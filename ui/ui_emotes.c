@@ -365,7 +365,7 @@ static void PlayerEmotes_FillEmotesArray( int emoteCategory ) {
 			for ( i = 0; i < bg_numEmotes; i++ ) {
 				//TiM: Make sure we don't include emote stubs.  No point
 				emote = &bg_emoteList[ i ];
-				if ( !emote || s_playerEmotes.playerInfo.animations[ emote->enumName ].numFrames < 0 || !emote->name[0] )
+				if ( !emote || (emote->enumName >= 0 && emote->enumName < MAX_ANIMATIONS && s_playerEmotes.playerInfo.animations[ emote->enumName ].numFrames < 0) || !emote->name[0] )
 					continue;
 
 				s_playerEmotes.mainEmotesList[ s_playerEmotes.numEmotes ] = i;
@@ -409,7 +409,7 @@ static void PlayerEmotes_FillEmotesArray( int emoteCategory ) {
 
 					//TiM: Make sure we don't include emote stubs.  No point
 					emote = &bg_emoteList[ emoteNum ];
-					if ( !emote || s_playerEmotes.playerInfo.animations[ emote->enumName ].numFrames < 0 )
+					if ( !emote || (emote->enumName >= 0 && emote->enumName < MAX_ANIMATIONS && s_playerEmotes.playerInfo.animations[ emote->enumName ].numFrames < 0) )
 						continue;
 
 					//add to the list
@@ -463,7 +463,7 @@ static void PlayerEmotes_FillEmotesArray( int emoteCategory ) {
 				for ( i = 0; i < bg_numEmotes; i++ ) {
 					//TiM: Make sure we don't include emote stubs.  No point
 					emote = &bg_emoteList[ i ];
-					if ( !emote || s_playerEmotes.playerInfo.animations[ emote->enumName ].numFrames < 0 )
+					if ( !emote || (emote->enumName >= 0 && emote->enumName < MAX_ANIMATIONS && s_playerEmotes.playerInfo.animations[ emote->enumName ].numFrames < 0) )
 						continue;					
 					
 					if ( bg_emoteList[i].emoteType == emoteIndex ) {
