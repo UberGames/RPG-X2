@@ -1,0 +1,830 @@
+Index: ChangeLog
+===================================================================
+--- ChangeLog	(revision 0)
++++ ChangeLog	(revision 10)
+@@ -0,0 +1,17 @@
++2006-04-08 Thilo Schulz <arny@ats.s.bawue.de>
++	- Added a bit of verboseness to the init_tonextint() function.
++
++2006-04-04 Thilo Schulz <arny@ats.s.bawue.de>
++	- Fixed a bug where the renderer shows certain weapon fire to go
++	  through the upper half of a forcefield.
++
++2006-03-17 Thilo Schulz <arny@ats.s.bawue.de>
++	- Added Makefile based build system for UNIXoid environments.
++	- New function for rounding floats to the next integer introduced
++	  that yields the same behaviour on all platforms.
++	- SnapVector macro changed to use the new rounding method. It will
++	  make the movement work similarly on all platforms.
++	- Fixed 64bit safety when compiling to shared objects.
++	- Modified the random number generators to discard the first 17 bits
++	  to emulate the behaviour of the VM generators.
++	- Fixed a few compiler warnings/errors.
+Index: game/g_syscalls.c
+===================================================================
+--- game/g_syscalls.c	(revision 1)
++++ game/g_syscalls.c	(revision 10)
+@@ -5,10 +5,10 @@
+ // this file is only included when building a dll
+ // g_syscalls.asm is included instead when building a qvm
+ 
+-static int (QDECL *syscall)( int arg, ... ) = (int (QDECL *)( int, ...))-1;
++static intptr_t (QDECL *syscall)( intptr_t arg, ... ) = (intptr_t (QDECL *)( intptr_t, ...))-1;
+ 
+ 
+-void dllEntry( int (QDECL *syscallptr)( int arg,... ) ) {
++void dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg,... ) ) {
+ 	syscall = syscallptr;
+ }
+ 
+Index: game/q_math.c
+===================================================================
+--- game/q_math.c	(revision 1)
++++ game/q_math.c	(revision 10)
+@@ -3,6 +3,7 @@
+ // q_math.c -- stateless support routines that are included in each code module
+ #include "q_shared.h"
+ 
++int nonansicast = 0;
+ 
+ vec3_t	vec3_origin = {0,0,0};
+ vec3_t	axisDefault[3] = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
+@@ -1340,7 +1341,7 @@
+ */
+ float flrandom(float min, float max)
+ {
+-	return ((rand() * (max - min)) / 32768.0F) + min;
++	return (((rand() & 0x7FFF) * (max - min)) / 32768.0F) + min;
+ }
+ 
+ /*
+@@ -1350,7 +1351,7 @@
+ int irandom(int min, int max)
+ {
+ 	max++; //so it can round down
+-	return ((rand() * (max - min)) >> 15) + min;
++	return (((rand() & 0x7FFF) * (max - min)) >> 15) + min;
+ }
+ 
+ 
+@@ -1372,3 +1373,38 @@
+ 	vect[1] /= 8191.0;
+ 	vect[2] /= 8191.0;
+ }
++
++// Rounds the argument to the next integer. Used by SnapVector.
++void init_tonextint(qboolean verbose)
++{
++	float decimal = 0.9;
++
++	nonansicast = (int) decimal;
++	
++	if(verbose)
++	{
++		if(nonansicast)
++			Com_Printf("Float to int casting behaviour: round to next int\n");
++		else
++			Com_Printf("Float to int casting behaviour: ISO compliant\n");
++	}
++}
++
++float tonextint(float x)
++{
++	int casted;
++	float rest;
++
++	if(nonansicast)
++		return (int) x;
++
++	casted = (int) x;
++	rest = x - (float) casted;
++
++	if(rest >= 0.5f)
++		return casted+1;
++	else if(rest <= -0.5f)
++		return casted - 1;
++	else
++		return casted;
++}
+Index: game/g_active.c
+===================================================================
+--- game/g_active.c	(revision 1)
++++ game/g_active.c	(revision 10)
+@@ -1159,7 +1159,7 @@
+ 	if (xaxis)
+ 	{
+ 		VectorSet(ent->r.mins, -halfWidth, -SHIELD_HALFTHICKNESS, -(height>>1));
+-		VectorSet(ent->r.maxs, halfWidth, SHIELD_HALFTHICKNESS, height>>1);
++		VectorSet(ent->r.maxs, halfWidth, SHIELD_HALFTHICKNESS, height);
+ 	}
+ 	else
+ 	{
+Index: game/g_main.c
+===================================================================
+--- game/g_main.c	(revision 1)
++++ game/g_main.c	(revision 10)
+@@ -192,7 +192,7 @@
+ This MUST be the very first function compiled into the .q3vm file
+ ================
+ */
+-int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
++intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
+ 	switch ( command ) {
+ 	case GAME_INIT:
+ 		G_InitGame( arg0, arg1, arg2 );
+@@ -201,7 +201,7 @@
+ 		G_ShutdownGame( arg0 );
+ 		return 0;
+ 	case GAME_CLIENT_CONNECT:
+-		return (int)ClientConnect( arg0, arg1, arg2 );
++		return (intptr_t)ClientConnect( arg0, arg1, arg2 );
+ 	case GAME_CLIENT_THINK:
+ 		ClientThink( arg0 );
+ 		return 0;
+@@ -493,6 +493,7 @@
+ 	G_Printf ("gamename: %s\n", GAMEVERSION);
+ 	G_Printf ("gamedate: %s\n", __DATE__);
+ 
++	init_tonextint(qtrue);
+ 	srand( randomSeed );
+ 
+ 	noJoinLimit = 0;//allow players to join the game still
+Index: game/Makefile
+===================================================================
+--- game/Makefile	(revision 0)
++++ game/Makefile	(revision 10)
+@@ -0,0 +1,119 @@
++default: qvm
++qvm: build_qvm
++so: build_so
++
++# bins for building VMs (you need all q3lcc, q3rcc, q3cpp and q3asm in the same dir.)
++Q3LCC = ../../bin/q3lcc
++Q3ASM = ../../bin/q3asm
++
++# compiler to use for building shared objects
++CC = gcc
++
++# cflags for the VM compiler
++VMCFLAGS = $(CFLAGS) -DQ3_VM
++# cflags for the compiler
++SOCFLAGS = $(CFLAGS) -g3 -ggdb3 -fPIC
++
++ARCH=$(shell uname -m | sed -e s/i.86/i386/)
++
++OBJ = \
++  g_main.o \
++  ai_chat.o \
++  ai_cmd.o \
++  ai_dmnet.o \
++  ai_dmq3.o \
++  ai_main.o \
++  ai_team.o \
++  bg_misc.o \
++  bg_pmove.o \
++  bg_slidemove.o \
++  g_active.o \
++  g_arenas.o \
++  g_bot.o \
++  g_breakable.o \
++  g_client.o \
++  g_cmds.o \
++  g_combat.o \
++  g_fx.o \
++  g_items.o \
++  g_log.o \
++  g_mem.o \
++  g_misc.o \
++  g_missile.o \
++  g_mover.o \
++  g_session.o \
++  g_spawn.o \
++  g_svcmds.o \
++  g_target.o \
++  g_team.o \
++  g_trigger.o \
++  g_turrets.o \
++  g_usable.o \
++  g_utils.o \
++  g_weapon.o \
++  q_math.o \
++  q_shared.o \
++  
++SOOBJ = \
++  g_syscalls.o \
++
++QVMOBJ = \
++  bg_lib.o \
++
++DO_VMCC = $(Q3LCC) $(VMCFLAGS) -o $@ -c $<
++DO_SOCC = $(CC) $(SOCFLAGS) -o $@ -c $<
++
++build_qvm: DO_CC=$(DO_VMCC)
++build_so: DO_CC=$(DO_SOCC)
++
++ai_chat.o : ai_chat.c; $(DO_CC)
++ai_cmd.o : ai_cmd.c; $(DO_CC)
++ai_dmnet.o : ai_dmnet.c; $(DO_CC)
++ai_dmq3.o : ai_dmq3.c; $(DO_CC)
++ai_main.o : ai_main.c; $(DO_CC)
++ai_team.o : ai_team.c; $(DO_CC)
++bg_misc.o : bg_misc.c; $(DO_CC)
++bg_pmove.o : bg_pmove.c; $(DO_CC)
++bg_slidemove.o : bg_slidemove.c; $(DO_CC)
++g_active.o : g_active.c; $(DO_CC)
++g_arenas.o : g_arenas.c; $(DO_CC)
++g_bot.o : g_bot.c; $(DO_CC)
++g_breakable.o : g_breakable.c; $(DO_CC)
++g_client.o : g_client.c; $(DO_CC)
++g_cmds.o : g_cmds.c; $(DO_CC)
++g_combat.o : g_combat.c; $(DO_CC)
++g_fx.o : g_fx.c; $(DO_CC)
++g_items.o : g_items.c; $(DO_CC)
++g_log.o : g_log.c; $(DO_CC)
++g_main.o : g_main.c; $(DO_CC)
++g_mem.o : g_mem.c; $(DO_CC)
++g_misc.o : g_misc.c; $(DO_CC)
++g_missile.o : g_missile.c; $(DO_CC)
++g_mover.o : g_mover.c; $(DO_CC)
++g_session.o : g_session.c; $(DO_CC)
++g_spawn.o : g_spawn.c; $(DO_CC)
++g_svcmds.o : g_svcmds.c; $(DO_CC)
++g_target.o : g_target.c; $(DO_CC)
++g_team.o : g_team.c; $(DO_CC)
++g_trigger.o : g_trigger.c; $(DO_CC)
++g_turrets.o : g_turrets.c; $(DO_CC)
++g_usable.o : g_usable.c; $(DO_CC)
++g_utils.o : g_utils.c; $(DO_CC)
++g_weapon.o : g_weapon.c; $(DO_CC)
++q_math.o : q_math.c; $(DO_CC)
++q_shared.o : q_shared.c; $(DO_CC)
++  
++g_syscalls.o : g_syscalls.c; $(DO_CC)
++
++bg_lib.o : bg_lib.c; $(DO_CC)
++
++build_qvm: $(OBJ) $(QVMOBJ)
++	$(Q3ASM) -vq3 -o qagame.qvm $(OBJ) $(QVMOBJ) g_syscalls.asm
++	cp *.qvm ../../baseef/vm/
++
++build_so: $(OBJ) $(SOOBJ)
++	$(CC) -shared -Wl,--export-dynamic,-soname,qagame$(ARCH).so -o qagame$(ARCH).so $(OBJ) $(SOOBJ)
++	cp *.so ../../baseef/
++	
++clean:
++	rm -f *.o *.qvm *.so
+Index: game/ai_dmq3.c
+===================================================================
+--- game/ai_dmq3.c	(revision 1)
++++ game/ai_dmq3.c	(revision 10)
+@@ -2285,7 +2285,7 @@
+ #ifdef OBSTACLEDEBUG
+ 	ClientName(bs->client, netname, sizeof(netname));
+ 	BotAI_Print(PRT_MESSAGE, "%s: I'm blocked by model %d\n", netname, entinfo.modelindex);
+-#endif OBSTACLEDEBUG
++#endif
+ 	//if blocked by a bsp model and the bot wants to activate it if possible
+ 	if (entinfo.modelindex > 0 && entinfo.modelindex <= max_bspmodelindex && activate) {
+ 		//find the bsp entity which should be activated in order to remove
+@@ -2295,14 +2295,14 @@
+ 			strcpy(classname, "");
+ #ifdef OBSTACLEDEBUG
+ 			BotAI_Print(PRT_MESSAGE, "%s: can't find activator for blocking entity\n", ClientName(bs->client, netname, sizeof(netname)));
+-#endif //OBSTACLEDEBUG
++#endif
+ 		}
+ 		else {
+ 			trap_AAS_ValueForBSPEpairKey(ent, "classname", classname, sizeof(classname));
+ #ifdef OBSTACLEDEBUG
+ 			ClientName(bs->client, netname, sizeof(netname));
+ 			BotAI_Print(PRT_MESSAGE, "%s: I should activate %s\n", netname, classname);
+-#endif OBSTACLEDEBUG
++#endif
+ 		}
+ 		if (!strcmp(classname, "func_button")) {
+ 			//create a bot goal towards the button
+Index: game/q_shared.h
+===================================================================
+--- game/q_shared.h	(revision 1)
++++ game/q_shared.h	(revision 10)
+@@ -74,6 +74,16 @@
+ 
+ #endif
+ 
++// Needed for mods compiled in 64 bit shared objects.
++#ifdef Q3_VM
++	typedef int intptr_t;
++#else
++	#ifdef _MSC_VER
++		#include <stddef.h>
++	#else
++		#include <stdint.h>
++	#endif
++#endif
+ 
+ // this is the define for determining if we have an asm version of a C function
+ #if (defined _M_IX86 || defined __i386__) && !defined __sun__  && !defined __LCC__
+@@ -526,8 +536,11 @@
+ #define VectorSet(v, x, y, z)	((v)[0]=(x), (v)[1]=(y), (v)[2]=(z))
+ #define Vector4Copy(a,b)		((b)[0]=(a)[0],(b)[1]=(a)[1],(b)[2]=(a)[2],(b)[3]=(a)[3])
+ 
+-#define	SnapVector(v) {v[0]=(int)v[0];v[1]=(int)v[1];v[2]=(int)v[2];}
++extern void init_tonextint(qboolean verbose);
++extern float tonextint(float x);
+ 
++#define	SnapVector(v) {v[0] = tonextint(v[0]); v[1] = tonextint(v[1]); v[2]= tonextint(v[2]);}
++
+ // just in case you do't want to use the macros
+ vec_t _DotProduct( const vec3_t v1, const vec3_t v2 );
+ void _VectorSubtract( const vec3_t veca, const vec3_t vecb, vec3_t out );
+Index: game/bg_lib.h
+===================================================================
+--- game/bg_lib.h	(revision 1)
++++ game/bg_lib.h	(revision 10)
+@@ -3,6 +3,8 @@
+ 
+ // This file is NOT included on native builds
+ 
++#ifdef Q3_VM
++
+ typedef int size_t;
+ 
+ typedef char *  va_list;
+@@ -67,3 +69,4 @@
+ int abs( int n );
+ double fabs( double x );
+ 
++#endif // Q3_VM
+Index: cgame/Makefile
+===================================================================
+--- cgame/Makefile	(revision 0)
++++ cgame/Makefile	(revision 10)
+@@ -0,0 +1,122 @@
++default: qvm
++qvm: build_qvm
++so: build_so
++
++# bins for building VMs (you need all q3lcc, q3rcc, q3cpp and q3asm in the same dir.)
++Q3LCC = ../../bin/q3lcc
++Q3ASM = ../../bin/q3asm
++
++# compiler to use for building shared objects
++CC = gcc
++
++# cflags for the VM compiler
++VMCFLAGS = $(CFLAGS) -DQ3_VM
++# cflags for the compiler
++SOCFLAGS = $(CFLAGS) -g3 -ggdb3 -fPIC
++
++ARCH=$(shell uname -m | sed -e s/i.86/i386/)
++
++OBJ = \
++  cg_main.o \
++  cg_consolecmds.o \
++  cg_draw.o \
++  cg_drawtools.o \
++  cg_effects.o \
++  cg_ents.o \
++  cg_env.o \
++  cg_event.o \
++  cg_info.o \
++  cg_localents.o \
++  cg_marks.o \
++  cg_players.o \
++  cg_playerstate.o \
++  cg_predict.o \
++  cg_scoreboard.o \
++  cg_screenfx.o \
++  cg_servercmds.o \
++  cg_snapshot.o \
++  cg_view.o \
++  cg_weapons.o \
++  fx_borg.o \
++  fx_compression.o \
++  fx_dreadnought.o \
++  fx_grenade.o \
++  fx_imod.o \
++  fx_item.o \
++  fx_lib.o \
++  fx_misc.o \
++  fx_phaser.o \
++  fx_quantum.o \
++  fx_scavenger.o \
++  fx_stasis.o \
++  fx_tetrion.o \
++  fx_transporter.o \
++
++
++OBJDEP = \
++  ../game/q_shared.o \
++  ../game/q_math.o \
++  ../game/bg_misc.o \
++  ../game/bg_pmove.o \
++  ../game/bg_slidemove.o \
++  
++SOOBJ = \
++  cg_syscalls.o \
++
++QVMOBJ = \
++  ../game/bg_lib.o \
++
++DO_VMCC = $(Q3LCC) $(VMCFLAGS) -o $@ -c $<
++DO_SOCC = $(CC) $(SOCFLAGS) -o $@ -c $<
++
++build_qvm: DO_CC=$(DO_VMCC)
++build_so: DO_CC=$(DO_SOCC)
++
++cg_consolecmds.o : cg_consolecmds.c; $(DO_CC)
++cg_draw.o : cg_draw.c; $(DO_CC)
++cg_drawtools.o : cg_drawtools.c; $(DO_CC)
++cg_effects.o : cg_effects.c; $(DO_CC)
++cg_ents.o : cg_ents.c; $(DO_CC)
++cg_env.o : cg_env.c; $(DO_CC)
++cg_event.o : cg_event.c; $(DO_CC)
++cg_info.o : cg_info.c; $(DO_CC)
++cg_localents.o : cg_localents.c; $(DO_CC)
++cg_main.o : cg_main.c; $(DO_CC)
++cg_marks.o : cg_marks.c; $(DO_CC)
++cg_players.o : cg_players.c; $(DO_CC)
++cg_playerstate.o : cg_playerstate.c; $(DO_CC)
++cg_predict.o : cg_predict.c; $(DO_CC)
++cg_scoreboard.o : cg_scoreboard.c; $(DO_CC)
++cg_screenfx.o : cg_screenfx.c; $(DO_CC)
++cg_servercmds.o : cg_servercmds.c; $(DO_CC)
++cg_snapshot.o : cg_snapshot.c; $(DO_CC)
++cg_view.o : cg_view.c; $(DO_CC)
++cg_weapons.o : cg_weapons.c; $(DO_CC)
++fx_borg.o : fx_borg.c; $(DO_CC)
++fx_compression.o : fx_compression.c; $(DO_CC)
++fx_dreadnought.o : fx_dreadnought.c; $(DO_CC)
++fx_grenade.o : fx_grenade.c; $(DO_CC)
++fx_imod.o : fx_imod.c; $(DO_CC)
++fx_item.o : fx_item.c; $(DO_CC)
++fx_lib.o : fx_lib.c; $(DO_CC)
++fx_misc.o : fx_misc.c; $(DO_CC)
++fx_phaser.o : fx_phaser.c; $(DO_CC)
++fx_quantum.o : fx_quantum.c; $(DO_CC)
++fx_scavenger.o : fx_scavenger.c; $(DO_CC)
++fx_stasis.o : fx_stasis.c; $(DO_CC)
++fx_tetrion.o : fx_tetrion.c; $(DO_CC)
++fx_transporter.o : fx_transporter.c; $(DO_CC)
++
++cg_syscalls.o : cg_syscalls.c; $(DO_CC)
++
++
++build_qvm: $(OBJ) $(QVMOBJ)
++	$(Q3ASM) -vq3 -o cgame.qvm $(OBJ) $(OBJDEP) $(QVMOBJ) cg_syscalls.asm
++	cp *.qvm ../../baseef/vm/
++
++build_so: $(OBJ) $(SOOBJ)
++	$(CC) -shared -Wl,--export-dynamic,-soname,cgame$(ARCH).so -o cgame$(ARCH).so $(OBJ) $(OBJDEP) $(SOOBJ)
++	cp *.so ../../baseef/
++
++clean:
++	rm -f *.o *.qvm *.so
+Index: cgame/cg_syscalls.c
+===================================================================
+--- cgame/cg_syscalls.c	(revision 1)
++++ cgame/cg_syscalls.c	(revision 10)
+@@ -4,10 +4,10 @@
+ // cg_syscalls.asm is included instead when building a qvm
+ #include "cg_local.h"
+ 
+-static int (QDECL *syscall)( int arg, ... ) = (int (QDECL *)( int, ...))-1;
++static intptr_t (QDECL *syscall)( intptr_t arg, ... ) = (intptr_t (QDECL *)( intptr_t, ...))-1;
+ 
+ 
+-void dllEntry( int (QDECL  *syscallptr)( int arg,... ) ) {
++void dllEntry( intptr_t (QDECL  *syscallptr)( intptr_t arg,... ) ) {
+ 	syscall = syscallptr;
+ }
+ 
+Index: cgame/cg_main.c
+===================================================================
+--- cgame/cg_main.c	(revision 1)
++++ cgame/cg_main.c	(revision 10)
+@@ -20,7 +20,7 @@
+ This must be the very first function compiled into the .q3vm file
+ ================
+ */
+-int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
++intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
+ 	switch ( command ) {
+ 	case CG_INIT:
+ 		CG_Init( arg0, arg1 );
+@@ -1088,6 +1088,8 @@
+ 	memset( cg_weapons, 0, sizeof(cg_weapons) );
+ 	memset( cg_items, 0, sizeof(cg_items) );
+ 
++	init_tonextint(qfalse);
++
+ 	cgs.processedSnapshotNum = serverMessageNum;
+ 	cgs.serverCommandSequence = serverCommandSequence;
+ 
+Index: Makefile
+===================================================================
+--- Makefile	(revision 0)
++++ Makefile	(revision 10)
+@@ -0,0 +1,16 @@
++default: build
++
++build_qvm:
++	$(MAKE) -C game build_qvm
++	$(MAKE) -C cgame build_qvm
++	$(MAKE) -C ui build_qvm
++
++build_so:
++	$(MAKE) -C game build_so
++	$(MAKE) -C cgame build_so
++	$(MAKE) -C ui build_so
++
++clean:
++	$(MAKE) -C game clean
++	$(MAKE) -C cgame clean
++	$(MAKE) -C ui clean
+Index: ui/ui_atoms.c
+===================================================================
+--- ui/ui_atoms.c	(revision 1)
++++ ui/ui_atoms.c	(revision 10)
+@@ -1276,6 +1276,8 @@
+ */
+ void UI_Init( void ) {
+ 
++	init_tonextint(qfalse);
++
+ 	UI_RegisterCvars();
+ 
+ 	UI_LoadMenuText();
+Index: ui/ui_main.c
+===================================================================
+--- ui/ui_main.c	(revision 1)
++++ ui/ui_main.c	(revision 10)
+@@ -20,7 +20,7 @@
+ This must be the very first function compiled into the .qvm file
+ ================
+ */
+-int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
++intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
+ 	switch ( command ) {
+ 	case UI_GETAPIVERSION:
+ 		return UI_API_VERSION;
+Index: ui/ui_spreset.c
+===================================================================
+--- ui/ui_spreset.c	(revision 1)
++++ ui/ui_spreset.c	(revision 10)
+@@ -121,9 +121,9 @@
+ 
+ 	Reset_Cache();
+ 
+-	n1 = UI_ProportionalStringWidth( "YES/NO" );
+-	n2 = UI_ProportionalStringWidth( "YES" ) + PROP_GAP_WIDTH;
+-	n3 = UI_ProportionalStringWidth( "/" )  + PROP_GAP_WIDTH;
++	n1 = UI_ProportionalStringWidth( "YES/NO", UI_BIGFONT);
++	n2 = UI_ProportionalStringWidth( "YES", UI_BIGFONT) + PROP_GAP_WIDTH;
++	n3 = UI_ProportionalStringWidth( "/", UI_BIGFONT)  + PROP_GAP_WIDTH;
+ 	l1 = 320 - ( n1 / 2 );
+ 	l2 = l1 + n2;
+ 	l3 = l2 + n3;
+Index: ui/Makefile
+===================================================================
+--- ui/Makefile	(revision 0)
++++ ui/Makefile	(revision 10)
+@@ -0,0 +1,124 @@
++default: qvm
++qvm: build_qvm
++so: build_so
++
++# bins for building VMs (you need all q3lcc, q3rcc, q3cpp and q3asm in the same dir.)
++Q3LCC = ../../bin/q3lcc
++Q3ASM = ../../bin/q3asm
++
++# compiler to use for building shared objects
++CC = gcc
++
++# cflags for the VM compiler
++VMCFLAGS = $(CFLAGS) -DQ3_VM
++# cflags for the compiler
++SOCFLAGS = $(CFLAGS) -g3 -ggdb3 -fPIC
++
++ARCH=$(shell uname -m | sed -e s/i.86/i386/)
++
++OBJ = \
++  ui_main.o \
++  ui_addbots.o \
++  ui_atoms.o \
++  ui_cdkey.o \
++  ui_confirm.o \
++  ui_connect.o \
++  ui_controls2.o \
++  ui_cvars.o \
++  ui_demo2.o \
++  ui_fonts.o \
++  ui_gameinfo.o \
++  ui_ingame.o \
++  ui_menu.o \
++  ui_mfield.o \
++  ui_mods.o \
++  ui_network.o \
++  ui_playermodel.o \
++  ui_players.o \
++  ui_playersettings.o \
++  ui_preferences.o \
++  ui_qmenu.o \
++  ui_removebots.o \
++  ui_serverinfo.o \
++  ui_servers2.o \
++  ui_sound.o \
++  ui_sparena.o \
++  ui_specifyserver.o \
++  ui_splevel.o \
++  ui_sppostgame.o \
++  ui_spreset.o \
++  ui_spskill.o \
++  ui_startserver.o \
++  ui_team.o \
++  ui_teamorders.o \
++  ui_video.o \
++
++
++OBJDEP = \
++  ../game/q_shared.o \
++  ../game/q_math.o \
++  ../game/bg_misc.o \
++  
++SOOBJ = \
++  ui_syscalls.o \
++
++QVMOBJ = \
++  ../game/bg_lib.o \
++
++DO_VMCC = $(Q3LCC) $(VMCFLAGS) -o $@ -c $<
++DO_SOCC = $(CC) $(SOCFLAGS) -o $@ -c $<
++
++build_qvm: DO_CC=$(DO_VMCC)
++build_so: DO_CC=$(DO_SOCC)
++
++cg_consolecmds.o : cg_consolecmds.c; $(DO_CC)
++
++ui_addbots.o : ui_addbots.c; $(DO_CC)
++ui_atoms.o : ui_atoms.c; $(DO_CC)
++ui_cdkey.o : ui_cdkey.c; $(DO_CC)
++ui_confirm.o : ui_confirm.c; $(DO_CC)
++ui_connect.o : ui_connect.c; $(DO_CC)
++ui_controls2.o : ui_controls2.c; $(DO_CC)
++ui_cvars.o : ui_cvars.c; $(DO_CC)
++ui_demo2.o : ui_demo2.c; $(DO_CC)
++ui_fonts.o : ui_fonts.c; $(DO_CC)
++ui_gameinfo.o : ui_gameinfo.c; $(DO_CC)
++ui_ingame.o : ui_ingame.c; $(DO_CC)
++ui_main.o : ui_main.c; $(DO_CC)
++ui_menu.o : ui_menu.c; $(DO_CC)
++ui_mfield.o : ui_mfield.c; $(DO_CC)
++ui_mods.o : ui_mods.c; $(DO_CC)
++ui_network.o : ui_network.c; $(DO_CC)
++ui_playermodel.o : ui_playermodel.c; $(DO_CC)
++ui_players.o : ui_players.c; $(DO_CC)
++ui_playersettings.o : ui_playersettings.c; $(DO_CC)
++ui_preferences.o : ui_preferences.c; $(DO_CC)
++ui_qmenu.o : ui_qmenu.c; $(DO_CC)
++ui_removebots.o : ui_removebots.c; $(DO_CC)
++ui_serverinfo.o : ui_serverinfo.c; $(DO_CC)
++ui_servers2.o : ui_servers2.c; $(DO_CC)
++ui_sound.o : ui_sound.c; $(DO_CC)
++ui_sparena.o : ui_sparena.c; $(DO_CC)
++ui_specifyserver.o : ui_specifyserver.c; $(DO_CC)
++ui_splevel.o : ui_splevel.c; $(DO_CC)
++ui_sppostgame.o : ui_sppostgame.c; $(DO_CC)
++ui_spreset.o : ui_spreset.c; $(DO_CC)
++ui_spskill.o : ui_spskill.c; $(DO_CC)
++ui_startserver.o : ui_startserver.c; $(DO_CC)
++ui_team.o : ui_team.c; $(DO_CC)
++ui_teamorders.o : ui_teamorders.c; $(DO_CC)
++ui_video.o : ui_video.c; $(DO_CC)
++
++ui_syscalls.o : ui_syscalls.c; $(DO_CC)
++
++
++build_qvm: $(OBJ) $(QVMOBJ)
++	$(Q3ASM) -vq3 -o ui.qvm $(OBJ) $(OBJDEP) $(QVMOBJ) ui_syscalls.asm
++	cp *.qvm ../../baseef/vm/
++
++build_so: $(OBJ) $(SOOBJ)
++	$(CC) -shared -Wl,--export-dynamic,-soname,ui$(ARCH).so -o ui$(ARCH).so $(OBJ) $(OBJDEP) $(SOOBJ)
++	cp *.so ../../baseef/
++
++clean:
++	rm -f *.o *.qvm *.so
+Index: ui/ui_syscalls.c
+===================================================================
+--- ui/ui_syscalls.c	(revision 1)
++++ ui/ui_syscalls.c	(revision 10)
+@@ -5,9 +5,9 @@
+ // this file is only included when building a dll
+ // syscalls.asm is included instead when building a qvm
+ 
+-static int (QDECL *syscall)( int arg, ... ) = (int (QDECL *)( int, ...))-1;
++static intptr_t (QDECL *syscall)( intptr_t arg, ... ) = (intptr_t (QDECL *)( intptr_t, ...))-1;
+ 
+-void dllEntry( int (QDECL *syscallptr)( int arg,... ) ) {
++void dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg,... ) ) {
+ 	syscall = syscallptr;
+ }
+ 
+Index: README.txt
+===================================================================
+--- README.txt	(revision 0)
++++ README.txt	(revision 10)
+@@ -0,0 +1,71 @@
++The Star Trek Voyager: Elite Force codebase project
++
++This project is meant to be a stable codebase with obvious bugs that
++Ravensoft left in there removed and a few new features added.
++
++This project was originally started because my modification of the Quake3
++engine to run EF turned out to be a bit problematic. The SnapVector macro
++yields slightly different results in the virtual machine interpreter of the
++newer quake3 compared to the older quake3 eliteforce is based off.
++As a result, you cannot jump as high as you could if you set com_maxfps to
++some magic values like 74, 85, 125 etc..
++To get the same movement as with the original EliteForce in these new engine
++releases the multiplayer VM code must be modified to emulate the old
++behaviour.
++So my goal is that every active player and every server will install these
++modifications to allow for smooth movement on both, servers using the new
++engine release and for good motion prediction on the client side. I realize
++it may well be that this never happens as getting people to install new pak
++files would be a major undertaking. I thought, if I attempt to do so in the
++first place, I can as well try to get in a few improvements as long as they
++don't change gameplay. I am not trying to insert new weapons, models,
++gametypes etc...
++
++A few todos:
++ - Ignoring text messages from players that are a nuisance
++ - Unlagged code (can be switched on/off with a cvar)
++
++If you have made changes that do *not* change gameplay as mentioned above
++and you think it really improves EliteForce, feel free to send the patches
++to: arny@ats.s.bawue.de
++If your code is reasonably clean, I will definitely add it to the
++repository!
++
++Now for the using of this code:
++I have left all non-C files from Ravensoft intact. This means, you should
++probably be able to build this release under windows like you build the
++original EF source released by raven.
++For users on unixoid environments, I have included a few Makefiles that make
++the job of building easier. The Makefiles are designed to work under Linux
++so if you use another OS you may need to edit the three Makefiles included
++in the game, cgame and ui directories to make this build properly.
++
++There are two different types of builds, namely the shared library and the
++building of QVMs.
++Building the shared objects only requires typing in "make so"
++in the main directory where this README resides. If you have a working gcc
++installation, this is all you need to do. The rest is being handled by the
++Makefiles and in the end you should have three resulting files in the baseef
++directory.
++Building QVMs is easy, too. You need a few special bins, though, namely
++q3lcc, q3rcc, q3cpp and q3asm. They can be found when building Quake3 from
++icculus.org: http://icculus.org/quake3/
++Get the source code, compile it (you may want to only build the dedicated
++server if you have no OpenGL support... consult the README in their project
++on how this works). When compilation is done, the four required binaries can
++be found in code/tools/. Copy the files to the bin/ directory that is in the
++same dir with this README.
++Now just do: "make qvm" in this dir and all QVMs should be in baseef/vm/.
++
++Careful when compiling both, QVMs and shared objects. gcc and the q3lcc
++compiler produce incompatible output.
++Make sure to run "make clean" before you change from QVM to shared objects
++and vice versa.
++
++And last but not least: I already installed a mechanism to produce a pak
++file that only works if you have zip installed.
++make pak
++will result in all three QVMs being packed into pak4.pk3 in baseef :)
++Rename it as you see fit.
++
++ - Thilo Schulz, 16.03.2006
+Index: Makefile
+===================================================================
+--- Makefile	(revision 0)
++++ Makefile	(revision 10)
+@@ -0,0 +1,17 @@
++default: qvm
++qvm: build_qvm
++so: build_so
++
++ZIP = zip
++
++build_qvm:
++	$(MAKE) -C Code-DM build_qvm
++build_so:
++	$(MAKE) -C Code-DM build_so
++
++clean:
++	$(MAKE) -C Code-DM clean
++	rm -f baseef/*.so baseef/*.pk3 baseef/vm/*.qvm
++
++pak: qvm
++	cd baseef && rm -f pak4.pk3 && $(ZIP) -r pak4.pk3 vm/*

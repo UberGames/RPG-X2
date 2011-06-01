@@ -1,0 +1,3 @@
+To compile for rpgxEF change the following things:
+q_shared.h line 54: #define XTRA 0 to #define XTRA 1
+bg_public.h line 6: #define XTRA 0 to #define XTRA 1

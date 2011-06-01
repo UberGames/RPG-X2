@@ -1,0 +1,20 @@
+Index: game/g_usable.c
+===================================================================
+--- game/g_usable.c	(revision 78)
++++ game/g_usable.c	(working copy)
+@@ -188,6 +188,7 @@
+ 		self->pain = func_usable_pain;
+ 	}
+ 	
++	//as we do doors as well now should we move this into a separate function avaible in both g_usable.c and g_mover.c?
+ 	//if the map has a usables file, get the data of of that
+ 	if ( rpg_scannablePanels.integer )
+ 	{
+Index: stefgame.ncb
+===================================================================
+Cannot display: file marked as a binary type.
+svn:mime-type = application/octet-stream
+Index: stefgame.suo
+===================================================================
+Cannot display: file marked as a binary type.
+svn:mime-type = application/octet-stream

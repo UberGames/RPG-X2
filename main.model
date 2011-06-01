@@ -1,0 +1,26 @@
+//Kulhane 
+{
+             headModel models/players_rpgx/kulhane/head.md3  //head model
+             torsoModel models/players_rpgx/male_crewbody/upper.mdr //torso model
+             legsModel models/players_rpgx/male_crewbody/lower.mdr //legs model
+		 //holsterModel 
+
+             boltonModel tag_larm models/boltons/emitter.md3 //any additional static boltons (ie mobile emitter, helmet etc)
+             hasRanks 1 //skinset will use the rank system (ie might not look so hot on civilians or something)
+
+             {
+             	skinname default
+                  headSkin models/players_rpgx/kulhane/head_default.skin //references what .skin file to use
+                  headSkinBlink models/players_rpgx/kulhane/head_default_blink.skin //same as above, but for blinking
+                  headSkinFrown models/players_rpgx/kulhane/head_default_frown.skin //frowning
+                  headSkinFrownBlink models/players_rpgx/kulhane/head_default_blinkfrown.skin //frowning and blinking
+
+                  headBlinkTime 7 15 //seconds in where model might blink (ie between 7 and 15 second intervals)
+                  headFrownTime 0 0 //seconds in where model might frown
+
+                  torsoSkin models/players_rpgx/male_crewbody/upper_default.skin //torso skin
+                  legsSkin models/players_rpgx/male_crewbody/lower_default.skin //legs skin
+
+			validClasses alien engineer security none //what, if any classes it is limited to
+             }
+}

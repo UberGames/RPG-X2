@@ -1,0 +1,98 @@
+/* Old Code bits	
+	hcolor[0] = 0.0;
+	hcolor[1] = 1.0;
+	hcolor[2] = 0.0;
+	hcolor[3] = 1.0;
+
+	x = 250;
+	y2 = 200;
+	w = 100;
+	h = 100;
+	glowOffset = 60;
+	streakW = 500;
+	streakH = 10;*/
+
+	//reflecAnamorphic lenses make their flares really stretched
+	//Actually, just make this control the reflections.  
+	//The user can define the w + h themselves. :P
+	/*if ( reflecAnamorphic ) {
+		w = w * 2;
+		//widthDouble = 2;
+	}*/
+
+			//else
+			/*CG_DrawPic(
+			( ( xCart/lensReflec[i].offset )+HALF_SCREEN_WIDTH ) - ( reflecAnamorphic ? lensReflec[i].width : lensReflec[i].width/2 ), //X
+			( ( yCart/lensReflec[i].offset )+HALF_SCREEN_HEIGHT ) - ( lensReflec[i].height/2 ), //Y
+			reflecAnamorphic ? lensReflec[i].width * 2 : lensReflec[i].width, //W
+			lensReflec[i].height, //H
+			lensReflec[i].graphic //pic 
+			);*/
+/*	float yMid = ymin + ( (ymax - ymin) /2 );
+
+	//if the flare's origin moves to out of range, fade out the alpha on the reflections
+	//this is how it works O_o each side of the screen is a different quadrant controlled
+	//by a dif equation, excluding the corners where they'd overlap.  The corners have their own
+	//equations applied later on, hopefully forming a complte circle for the flares to fade out easily. :S
+
+
+	//left bar
+	if ( x > xmin && x < xmax && y < ymin && y > -ymin )
+		reflecAlpha = (float)(( xmax - (float)x ) / xDif);
+	//right bar
+	if ( x < -xmin && x > -xmax && y < ymin && y > -ymin )
+		reflecAlpha = (float)(( xmax + (float)x ) / xDif);
+	//upper bar
+	if ( y > ymin && y < ymax && x < xmin && x > -xmin )
+		reflecAlpha = (float)(( ymax - (float)y ) / yDif);
+	//lower bar
+	if ( y < -ymin && y > -ymax && x < xmin && x > -xmin )
+		reflecAlpha = (float)(( ymax + (float)y ) / yDif);
+	
+	//lower right quadrant
+/*	if ( x > xmin && x < xmax && y > ymin && y < ymax ) {
+		if ( (x*0.75) > yMid )*/
+
+/*
+	CG_DrawPic( , y - ((h * hazeOffset) * 0.5), (w * hazeOffset), h * hazeOffset, cgs.media.flareHaze ); //Surrounding ambient haze
+
+	trap_R_SetColor( strkColor );
+	CG_DrawPic( streakX , streakY , streakW, streakH, cgs.media.flareStreak ); //Colored portion of the anamorphic streaks
+	
+	trap_R_SetColor( color ); 
+	CG_DrawPic( x - ((w * glowOffset) * 0.5), y - ((h * glowOffset) * 0.5), (w * glowOffset), h * glowOffset, cgs.media.flareCore ); //Main colored glow bit of the main flare
+	
+	if ( whiteStreaks ) { //if player wanted white streaks in their streaks
+		strkColor[0] = strkColor[1] = strkColor[2] = 1.0;
+
+		trap_R_SetColor( strkColor ); //White
+		CG_DrawPic( streakX + (streakW*0.2), streakY + (streakH*0.2), streakW*0.6, streakH*0.6, cgs.media.flareStreak ); //White Core of streak is ALWAYS 20% smaller.
+	}
+
+	trap_R_SetColor( NULL );
+	CG_DrawPic( x, y, w, h, cgs.media.flareCore ); //Draw teh main fl4r3 :)*/
+
+	//w = (0.0001 * -(length*length)) + w;
+	//h = (0.0001 * -(length*length)) + h;
+
+	/*if ( !clamp ) {
+		w = w + (int)(-0.1 * length );
+		h = h + (int)(-0.1 * length );
+
+		//clamp it at 10% then fade it out
+		if ( ((float)w/(float)w1) <= 0.2 && ((float)h/(float)h1) <= 0.2 ) {
+			w = w1*0.2f;
+			h = h1*0.2f;
+		}
+
+		//then fade it back in
+		//if ( ((float)w/(float)w1) >= .05 && ((float)h/(float)h1) >= .05 && fadeAlpha == 0.0 ) 
+
+		if ( ((float)w/(float)w1) <= 0.15 && ((float)h/(float)h1) <= 0.15 ) {
+			w = w1 * 0.15;
+			h = h1 * 0.15;
+		}
+		//CG_Printf( "Distance = %f, w = %i, h = %i\n", length, w, h);
+	}*/
+
+//------------------------------------------------------

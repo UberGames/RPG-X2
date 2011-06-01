@@ -1,0 +1,213 @@
+***********************************************************
+* VERSION CHANGE LOG (DO NOT REMOVE THIS HEADER           *
+*							  *
+* Add a entry when you reciew the code, adding 1 to the   *
+* last number on the version, listing any new features    *
+* and fixes or modifications you have made to the code.   *
+* Use the format as seen in the other entries. 		  *
+* DO NOT make an entry every single time you compile!     *
+* Only as you add features and fixes.			  *****
+*							      *
+* MAKE SURE THIS IS UP-TO-DATE BEFORE HANDING OVER THE CODE!! *
+***************************************************************
+
+v0.1.5  Modified By RedTechie Last Compile Date: 24/07/04   (Model System Dedicated Version)
+=========================================================================================
+Features Added:
+--------------------------------------------
+
+
+Bugs Found:
+--------------------------------------------
+
+
+Bugs Fixed:
+--------------------------------------------
+
+
+Known Bugs:
+---------------------------------------------
+
+
+Todo:
+---------------------------------------------
+
+
+
+
+
+
+v0.1.4  Modified By J2J Last Compile Date: 24/07/04   (Model System Dedicated Version)
+=========================================================================================
+Features Added:
+--------------------------------------------
+ -Secondary Fire on TR-116 activates wireframe view to see thru walls in local area portal. (j2j)
+ -Changed model loading path to /models/players_rpgx/ (j2j)
+ -Updated the Animation.cfg parser function, imported string tables from single player, and removed extra info parsing (for now) (j2j)
+ -Single player model now load succesfully into holomatch game. (j2j)
+
+
+Bugs Found:
+--------------------------------------------
+
+
+Bugs Fixed:
+--------------------------------------------
+ -TR-116 nullshader tmp fixed by removing the guts of the wall hit function. (j2j)
+
+
+
+
+Known Bugs:
+---------------------------------------------
+Too many to list.
+
+Todo:
+---------------------------------------------
+Fix animation that are played with various player movments
+Add emote function
+Rank System
+etc.
+ 
+
+
+
+
+v0.1.3  Modified By RedTechie Last Compile Date: 22/07/04
+=========================================================================================
+Features Added:
+--------------------------------------------
+ -Brand new scoreboard (Also fixed intermission scoreboards)
+ -New forcefield features(zap sound when touched, cvar controlable damage if 0 no health damage will occure, admins   can remove forcefields but shooting at them with a alt grenade, force fields are now non damage taking,             forcefields now last forever no time limit)
+ -added cvar rpg_invisibletripmines when set to 0 turns tripmines into time mines and every one can see them when     set to 1 turned to tripmines and only admins can see them and walk threw them
+ -New health bar added first steps to health system ;)
+ -Flight and cloak status on left hand side of screen
+ -New n00b features (ghosted, nocliped, they change to the n00b class without a respawn, N00bs cant chat at all)
+ -Uncommeted out J2J's drag code probly going to get yelled out but its good code :D (only prob what would be cool    is if we could get the play to hover in front of the player dragging him and always stay in front of him....kinda   like the force in jk with the grip force) But this code is awsome for throwing N00bs off the map into the void :D
+ -Medics revive if cvar rpg_medicsrevive is turned on (1 or 0)
+ -Class selection in team menu now used the new rpg classes
+ -Cloaked admins have a sprite above there heads that only other admins can see saying there cloacked
+
+Bugs Found:
+--------------------------------------------
+ -nullshader for TR-116 :P (COUGH wallmark texture COUGH)
+ -Red line for TR-116
+
+Bugs Fixed:
+--------------------------------------------
+ -md5 script removed on J2J's request
+ -Health bar now uses dat text files
+
+Known Bugs:
+---------------------------------------------
+ -Eng Tool's fire still dosnt remove mines when shooting at one trace won't trace a mind :S
+ -Shake cmd is not finished (its in g_cmds.c and cg_consolecmds.c) g_cmds.c calls it in cg_consolecmds.c it needs     to loop to all clients on the server and that loop code needs to be in g_cmds.c so its not hackable
+ -Portal camera map entity still fricken sways its not a sea ship its a star ship
+ -Suicide while rpg_medicsrevive is on (forcekill, kill, forcekillradius) dosnt play death animation
+
+Todo:
+---------------------------------------------
+ -Effects gun
+ -Toggle switch for drag cmd
+ -MODEL SYSTEM!
+ -possibly NPC's :)
+ -apply the same invisible stuff to regular fire on grenades and also takes sounds out of both except for the     explostion sound
+ -admin cmd to freeentity on all tripmines
+ -admin cmd to revive all
+ -MODEL SYSTEM!
+ -MODEL SYSTEM!
+ -MODEL SYSTEM!
+ -MODEL SYSTEM!
+ -MODEL SYSTEM!
+ -MODEL SYSTEM!
+ -MODEL SYSTEM!
+ -MODEL SYSTEM!
+ -MODEL SYSTEM!
+
+
+
+
+v0.1.2  Modified By J2J Last Compile Date: 28/06/04
+=========================================================================================
+Features Added:
+--------------------------------------------
+ Phaser and Phaser Compression Rifle sounds added from Nemisis.
+ Score Board: Score replace with Client Number (Hey its a rpg, who needs a score, right?)
+
+Bugs Found:
+--------------------------------------------
+
+Bugs Fixed:
+--------------------------------------------
+ Cloak and Flight now only availible for Admin class.
+
+Known Bugs:
+---------------------------------------------
+
+
+
+v0.1.1  Modified By J2J Last Compile Date: 23/06/04
+=========================================================================================
+Features Added:
+--------------------------------------------
+ (Non-Code) - Swaped primary grenades to the single player version model.[In pak3.pk3, add all new contnent here till next release] -Now using extracted.
+ Added Easter Egg.
+ Added yet another mapper (yam) to the credits.
+ Transporter Tricorder now has personal coordinates
+ Transporter Power Up now has custom transport points.
+ Added chat commands to return server exe OS, and direct cmd to shutdown server (due to fuckface carter)
+ Added Chat to Area function, and made it default chat.
+
+
+Bugs Found:
+--------------------------------------------
+ Ext. Laser bug: Flash light pile up effect still visible to other players when owner is in spec;
+                 Also it piles up flash lights when in an invalid class, and no class is the right class!
+ Tripmines crash the server when a player comes into direct contact, assuming ent trace is going through,  -causing a error
+ Cloaking only works if clients health is 40 or more.
+ Cloaking still availible for marines, possible oversight?
+
+
+Bugs Fixed:
+--------------------------------------------
+ Trip mines now expload for non admin classes properly, and never for a passing admin;
+ Trip mines know don't crash the game ever, working perfectly;
+ Laser/Flashlight Problems fixed, so that admin and marine class can have laser, and no layering of lights.
+ Noclip spectating nolonger uses doors or transporter entities.
+ Changed all of Phenix's stricmp functions to Q_stricmp for QVM compile (:P)
+
+
+Known Bugs:
+---------------------------------------------
+ No clip spectating still jerky.
+
+
+
+v0.1.0  Modified By Phenix Last Compile Date: 14/06/04
+=========================================================================================
+Features Added:
+-------------------------------------------
+ New UI color scheme change;
+ New UI Main Menu (RPG-X Credits, Player Model);
+ Version Info / Control;
+ Development Only: Rcon Get Command for use of selected RPG-X Team member only; 
+  	-This has been added due to the recent leak of an older preview version by Fuck-Face Carter
+ And everything before this.
+
+
+Bugs Found:
+-------------------------------------------
+
+
+Bug Fixes:
+-------------------------------------------
+ None
+
+
+Known Bugs:
+-------------------------------------------
+ Tripmines expload at random (mostly when the owner admin is NOT in admin class, then expload at anyone);
+ Noclip Spectating has jerky movment, still uses door transporter entities;
+ TR-116 produces 1000s of errors on primary fire, and secondary fire whilst invisible still has effect.
+ Bugs when using marine laser in admin class, it piles up flash lights. Same in the actual marine class.
+ Player Model on main menu does not change weapons with the weapon display as it should.
