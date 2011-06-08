@@ -1347,7 +1347,7 @@ static int CG_CalcViewValues( void ) {
 		}
 	}
 
-	if ( cg.renderingThirdPerson ) {
+	if ( cg.renderingThirdPerson && ps->pm_type != PM_CCAM ) {
 		// back away from character
 		CG_OffsetThirdPersonView();
 	} else {

@@ -49,7 +49,7 @@ void				G_LuaShutdown(void);
 void				G_LuaStatus(gentity_t *ent);
 lvm_t				*G_LuaGetVM(lua_State *L);
 
-// lua/entity.c
+// lua_entity.c
 typedef struct {
 	gentity_t *e;
 } lent_t;
@@ -58,19 +58,23 @@ int			Luaopen_Entity(lua_State *L);
 void		Lua_PushEntity(lua_State *L, gentity_t *ent);
 lent_t		*Lua_GetEntity(lua_State *L, int argNum);
 
-// lua/game.c
+// lua_game.c
 int			Luaopen_Game(lua_State *L);
 
-// lua/qmath.c
+// lua_qmath.c
 int			Luaopen_Qmath(lua_State *L);
 
-// lua/vector.c
+// lua_vector.c
 int			Luaopen_Vector(lua_State *L);
 void		Lua_PushVector(lua_State *L, vec3_t v);
 vec_t		*Lua_GetVector(lua_State *L, int argNum);
 int			Lua_IsVector(lua_State *L, int index);
 vec3_t		*Lua_GetVectorMisc(lua_State *L, int *index);
 
-// lua/mover.c
+// lua_mover.c
 int			Luaopen_Mover(lua_State *L);
+
+// lua_cinematic.c
+int			Luaopen_Cinematic(lua_State *L);
+
 #endif

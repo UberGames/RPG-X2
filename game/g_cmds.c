@@ -9914,6 +9914,32 @@ static void Cmd_findEntitiesInRadius(gentity_t *ent) {
 	}
 }
 
+// CCAM
+extern void Cinematic_ActivateCameraMode(gentity_t *ent, gentity_t *target);
+extern void Cinematic_DeactivateCameraMode(gentity_t *ent);
+void Cmd_Camtest_f(gentity_t *ent) {
+	gentity_t *targ;
+	char tname[256];
+
+	if(trap_Argc() < 1) return;
+
+	G_Printf("activate cam\n");
+
+	if(ent->flags & FL_CCAM) return;
+
+	trap_Argv(1, tname, sizeof(tname));
+
+	targ = G_Find(NULL, FOFS(targetname), tname);
+	if(!targ) return;
+
+	Cinematic_ActivateCameraMode(ent, targ);
+}
+
+void Cmd_CamtestEnd_f(gentity_t *ent) {
+	Cinematic_DeactivateCameraMode(ent);
+}
+// END CCAM
+
 /*
 =================
 ClientCommand
@@ -10168,6 +10194,12 @@ void ClientCommand( int clientNum )
 	else if (Q_stricmp(cmd, "userDel") == 0)
 		Cmd_SqlUserDel_f(ent);
 	#endif
+	// CCAM
+	else if (Q_stricmp(cmd, "camtest") == 0)
+		Cmd_Camtest_f(ent);
+	else if (Q_stricmp(cmd, "camtestend") == 0)
+		Cmd_CamtestEnd_f(ent);
+	// END CCAM
 	else if (Q_strncmp (cmd, "\n", 1) == 0 || Q_strncmp (cmd, " ", 1) == 0 || Q_strncmp (cmd, "\0", 1) == 0) // sorry
 		(void)(0);
 	else

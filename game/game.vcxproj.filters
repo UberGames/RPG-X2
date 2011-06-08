@@ -258,6 +258,12 @@
     <ClCompile Include="luac.c">
       <Filter>Source Files\lua</Filter>
     </ClCompile>
+    <ClCompile Include="g_cinematic.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lua_cinematic.c">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_chat.h">
@@ -430,6 +436,9 @@
     </ClInclude>
     <ClInclude Include="lzio.h">
       <Filter>Source Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="g_cinematic.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

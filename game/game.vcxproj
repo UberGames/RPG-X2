@@ -227,6 +227,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="g_cinematic.c" />
     <ClCompile Include="lapi.c" />
     <ClCompile Include="lauxlib.c" />
     <ClCompile Include="lbaselib.c" />
@@ -258,6 +259,7 @@
     <ClCompile Include="ltm.c" />
     <ClCompile Include="lua.c" />
     <ClCompile Include="luac.c" />
+    <ClCompile Include="lua_cinematic.c" />
     <ClCompile Include="lua_game.c" />
     <ClCompile Include="lua_entity.c" />
     <ClCompile Include="g_active.c">
@@ -487,6 +489,7 @@
     <ClInclude Include="botlib.h" />
     <ClInclude Include="chars.h" />
     <ClInclude Include="g_breakable.h" />
+    <ClInclude Include="g_cinematic.h" />
     <ClInclude Include="g_groups.h" />
     <ClInclude Include="g_local.h" />
     <ClInclude Include="g_lua.h" />
@@ -542,6 +545,13 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuildStep>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

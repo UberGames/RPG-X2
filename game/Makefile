@@ -56,6 +56,7 @@ OBJ = \
   g_bot.o \
   g_arenas.o \
   g_active.o \
+  g_cinematic.o \
   bg_slidemove.o \
   bg_pmove.o \
   bg_oums.o \
@@ -70,7 +71,8 @@ OBJ = \
   lua_entity.o \
   lua_vector.o \
   lua_mover.o \
-  lua_qmath.o 
+  lua_qmath.o \
+  lua_cinematic.o
  
 # game object  for syscalls to the engine
 SOOBJ = \
@@ -114,9 +116,9 @@ LUAOBJ = \
   lzio.o
 
 # do cc for shared library
-DO_SOCC = $(CC) $(SOCFLAGS) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) -Wall -o $@ -c $<
 # do cc for lua
-DO_LUACC = $(CC) -O2 -Wall -fPIC -DLUA_COMPAT_ALL -o $@ -c $<
+DO_LUACC = $(CC) -O2 -Wall $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
 
 build_so: DO_CC=$(DO_SOCC)
 
@@ -160,12 +162,14 @@ q_shared.o : q_shared.c; $(DO_CC)
 g_lua.o: g_lua.c; $(DO_CC)
 g_ui.o: g_ui.c; $(DO_CC)
 g_sql.o: g_sql.c; $(DO_CC)
+g_cinematic.o: g_cinematic.c; $(DO_CC)
 bg_oums.o : bg_oums.c; $(DO_CC)
 lua_game.o: lua_game.c; $(DO_CC)
 lua_entity.o: lua_entity.c; $(DO_CC)
 lua_mover.o: lua_mover.c; $(DO_CC)
 lua_qmath.o: lua_qmath.c; $(DO_CC)
 lua_vector.o: lua_vector.c; $(DO_CC)
+lua_cinematic.o: lua_cinematic.c; $(DO_CC)
  
 # game syscalls 
 g_syscalls.o : g_syscalls.c; $(DO_CC)

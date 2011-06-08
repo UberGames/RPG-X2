@@ -1061,5 +1061,9 @@ void CG_InitConsoleCommands( void ) {
 	#ifdef CG_LUA
 	trap_AddCommand("lua_status");
 	#endif
+
+	// CCAM
+	trap_AddCommand("camtest");
+	trap_AddCommand("camtestend");
 }
 

@@ -2661,6 +2661,13 @@ void SendPendingPredictableEvents( playerState_t *ps ) {
 	}
 }
 
+void ClientCamThink(gentity_t *client) {
+	if(!client->client->cam) return;
+	G_SetOrigin(client, client->client->cam->s.origin);
+	SetClientViewAngle(client, client->client->cam->s.angles);
+	trap_LinkEntity(client);
+}
+
 /*
 ==============
 ClientThink
@@ -2717,6 +2724,11 @@ void ClientThink_real( gentity_t *ent ) {
 	//
 	if ( level.intermissiontime ) {
 		ClientIntermissionThink( client );
+		return;
+	}
+
+	if (ent->flags & FL_CCAM) {
+		ClientCamThink( ent );
 		return;
 	}
 

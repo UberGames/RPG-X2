@@ -73,7 +73,7 @@ SOOBJ = \
   cg_syscalls.o 
 
 # do cc for shared library
-DO_SOCC = $(CC) $(SOCFLAGS) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) -Wall -o $@ -c $<
 
 build_so: DO_CC=$(DO_SOCC)
 

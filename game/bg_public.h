@@ -258,7 +258,8 @@ typedef enum {
 	PM_SPECTATOR,	//!< still run into walls
 	PM_DEAD,		//!< no acceleration or turning, but free falling
 	PM_FREEZE,		//!< stuck in place with no control
-	PM_INTERMISSION	//!< no movement or status bar
+	PM_INTERMISSION,//!< no movement or status bar
+	PM_CCAM			//!< cinematic cam mode
 } pmtype_t;
 
 /** \enum weaponstate_t

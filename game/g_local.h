@@ -1,6 +1,8 @@
 // Copyright (C) 1999-2000 Id Software, Inc.
 //
 // g_local.h -- local definitions for game module
+#ifndef _G_LOCAL_H_
+#define _G_LOCAL_H_
 
 #include "q_shared.h"
 #include "bg_public.h"
@@ -41,6 +43,8 @@
 #define FL_CLAMPED				0x01000000  //RPG-X | TiM	 | 25/6/2006
 #define FL_THROWN_ITEM          0x02000000  //RPG-X | Marcin | 03/12/2008
 #define FL_LOCKED				0x04000000	//RPG-X | GSIO01 | 08/05/2009
+// CCAM
+#define FL_CCAM					0x08000000
 
 //RPG-X Defines ==============================
 
@@ -602,6 +606,11 @@ struct gclient_s {
 	int			uid;							//!< uiser id of the player in the sql database 
 	byte		sqlkey;							//!< random key used to make transmission of the username and password from the ui at least a bit safer
 	#endif
+
+	// CCAM
+	vec3_t		origViewAngles;
+	vec3_t		origOrigin;
+	gentity_t	*cam;
 };
 
 
@@ -2047,3 +2056,4 @@ struct luaAlertState_s {
 
 luaAlertState_t *luaAlertState;
 
+#endif //_G_LOCAL_H_

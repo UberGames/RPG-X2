@@ -238,6 +238,9 @@ void SP_path_point(gentity_t *ent);
 void SP_ui_transporter(gentity_t *ent);
 void SP_ui_holodeck(gentity_t *ent);
 
+// cinematic entities
+void SP_cinematic_camera(gentity_t *ent);
+
 
 spawn_t	spawns[] = {
 	// info entities don't do anything at all, but provide positional
@@ -414,6 +417,9 @@ spawn_t	spawns[] = {
 	{"ui_holodeck",					SP_ui_holodeck},
 	
 	{"ref_tag",						SP_info_notnull},
+
+	// cinematic entities
+	{"cinematic_camera",			SP_cinematic_camera},
 
 	{0, 0}
 };

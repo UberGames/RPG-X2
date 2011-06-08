@@ -4827,6 +4827,10 @@ static void CG_Draw2D( void ) {
 		return;
 	}
 
+	if ( cg.snap->ps.pm_type == PM_CCAM ) {
+		return;
+	}
+
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 #ifndef FINAL_BUILD
 		CG_DrawUpperRight();

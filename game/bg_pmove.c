@@ -3478,6 +3478,10 @@ void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) {
 		return;		// no view changes at all
 	}
 
+	if ( ps->pm_type == PM_CCAM) {
+		return;
+	}
+
 	if ( ps->pm_type != PM_SPECTATOR && ps->stats[STAT_HEALTH] <= 1 ) { //RPG-X: RedTechie - This use to be 0 but in rpg-x with or without medics revive 1 health means you die!
 		return;		// no view changes at all
 	}
@@ -3554,6 +3558,7 @@ void PmoveSingle (pmove_t *pmove) {
 	// set the firing flag for continuous beam weapons
 	if (	!(ps->pm_flags & PMF_RESPAWNED) && 
 			ps->pm_type != PM_INTERMISSION && 
+			ps->pm_type != PM_CCAM &&
 			( (pm->cmd.buttons & BUTTON_ATTACK) || (pm->cmd.buttons & BUTTON_ALT_ATTACK) ) &&
 			(ps->ammo[ ps->weapon ] || ps->weapon == WP_PHASER))
 	{
@@ -3712,31 +3717,19 @@ void PmoveSingle (pmove_t *pmove) {
 
 	if ( ps->pm_type == PM_SPECTATOR )
 	{
-		//spectator or an eliminated player
-
-	//RPG-X J2J - NoClip Spectation:
-		//Change to allow noclip in spectator if enabled on server
-		//And if the client wants to noclip
-		/*if(rpg_noclipspectating.integer == 1 && ClientNCSpec == qtrue)
-		{
-			PM_NoclipMove();
-			PM_DropTimers ();
-			return;
-		}*/
-		//Else allow flight.
-		//else
-		{
-			PM_CheckDuck ();
-			PM_FlyMove();
-			PM_DropTimers ();
-			return;
-		}
-	////////////////////////////////
+		PM_CheckDuck ();
+		PM_FlyMove();
+		PM_DropTimers ();
+		return;
 	}
 
 	if ( ps->pm_type == PM_NOCLIP ) {
 		PM_NoclipMove ();
 		PM_DropTimers ();
+		return;
+	}
+
+	if ( ps->pm_type == PM_CCAM) {
 		return;
 	}
 
