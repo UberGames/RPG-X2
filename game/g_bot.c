@@ -398,7 +398,7 @@ void G_CheckMinimumPlayers( void ) {
 		}
 	}
 
-	if ( g_pModAssimilation.integer != 0 && numKilled != 0 || g_pModElimination.integer != 0 && numKilled != 0 )
+	if ( (g_pModAssimilation.integer != 0 && numKilled != 0) || (g_pModElimination.integer != 0 && numKilled != 0) )
 	{
 		return;
 	}

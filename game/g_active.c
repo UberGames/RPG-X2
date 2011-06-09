@@ -123,7 +123,7 @@ void TryUse( gentity_t *ent )
 		#endif
 		return;
 	}
-	else if ( target && target->s.number == ENTITYNUM_WORLD || (target->s.pos.trType == TR_STATIONARY && !(trace.surfaceFlags & SURF_NOIMPACT) && !target->takedamage) )
+	else if ( (target && target->s.number == ENTITYNUM_WORLD) || (target->s.pos.trType == TR_STATIONARY && !(trace.surfaceFlags & SURF_NOIMPACT) && !target->takedamage) )
 	{
 		//switch( ent->client->sess.sessionClass )
 		//{
@@ -595,7 +595,7 @@ char *TimedMessage( void ){
 		}
 
 		//TiM: Cheap hack to stop it freezing if string0 is empty.  THe above condition don't work here
-		if ( ( i == lastTimedMessage == 1 ) && !strlen( rpg_message[i-1] ) ) {
+		if ( ((i == 1 && lastTimedMessage == 1) && !strlen( rpg_message[i-1] )) ) {
 			return NULL;
 		}
 
@@ -1499,7 +1499,7 @@ void CreateShield(gentity_t *ent)
 	int			height, posWidth, negWidth, halfWidth = 0;
 	qboolean	xaxis;
 	int			paramData = 0;
-	static int	shieldID;
+	//static int	shieldID;
 	//gentity_t   *emitter;
 
 	// trace upward to find height of shield

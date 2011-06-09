@@ -279,9 +279,9 @@ static int Game_AlertAddShader(lua_State *L) {
 
 // game.Alert(entity ent, integer target, boolean silent)
 static int Game_Alert(lua_State *L) {
-	lent_t *lent;
+	/*lent_t *lent;
 	int current, target;
-	qboolean silent;
+	qboolean silent;*/
 
 	return 0;
 }

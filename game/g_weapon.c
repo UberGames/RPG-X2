@@ -500,7 +500,7 @@ void IMODHit(qboolean alt_fire, gentity_t *traceEnt, gentity_t *ent, vec3_t d_di
 					if (alt_fire)
 					{
 						ent->client->accurateCount++;
-						/*if ( ent->client->accurateCount >= 2 ) 
+						if ( ent->client->accurateCount >= 2 ) 
 						{
 							ent->client->accurateCount -= 2;
 							ent->client->ps.persistant[PERS_REWARD_COUNT]++;
@@ -642,7 +642,7 @@ void FireScavengerBullet( gentity_t *ent, vec3_t start, vec3_t dir )
 	grenade->parent = ent;
 	grenade->damage = SCAV_ALT_DAMAGE*DMG_VAR*s_quadFactor; 
 	grenade->splashDamage = SCAV_ALT_SPLASH_DAM*s_quadFactor;
-	grenade->splashRadius = SCAV_ALT_SPLASH_RAD;//*s_quadFactor;
+	grenade->splashRadius = SCAV_ALT_SPLASH_RAD;// *s_quadFactor;
 	grenade->methodOfDeath = MOD_SCAVENGER_ALT;
 	grenade->splashMethodOfDeath = MOD_SCAVENGER_ALT_SPLASH;
 	grenade->clipmask = MASK_SHOT;

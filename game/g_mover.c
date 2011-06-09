@@ -422,6 +422,8 @@ void ROT_SetMoverState( gentity_t *ent, moverState_t moverState, int time )
 		VectorScale( delta, f, ent->s.apos.trDelta );
 		ent->s.apos.trType = TR_LINEAR_STOP;
 		break;
+	default: // to make gcc happy
+		break;
 	}
 	BG_EvaluateTrajectory( &ent->s.apos, level.time, ent->r.currentAngles );	
 }
@@ -521,6 +523,8 @@ void SetMoverState( gentity_t *ent, moverState_t moverState, int time ) {
 	case MOVER_LUA:
 		break;
 	#endif
+	default: // to make gcc happy
+		break;
 	}
 	BG_EvaluateTrajectory( &ent->s.pos, level.time, ent->r.currentOrigin );
 	BG_EvaluateTrajectory( &ent->s.apos, level.time, ent->r.currentAngles );
@@ -868,8 +872,8 @@ void Use_BinaryMover( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	}
 
 	//GSIO01 | 09/05/2009: do engage if door is admin only and player isn admin
-	if(!Q_stricmp(ent->classname, "func_door") && ent->spawnflags & 128 
-		|| !Q_stricmp(ent->classname, "func_door_rotating") && ent->spawnflags & 64) {
+	if((!Q_stricmp(ent->classname, "func_door") && (ent->spawnflags & 128)) 
+		|| (!Q_stricmp(ent->classname, "func_door_rotating") && (ent->spawnflags & 64))) {
 		if(activator && !IsAdmin(activator))
 			return;
 	}
@@ -1401,8 +1405,8 @@ void Think_SpawnNewDoorTrigger( gentity_t *ent ) {
 	}
 
 	// should we have a big old trigger volume, or a small one?
-	if(ent->spawnflags & 256 && !Q_stricmp(ent->classname, "func_door") ||
-		ent->spawnflags & 128 && !Q_stricmp(ent->classname, "func_door_rotating")) {
+	if(((ent->spawnflags & 256) && !Q_stricmp(ent->classname, "func_door")) ||
+		((ent->spawnflags & 128) && !Q_stricmp(ent->classname, "func_door_rotating"))) {
 		maxs[best] += 12;
 		mins[best] -= 12;
 	}
@@ -2350,8 +2354,8 @@ static void forcefield_touch( gentity_t *ent, gentity_t *other, trace_t *trace )
 	ent->r.svFlags &= ~SVF_NOCLIENT;
 	ent->s.eFlags &= ~EF_NODRAW;
 
-	if ( (ent->spawnflags & 4) && /*g_classData[other->client->sess.sessionClass].isAdmin*/ IsAdmin(other) || 
-		(rpg_borgAdapt.integer && rpg_borgMoveThroughFields.integer && IsBorg(other) && !(ent->spawnflags & 256)) )
+	if ( ((ent->spawnflags & 4) && IsAdmin(other)) || 
+		((rpg_borgAdapt.integer && rpg_borgMoveThroughFields.integer && IsBorg(other) && !(ent->spawnflags & 256))) )
 	{
 		FieldGoNotSolid( ent );
 	}
@@ -3149,7 +3153,7 @@ void Reached_AdvancedMover(gentity_t *ent) {
 			ent->damage = 0;
 		if(!touched->targetname2 && !(ent->spawnflags & 1))
 			ent->damage = 1;
-		if(!touched->target && touched->angle || !touched->targetname2 && !(ent->spawnflags & 1) && touched->angle)
+		if((!touched->target && touched->angle) || (!touched->targetname2 && !(ent->spawnflags & 1) && touched->angle))
 			bypass = qtrue;
 
 		if( touched->wait < 0) {

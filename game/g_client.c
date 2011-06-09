@@ -1379,6 +1379,8 @@ void SetCSTeam( team_t team, char *teamname )
 	case TEAM_RED:
 		trap_SetConfigstring( CS_RED_GROUP, teamname );
 		break;
+	default: // make gcc happy
+		break;
 	}
 }
 /*
@@ -1744,7 +1746,8 @@ void ClientUserinfoChanged( int clientNum ) {
 				}
 				break;
 			}
-
+		default:
+			break;
 		}
 		if ( g_gametype.integer >= GT_TEAM && sess->sessionTeam == TEAM_SPECTATOR ) {
 			// don't ever use a default skin in teamplay, it would just waste memory
@@ -4000,7 +4003,7 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 	//body->s.apos.trBase[PITCH] = 0;
 	//body->s.apos.trBase[ROLL] = 0;
 
-	/*AngleVectors( body->s.apos.trBase, f, r, u );
+	AngleVectors( body->s.apos.trBase, f, r, u );
 	VectorMA( pad->r.currentOrigin, offset[0], f, vec );
 	VectorMA( vec, offset[1], r, vec );
 	VectorMA( vec, offset[2], u, vec );

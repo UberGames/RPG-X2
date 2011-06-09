@@ -65,7 +65,7 @@ vmCvar_t *Min_Weapons[WP_NUM_WEAPONS] = {
 
 
 // RPG-X: Marcin: Definitions of the PADD messaging system data structures - 06/12/2008
-paddData_t	paddData[PADD_DATA_MAX] = { 0 };
+paddData_t	paddData[PADD_DATA_MAX];
 int			paddDataNum = 0;
 int			numTotalDropped = 0;
 
@@ -95,6 +95,7 @@ int Max_Weapon(int num)
 Min_Weapon
 RPG-X | Marcin | 06/12/2008
 ===============
+*/
 /**
 *	Get the minimum ammount of weapons a player can carry for a weapon.
 *	\param num weapon number (WP_...)

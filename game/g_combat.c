@@ -356,7 +356,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	contents = trap_PointContents( self->r.currentOrigin, -1 );
 
 	if(rpg_medicsrevive.integer == 1 && !( contents & CONTENTS_NODROP ) && (meansOfDeath != MOD_TRIGGER_HURT)){
-	static		int deathNum;
+	//static		int deathNum;
 	int			anim;
 	char		*classname = NULL;
 	gentity_t	*detpack = NULL;
@@ -1574,8 +1574,8 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	}
 
 	// shootable doors / buttons don't actually have any health
-	if ( targ->s.eType == ET_MOVER && Q_stricmp("func_breakable", targ->classname) != 0 && Q_stricmp("misc_model_breakable", targ->classname) != 0 ||
-		targ->s.eType == ET_MOVER_STR && Q_stricmp("func_breakable", targ->classname) != 0 && Q_stricmp("misc_model_breakable", targ->classname) != 0) //RPG-X | GSIO01 | 13/05/2009 
+	if ( (targ->s.eType == ET_MOVER && Q_stricmp("func_breakable", targ->classname) != 0 && Q_stricmp("misc_model_breakable", targ->classname) != 0) ||
+		(targ->s.eType == ET_MOVER_STR && Q_stricmp("func_breakable", targ->classname) != 0 && Q_stricmp("misc_model_breakable", targ->classname) != 0)) //RPG-X | GSIO01 | 13/05/2009 
 	{
 		if ( !Q_stricmp( targ->classname, "func_forcefield" ) )
 		{

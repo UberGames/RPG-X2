@@ -965,7 +965,7 @@ void SP_fx_spark( gentity_t	*ent );
 //
 // g_cmds.c
 //
-static void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message );
+//static void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message );
 
 //
 // g_pweapon.c

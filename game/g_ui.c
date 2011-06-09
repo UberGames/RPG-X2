@@ -67,7 +67,7 @@ void ui_transporter_use(gentity_t *ent, gentity_t *other, gentity_t *activator) 
 */
 void ui_transporter_setup(gentity_t *ent) {
 	//int i;
-	gentity_t *target;
+	gentity_t *target = NULL;
 
 	target = G_Find(target, FOFS(targetname), ent->target);
 

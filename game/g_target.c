@@ -1040,7 +1040,7 @@ static void target_turbolift_endMove ( gentity_t *ent )
 	#ifdef XTRA
 	// check for shader remaps
 	if(rpg_calcLiftTravelDuration.integer) {
-		if(ent->truename && otherLift->truename || ent->falsename && otherLift->falsename) {
+		if((ent->truename && otherLift->truename) || (ent->falsename && otherLift->falsename)) {
 			f = level.time * 0.001;
 			AddRemap(ent->targetShaderName, ent->targetShaderName, f);
 			AddRemap(otherLift->targetShaderName, otherLift->targetShaderName, f);

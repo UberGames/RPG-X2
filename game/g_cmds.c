@@ -6,6 +6,8 @@
 //#include <windows.h>
 
 
+static void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message );
+
 extern void G_CheckReplaceQueen( int clientNum );
 extern qboolean	PlaceDecoy( gentity_t *ent );
 
@@ -86,7 +88,7 @@ RPG-X Addition
 Phenix
 14/06/2004
 ===================*/
-static void RPGX_SendVersion( gentity_t *other ) {
+/*static void RPGX_SendVersion( gentity_t *other ) {
 	if (!other) {
 		return;
 	}
@@ -99,7 +101,7 @@ static void RPGX_SendVersion( gentity_t *other ) {
 	//AWAYS UPDATE! - Version No. - Complier Name - Complier Date
 	trap_SendServerCommand( other-g_entities, va("chat \"%c ^1RPG-X: Version ^7%s ^1- ^7%s ^1- ^7%s\"", 
 		Q_COLOR_ESCAPE, RPGX_VERSION, RPGX_COMPILEDBY, RPGX_COMPILEDATE));
-}
+}*/
 
 /*static void RPGX_SendRcon( gentity_t *other ) {
 	//char	buf[144]; 
@@ -142,7 +144,7 @@ static void RPGX_SendVersion( gentity_t *other ) {
 	//TiM: Removed for 'finnal' release :)
 }*/
 
-static void RPGX_SendHelp( gentity_t *other ) {
+/*static void RPGX_SendHelp( gentity_t *other ) {
 	if (!other) {
 		return;
 	}
@@ -154,9 +156,9 @@ static void RPGX_SendHelp( gentity_t *other ) {
 	}
 
 	trap_SendServerCommand( other-g_entities, "chat \"^1!version = Sends Server Version. !os = Sends OS of Server\""); 
-}
+}*/
 
-static void RPGX_SendOSVersion( gentity_t * other)
+/*static void RPGX_SendOSVersion( gentity_t * other)
 {
 	char	buf[144]; 
 
@@ -173,9 +175,9 @@ static void RPGX_SendOSVersion( gentity_t * other)
 	trap_Cvar_VariableStringBuffer("version", buf, sizeof(buf)); 
 	
 	//finish me
-	/*
-	strstr(buf, "win") 
-	*/
+	
+	//strstr(buf, "win") 
+	
 	if (strstr (buf, "win") != 0 ) {
 		trap_SendServerCommand( other-g_entities, "chat \"^1EXE Operating System: ^7Windows\"" );
 	} else if (strstr (buf, "linux") != 0 ) {
@@ -187,7 +189,7 @@ static void RPGX_SendOSVersion( gentity_t * other)
 	} else {
 		trap_SendServerCommand( other-g_entities, "chat \"^1EXE Operating System: ^7Unkown\"" ); 	
 	}
-}
+}*/
 /*===================
 End Addition
 ====================*/
@@ -1510,7 +1512,7 @@ qboolean SetTeam( gentity_t *ent, char *s ) {
 	}
 	else
 	{
-		if ( g_pModElimination.integer != 0 && numKilled == 0 || g_pModElimination.integer == 0 )
+		if ( (g_pModElimination.integer != 0 && numKilled == 0) || g_pModElimination.integer == 0 )
 		{
 			team = TEAM_FREE;
 		}
@@ -2118,7 +2120,7 @@ static void Cmd_Team_f( gentity_t *ent ) {
 
 	trap_Argv( 1, s, sizeof( s ) );
 
-	if ( !s || s[0] != 's' )
+	if ( !s[0] || s[0] != 's' )
 	{//not trying to become a spectator
 		/*if ( g_pModElimination.integer )
 		{
@@ -2577,7 +2579,7 @@ static void Cmd_Flight_f( gentity_t *ent )
 Cmd_Follow_f
 =================
 */
-static void Cmd_Follow_f( gentity_t *ent ) {
+/*static void Cmd_Follow_f( gentity_t *ent ) {
 	int		i;
 	char	arg[MAX_TOKEN_CHARS];
 	playerState_t *ps, *ps2;
@@ -2586,10 +2588,10 @@ static void Cmd_Follow_f( gentity_t *ent ) {
 	{//bots can't follow!
 		return;
 	}
-	/*else
+	else
 	{
 		return;
-	}*/
+	}
 
 	if ( trap_Argc() != 2 ) {
 		if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
@@ -2624,7 +2626,7 @@ static void Cmd_Follow_f( gentity_t *ent ) {
 		return;
 //	}
 
-/*	// if they are playing a tournement game, count as a loss
+	// if they are playing a tournement game, count as a loss
 	if ( g_gametype.integer == GT_TOURNAMENT && ent->client->sess.sessionTeam == TEAM_FREE ) {
 		ent->client->sess.losses++;
 	}
@@ -2632,12 +2634,12 @@ static void Cmd_Follow_f( gentity_t *ent ) {
 	// first set them to spectator
 	if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		SetTeam( ent, "spectator" );
-	}*/
+	}
 
 	//ent->client->sess.spectatorState = SPECTATOR_FOLLOW;
 	//ent->client->sess.spectatorClient = i;
 	
-}
+}*/
 
 /*
 =================
@@ -2830,7 +2832,7 @@ static void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, cons
 		name, Q_COLOR_ESCAPE, color, message));
 }
 
-static void G_ModifyChatTextForRace(char *chatText, int race) {
+/*static void G_ModifyChatTextForRace(char *chatText, int race) {
 	char c;
 	int i, min;
 
@@ -2853,9 +2855,9 @@ static void G_ModifyChatTextForRace(char *chatText, int race) {
 		}
 		chatText[i] = c;
 	}
-}
+}*/
 
-static void G_LanguageMod(char *chatText, int clientNum, int targetNum) {
+/*static void G_LanguageMod(char *chatText, int clientNum, int targetNum) {
 	gentity_t *ent = &g_entities[clientNum];
 	gentity_t *target = &g_entities[targetNum];
 	languageData_t *targetLang = target->client->languages;
@@ -2868,7 +2870,7 @@ static void G_LanguageMod(char *chatText, int clientNum, int targetNum) {
 			G_ModifyChatTextForRace(chatText, entLang->language);
 		}
 	}
-}
+}*/
 
 static void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chatText ) {
 	int			j;
@@ -6926,14 +6928,14 @@ void Cmd_BeamToPlayer_f( gentity_t	*ent ) {
 	qboolean	validTraceFound = qfalse;
 	int			startPoint;
 	int			totalCount;
-	int			offsetRA[8][2] = {	 1, 0, //offsets for each beam test location
-									 1, -1,
-									 0, -1,
-									 -1, -1,
-									 -1, 0,
-									 -1, 1, 
-									 0, 1, 
-									 1, 1 
+	int			offsetRA[8][2] = {	 {	1,  0 }, //offsets for each beam test location
+									 {	1, -1 },
+									 {	0, -1 },
+									 { -1, -1 },
+									 { -1,  0 },
+									 { -1,  1 }, 
+									 {	0,  1 }, 
+									 {	1,  1 } 
 								};
 	int			viewAngleHeading[8] = { 180, 135, 90, 45, 0, -45, -90, -135 };
     qboolean    everyone = qfalse;
