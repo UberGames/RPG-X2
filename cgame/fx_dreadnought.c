@@ -127,7 +127,7 @@ FX_DreadnoughtFire
 	beam.data.electricity.deviation = 0.12;
 	trap_R_AddRefEntityToScene( &beam );
 	
-/*
+
 
 	le = FX_AddLine( origin, end, 2.0f, scale * 6, 0.0f, 0.2f, 0.2f, 100, cgs.media.dnBoltShader );
 	if (le)

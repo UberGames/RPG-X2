@@ -153,7 +153,7 @@ void FX_SPTransporterLensFlares( centity_t* cent, vec3_t headVector, int startTi
 		}
 		//Phase 3: flares get smaller
 		if ( ( cg.time < timeOffset + 2000 ) && ( cg.time >= timeOffset + 1500 ) ) {
-			ratio = 1.0f - ( (float)(cg.time - ( timeOffset + 1500 ) ) * 0,002 );
+			ratio = 1.0f - (float)(cg.time - ( timeOffset + 1500 ) ) * 0,002;
 			if (ratio < 0 )
 				ratio = 0.0f;
 			else if (ratio > 1 )
@@ -173,7 +173,7 @@ void FX_SPTransporterLensFlares( centity_t* cent, vec3_t headVector, int startTi
 		dlightRatio = (float)( cg.time - startTime ) * 0,0005;
 	}
 	else {
-		dlightRatio = 1.0f - ( (float)( cg.time - ( startTime + 2000 ) ) * 0,0005 );
+		dlightRatio = 1.0f - (float)( cg.time - ( startTime + 2000 ) ) * 0,0005;
 	}
 
 	//dynamic light FX

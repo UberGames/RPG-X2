@@ -493,7 +493,7 @@ static void CG_DrawClientScore_Big( int y, score_t *score, float *color, float f
 		CG_DrawRank( SB_RANK_X_BIG, y-2,ci->pClass, score->score);
 
 		//draw player class name
-		if(rpg_class && rpg_color){
+		if(rpg_class){
 			UI_DrawProportionalString( SB_RPGCLASS_X_BIG, y , rpg_class, UI_TINYFONT | UI_LEFT, rpg_color); //CT_VLTPURPLE1 CT_WHITE
 		}
 
@@ -933,7 +933,7 @@ static void CG_DrawClientScore( int y, score_t *score, float *color, float fade,
 	}*/
 }
 
-static int CG_GetTeamCount(team_t team, int maxClients)
+/*static int CG_GetTeamCount(team_t team, int maxClients)
 {
 	int		i = 0;
 	int		count = 0;
@@ -953,7 +953,7 @@ static int CG_GetTeamCount(team_t team, int maxClients)
 	}
 
 	return count;
-}
+}*/
 
 /*
 =================
@@ -1757,9 +1757,9 @@ int cg_medalTeamNames[TEAM_MAX] = {
 
 
 // spaced by 70 pixels apart
-static int medalLocations[6] = {570, 500, 430, 360, 290};
+//static int medalLocations[6] = {570, 500, 430, 360, 290};
 
-static void AW_DrawMedal( int medal, int amount, int x, int y )
+/*static void AW_DrawMedal( int medal, int amount, int x, int y )
 {
 	char		buf[20];
 	qhandle_t	hShader;
@@ -1794,7 +1794,7 @@ static void AW_DrawMedal( int medal, int amount, int x, int y )
 		UI_DrawProportionalString( x+24, y+50, buf, UI_TINYFONT|UI_CENTER, yellow );
 		//--------------------------------------------------------------- NAME OF THE AWARD
 	}
-}
+}*/
 
 //========================
 //	DrawTheMedals(int max)

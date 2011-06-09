@@ -30,10 +30,10 @@ const char	*cg_customSoundNames[MAX_CUSTOM_SOUNDS] = {
 
 stringID_table_t BoltonTable[BOLTON_MAX + 1] =
 {
-	ENUM2STRING(BOLTON_HEAD),
-	ENUM2STRING(BOLTON_TORSO),
-	ENUM2STRING(BOLTON_LEGS),
-	NULL, -1
+	{ ENUM2STRING(BOLTON_HEAD) },
+	{ ENUM2STRING(BOLTON_TORSO) },
+	{ ENUM2STRING(BOLTON_LEGS) },
+	{ NULL, -1 }
 };
 
 int timeParam;
@@ -1607,7 +1607,7 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *charNa
 CG_ColorFromString
 ====================
 */
-static void CG_ColorFromString( const char *v, vec3_t color ) {
+/*static void CG_ColorFromString( const char *v, vec3_t color ) {
 	int val;
 
 	VectorClear( color );
@@ -1628,7 +1628,7 @@ static void CG_ColorFromString( const char *v, vec3_t color ) {
 	if ( val & 4 ) {
 		color[0] = 1.0f;
 	}
-}
+}*/
 
 /*
 ===================
@@ -1780,7 +1780,7 @@ static void CG_CopyClientInfoModel( clientInfo_t *from, clientInfo_t *to ) {
 	/*if ( from->boltonTags[0].tagModel && from->boltonTags[0].tagName ) { //if there actually is bolton data...
 		for (i = 0; i < MAX_BOLTONS; i++ ) { //loop thru all of them
 			if ( from->boltonTags[i].tagModel && from->boltonTags[i].tagName ) { //only work on ones that actually have data.
-				/*to->boltonTags[i].modelBase = from->boltonTags[i].modelBase;
+				to->boltonTags[i].modelBase = from->boltonTags[i].modelBase;
 				to->boltonTags[i].tagModel = from->boltonTags[i].tagModel;
 				Q_strncpyz( to->boltonTags[i].tagName, from->boltonTags[i].tagName, sizeof (to->boltonTags[i].tagName) );*/
 				memcpy( to->boltonTags, from->boltonTags, sizeof(to->boltonTags) );
@@ -2654,7 +2654,7 @@ static void CG_SwingAngles( float destination, float swingTolerance, float clamp
 			*swinging = qfalse;
 		} else if ( swing >= clampTolerance || swing <= -clampTolerance ) {
 			*swinging = qtrue;
-		} /*else {
+		} else {
 			*swinging = qtrue;
 		}
 	} 
@@ -3142,7 +3142,7 @@ CG_FlightTrail
 CG_TrailItem
 ===============
 */
-static void CG_TrailItem( centity_t *cent, qhandle_t hModel ) {
+/*static void CG_TrailItem( centity_t *cent, qhandle_t hModel ) {
 	refEntity_t		ent;
 	vec3_t			angles;
 	float			frame;
@@ -3191,7 +3191,7 @@ static void CG_TrailItem( centity_t *cent, qhandle_t hModel ) {
 
 	ent.hModel = hModel;
 	trap_R_AddRefEntityToScene( &ent );
-}
+}*/
 
 /*
 ===============
@@ -4605,11 +4605,11 @@ void CG_Player( centity_t *cent ) {
 	//BLINK CODE
 	//if we have a valid blink skin...
 	//Or we're frowning and we have a frown blink skin
-	if ( !cg_noBlinkingHeads.integer && ci->headSkinBlink 
+	if ( (!cg_noBlinkingHeads.integer && ci->headSkinBlink) 
 		|| 
-			( !cg_noFrowningHeads.integer && 
+			(( !cg_noFrowningHeads.integer && 
 			( cent->currentState.eFlags & EF_EYES_ANGRY ) 
-			&& ci->headSkinFrownBlink ) 
+			&& ci->headSkinFrownBlink) ) 
 		) 
 	{
 		

@@ -642,7 +642,7 @@ void CG_AddTrail( localEntity_t *le )
 		return;
 	}
 
-	if (!le->leFlags & LEF_MOVE)
+	if (!(le->leFlags & LEF_MOVE))
 	{
 		return;
 	}

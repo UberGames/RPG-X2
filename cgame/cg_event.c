@@ -1748,6 +1748,11 @@ case EV_SHAKE_SOUND:
 		}
 		break;
 
+	case EV_CAMMODE_TOGGLE:
+		DEBUGNAME("EV_CAMMODE_TOGGLE");
+		cg.cinematicFade = !cg.cinematicFade;
+		break;
+
 	default:
 		DEBUGNAME("UNKNOWN");
 		CG_Error( "Unknown event: %i", event );

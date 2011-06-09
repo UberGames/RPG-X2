@@ -494,11 +494,11 @@ static void UI_DrawBannerString2( int x, int y, const char* str, vec4_t color )
 		}
 		else if ( ch >= 'A' && ch <= 'Z' ) {
 			ch -= 'A';
-			fcol = (float)propMapB[ch][0] / 256;
-			frow = (float)propMapB[ch][1] / 256;
-			fwidth = (float)propMapB[ch][2] / 256;
+			fcol = (float)propMapB[(int)ch][0] / 256;
+			frow = (float)propMapB[(int)ch][1] / 256;
+			fwidth = (float)propMapB[(int)ch][2] / 256;
 			fheight = (float)PROPB_HEIGHT / 256;
-			aw = (float)(propMapB[ch][2] * cgs.screenXScale);
+			aw = (float)(propMapB[(int)ch][2] * cgs.screenXScale);
 			ah = (float)(PROPB_HEIGHT * cgs.screenYScale);
 			trap_R_DrawStretchPic( ax, ay, aw, ah, fcol, frow, fcol+fwidth, frow+fheight, cgs.media.charsetPropB );
 			ax += (aw + (float)PROPB_GAP_WIDTH * cgs.screenXScale);

@@ -78,7 +78,7 @@ FX_IMODBolt2
 	VectorScale(control2_velocity, -12.0f + (-140.0f * random()), control2_velocity);
 
 	// constant acceleration of control points
-	/*
+	
 	VectorScale(control1_velocity, -1.2, control1_acceleration);	
 	for (i = 0; i < 3; i++)
 	{
@@ -244,7 +244,7 @@ FX_IMODExplosion
 								750.0f,
 								cgs.media.purpleParticleShader );
 
-		//FXE_Spray( normal, 500, 250, 0.75f, /*256,*///vel );
+		//FXE_Spray( normal, 500, 250, 0.75f, 256,//vel );
 	//}
 
 	//CG_ImpactMark( cgs.media.IMODMarkShader, origin, normal, random()*360, 1,1,1,0.75, qfalse, 5, qfalse );
@@ -306,7 +306,7 @@ FX_AltIMODExplosion
 								750.0f,
 								cgs.media.spark2Shader );
 
-		FXE_Spray( normal, 500, 250, 0.75f, /*256,*/ //vel );
+		FXE_Spray( normal, 500, 250, 0.75f, 256, //vel );
 	//}
 
 	//CG_ImpactMark( cgs.media.IMODMarkShader, origin, normal, random()*360, 1,1,1,1, qfalse, 8, qfalse );

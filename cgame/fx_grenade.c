@@ -48,7 +48,7 @@ FX_GrenadeExplode
 void FX_GrenadeExplode( vec3_t origin, vec3_t normal )
 {
 	localEntity_t	*le;
-	qhandle_t	null;
+	qhandle_t	null = 0;
 	vec3_t			direction, org, vel;
 	int i;
 

@@ -120,7 +120,7 @@ void FX_HypoSpray( vec3_t origin, vec3_t dir, qboolean red )  // When not red, i
 /*void FX_HypoSpray( vec3_t origin, vec3_t dir, qboolean red )  // When not red, it'll be blue
 {
 	localEntity_t *le;
-	vec3_t		muzzle, /*mins, maxs, end, color, forward, right;
+	vec3_t		muzzle, mins, maxs, end, color, forward, right;
 	float  scale, dscale;
 	int i;
 
@@ -198,7 +198,7 @@ void FX_HypoSpray( vec3_t origin, vec3_t dir, qboolean red )  // When not red, i
 	if ( fired_from_NPC )
 	{
 		// Energy glow
-		/*FX_AddSprite( cent->lerpOrigin, 
+		FX_AddSprite( cent->lerpOrigin, 
 						NULL, qfalse, 
 						8.0f + random() * 8.0f, 0.0f, 
 						0.7f, 0.0f, 
@@ -216,7 +216,7 @@ void FX_HypoSpray( vec3_t origin, vec3_t dir, qboolean red )  // When not red, i
 						cgs.media.redFlareShader );
 
 		// leave a cool tail
-		/*FX_AddTrail( cent->lerpOrigin, 
+		FX_AddTrail( cent->lerpOrigin, 
 						forward, qfalse, 
 						16, 0, 
 						1.0f, 0.0f, 
@@ -228,7 +228,7 @@ void FX_HypoSpray( vec3_t origin, vec3_t dir, qboolean red )  // When not red, i
 	else
 	{
 		// Energy glow
-		/*FX_AddSprite( cent->lerpOrigin, 
+		FX_AddSprite( cent->lerpOrigin, 
 						NULL, qfalse, 
 						16.0f + random() * 16.0f, 0.0f, 
 						0.5f, 0.0f, 
@@ -246,7 +246,7 @@ void FX_HypoSpray( vec3_t origin, vec3_t dir, qboolean red )  // When not red, i
 						cgs.media.redFlareShader );
 
 		// leave a cool tail
-		/*FX_AddTrail( cent->lerpOrigin, 
+		FX_AddTrail( cent->lerpOrigin, 
 						forward, qfalse, 
 						64, 0, 
 						1.4f, 0.0f, 
@@ -293,7 +293,7 @@ FX_ScavengerAltFireThink
 			// Calc the right spot along the trail
 			VectorMA( cent->lerpOrigin, -i, diff, origin );
 			scale = 18.0f + (random()*5.0f);
-			/*FX_AddSprite( origin, 
+			FX_AddSprite( origin, 
 								NULL, qfalse, 
 								scale, -8.75, 
 								0.4f, 0.0f, 
@@ -308,7 +308,7 @@ FX_ScavengerAltFireThink
 	}
 
 	// Glowing bit
-	/*FX_AddSprite( cent->lerpOrigin, 
+	FX_AddSprite( cent->lerpOrigin, 
 					NULL, qfalse, 
 					24.0f + ( random() * 16.0f ), 0.0f, 
 					1.0f, 0.0f, 
@@ -452,7 +452,7 @@ FX_Scavenger_Alt_Explode
 		vec3_t velocity;
 
 		FXE_Spray( dir, 300, 175, 0.8f, velocity);
-		/*FX_AddTrail( origin, velocity, qtrue, 12.0f, -12.0f,
+		FX_AddTrail( origin, velocity, qtrue, 12.0f, -12.0f,
 								2, -2, 1.0f, 1.0f, 0.2f, 1000.0f,  cgs.media.tetrionTrail2Shader);*/
 	/*}
 }*/

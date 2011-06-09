@@ -597,7 +597,7 @@ void FX_DisruptorBeamFire( vec3_t startpos, vec3_t endpos, vec3_t normal, qboole
 	// "Fun" sparks...  Not when empty.
 	if ( spark && !empty)
 	{
-		sparks = rand() & 1 + 1;
+		sparks = (rand() & 1) + 1;
 		for(;sparks>0;sparks--)
 		{	
 			size = 0.2f + (random() * 0.4);

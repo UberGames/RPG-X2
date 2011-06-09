@@ -2640,14 +2640,14 @@ static void PM_Footsteps( void ) {
 
 				/*if ( !(ps->pm_flags & ANIM_CROUCHING) ) { //okay, we've obviously JUST crouched...
 					ps->pm_flags |= ANIM_CROUCHING;
-					/*if ( ps->weaponstate == WEAPON_READY ) {
+					if ( ps->weaponstate == WEAPON_READY ) {
 						PM_StartTorsoAnim( PM_GetAnim( "docrouch", qtrue ) );
 						ps->torsoTimer += 1200;
 					}
 
 					PM_StartLegsAnim( PM_GetAnim( "docrouch", qfalse ) );
-					ps->legsTimer += 1200;*/
-				//}
+					ps->legsTimer += 1200;
+				}*/
 
 			} else {
 
@@ -3623,7 +3623,7 @@ void PmoveSingle (pmove_t *pmove) {
 
 	//If the legs are playing a non infinite loop, disable the movement keys.
 	//Else the player slides on their feet :S
-	if ( ps->stats[EMOTES] & EMOTE_LOWER &&( ps->stats[EMOTES] & EMOTE_CLAMP_BODY ) || ( ps->stats[EMOTES] & EMOTE_CLAMP_ALL ) ) { //EMOTE_LOWER
+	if ( (ps->stats[EMOTES] & EMOTE_LOWER &&( ps->stats[EMOTES] & EMOTE_CLAMP_BODY )) || ( ps->stats[EMOTES] & EMOTE_CLAMP_ALL ) ) { //EMOTE_LOWER
 		pmove->cmd.forwardmove = 0;
 		pmove->cmd.rightmove = 0;
 		//pmove->cmd.upmove = Q_fabs( pmove->cmd.upmove );

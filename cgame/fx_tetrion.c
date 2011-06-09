@@ -14,7 +14,7 @@ FX_TetrionProjectileThink
 	if ( VectorNormalize2( cent->currentState.pos.trDelta, forward ) == 0 )
 		forward[2] = 1;
 
-	/*FX_AddSprite(	cent->lerpOrigin, 
+	FX_AddSprite(	cent->lerpOrigin, 
 					NULL, qfalse,
 					4.0f + random() * 16.0f, 0.0f,
 					0.4f, 0.0f,
@@ -28,7 +28,7 @@ FX_TetrionProjectileThink
 					random()*360, 0.0f,
 					1.0f,
 					cgs.media.borgFlareShader );
-	/*FX_AddTrail(	cent->lerpOrigin,
+	FX_AddTrail(	cent->lerpOrigin,
 					forward, qfalse,
 					64, 0,
 					2.0f, 0,
@@ -181,7 +181,7 @@ void FX_TetrionRicochet( vec3_t origin, vec3_t normal )
 	// Move away from the wall a bit to help avoid z buffer clipping.
 	VectorMA( origin, 0.5, normal, org );
 
-	/*FX_AddQuad( org, normal,
+	FX_AddQuad( org, normal,
 				24, -24,
 				1.0, 0.0,
 				0,
@@ -207,13 +207,13 @@ FX_TetrionAltHitWall
 
 	scale = random() * 2.0 + 1.0;
 
-	/*CG_ImpactMark( cgs.media.bulletmarksShader, origin, normal, random()*360, 1,1,1,0.2, qfalse, 
+	CG_ImpactMark( cgs.media.bulletmarksShader, origin, normal, random()*360, 1,1,1,0.2, qfalse, 
 					scale, qfalse );
 
 	// Move out a hair to avoid z buffer nastiness
 	VectorMA( origin, 0.5, normal, org );
 
-	/*FX_AddQuad( origin, normal,
+	FX_AddQuad( origin, normal,
 				64, -96,
 				1.0, 0.0,
 				0,

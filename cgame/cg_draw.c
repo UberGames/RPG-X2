@@ -44,35 +44,35 @@ int zoomFlashTime=0;
 interfacegraphics_s interface_graphics[IG_MAX] = 
 {
 //	type		timer	x		y		width	height	file/text						graphic,	min		max		color			style			ptr
-	SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0,					// IG_GROW
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },					// IG_GROW
 
-	SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0,				 	// IG_HEALTH_START
-	SG_GRAPHIC,	0.0,	5,		429,	32,		64,		"gfx/interface/rpgx_healthbar_leftcorner",		0,		0,		0,		CT_DKBROWN1,	0,				 	// IG_HEALTH_BEGINCAP
-	SG_GRAPHIC,	0.0,	64,		429,	6,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKBROWN1,	0,				 	// IG_HEALTH_BOX1
-	SG_GRAPHIC,	0.0,	72,		429,	0,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTBROWN1,	0,				 	// IG_HEALTH_SLIDERFULL
-	SG_GRAPHIC,	0.0,	0,		429,	0,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKBROWN1,	0,				 	// IG_HEALTH_SLIDEREMPTY
-	SG_GRAPHIC,	0.0,	72,		429,	16,		32,		"gfx/interface/rpgx_healthbar_endcap",		0,		0,		147,	CT_DKBROWN1,	0,				 	// IG_HEALTH_ENDCAP
-	SG_NUMBER,	0.0,	23,		425,	16,		32,		NULL,							0,		0,		0,		CT_LTBROWN1,	NUM_FONT_BIG,	 	// IG_HEALTH_COUNT
-	SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0,				 	// IG_HEALTH_END
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },				 	// IG_HEALTH_START
+	{ SG_GRAPHIC,	0.0,	5,		429,	32,		64,		"gfx/interface/rpgx_healthbar_leftcorner",		0,		0,		0,		CT_DKBROWN1,	0 },				 	// IG_HEALTH_BEGINCAP
+	{ SG_GRAPHIC,	0.0,	64,		429,	6,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKBROWN1,	0 },				 	// IG_HEALTH_BOX1
+	{ SG_GRAPHIC,	0.0,	72,		429,	0,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTBROWN1,	0 },				 	// IG_HEALTH_SLIDERFULL
+	{ SG_GRAPHIC,	0.0,	0,		429,	0,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKBROWN1,	0 },				 	// IG_HEALTH_SLIDEREMPTY
+	{ SG_GRAPHIC,	0.0,	72,		429,	16,		32,		"gfx/interface/rpgx_healthbar_endcap",		0,		0,		147,	CT_DKBROWN1,	0 },				 	// IG_HEALTH_ENDCAP
+	{ SG_NUMBER,	0.0,	23,		425,	16,		32,		NULL,							0,		0,		0,		CT_LTBROWN1,	NUM_FONT_BIG },	 	// IG_HEALTH_COUNT
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },				 	// IG_HEALTH_END
 
-	SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0,				 	// IG_ARMOR_START
-	SG_GRAPHIC,	0.0,	20,		458,	32,		16,		"gfx/interface/armorcap1",		0,		0,		0,		CT_DKPURPLE1,	0,			 	// IG_ARMOR_BEGINCAP
-	SG_GRAPHIC,	0.0,	64,		458,	6,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0,			 	// IG_ARMOR_BOX1
-	SG_GRAPHIC,	0.0,	72,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTPURPLE1,	0,			 	// IG_ARMOR_SLIDERFULL
-	SG_GRAPHIC,	0.0,	0,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0,			 	// IG_ARMOR_SLIDEREMPTY
-	SG_GRAPHIC,	0.0,	72,		458,	16,		16,		"gfx/interface/armorcap2",		0,		0,		147,	CT_DKPURPLE1,	0,			 	// IG_ARMOR_ENDCAP
-	SG_NUMBER,	0.0,	44,		458,	16,		16,		NULL,							0,		0,		0,		CT_LTPURPLE1,	NUM_FONT_SMALL, 	// IG_ARMOR_COUNT
-	SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0,			 	// IG_ARMOR_END
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },				 	// IG_ARMOR_START
+	{ SG_GRAPHIC,	0.0,	20,		458,	32,		16,		"gfx/interface/armorcap1",		0,		0,		0,		CT_DKPURPLE1,	0 },			 	// IG_ARMOR_BEGINCAP
+	{ SG_GRAPHIC,	0.0,	64,		458,	6,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0 },			 	// IG_ARMOR_BOX1
+	{ SG_GRAPHIC,	0.0,	72,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTPURPLE1,	0 },			 	// IG_ARMOR_SLIDERFULL
+	{ SG_GRAPHIC,	0.0,	0,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0 },			 	// IG_ARMOR_SLIDEREMPTY
+	{ SG_GRAPHIC,	0.0,	72,		458,	16,		16,		"gfx/interface/armorcap2",		0,		0,		147,	CT_DKPURPLE1,	0 },			 	// IG_ARMOR_ENDCAP
+	{ SG_NUMBER,	0.0,	44,		458,	16,		16,		NULL,							0,		0,		0,		CT_LTPURPLE1,	NUM_FONT_SMALL }, 	// IG_ARMOR_COUNT
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },			 	// IG_ARMOR_END
 
-	SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0,			 	// IG_AMMO_START
-	SG_GRAPHIC,	0.0,	613,	429,	32,		64,		"gfx/interface/ammouppercap1",	0,		0,		0,		CT_LTPURPLE2,	0,			 	// IG_AMMO_UPPER_BEGINCAP
-	SG_GRAPHIC,	0.0,	607,	429,	16,		32,		"gfx/interface/ammouppercap2",	0,		0,		572,	CT_LTPURPLE2,	0,			 	// IG_AMMO_UPPER_ENDCAP
-	SG_GRAPHIC,	0.0,	613,	458,	16,		16,		"gfx/interface/ammolowercap1",	0,		0,		0,		CT_LTPURPLE2,	0,			 	// IG_AMMO_LOWER_BEGINCAP
-	SG_GRAPHIC,	0.0,	578,	458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTPURPLE1,	0,			 // IG_AMMO_SLIDERFULL
-	SG_GRAPHIC,	0.0,	0,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0,			 	// IG_AMMO_SLIDEREMPTY
-	SG_GRAPHIC,	0.0,	607,	458,	16,		16,		"gfx/interface/ammolowercap2",	0,		0,		572,	CT_LTPURPLE2,	0,			 	// IG_AMMO_LOWER_ENDCAP
-	SG_NUMBER,	0.0,	573,	425,	16,		32,		NULL,							0,		0,		0,		CT_LTPURPLE1,	NUM_FONT_BIG, 	// IG_AMMO_COUNT
-	SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0,			 	// IG_AMMO_END
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },			 	// IG_AMMO_START
+	{ SG_GRAPHIC,	0.0,	613,	429,	32,		64,		"gfx/interface/ammouppercap1",	0,		0,		0,		CT_LTPURPLE2,	0 },			 	// IG_AMMO_UPPER_BEGINCAP
+	{ SG_GRAPHIC,	0.0,	607,	429,	16,		32,		"gfx/interface/ammouppercap2",	0,		0,		572,	CT_LTPURPLE2,	0 },			 	// IG_AMMO_UPPER_ENDCAP
+	{ SG_GRAPHIC,	0.0,	613,	458,	16,		16,		"gfx/interface/ammolowercap1",	0,		0,		0,		CT_LTPURPLE2,	0 },			 	// IG_AMMO_LOWER_BEGINCAP
+	{ SG_GRAPHIC,	0.0,	578,	458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTPURPLE1,	0 },			 // IG_AMMO_SLIDERFULL
+	{ SG_GRAPHIC,	0.0,	0,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0 },			 	// IG_AMMO_SLIDEREMPTY
+	{ SG_GRAPHIC,	0.0,	607,	458,	16,		16,		"gfx/interface/ammolowercap2",	0,		0,		572,	CT_LTPURPLE2,	0 },			 	// IG_AMMO_LOWER_ENDCAP
+	{ SG_NUMBER,	0.0,	573,	425,	16,		32,		NULL,							0,		0,		0,		CT_LTPURPLE1,	NUM_FONT_BIG }, 	// IG_AMMO_COUNT
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },			 	// IG_AMMO_END
 
 };
 
@@ -1261,12 +1261,12 @@ static void CG_DrawStatusBar( void )
 	//float	rpg_shakemycamera_intensity;
 	//const char	*info;
 
-	static float colors[4][4] = 
+	/*static float colors[4][4] = 
 	{ 
 		{ 1, 0.69, 0, 1.0 } ,		// normal
 		{ 1.0, 0.2, 0.2, 1.0 },		// low health
 		{0.5, 0.5, 0.5, 1},			// weapon firing
-		{ 1, 1, 1, 1 } };			// health > 100
+		{ 1, 1, 1, 1 } };			// health > 100*/
 
 	whiteA[0] = whiteA[1] = whiteA[2] = 1.0f;	whiteA[3] = 0.3f;
 	
@@ -1719,7 +1719,7 @@ CG_DrawAttacker
 
 ================
 */
-static float CG_DrawAttacker( float y ) {
+/*static float CG_DrawAttacker( float y ) {
 	int			t;
 	float		size;
 	vec3_t		angles;
@@ -1760,7 +1760,7 @@ static float CG_DrawAttacker( float y ) {
 	UI_DrawProportionalString( 635, y, name, UI_RIGHT | UI_SMALLFONT, colorTable[CT_LTGOLD1] );
 
 	return y + BIGCHAR_HEIGHT + 2;
-}
+}*/
 
 /*
 ==================
@@ -3103,7 +3103,7 @@ static void CG_DrawCrosshair(void) {
 
 		VectorCopy( trace.endpos, worldPoint ); 
 		
-		if ( worldPoint && VectorLength( worldPoint ) ) {
+		if ( VectorLength( worldPoint ) ) {
 			if ( !CG_WorldCoordToScreenCoord( worldPoint, &x, &y, qfalse) )
 			{//off screen, don't draw it
 				return;
@@ -3541,7 +3541,7 @@ static void CG_LabelViewEntity( int clientNum, vec3_t origin, vec3_t entMins, ve
 
 				Com_sprintf( showHealth, sizeof( showHealth ), "%s: %i", "Health", health );
 
-				if ( healthCharIndex > 0 && showHealth ) {
+				if ( healthCharIndex > 0 && showHealth[0] ) {
 					int len = strlen( showHealth );
 
 					if ( healthCharIndex > len+1 )
@@ -4643,14 +4643,14 @@ static void CG_DrawZoomMask( void )
 
 //==================================================================================
 
-static char *AfterSpace( char *p )
+/*static char *AfterSpace( char *p )
 {
 	while (*p && *p != ' ') {
 		++p;
 	}
 
 	return p;
-}
+}*/
 
 /*
 =====================
@@ -4709,9 +4709,9 @@ static void CG_DrawAdminMsg( void ) {
 	*/
 	Boxcolor[3] = color[3];
 	
-	if ( !color ) {
+	/*if ( !color ) {
 		return;
-	}
+	}*/
 
 	trap_R_SetColor( color );
 

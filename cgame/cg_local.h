@@ -1027,6 +1027,9 @@ typedef struct {
 
 	//TiM - A local boolean for the TPS view
 	qboolean	thirdPersonNoLerp;
+
+	// cinematics	
+	int					cinematicFade;
 } cg_t;
 
 

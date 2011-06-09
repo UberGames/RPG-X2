@@ -943,7 +943,7 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups, beamData_t
 						1300, //300 //random() * 200 + 1200, //300 //
 						cgs.media.steamShader );
 	}
-	/*localEntity_t *FX_AddSprite(vec3_t origin, vec3_t velocity, qboolean gravity, float scale, float dscale, 
+	localEntity_t *FX_AddSprite(vec3_t origin, vec3_t velocity, qboolean gravity, float scale, float dscale, 
 							float startalpha, float endalpha, float roll, float elasticity, 
 							float killTime, qhandle_t shader)*/
 
@@ -972,7 +972,7 @@ void CG_CoffeeSteamThirdPerson ( refEntity_t* parent, weaponInfo_t *weapon) {
 						1300, //300 //random() * 200 + 1200, //300 //
 						cgs.media.steamShader );
 	}
-	/*localEntity_t *FX_AddSprite(vec3_t origin, vec3_t velocity, qboolean gravity, float scale, float dscale, 
+	localEntity_t *FX_AddSprite(vec3_t origin, vec3_t velocity, qboolean gravity, float scale, float dscale, 
 							float startalpha, float endalpha, float roll, float elasticity, 
 							float killTime, qhandle_t shader)*/
 
@@ -1607,12 +1607,12 @@ CG_DrawWeaponSelect
 ===================
 */
 
-static int	weaponRows[6][3] = { WP_NULL_HAND, 0, 0,
-								 WP_TRICORDER, WP_PADD, WP_COFFEE,
-								 WP_PHASER, WP_COMPRESSION_RIFLE, WP_TR116,
-								 WP_GRENADE_LAUNCHER, WP_QUANTUM_BURST, WP_DISRUPTOR,
-								 WP_MEDKIT, WP_VOYAGER_HYPO, WP_DERMAL_REGEN,
-								 WP_TOOLKIT, WP_HYPERSPANNER, 0 };
+static int	weaponRows[6][3] = { { WP_NULL_HAND, 0, 0 },
+								 { WP_TRICORDER, WP_PADD, WP_COFFEE },
+								 { WP_PHASER, WP_COMPRESSION_RIFLE, WP_TR116 },
+								 { WP_GRENADE_LAUNCHER, WP_QUANTUM_BURST, WP_DISRUPTOR },
+								 { WP_MEDKIT, WP_VOYAGER_HYPO, WP_DERMAL_REGEN },
+								 { WP_TOOLKIT, WP_HYPERSPANNER, 0 } };
 
 void CG_DrawWeaponSelect( void ) {
 	int		i, rowCount, cellCount;

@@ -670,7 +670,7 @@ static void CG_OffsetThirdPersonView( void ) {
 		}
 	}
 
-	/*if ( focusAngles[PITCH] > 89.9 )
+	if ( focusAngles[PITCH] > 89.9 )
 	{
 		focusAngles[PITCH] = 89.9f; // don't go too far overhead - has to be under 90 or bad things happen
 	}
@@ -1377,7 +1377,7 @@ static int CG_CalcViewValues( void ) {
 CG_PowerupTimerSounds
 =====================
 */
-static void CG_PowerupTimerSounds( void ) {
+/*static void CG_PowerupTimerSounds( void ) {
 	int		i;
 	int		t;
 
@@ -1400,7 +1400,7 @@ static void CG_PowerupTimerSounds( void ) {
 			//trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_ITEM, cgs.media.wearOffSound );
 		}
 	}
-}
+}*/
 
 
 

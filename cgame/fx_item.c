@@ -129,7 +129,7 @@ qboolean DetpackAftereffect(localEntity_t *le)
 void FX_Detpack(vec3_t origin)
 {
 	localEntity_t	*le;
-	qhandle_t	null;
+	qhandle_t	null = 0;
 	vec3_t			direction, org, vel, norm = {0,0,1};
 	int i;
 
