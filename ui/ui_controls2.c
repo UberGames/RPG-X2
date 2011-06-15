@@ -80,7 +80,7 @@ static menubitmap_s			s_controls_fonts;
 static menubitmap_s			s_controls_network;
 
 static menuframework_s		s_controlsother_menu;
-static menulist_s			s_lookspring_box;
+//static menulist_s			s_lookspring_box;
 static menuslider_s			s_keyturnspeed_slider;
 
 static struct 
@@ -131,25 +131,25 @@ typedef enum
 menugraphics_s attackmenu_graphics[AMG_MAX] = 
 {
 //	type		timer	x		y		width	height	file/text						graphic,	min		max	target	inc		style	color
-	MG_GRAPHIC,	0.0,	158,	280,	4,		32,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_MIDLEFT
-	MG_GRAPHIC,	0.0,	158,	180,	8,		97,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERLEFT
-	MG_GRAPHIC,	0.0,	158,	315,	8,		100,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERLEFT
-	MG_GRAPHIC,	0.0,	158,	164,	16,		 16,	"menu/common/corner_lu.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERCORNER
-	MG_GRAPHIC,	0.0,	158,	406,	32,		 32,	"menu/common/newswoosh.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERCORNER
+	{ MG_GRAPHIC,	0.0,	158,	280,	4,		32,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_MIDLEFT
+	{ MG_GRAPHIC,	0.0,	158,	180,	8,		97,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERLEFT
+	{ MG_GRAPHIC,	0.0,	158,	315,	8,		100,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERLEFT
+	{ MG_GRAPHIC,	0.0,	158,	164,	16,		 16,	"menu/common/corner_lu.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERCORNER
+	{ MG_GRAPHIC,	0.0,	158,	406,	32,		 32,	"menu/common/newswoosh.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERCORNER
 
-	MG_GRAPHIC,	0.0,	177,	164,	280,	  8,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERTOP1ST
-	MG_GRAPHIC,	0.0,	175,	410,	282,	 18,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERTOP1ST
+	{ MG_GRAPHIC,	0.0,	177,	164,	280,	  8,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERTOP1ST
+	{ MG_GRAPHIC,	0.0,	175,	410,	282,	 18,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERTOP1ST
 
-	MG_GRAPHIC,	0.0,	457,	164,	 34,	  8,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERTOP2ND
-	MG_GRAPHIC,	0.0,	457,	410,	 34,	 18,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERTOP2ND
+	{ MG_GRAPHIC,	0.0,	457,	164,	 34,	  8,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERTOP2ND
+	{ MG_GRAPHIC,	0.0,	457,	410,	 34,	 18,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERTOP2ND
 
-	MG_GRAPHIC,	0.0,	494,	164,	128,	128,	"menu/common/swoosh_top.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERSWOOP
-	MG_GRAPHIC,	0.0,	483,	403,	128,	32,	"menu/common/newswoosh_long.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERSWOOP
+	{ MG_GRAPHIC,	0.0,	494,	164,	128,	128,	"menu/common/swoosh_top.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERSWOOP
+	{ MG_GRAPHIC,	0.0,	483,	403,	128,	32,	"menu/common/newswoosh_long.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERSWOOP
 
-	MG_GRAPHIC,	0.0,	501,	189,	110,	17,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_TOPRIGHT
-	MG_GRAPHIC,	0.0,	501,	383,	110,	17,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_BOTTOMRIGHT
+	{ MG_GRAPHIC,	0.0,	501,	189,	110,	17,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_TOPRIGHT
+	{ MG_GRAPHIC,	0.0,	501,	383,	110,	17,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_BOTTOMRIGHT
 
-	MG_GRAPHIC,	0.0,	501,	206,	110,	177,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_PLAYERBKGRND
+	{ MG_GRAPHIC,	0.0,	501,	206,	110,	177,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_PLAYERBKGRND
 };
 static int					g_section;
 
@@ -162,10 +162,10 @@ static menuaction_s			s_attack_weapon2_action;
 static menuaction_s			s_attack_weapon3_action;
 static menuaction_s			s_attack_weapon4_action;
 static menuaction_s			s_attack_weapon5_action;
-static menuaction_s			s_attack_weapon6_action;
-static menuaction_s			s_attack_weapon7_action;
-static menuaction_s			s_attack_weapon8_action;
-static menuaction_s			s_attack_weapon9_action;
+//static menuaction_s			s_attack_weapon6_action;
+//static menuaction_s			s_attack_weapon7_action;
+//static menuaction_s			s_attack_weapon8_action;
+//static menuaction_s			s_attack_weapon9_action;
 static menuaction_s			s_attack_weapon_next_action;
 static menuaction_s			s_attack_weapon_prev_action;
 static menuaction_s			s_attack_waiting_action;
@@ -196,7 +196,7 @@ static menuframework_s		s_controlscommand_menu;
 static menuframework_s		s_controlsmouse_menu;
 //atic menulist_s			s_joyenable_box;
 //static menuslider_s			s_joythreshold_slider;
-static menulist_s			s_forcefeedback_box;
+//static menulist_s			s_forcefeedback_box;
 static menulist_s			s_joyxbutton_box;
 static menulist_s			s_joyybutton_box;
 
@@ -466,7 +466,7 @@ typedef struct
 
 static controls_t s_controls;
 
-static vec4_t controls_binding_color  = {1.00, 0.43, 0.00, 1.00};
+//static vec4_t controls_binding_color  = {1.00, 0.43, 0.00, 1.00};
 
 static bind_t g_bindings[] = 
 {
@@ -652,7 +652,7 @@ static void** g_controls[] =
 	g_command_controls
 };
 
-static menucommon_s *g_movement_controls[] =
+/*static menucommon_s *g_movement_controls[] =
 {
 	(menucommon_s *)&s_controls.alwaysrun,     
 	(menucommon_s *)&s_controls.run,            
@@ -666,10 +666,10 @@ static menucommon_s *g_movement_controls[] =
 	(menucommon_s *)&s_controls.turnright,     
 	(menucommon_s *)&s_controls.sidestep,
 	NULL
-};
+};*/
 
 
-static menucommon_s *g_looking_controls[] = 
+/*static menucommon_s *g_looking_controls[] = 
 {
 	(menucommon_s *)&s_controls.sensitivity,
 	(menucommon_s *)&s_controls.smoothmouse,
@@ -683,9 +683,9 @@ static menucommon_s *g_looking_controls[] =
 	(menucommon_s *)&s_controls.joyenable,
 	(menucommon_s *)&s_controls.joythreshold,
 	NULL,
-};
+};*/
 
-static menucommon_s *g_misc_controls[] = 
+/*static menucommon_s *g_misc_controls[] = 
 {
 	(menucommon_s *)&s_controls.showscores, 
 	(menucommon_s *)&s_controls.useitem,
@@ -698,7 +698,7 @@ static menucommon_s *g_misc_controls[] =
 	(menucommon_s *)&s_controls.gesture,
 	(menucommon_s *)&s_controls.showscores,
 	NULL,
-};
+};*/
 
 /*
 =================

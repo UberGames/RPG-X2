@@ -263,11 +263,11 @@ static void UI_DrawBannerString2( int x, int y, const char* str, vec4_t color )
 		}
 		else if ( ch >= 'A' && ch <= 'Z' ) {
 			ch -= 'A';
-			fcol = (float)propMapB[ch][0] / 256.0f; //256.0f
-			frow = (float)propMapB[ch][1] / 256.0f;
-			fwidth = (float)propMapB[ch][2] / 256.0f;
+			fcol = (float)propMapB[(int)ch][0] / 256.0f; //256.0f
+			frow = (float)propMapB[(int)ch][1] / 256.0f;
+			fwidth = (float)propMapB[(int)ch][2] / 256.0f;
 			fheight = (float)PROPB_HEIGHT / 256.0f;
-			aw = (float)propMapB[ch][2] * uis.scalex;
+			aw = (float)propMapB[(int)ch][2] * uis.scalex;
 			ah = (float)PROPB_HEIGHT * uis.scaley;
 			trap_R_DrawStretchPic( ax, ay, aw, ah, fcol, frow, fcol+fwidth, frow+fheight, uis.charsetPropB );
 			ax += (aw + (float)PROPB_GAP_WIDTH * uis.scalex);
@@ -2588,7 +2588,7 @@ it quits as well. :)
 
 const char* illegalStrings[] = { "D4", "d4", "RPG-Y", "rpg-y", "AORP", "aorp" };
 
-static void UI_AntiPlagiarise ( const char *textLine, int arg )
+/*static void UI_AntiPlagiarise ( const char *textLine, int arg )
 {
 	int i;
 	char language[32];
@@ -2611,7 +2611,7 @@ static void UI_AntiPlagiarise ( const char *textLine, int arg )
 			}
 		}
 	}
-}
+}*/
 
 #define MAXMENUTEXT 15000
 char	MenuText[MAXMENUTEXT];
