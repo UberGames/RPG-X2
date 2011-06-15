@@ -71,12 +71,12 @@ static int s_graphics_options_Names[] =
 	MNT_NONE
 };
 
-static int s_driver_Names[] =
+/*static int s_driver_Names[] =
 {
 	MNT_VIDEO_DRIVER_DEFAULT,
 	MNT_VIDEO_DRIVER_VOODOO,
 	MNT_NONE
-};
+};*/
 
 extern int s_OffOnNone_Names[];
 
@@ -115,9 +115,9 @@ static char *s_wideResolutions16x9[] =
 
 static videoResolutions_t videoResolutions16x9[] =
 {
-	854, 480,
-	1280, 720,
-	1920, 1080
+	{ 854, 480 },
+	{ 1280, 720 },
+	{ 1920, 1080 }
 };
 
 static char *s_wideResolutions16x10[] =
@@ -132,11 +132,11 @@ static char *s_wideResolutions16x10[] =
 
 static videoResolutions_t videoResolutions16x10[] =
 {
-	1280, 800,
-	1440, 900,
-	1680, 1050,
-	1920, 1200,
-	2560, 1600
+	{ 1280, 800 },
+	{ 1440, 900 },
+	{ 1680, 1050 },
+	{ 1920, 1200 },
+	{ 2560, 1600 }
 };
 
 static void *s_widescreenResolutions[] = 
@@ -177,12 +177,12 @@ static int s_colordepth_Names[] =
 	MNT_NONE
 };
 
-static int s_lighting_Names[] =
+/*static int s_lighting_Names[] =
 {
 	MNT_LIGHTMAP,
 	MNT_VERTEX,
 	MNT_NONE
-};
+};*/
 
 static int s_quality_Names[] =
 {
@@ -313,9 +313,9 @@ static void* g_videolines[] =
 
 int video_sidebuttons[3][2] = 
 {
-	30, 250,	// Video Data Button
-	30, 250 + 6 + (MENU_BUTTON_MED_HEIGHT * 1.5),	// Video Drivers Button
-	30, 250 + (2 * (6 + (MENU_BUTTON_MED_HEIGHT * 1.5))),	// Video Drivers Button
+	{ 30, 250													},	// Video Data Button
+	{ 30, 250 + 6 + (MENU_BUTTON_MED_HEIGHT * 1.5)				},	// Video Drivers Button
+	{ 30, 250 + (2 * (6 + (MENU_BUTTON_MED_HEIGHT * 1.5)))		},	// Video Drivers Button
 };
 
 
@@ -488,12 +488,12 @@ GRAPHICS OPTIONS MENU
 */
 
 
-static const char *s_drivers[] =
+/*static const char *s_drivers[] =
 {
 	OPENGL_DRIVER_NAME,
 	_3DFX_DRIVER_NAME,
 	0
-};
+};*/
 
 #define ID_BACK2		101
 #define ID_FULLSCREEN	102

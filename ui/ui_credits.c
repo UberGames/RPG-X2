@@ -176,117 +176,126 @@ typedef struct
 static creditsInfo_t	creditsInfo[MAX_MENUS] = 
 {
 	//The d00ds leading this shizzie :)
-	{ "PROJECT LEADS", 
-		 NAME_PHENIX,			TITLE_LEADER,
-		 NAME_JAY,				TITLE_LPROG,
-		 NAME_SHARKY,			TITLE_L2DAS,
-		 NAME_TIM,				TITLE_L3D,
-		 NAME_WILL,				TITLE_LMAPPER  
+	{
+		{ "PROJECT LEADS" }, 
+		{ { NAME_PHENIX },			{ TITLE_LEADER } },
+		{ { NAME_JAY },				{ TITLE_LPROG } },
+		{ { NAME_SHARKY },			{ TITLE_L2DAS } },
+		{ { NAME_TIM },				{ TITLE_L3D } },
+		{ { NAME_WILL },			{ TITLE_LMAPPER } }  
 	},
 
 	//The d00ds l33tzor haxxoring this shizzie.
-	{ "PROGRAMMING",
-		NAME_JAY,				TITLE_LPROG,
-		NAME_TIM,				TITLE_PROG,
-		NAME_PHENIX,			TITLE_PROG,
-		NAME_RED,				TITLE_ADPROG,
-		NAME_MARCIN,			TITLE_PROG, // Scooter was originally here...sorry... not enough space!
-		NAME_SCOOTER,			TITLE_ADPROG,
-		NAME_GSIO01,			TITLE_PROG,
+	{ 
+		{ "PROGRAMMING" },
+		{ { NAME_JAY },				{ TITLE_LPROG } },
+		{ { NAME_TIM },				{ TITLE_PROG } },
+		{ { NAME_PHENIX },			{ TITLE_PROG } },
+		{ { NAME_RED },				{ TITLE_ADPROG } },
+		{ { NAME_MARCIN },			{ TITLE_PROG } }, // Scooter was originally here...sorry... not enough space!
+		{ { NAME_SCOOTER },			{ TITLE_ADPROG } },
+		{ { NAME_GSIO01 },			{ TITLE_PROG } },
 	},
 
 	//The d00ds painting and texturing this shizzie.
-	{ "2-D ART",
-		NAME_SHARKY,			TITLE_L2D,
-		NAME_SIMMO,				TITLE_LCARS,
-		NAME_TIM,				TITLE_AD2D,
-		NAME_SCOOTER,			TITLE_AD2D,
-		NAME_KURO,				TITLE_RANKS,
+	{ 
+		{ "2-D ART" },
+		{ { NAME_SHARKY },			{ TITLE_L2D } },
+		{ { NAME_SIMMO },			{ TITLE_LCARS } },
+		{ { NAME_TIM },				{ TITLE_AD2D } },
+		{ { NAME_SCOOTER },			{ TITLE_AD2D } },
+		{ { NAME_KURO },			{ TITLE_RANKS } },
 	},
 
 	//The d00d modeling this shizzie.  I feel so alone rofl. 
-	{ "3-D ART",
-		NAME_TIM,				TITLE_L3D,
+	{ 
+		{ "3-D ART" },
+		{ { NAME_TIM },				{ TITLE_L3D } },
 		//{ "Ralph Schoberth",		"Enterprise-E LightWave Mesh" }, //FixMe: Put mesh credits in a smaller section below here somehow lol
 	},
 
 	//The d00ds mapping this shizzie.
-	{ "LEVEL DESIGN",
-		NAME_WILL,					TITLE_LMAPPER ,
-		NAME_ANT,					TITLE_LEVELART,
-		//{ "Jack Amzadi",			"Level Artist" }, //Seriously... did we see ANYTHING come out of these guys? O_o
-		//{ "Johan",				"Level Artist" },
-		//{ "RED-RUM",				"Level Artist" },
-		NAME_PHENIX,				TITLE_LEVELART,
-		// NAME_SCOOTER,				TITLE_LEVELART, //I think he wanted to be taken off
-		//NAME_WILL,					TITLE_LEVELART,
+	{ 
+		{ "LEVEL DESIGN" },
+		{ { NAME_WILL },					{ TITLE_LMAPPER  } },
+		{ { NAME_ANT },					{ TITLE_LEVELART } },
+		//{ { "Jack Amzadi" },			{ "Level Artist" } }, //Seriously... did we see ANYTHING come out of these guys? O_o
+		//{ { "Johan" },					{ "Level Artist" } },
+		//{ { "RED-RUM" },				{ "Level Artist" } },
+		{ { NAME_PHENIX },				{ TITLE_LEVELART } },
+		//{ {  NAME_SCOOTER },			{ TITLE_LEVELART } }, //I think he wanted to be taken off
+		//{ { NAME_WILL },				{ TITLE_LEVELART } },
 	},
 
 	//The d00ds... uh.. soundzor-ing this shizzie. :)
-	{ "AUDIO DESIGN",
-		NAME_SHARKY,				TITLE_LAUDIO,
-		NAME_PHENIX,				TITLE_ADAUDIO,
-		NAME_TIM,					TITLE_ADAUDIO,
-		NAME_SCOOTER,				TITLE_ADAUDIO,
-		NAME_TDP,					TITLE_ADAUDIO,
+	{ 
+		{ "AUDIO DESIGN" },
+		{ { NAME_SHARKY },				{ TITLE_LAUDIO } },
+		{ { NAME_PHENIX },				{ TITLE_ADAUDIO } },
+		{ { NAME_TIM },					{ TITLE_ADAUDIO } },
+		{ { NAME_SCOOTER },				{ TITLE_ADAUDIO } },
+		{ { NAME_TDP },					{ TITLE_ADAUDIO } },
 	},
 
-	{ "ADDITIONAL SUPPORT",
-		NAME_SCOOTER,				TITLE_CANON,
-		//{ "Highlander",			"Public Relations" }, //He didn't publicly relate anything in this mod, this edition. Plus I want the space at the bottom of this lol
-		NAME_GSIO01,				TITLE_DEUTSCH,
-		NAME_JEROEN,				TITLE_NEDERLANDS,
-		NAME_MARCIN,				TITLE_NEDERLANDS,
-		NAME_LAZ,					TITLE_SKINSMODELS,
-		//NAME_PHENIX,				TITLE_DOCU,
-		//NAME_SHARKY,				TITLE_DOCU,
-		//NAME_RED,					TITLE_DOCU,
-		//NAME_DI,					TITLE_CIN,
-		NAME_PARKER,				TITLE_ACAI,
-		NAME_HOCKING,				TITLE_AD2D
+	{ 
+		{ "ADDITIONAL SUPPORT" },
+		{ { NAME_SCOOTER,				{ TITLE_CANON } },
+		//{ { "Highlander",				{ "Public Relations" } }, //He didn't publicly relate anything in this mod, this edition. Plus I want the space at the bottom of this lol
+		{ { NAME_GSIO01,				{ TITLE_DEUTSCH } },
+		{ { NAME_JEROEN,				{ TITLE_NEDERLANDS } },
+		{ { NAME_MARCIN,				{ TITLE_NEDERLANDS } },
+		{ { NAME_LAZ,					{ TITLE_SKINSMODELS } },
+		//{ { NAME_PHENIX,				{ TITLE_DOCU } },
+		//{ { NAME_SHARKY,				{ TITLE_DOCU } },
+		//{ { NAME_RED,					{ TITLE_DOCU } },
+		//{ { NAME_DI,					{ TITLE_CIN } },
+		{ { NAME_PARKER,				{ TITLE_ACAI } },
+		{ { NAME_HOCKING,				{ TITLE_AD2D } }
 	},
 
 	//The d00ds beta testing this shizzie 
-	{ "BETA TESTERS",
-		"Jordan",				"",
-		"sharpkiller",			"",
-		"Telex Ferra",			"",
-		"AdmiralHocking",		"",
-		"Lee Wolfgang",         "",
-		"Quince",				"",
-		/*"Alex L.",				"",
-		"Chase Benedict",		"",
-		"Jake Conhale",			"",
-		"James Young",			"",
-		"Kadratis Velevere",	"",
-		"Ricksal0224",			"",
-		"SimmerALPHA",			"",
-		"Slayer",				"",
-		NAME_MARCIN,			"",
-		"Tuskin"*/				""
-		/*"Alex L.",				"", 
-		"Alex Mcpherson",		"",
-		"AlphaOmega",			"",
-		"Andrew",				"",
-		"Crusader",				"",
-		"Diaz",					"",
-		"Fred",					"",
-		"Jake Conhale",			"",
-		"Martin",				"",
-		"Mr Fibbles",			"",
-		"Myntz",				"",
-		"Nuttycomputer",		"",
-		"Rigs",					"",*/
-		//"Pending...",			""
+	{ 
+		{ "BETA TESTERS" },
+		{ { "Jordan" },					{ "" } },
+		{ { "sharpkiller" },			{ "" } },
+		{ { "Telex Ferra" },			{ "" } },
+		{ { "AdmiralHocking" },			{ "" } },
+		{ { "Lee Wolfgang" },			{ "" } },
+		{ { "Quince" },					{ "" } },
+		/*{ { "Alex L." },				{ "" } },
+		{ { "Chase Benedict" },			{ "" } },
+		{ { "Jake Conhale" },			{ "" } },
+		{ { "James Young" },			{ "" } },
+		{ { "Kadratis Velevere" },		{ "" } },
+		{ { "Ricksal0224" },			{ "" } },
+		{ { "SimmerALPHA" },			{ "" } },
+		{ { "Slayer" },					{ "" } },
+		{ { NAME_MARCIN },				{ "" } },
+		{ { "Tuskin" }					{ "" } }*/
+		/*{ { "Alex L." },				{ "" } }, 
+		{ { "Alex Mcpherson" },			{ "" } },
+		{ { "AlphaOmega" },				{ "" } },
+		{ { "Andrew" },					{ "" } },
+		{ { "Crusader" },				{ "" } },
+		{ { "Diaz" },					{ "" } },
+		{ { "Fred" },					{ "" } },
+		{ { "Jake Conhale" },			{ "" } },
+		{ { "Martin" },					{ "" } },
+		{ { "Mr Fibbles" },				{ "" } },
+		{ { "Myntz" },					{ "" } },
+		{ { "Nuttycomputer" },			{ "" } },
+		{ { "Rigs" },					{ "" } },*/
+		//{ { "Pending..." },			{ "" } }
 	},
 
 	//Totally awesome d00ds whose input contributed greatly to this shizzie. :)
-	{ "SPECIAL THANKS",	
-		NAME_GENE,				TITLE_TREK,
-		NAME_RAVEN,				TITLE_EF,
-		NAME_EFPEEPS,			TITLE_TEST,
-		NAME_STEVE,				TITLE_PLAGIA,
-		NAME_MONROE,			TITLE_RAVENCODER
+	{ 
+		{ "SPECIAL THANKS" },	
+		{ { NAME_GENE },				{ TITLE_TREK } },
+		{ { NAME_RAVEN },				{ TITLE_EF } },
+		{ { NAME_EFPEEPS },				{ TITLE_TEST } },
+		{ { NAME_STEVE },				{ TITLE_PLAGIA } },
+		{ { NAME_MONROE },				{ TITLE_RAVENCODER } }
 	}
 
 };

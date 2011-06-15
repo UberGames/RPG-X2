@@ -21,12 +21,12 @@ static int currentFont;
 #define ID_FONT_GRID		304
 
 static menuframework_s	s_fonts_menu;
-static menubitmap_s			s_cdkey_mainmenu;
-static menubitmap_s			s_cdkey_controls;
-static menubitmap_s			s_cdkey_video;
-static menubitmap_s			s_cdkey_sound;
-static menubitmap_s			s_cdkey_game;
-static menubitmap_s			s_cdkey_cdkey;
+//static menubitmap_s			s_cdkey_mainmenu;
+//static menubitmap_s			s_cdkey_controls;
+//static menubitmap_s			s_cdkey_video;
+//static menubitmap_s			s_cdkey_sound;
+//static menubitmap_s			s_cdkey_game;
+//static menubitmap_s			s_cdkey_cdkey;
 static menubitmap_s			s_fonts_small;
 static menubitmap_s			s_fonts_medium;
 static menubitmap_s			s_fonts_large;

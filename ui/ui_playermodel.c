@@ -1703,9 +1703,9 @@ static void PlayerModel_MenuInit(int menuFrom)
 	int			x;
 	int			y;
 	static char	playername[32];
-	static char	modelname[32];
-	static char	skinname[32];
-	static char	skinnameviewed[32];
+	//static char	modelname[32];
+	//static char	skinname[32];
+	//static char	skinnameviewed[32];
 	qboolean	races=qfalse;
 	qboolean	genders=qfalse;
 

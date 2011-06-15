@@ -103,14 +103,14 @@ int s_voicelanguage_Names[] =
 	MNT_NONE
 };
 
-static int teamoverlay_names[] =
+/*static int teamoverlay_names[] =
 {
 	MNT_TO_OFF,
 	MNT_TO_UPPER_RIGHT,
 	MNT_TO_LOWER_RIGHT,
 	MNT_TO_LOWER_LEFT,
 	0
-};
+};*/
 
 static void Preferences_SetMenuItems( void ) 
 {

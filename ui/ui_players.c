@@ -27,10 +27,10 @@ static float		jumpHeight;
 //TiM : Bolton Table
 stringID_table_t BoltonTable[BOLTON_MAX + 1] =
 {
-	ENUM2STRING(BOLTON_HEAD),
-	ENUM2STRING(BOLTON_TORSO),
-	ENUM2STRING(BOLTON_LEGS),
-	NULL, -1
+	{ ENUM2STRING(BOLTON_HEAD) },
+	{ ENUM2STRING(BOLTON_TORSO) },
+	{ ENUM2STRING(BOLTON_LEGS) },
+	{ NULL, -1 }
 };
 
 /*

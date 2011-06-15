@@ -79,7 +79,7 @@ SOOBJ = \
   ui_syscalls.o 
 
 # do cc for shared libraries
-DO_SOCC = $(CC) $(SOCFLAGS) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) -Wall -o $@ -c $<
 
 build_so: DO_CC=$(DO_SOCC)
 

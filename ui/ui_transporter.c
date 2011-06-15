@@ -41,9 +41,9 @@ extern void AdminGeneric_InitLists( void );
 void UI_TransporterMenu_Cache (void);
 
 
-static void TransCreateMaplist(void) {
+/*static void TransCreateMaplist(void) {
 
-}
+}*/
 
 /*
 =================

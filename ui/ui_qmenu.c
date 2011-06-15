@@ -610,7 +610,7 @@ void Bitmap_Draw( menubitmap_s *b )
 			UI_DrawHandlePic( x, y, w, h, b->shader );
 		}
 
-		if ((b->generic.flags & QMF_PULSE) || (b->generic.flags & QMF_PULSEIFFOCUS) && (Menu_ItemAtCursor( b->generic.parent ) == b))
+		if ((b->generic.flags & QMF_PULSE) || ((b->generic.flags & QMF_PULSEIFFOCUS) && (Menu_ItemAtCursor( b->generic.parent ) == b)))
 		{	
 			if (b->focuscolor)			
 			{

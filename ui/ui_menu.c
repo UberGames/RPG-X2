@@ -475,88 +475,88 @@ menugraphics_s quitmenu_graphics[QMG_MAX] =
 {
 //	type		timer	x		y		width	height	file/text		graphic,	min		max		target	inc		style						color
 
-	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,	0,		0,		0,		0,		0,		0,		0,							0,				NULL,	// QMG_NUMBERS
-	MG_NUMBER,	0.0,	368,	54,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL1_NUM1
-	MG_NUMBER,	0.0,	368,	68,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL1_NUM2
-	MG_NUMBER,	0.0,	368,	82,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL1_NUM3
-	MG_NUMBER,	0.0,	368,	96,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL1_NUM4
-	MG_NUMBER,	0.0,	368,	110,	16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL1_NUM5
+	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,	0,		0,		0,		0,		0,		0,		0,							0,				NULL },	// Q{ MG_NUMBERS
+	{ MG_NUMBER,	0.0,	368,	54,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL1_NUM1
+	{ MG_NUMBER,	0.0,	368,	68,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL1_NUM2
+	{ MG_NUMBER,	0.0,	368,	82,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL1_NUM3
+	{ MG_NUMBER,	0.0,	368,	96,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL1_NUM4
+	{ MG_NUMBER,	0.0,	368,	110,	16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL1_NUM5
 
-	MG_NUMBER,	0.0,	423,	54,		16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL2_NUM1
-	MG_NUMBER,	0.0,	423,	68,		16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL2_NUM2
-	MG_NUMBER,	0.0,	423,	82,		16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL2_NUM3
-	MG_NUMBER,	0.0,	423,	96,		16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL2_NUM4
-	MG_NUMBER,	0.0,	423,	110,	16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL2_NUM5
+	{ MG_NUMBER,	0.0,	423,	54,		16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL2_NUM1
+	{ MG_NUMBER,	0.0,	423,	68,		16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL2_NUM2
+	{ MG_NUMBER,	0.0,	423,	82,		16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL2_NUM3
+	{ MG_NUMBER,	0.0,	423,	96,		16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL2_NUM4
+	{ MG_NUMBER,	0.0,	423,	110,	16,		10,		NULL,	0,		0,		0,		6,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL2_NUM5
 
-	MG_NUMBER,	0.0,	463,	54,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL3_NUM1
-	MG_NUMBER,	0.0,	463,	68,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL3_NUM2
-	MG_NUMBER,	0.0,	463,	82,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL3_NUM3
-	MG_NUMBER,	0.0,	463,	96,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL3_NUM4
-	MG_NUMBER,	0.0,	463,	110,	16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL3_NUM5
+	{ MG_NUMBER,	0.0,	463,	54,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL3_NUM1
+	{ MG_NUMBER,	0.0,	463,	68,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL3_NUM2
+	{ MG_NUMBER,	0.0,	463,	82,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL3_NUM3
+	{ MG_NUMBER,	0.0,	463,	96,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL3_NUM4
+	{ MG_NUMBER,	0.0,	463,	110,	16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL3_NUM5
 
-	MG_NUMBER,	0.0,	526,	54,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL4_NUM1
-	MG_NUMBER,	0.0,	526,	68,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL4_NUM2
-	MG_NUMBER,	0.0,	526,	82,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL4_NUM3
-	MG_NUMBER,	0.0,	526,	96,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL4_NUM4
-	MG_NUMBER,	0.0,	526,	110,	16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL4_NUM5
+	{ MG_NUMBER,	0.0,	526,	54,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL4_NUM1
+	{ MG_NUMBER,	0.0,	526,	68,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL4_NUM2
+	{ MG_NUMBER,	0.0,	526,	82,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL4_NUM3
+	{ MG_NUMBER,	0.0,	526,	96,		16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL4_NUM4
+	{ MG_NUMBER,	0.0,	526,	110,	16,		10,		NULL,	0,		0,		0,		9,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL4_NUM5
 
-	MG_NUMBER,	0.0,	581,	54,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL5_NUM1
-	MG_NUMBER,	0.0,	581,	68,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL5_NUM2
-	MG_NUMBER,	0.0,	581,	82,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL5_NUM3
-	MG_NUMBER,	0.0,	581,	96,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL5_NUM4
-	MG_NUMBER,	0.0,	581,	110,	16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL5_NUM5
+	{ MG_NUMBER,	0.0,	581,	54,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL5_NUM1
+	{ MG_NUMBER,	0.0,	581,	68,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL5_NUM2
+	{ MG_NUMBER,	0.0,	581,	82,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL5_NUM3
+	{ MG_NUMBER,	0.0,	581,	96,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL5_NUM4
+	{ MG_NUMBER,	0.0,	581,	110,	16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL5_NUM5
 
-	MG_NUMBER,	0.0,	601,	54,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL6_NUM1
-	MG_NUMBER,	0.0,	601,	68,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL6_NUM2
-	MG_NUMBER,	0.0,	601,	82,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL6_NUM3
-	MG_NUMBER,	0.0,	601,	96,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL6_NUM4
-	MG_NUMBER,	0.0,	601,	110,	16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL,	// QMG_COL6_NUM5
+	{ MG_NUMBER,	0.0,	601,	54,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL6_NUM1
+	{ MG_NUMBER,	0.0,	601,	68,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL6_NUM2
+	{ MG_NUMBER,	0.0,	601,	82,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL6_NUM3
+	{ MG_NUMBER,	0.0,	601,	96,		16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL6_NUM4
+	{ MG_NUMBER,	0.0,	601,	110,	16,		10,		NULL,	0,		0,		0,		2,		0,		0,		UI_TINYFONT,				CT_DKPURPLE2,	NULL },	// Q{ MG_COL6_NUM5
 
 
 //	type		timer	x		y		width	height	file/text						graphic,	min		max	target							inc		style						color
-	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,				0,			0,		0,		0,	0,								0,		0,							0,				NULL,	// QMG_ACTIVE_SYSTEM
+	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,				0,			0,		0,		0,	0,								0,		0,							0,				NULL },	// Q{ MG_ACTIVE_SYSTEM
 
 //	type		timer	x		y		width	height	file/text										graphic,	min		max	target							inc		style						color
-	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,				0,					0,			0,		0,	0,								0,		0,							0,				NULL,	// QMG_DESC_START
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_BRIDGE_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_BRIDGE_DESC1
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_PHASER_STRIP1_DESC1,	0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_PHASER_STRIP1_DESC1
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_TORPEDOS_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_TORPEDOS_DESC1
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_VENTRAL_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_VENTRAL_DESC1
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_MIDHULL_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_MIDHULL_DESC1
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_BUSSARD_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_BUSSARD_DESC1
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_NACELLES_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_NACELLES_DESC1
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_THRUSTERS_DESC1,		0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_THRUSTERS_DESC1
-	MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_VOYAGER_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL,	// QMG_VOYAGER_DESC1
+	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,				0,					0,			0,		0,	0,								0,		0,							0,				NULL },	// Q{ MG_DESC_START
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_BRIDGE_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_BRIDGE_DESC1
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_PHASER_STRIP1_DESC1,	0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_PHASER_STRIP1_DESC1
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_TORPEDOS_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_TORPEDOS_DESC1
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_VENTRAL_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_VENTRAL_DESC1
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_MIDHULL_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_MIDHULL_DESC1
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_BUSSARD_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_BUSSARD_DESC1
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_NACELLES_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_NACELLES_DESC1
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_THRUSTERS_DESC1,		0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_THRUSTERS_DESC1
+	{ MG_STRING,	0.0,	385,	378,	0,		0,		NULL,		MNT_VOYAGER_DESC1,			0,			0,		0,		0,		0,		UI_TINYFONT,				CT_LTGOLD1,		NULL },	// Q{ MG_VOYAGER_DESC1
 
-	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,									0,			0,		0,		0,	0,								0,		0,							0,				NULL,	// QMG_DESC_END
+	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,									0,			0,		0,		0,	0,								0,		0,							0,				NULL },	// Q{ MG_DESC_END
 
 //	type		timer	x		y		width	height	file/text		graphic,	min	(desc)						max		target	(swoop)					inc		style						color
-	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		0,								0,		0,								0,		0,							0,				NULL,								// QMG_LABEL_START
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_BRIDGE_DESC1,				0,		QMG_BRIDGE_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.bridge_pic,	// QMG_BRIDGE_LABEL
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_PHASER_STRIP1_DESC1,		0,		QMG_PHASER_STRIP1_SWOOP,		0,		0,							CT_DKBROWN1,	(void *) &s_quit.phaser_pic,	// QMG_PHASER_LABEL
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_TORPEDOS_DESC1,				0,		QMG_TORPEDO_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.torpedo_pic,	// QMG_TORPEDOS_LABEL
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_VENTRAL_DESC1,				0,		QMG_VENTRAL_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.ventral_pic,	// QMG_VENTRAL_LABEL
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_MIDHULL_DESC1,				0,		QMG_MIDHULL_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.midhull_pic,	// QMG_MIDHULL_LABEL
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_BUSSARD_DESC1,				0,		QMG_BUSSARD_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.bussard_pic,	// QMG_BUSSARD_LABEL
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_NACELLES_DESC1,				0,		QMG_NACELLES_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.nacelles_pic,	// QMG_NACELLES_LABEL
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_THRUSTERS_DESC1,			0,		QMG_THRUSTERS_SWOOP,			0,		0,							CT_DKBROWN1,	(void *) &s_quit.thrusters_pic,	// QMG_THRUSTERS_LABEL
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		QMG_VOYAGER_DESC1,				0,		0,								0,		0,							CT_DKBROWN1,	(void *) &s_quit.voyager_pic,	// QMG_VOYAGER_LABEL
-	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		0,								0,		0,								0,		0,							0,				NULL,								// QMG_LABEL_END
+	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		0,								0,		0,								0,		0,							0,				NULL },								// Q{ MG_LABEL_START
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_BRIDGE_DESC1,				0,		Q{ MG_BRIDGE_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.bridge_pic },	// Q{ MG_BRIDGE_LABEL
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_PHASER_STRIP1_DESC1,		0,		Q{ MG_PHASER_STRIP1_SWOOP,		0,		0,							CT_DKBROWN1,	(void *) &s_quit.phaser_pic },	// Q{ MG_PHASER_LABEL
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_TORPEDOS_DESC1,				0,		Q{ MG_TORPEDO_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.torpedo_pic },	// Q{ MG_TORPEDOS_LABEL
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_VENTRAL_DESC1,				0,		Q{ MG_VENTRAL_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.ventral_pic },	// Q{ MG_VENTRAL_LABEL
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_MIDHULL_DESC1,				0,		Q{ MG_MIDHULL_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.midhull_pic },	// Q{ MG_MIDHULL_LABEL
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_BUSSARD_DESC1,				0,		Q{ MG_BUSSARD_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.bussard_pic },	// Q{ MG_BUSSARD_LABEL
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_NACELLES_DESC1,				0,		Q{ MG_NACELLES_SWOOP,				0,		0,							CT_DKBROWN1,	(void *) &s_quit.nacelles_pic },	// Q{ MG_NACELLES_LABEL
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_THRUSTERS_DESC1,			0,		Q{ MG_THRUSTERS_SWOOP,			0,		0,							CT_DKBROWN1,	(void *) &s_quit.thrusters_pic },	// Q{ MG_THRUSTERS_LABEL
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		Q{ MG_VOYAGER_DESC1,				0,		0,								0,		0,							CT_DKBROWN1,	(void *) &s_quit.voyager_pic },	// Q{ MG_VOYAGER_LABEL
+	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,		0,	0,		0,								0,		0,								0,		0,							0,				NULL },								// Q{ MG_LABEL_END
 
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,						0,	0,		0,		0,	0,								0,		0,							0,				NULL,	// QMG_SWOOP_START
-//	MG_GRAPHIC,	0.0,	156,	198,	93,		1,		"menu/common/square.tga",	0,	0,		0,		0,	QMG_BRIDGE_DESC1,				1,		0,							CT_WHITE,		NULL,	// QMG_BRIDGE_SWOOP
-//	MG_GRAPHIC,	0.0,	155,	229,	16,		64,		"menu/voyager/swoop1.tga",	0,	0,		0,		0,	QMG_PHASER_STRIP1_DESC1,		2,		0,							CT_WHITE,		NULL,	// QMG_PHASER_STRIP1_SWOOP
-//	MG_GRAPHIC,	0.0,	252,	272,	32,		32,		"menu/voyager/swoop2.tga",	0,	0,		0,		0,	QMG_TORPEDOS_DESC1,				1,		0,							CT_WHITE,		NULL,	// QMG_TORPEDOS_SWOOP
-//	MG_GRAPHIC,	0.0,	318,	310,	32,		32,		"menu/voyager/swoop3.tga",	0,	0,		0,		0,	QMG_VENTRAL_DESC1,				1,		0,							CT_WHITE,		NULL,	// QMG_VENTRAL_SWOOP
-//	MG_GRAPHIC,	0.0,	366,	247,	16,		128,	"menu/voyager/swoop4.tga",	0,	0,		0,		0,	QMG_MIDHULL_DESC1,				1,		0,							CT_WHITE,		NULL,	// QMG_MIDHULL_SWOOP
-//	MG_GRAPHIC,	0.0,	457,	281,	64,		64,		"menu/voyager/swoop5.tga",	0,	0,		0,		0,	QMG_BUSSARD_DESC1,				3,		0,							CT_WHITE,		NULL,	// QMG_BUSSARD_SWOOP
-//	MG_GRAPHIC,	0.0,	563,	181,	64,		128,	"menu/voyager/swoop6.tga",	0,	0,		0,		0,	QMG_NACELLES_DESC1,				2,		0,							CT_WHITE,		NULL,	// QMG_NACELLES_SWOOP
-//	MG_GRAPHIC,	0.0,	288,	183,	64,		128,	"menu/voyager/swoop7.tga",	0,	0,		0,		0,	QMG_THRUSTERS_DESC1,			1,		0,							CT_WHITE,		NULL,	// QMG_THRUSTERS_SWOOP
-//	MG_VAR,		0.0,	0,		0,		0,		0,		NULL,						0,	0,		0,		0,	0,								0,		0,							0,				NULL,	// QMG_SWOOP_END
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,						0,	0,		0,		0,	0,								0,		0,							0,				NULL },	// Q{ MG_SWOOP_START
+//	{ MG_GRAPHIC,	0.0,	156,	198,	93,		1,		"menu/common/square.tga",	0,	0,		0,		0,	Q{ MG_BRIDGE_DESC1,				1,		0,							CT_WHITE,		NULL },	// Q{ MG_BRIDGE_SWOOP
+//	{ MG_GRAPHIC,	0.0,	155,	229,	16,		64,		"menu/voyager/swoop1.tga",	0,	0,		0,		0,	Q{ MG_PHASER_STRIP1_DESC1,		2,		0,							CT_WHITE,		NULL },	// Q{ MG_PHASER_STRIP1_SWOOP
+//	{ MG_GRAPHIC,	0.0,	252,	272,	32,		32,		"menu/voyager/swoop2.tga",	0,	0,		0,		0,	Q{ MG_TORPEDOS_DESC1,				1,		0,							CT_WHITE,		NULL },	// Q{ MG_TORPEDOS_SWOOP
+//	{ MG_GRAPHIC,	0.0,	318,	310,	32,		32,		"menu/voyager/swoop3.tga",	0,	0,		0,		0,	Q{ MG_VENTRAL_DESC1,				1,		0,							CT_WHITE,		NULL },	// Q{ MG_VENTRAL_SWOOP
+//	{ MG_GRAPHIC,	0.0,	366,	247,	16,		128,	"menu/voyager/swoop4.tga",	0,	0,		0,		0,	Q{ MG_MIDHULL_DESC1,				1,		0,							CT_WHITE,		NULL },	// Q{ MG_MIDHULL_SWOOP
+//	{ MG_GRAPHIC,	0.0,	457,	281,	64,		64,		"menu/voyager/swoop5.tga",	0,	0,		0,		0,	Q{ MG_BUSSARD_DESC1,				3,		0,							CT_WHITE,		NULL },	// Q{ MG_BUSSARD_SWOOP
+//	{ MG_GRAPHIC,	0.0,	563,	181,	64,		128,	"menu/voyager/swoop6.tga",	0,	0,		0,		0,	Q{ MG_NACELLES_DESC1,				2,		0,							CT_WHITE,		NULL },	// Q{ MG_NACELLES_SWOOP
+//	{ MG_GRAPHIC,	0.0,	288,	183,	64,		128,	"menu/voyager/swoop7.tga",	0,	0,		0,		0,	Q{ MG_THRUSTERS_DESC1,			1,		0,							CT_WHITE,		NULL },	// Q{ MG_THRUSTERS_SWOOP
+//	{ MG_VAR,		0.0,	0,		0,		0,		0,		NULL,						0,	0,		0,		0,	0,								0,		0,							0,				NULL },	// Q{ MG_SWOOP_END
 
 //	type		timer	x		y		width	height	file/text							graphic,	min	(desc)						max		target	(swoop)					inc		style						color
-//	MG_GRAPHIC,	0.0,	  0,	353,	8,		8,		"menu/common/square.tga",	0,		0,		77,		550,0,								12,		UI_TINYFONT,				CT_LTPURPLE1,	NULL,	// QMG_BOTTOM_BLIP
-//	MG_GRAPHIC,	0.0,	  0,	167,	8,		8,		"menu/common/square.tga",	0,		0,		77,		550,0,								12,		UI_TINYFONT,				CT_LTPURPLE1,	NULL,	// QMG_BOTTOM_BLIP2
+//	{ MG_GRAPHIC,	0.0,	  0,	353,	8,		8,		"menu/common/square.tga",	0,		0,		77,		550,0,								12,		UI_TINYFONT,				CT_LTPURPLE1,	NULL },	// Q{ MG_BOTTOM_BLIP
+//	{ MG_GRAPHIC,	0.0,	  0,	167,	8,		8,		"menu/common/square.tga",	0,		0,		77,		550,0,								12,		UI_TINYFONT,				CT_LTPURPLE1,	NULL },	// Q{ MG_BOTTOM_BLIP2
 };
 
 
@@ -590,25 +590,25 @@ menugraphics_s attackmenu_graphics1[AMG_MAX] =
 {
 	//X - 58
 //	type		timer	x		y		width	height	file/text						graphic,	min		max	target	inc		style	color
-	MG_GRAPHIC,	0.0,	100,	280,	4,		32,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_MIDLEFT
-	MG_GRAPHIC,	0.0,	100,	180,	8,		97,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERLEFT
-	MG_GRAPHIC,	0.0,	100,	315,	8,		100,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERLEFT
-	MG_GRAPHIC,	0.0,	100,	164,	16,		 16,	"menu/common/corner_lu.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERCORNER
-	MG_GRAPHIC,	0.0,	100,	406,	32,		 32,	"menu/common/newswoosh.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERCORNER
+	{ MG_GRAPHIC,	0.0,	100,	280,	4,		32,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_MIDLEFT
+	{ MG_GRAPHIC,	0.0,	100,	180,	8,		97,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERLEFT
+	{ MG_GRAPHIC,	0.0,	100,	315,	8,		100,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERLEFT
+	{ MG_GRAPHIC,	0.0,	100,	164,	16,		 16,	"menu/common/corner_lu.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERCORNER
+	{ MG_GRAPHIC,	0.0,	100,	406,	32,		 32,	"menu/common/newswoosh.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERCORNER
 
-	MG_GRAPHIC,	0.0,	119,	164,	338,	  8,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERTOP1ST
-	MG_GRAPHIC,	0.0,	117,	410,	340,	 18,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERTOP1ST
+	{ MG_GRAPHIC,	0.0,	119,	164,	338,	  8,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERTOP1ST
+	{ MG_GRAPHIC,	0.0,	117,	410,	340,	 18,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERTOP1ST
 
-	MG_GRAPHIC,	0.0,	457,	164,	 34,	  8,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERTOP2ND
-	MG_GRAPHIC,	0.0,	457,	410,	 34,	 18,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERTOP2ND
+	{ MG_GRAPHIC,	0.0,	457,	164,	 34,	  8,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERTOP2ND
+	{ MG_GRAPHIC,	0.0,	457,	410,	 34,	 18,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERTOP2ND
 
-	MG_GRAPHIC,	0.0,	494,	164,	128,	128,	"menu/common/swoosh_top.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_UPPERSWOOP
-	MG_GRAPHIC,	0.0,	483,	403,	128,	32,	"menu/common/newswoosh_long.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_LOWERSWOOP
+	{ MG_GRAPHIC,	0.0,	494,	164,	128,	128,	"menu/common/swoosh_top.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_UPPERSWOOP
+	{ MG_GRAPHIC,	0.0,	483,	403,	128,	32,	"menu/common/newswoosh_long.tga",0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_LOWERSWOOP
 
-	MG_GRAPHIC,	0.0,	501,	189,	110,	17,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_TOPRIGHT
-	MG_GRAPHIC,	0.0,	501,	383,	110,	17,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_BOTTOMRIGHT
+	{ MG_GRAPHIC,	0.0,	501,	189,	110,	17,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_TOPRIGHT
+	{ MG_GRAPHIC,	0.0,	501,	383,	110,	17,		"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_BOTTOMRIGHT
 
-	MG_GRAPHIC,	0.0,	501,	206,	110,	177,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL,	// AMG_PLAYERBKGRND
+	{ MG_GRAPHIC,	0.0,	501,	206,	110,	177,	"menu/common/square.tga",	0,	0,		0,		0,	0,		0,		0,		CT_VDKPURPLE1,	NULL },	// AMG_PLAYERBKGRND
 };
 /*
 ===================
@@ -1906,7 +1906,7 @@ static weapongraphics_s weapon_graphics[UI_NUM_WEAPONS] =	//was WP_NUM_WEAPONS, 
 	trap_R_AddLightToScene( origin, 500, 1.0, 1.0, 1.0 );
 
 	trap_R_RenderScene( &refdef );
-}/*
+}*/
 
 /*
 ================
@@ -1940,7 +1940,7 @@ static void CacheWeaponModel(int i);
 
 	//BOOKMARK - 163
 	UI_DrawProportionalString( 289, 180, bg_itemlist[s_main.currentWeapon + 1].pickup_name,UI_CENTER|UI_SMALLFONT, colorTable[CT_YELLOW]);
-}/*
+}*/
 
 /*
 =================
@@ -1949,7 +1949,7 @@ M_MainMenu_Graphics
 */
 //BOOKMARK
 
-static 	qboolean hasSlashed = qfalse;
+//static 	qboolean hasSlashed = qfalse;
 
 static void M_MainMenu_Graphics (void)
 {
@@ -2067,9 +2067,9 @@ static void M_MainMenu_Graphics (void)
 		trap_S_StartLocalSound( uis.menu_choice1_snd, CHAN_LOCAL_SOUND );
 		weaponptr = g_weapons[s_main.currentWeapon];	
 		((menubitmap_s*)weaponptr)->textcolor = CT_LTGOLD1;
-	}/*
+	}
 
-	/* ===REMOVED BECAUSE OF TIM's NEW Credits Menu=== 
+	 ===REMOVED BECAUSE OF TIM's NEW Credits Menu=== 
 	switch (s_main.currentWeapon)
 	{
 
@@ -2084,7 +2084,7 @@ static void M_MainMenu_Graphics (void)
 
 	case 1 :	// Phaser rifle
 		Player_UpdateModel( ANIM_WEAPON2 );
-		/*
+		
 		UI_DrawProportionalString( 130, 308, "Project Lead:                         Phenix",UI_TINYFONT, colorTable[CT_LTGOLD1]);
 		UI_DrawProportionalString( 130, 322, "Lead Coder:                           Jason2Jason",UI_TINYFONT, colorTable[CT_LTGOLD1]);
 		UI_DrawProportionalString( 130, 336, "Lead Mapper:                          Sniper",UI_TINYFONT, colorTable[CT_LTGOLD1]);

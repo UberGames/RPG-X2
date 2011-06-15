@@ -98,7 +98,7 @@ const fxData_t s_admin_fxData[] = {
 	{ "elec_explosion", QMF_HIGHLIGHT_IF_FOCUS, ( QMF_INACTIVE | QMF_GRAYED ), ( QMF_INACTIVE | QMF_GRAYED ), MNT_RADIUS, -1, -1 },
 	{ "fire", QMF_HIGHLIGHT_IF_FOCUS, QMF_HIGHLIGHT_IF_FOCUS, ( QMF_INACTIVE | QMF_GRAYED ), MNT_RADIUS, MNT_TIMELENGTH, -1 },
 	{ "shake", QMF_HIGHLIGHT_IF_FOCUS, QMF_HIGHLIGHT_IF_FOCUS, ( QMF_INACTIVE | QMF_GRAYED ), MNT_RADIUS, MNT_SHAKEINTENSITY, -1 },
-	0
+	{ NULL, 0, 0, 0, 0, 0, 0 }
 };
 
 const char* s_admin_forceParams[] = {
@@ -2527,11 +2527,11 @@ static void AdminAudio_Draw( void )
 	Menu_Draw( &s_adminAudio.menu );
 }
 
-static void AdminAudio_Cache( void )
+/*static void AdminAudio_Cache( void )
 {
 	trap_R_RegisterShaderNoMip( PIC_ARROW_UP );
 	trap_R_RegisterShaderNoMip(	PIC_ARROW_DOWN );
-}
+}*/
 
 /*
 ====================

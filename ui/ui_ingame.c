@@ -97,7 +97,7 @@ typedef struct
 
 static ingamemenu_t	s_ingame;
 
-static int ingame_buttons[10][2] =
+/*static int ingame_buttons[10][2] =
 {
 {152,220},
 {152,220 + INGAME_MENU_VERTICAL_SPACING},
@@ -110,7 +110,7 @@ static int ingame_buttons[10][2] =
 {368,220 + (INGAME_MENU_VERTICAL_SPACING *2)},
 {368,220 + (INGAME_MENU_VERTICAL_SPACING *3)},
 {368,220 + (INGAME_MENU_VERTICAL_SPACING *4)},
-};
+};*/
 
 
 typedef struct 

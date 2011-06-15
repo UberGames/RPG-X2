@@ -126,8 +126,8 @@ typedef struct {
 
 static playersettings_t	s_playersettings;
 
-static int gamecodetoui[] = {4,2,3,0,5,1,6};
-static int uitogamecode[] = {4,6,2,3,1,5,7};
+//static int gamecodetoui[] = {4,2,3,0,5,1,6};
+//static int uitogamecode[] = {4,6,2,3,1,5,7};
 
 /*
 static int handicap_items[] = 
@@ -508,11 +508,12 @@ static void PlayerSettings_SaveChanges( void )
 
 	//rank
 	if ( s_playersettings.pRank.curvalue == s_playersettings.numRanks ) {
-		if ( s_playersettings.rankTxt.field.buffer[0] )
+		if ( s_playersettings.rankTxt.field.buffer[0] ) {
 			if ( !ingameFlag )
 				trap_Cvar_Set( "ui_playerRank", s_playersettings.rankTxt.field.buffer );
 			else
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "rank %s\n", s_playersettings.rankTxt.field.buffer ) );
+		}
 	}
 	else {
 		if ( !ingameFlag )
@@ -971,7 +972,7 @@ PlayerSettings_MenuInit
 static void PlayerSettings_MenuInit(int menuFrom) 
 {
 	int		y;
-	static char	playername[32];
+	//static char	playername[32];
 	int		i;
 
 	memset(&s_playersettings,0,sizeof(playersettings_t));
