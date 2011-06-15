@@ -39,7 +39,7 @@ there (please upload a *.diff file).
 
 Contact:
 --------------
-Come join our forum at http://ubergames.org/forums/!
+Come join our forum at http://ubergames.org/forums/
 
 
 Legal Notice:
