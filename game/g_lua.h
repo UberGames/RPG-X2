@@ -77,4 +77,7 @@ int			Luaopen_Mover(lua_State *L);
 // lua_cinematic.c
 int			Luaopen_Cinematic(lua_State *L);
 
+// lua_sound.c
+int			Luaopen_Sound(lua_State *L);
+
 #endif
