@@ -485,7 +485,7 @@ void fountain_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 void SP_fx_fountain ( gentity_t *ent ) {
 	gentity_t	*target = NULL;
 
-	if ( ent->target ) {
+	if ( ent->target[0] ) {
 		target = G_Find (target, FOFS(targetname), ent->target);
 	}
 
