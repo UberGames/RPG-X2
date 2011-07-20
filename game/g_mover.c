@@ -3325,3 +3325,8 @@ void SP_func_mover(gentity_t *ent) {
 
 	level.numBrushEnts++;
 }
+
+// Basic spawn function for func_stasis_door
+void SP_func_stasis_door(gentity_t *ent) {
+
+}

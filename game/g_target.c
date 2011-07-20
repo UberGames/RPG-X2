@@ -148,7 +148,7 @@ void Use_Target_Delay( gentity_t *ent, gentity_t *other, gentity_t *activator ) 
 
 void SP_target_delay( gentity_t *ent ) {
 	if ( !ent->wait ) {
-		G_SpawnInt("delay", "0", &ent->wait);
+		G_SpawnFloat("delay", "0", &ent->wait);
 		if(!ent->wait)
 			ent->wait = 1;
 	}
