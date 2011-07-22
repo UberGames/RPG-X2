@@ -3328,5 +3328,6 @@ void SP_func_mover(gentity_t *ent) {
 
 // Basic spawn function for func_stasis_door
 void SP_func_stasis_door(gentity_t *ent) {
-
+	trap_SetBrushModel(ent, ent->model);
+	trap_LinkEntity(ent);
 }
