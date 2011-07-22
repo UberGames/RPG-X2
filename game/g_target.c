@@ -2705,6 +2705,7 @@ Can be toggled by an usable if the usable has NO_ACTIVATOR spawnflag.
 void target_serverchange_think(gentity_t *ent) {
 	if(!ent->touched || !ent->touched->client) return;
 	trap_SendServerCommand(ent->touched->client->ps.clientNum, va("cg_connect \"%s\"\n", ent->targetname2));
+	ent->nextthink = -1;
 }
 
 void target_serverchange_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
@@ -2768,14 +2769,16 @@ void SP_target_serverchange(gentity_t *ent) {
 This will change the map if rpg_allowSPLevelChange is set to 1.
 
 "target" map to load (for example: borg2)
+"wait" time to wait before levelchange (whole numbers only, -1 for intermediate levelchange, 0 for default = 5)
 */
 void target_levelchange_think(gentity_t *ent) {
-	ent->count--;
-	if(ent->count != 0)
+	if(ent->count > 0) {
+		ent->count--;
 		trap_SendServerCommand(-1, va("servercprint \"Mapchange in %i ...\"", ent->count)); 
-	else {
+	} else {
 		trap_SendConsoleCommand(EXEC_APPEND, va("devmap \"%s\"", ent->target));
 		ent->nextthink = -1;
+		return;
 	}
 	ent->nextthink = level.time + 1000;
 }
@@ -2784,7 +2787,6 @@ void target_levelchange_use(gentity_t *ent, gentity_t *other, gentity_t *activat
 	if(rpg_allowSPLevelChange.integer) {
 		ent->think = target_levelchange_think;
 		ent->nextthink = level.time + 1000;
-		ent->count = 5;
 		trap_SendServerCommand(-1, va("servercprint \"Mapchange in %i ...\"", ent->count)); 
 	}
 }
@@ -2795,6 +2797,11 @@ void SP_target_levelchange(gentity_t *ent) {
 		G_FreeEntity(ent);
 		return;
 	}
+
+	if(!ent->wait)
+		ent->count = 5;
+	if(ent->wait < -1)
+		ent->count = -1;
 
 	ent->use = target_levelchange_use;
 }
