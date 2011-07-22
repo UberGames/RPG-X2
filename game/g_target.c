@@ -1500,6 +1500,8 @@ void target_turbolift_start ( gentity_t *self )
 static void target_turbolift_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
 	if(!Q_stricmp(self->swapname, activator->target)) {
+		if(self->soundPos1)
+			G_AddEvent(self, EV_GENERAL_SOUND, self->soundPos1);
 		self->flags ^= FL_LOCKED;
 	}
 
@@ -1539,6 +1541,7 @@ OFFLINE				Turbolift is offline at start
 "soundEnd"			- sound that plays as the wait period ends. (Defaults to EF SP's sound. '*' for none)
 "soundStart			- sound that plays when the lift starts moving
 "soundStartLength"	- how long the start sound is in seconds
+"soundDeactivate"	- sound to play if player tries to use an deactivated turbolift
 "waitEnd"			- how long to wait from the lift stopping to the doors opening (default 1000 )
 "swapname"			- toggles turbolift on/off
 "targetShaderName"	- lights off shader
@@ -1553,6 +1556,7 @@ void SP_target_turbolift ( gentity_t *self )
 	char*			endSound;
 	char*			idleSound;
 	char*			startSound;
+	char*			deactSound;
 	int				len;
 	fileHandle_t	f;
 	char			fileRoute[MAX_QPATH];
@@ -1565,12 +1569,14 @@ void SP_target_turbolift ( gentity_t *self )
 	G_SpawnString( "soundIdle", "100", &idleSound);
 	G_SpawnString( "soundStart", "100", &startSound);
 	G_SpawnFloat( "soundStartLength", "100", &self->distance);
+	G_SpawnString( "soundDeactivate", "100", &deactSound );
 
 	self->s.loopSound				= G_SoundIndex( loopSound ); //looping sound
 	self->s.otherEntityNum2			= G_SoundIndex( endSound );	//End Phase sound
 	/*self->soundLocked				= G_SoundIndex( idleSound );*/
 	self->n00bCount					= G_SoundIndex( idleSound );
 	self->sound2to1					= G_SoundIndex( startSound );
+	self->soundPos1					= G_SoundIndex( deactSound );
 
 	if(self->spawnflags & 512)
 		self->flags ^= FL_LOCKED;
@@ -2638,6 +2644,9 @@ void target_warp_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 				ent->target = ent->greensound;
 			G_UseTargets(ent, activator);
 			ent->n00bCount = !ent->n00bCount;
+		} else {
+			if(ent->soundPos1)
+				G_AddEvent(ent, EV_GENERAL_SOUND, ent->soundPos1);
 		}
 	}
 }
@@ -2657,6 +2666,8 @@ void SP_target_warp(gentity_t *ent) {
 	ent->falsetarget = G_NewString(temp);
 	G_SpawnString("coreSwap", "", &temp);
 	ent->bluename = G_NewString(temp);
+	G_SpawnString("soundDeactivate", "100", &temp);
+	ent->soundPos1 = G_SoundIndex(temp);
 	
 	//set corestate
 	ent->sound1to2 = (ent->spawnflags & 1);
@@ -2676,6 +2687,7 @@ void SP_target_warp(gentity_t *ent) {
 This entity can be used to de/activate all func_usables with "target" as targetname2.
 
 "target"	func_usable to de/activate(targetname2).
+"soundDeactivate" sound to play if going to warp but core is deactivated/ejected
 */
 void target_deactivate_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	gentity_t *target = NULL;
