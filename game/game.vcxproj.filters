@@ -267,6 +267,12 @@
     <ClCompile Include="lua_sound.c">
       <Filter>Source Files\lua</Filter>
     </ClCompile>
+    <ClCompile Include="lua_weapons.c">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua_trace.c">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_chat.h">

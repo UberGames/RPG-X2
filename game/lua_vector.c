@@ -13,7 +13,7 @@
 static int Vector_New(lua_State *L) {
 	vec_t *v;
 
-	v = lua_newuserdata(L, sizeof(vec3_t));
+	v = (vec_t *)lua_newuserdata(L, sizeof(vec3_t));
 
 	luaL_getmetatable(L, "vector");
 	lua_setmetatable(L, -2);
@@ -28,7 +28,7 @@ static int Vector_New(lua_State *L) {
 static int Vector_Construct(lua_State *L) {
 	vec_t *v;
 
-	v = lua_newuserdata(L, sizeof(vec3_t));
+	v = (vec_t *)lua_newuserdata(L, sizeof(vec3_t));
 
 	luaL_getmetatable(L, "vector");
 	lua_setmetatable(L, -2);
@@ -177,6 +177,30 @@ static int Vector_Perpendicular(lua_State *L) {
 	return 1;
 }
 
+static int Vector_VecToAngles(lua_State *L) {
+	vec_t *v, *t;
+	
+	v = Lua_GetVector(L, 1);
+	t = Lua_GetVector(L, 2);
+
+	vectoangles(v, t);
+
+	return 1;
+} 
+
+static int Vector_AngleVectors(lua_State *L) {
+	vec_t *v, *fwd, *right, *up; 
+
+	v = Lua_GetVector(L, 1);
+	fwd = Lua_GetVector(L, 2);
+	right = Lua_GetVector(L, 3);
+	up = Lua_GetVector(L, 4);
+
+	AngleVectors(v, fwd, right, up);
+
+	return 1;
+}
+
 static int Vector_Index(lua_State *L) {
 	vec_t		*v;
 	const char	*i;
@@ -290,6 +314,8 @@ static const luaL_Reg vector_ctor[] = {
 	{"NormalizeFast", Vector_NormalizeFast},
 	{"RotatePointAround", Vector_RotatePointAround},
 	{"Perpendicular", Vector_Perpendicular},
+	{"VecToAngles", Vector_VecToAngles },
+	{"AngleVectors", Vector_AngleVectors },
 	{NULL, NULL}
 };
 

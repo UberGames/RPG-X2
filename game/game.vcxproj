@@ -450,6 +450,8 @@
     <ClCompile Include="lua_mover.c" />
     <ClCompile Include="lua_qmath.c" />
     <ClCompile Include="lua_sound.c" />
+    <ClCompile Include="lua_trace.c" />
+    <ClCompile Include="lua_weapons.c" />
     <ClCompile Include="lundump.c" />
     <ClCompile Include="lvm.c" />
     <ClCompile Include="lzio.c" />

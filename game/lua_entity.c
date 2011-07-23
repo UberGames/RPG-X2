@@ -879,7 +879,7 @@ void Lua_PushEntity(lua_State * L, gentity_t * ent)
 {
 	lent_t     *lent;
 
-	lent = lua_newuserdata(L, sizeof(lent_t));
+	lent = (lent_t *)lua_newuserdata(L, sizeof(lent_t));
 
 	luaL_getmetatable(L, "game.entity");
 	lua_setmetatable(L, -2);

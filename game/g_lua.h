@@ -58,6 +58,18 @@ int			Luaopen_Entity(lua_State *L);
 void		Lua_PushEntity(lua_State *L, gentity_t *ent);
 lent_t		*Lua_GetEntity(lua_State *L, int argNum);
 
+// lua_weapons.c
+int			Luaopen_Weapons(lua_State *L);
+
+// lua_trace.c
+typedef struct {
+	trace_t *tr;
+} ltrace_t;
+
+void Lua_PushTrace(lua_State * L, trace_t * tr);
+ltrace_t *Lua_GetTrace(lua_State * L, int argNum);
+int Luaopen_Trace(lua_State *L);
+
 // lua_game.c
 int			Luaopen_Game(lua_State *L);
 
