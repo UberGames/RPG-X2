@@ -266,6 +266,7 @@ qboolean G_LuaStartVM(lvm_t * vm)
 
 	luaopen_base(vm->L);
 	luaopen_string(vm->L);
+	luaopen_coroutine(vm->L);
 	Luaopen_Game(vm->L);
 	Luaopen_Qmath(vm->L);
 	Luaopen_Mover(vm->L);
