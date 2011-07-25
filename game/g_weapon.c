@@ -243,14 +243,6 @@ void WP_FirePhaser( gentity_t *ent, qboolean alt_fire )
 			}
 		}
 	}
-	if (damage)
-	{
-		// log hit
-		/*if (ent->client)
-		{
-			ent->client->ps.persistant[PERS_ACCURACY_HITS]++;
-		}*/
-	}
 }
 
 

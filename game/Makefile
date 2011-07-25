@@ -75,7 +75,8 @@ OBJ = \
   lua_cinematic.o \
   lua_sound.o \
   lua_weapons.o \
-  lua_trace.o
+  lua_trace.o \
+  lua_cvar.o
  
 # game object  for syscalls to the engine
 SOOBJ = \
@@ -176,6 +177,7 @@ lua_cinematic.o: lua_cinematic.c; $(DO_CC)
 lua_sound.o: lua_sound.c; $(DO_CC)
 lua_weapons.o: lua_weapons.c; $(DO_CC)
 lua_trace.o: lua_trace.c; $(DO_CC)
+lua_cvar.o: lua_cvar.c; $(DO_CC)
  
 # game syscalls 
 g_syscalls.o : g_syscalls.c; $(DO_CC)

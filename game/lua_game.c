@@ -296,7 +296,55 @@ static int Game_Leveltime(lua_State * L)
 	return 1;
 }
 
+static int Game_Damage(lua_State *L) {
+	lent_t *lent;
+	gentity_t *targ = NULL, *inflictor = NULL, *attacker = NULL;
+	vec_t *dir = NULL, *point = NULL;
+	int damage = 0, dflags = 0, mod = 0;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) return 1;
+	targ = lent->e;
+	if(!lua_isnil(L, 2)) {
+		lent = Lua_GetEntity(L, 2);
+		if(lent && lent->e)
+			inflictor = lent->e;
+	}
+	if(!lua_isnil(L, 3)) {
+		lent = Lua_GetEntity(L, 3);
+		if(lent && lent->e)
+			attacker = lent->e;
+	}
+	if(!lua_isnil(L, 4))
+		dir = Lua_GetVector(L, 4);
+	if(!lua_isnil(L, 5))
+		point = Lua_GetVector(L, 5);
+	damage = (int)luaL_checknumber(L, 6);
+	dflags = (int)luaL_checknumber(L, 7);
+	mod = (int)luaL_checknumber(L, 8);
+
+	G_Damage(targ, inflictor, attacker, dir, point, damage, dflags, mod);
+
+	return 1;
+}
+
+static int Game_Repair(lua_State *L) {
+	lent_t *lent;
+	float rate;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) return 1;
+	
+	rate = (float)luaL_checknumber(L, 2);
+
+	G_Repair(lent->e, rate);
+
+	return 1;
+}
+
 static const luaL_Reg lib_game[] = {
+	{"Damage", Game_Damage},
+	{"Repair", Game_Repair},
 	{"Print", Game_Print},
 	{"MessagePrint", Game_MessagePrint},
 	{"CenterPrint", Game_CenterPrint},

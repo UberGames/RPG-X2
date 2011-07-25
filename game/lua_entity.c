@@ -816,7 +816,6 @@ static int Entity_SetParm(lua_State *L) {
 
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn", Entity_Spawn},
-
 	{"Find", Entity_Find},
 	{"FindNumber", Entity_FindNumber},
 	{"FindBModel", Entity_FindBModel},
