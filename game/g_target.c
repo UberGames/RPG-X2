@@ -152,6 +152,7 @@ void SP_target_delay( gentity_t *ent ) {
 		if(!ent->wait)
 			ent->wait = 1;
 	}
+        ent->count = (int)ent->wait;
 	ent->use = Use_Target_Delay;
 }
 
