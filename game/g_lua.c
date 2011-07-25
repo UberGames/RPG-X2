@@ -163,6 +163,28 @@ qboolean G_LuaInit()
 	return qtrue;
 }
 
+qboolean G_LuaResume(lvm_t *vm, lua_State *T, char *func, int nargs) {
+	int res = lua_resume(T, nargs);
+
+	if(res == LUA_ERRRUN) {
+		LUA_LOG("Lua: %s error running lua script: %s\n", func, lua_tostring(T, -1));
+		G_Printf(S_COLOR_YELLOW "Lua: %s error running lua script: %s\n", func, lua_tostring(T, -1));
+		lua_pop(T, 1);
+		vm->error++;
+		return qfalse;
+	} else if(res == LUA_ERRMEM) {
+		LUA_LOG("Lua: memory allocation error #2 ( %s )\n", vm->filename);
+		vm->error++;
+		return qfalse;
+	} else if(res == LUA_ERRERR) {
+		LUA_LOG("Lua: traceback error ( %s )\n", vm->filename);
+		G_Printf(S_COLOR_YELLOW "Lua: traceback error ( %s )\n", vm->filename);
+		vm->error++;
+		return qfalse;
+	} 
+	return qtrue;
+}
+
 qboolean G_LuaCall(lvm_t * vm, char *func, int nargs, int nresults)
 {
 	int             res = lua_pcall(vm->L, nargs, nresults, 0);
@@ -193,6 +215,24 @@ qboolean G_LuaCall(lvm_t * vm, char *func, int nargs, int nresults)
 
 #define SAY_ALL		0
 #define SAY_TEAM	1
+
+qboolean G_LuaGetFunctionT(lua_State *T, char *name)
+{
+	if(T)
+	{
+		lua_getglobal(T, name);
+		if(lua_isfunction(T, -1))
+		{
+			return qtrue;
+		}
+		else
+		{
+			lua_pop(T, 1);
+			return qfalse;
+		}
+	}
+	return qfalse;
+}
 
 qboolean G_LuaGetFunction(lvm_t * vm, char *name)
 {
@@ -526,6 +566,7 @@ qboolean LuaHook_G_EntityThink(char *function, int entity)
 {
 	int         i;
 	lvm_t       *vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++)
 	{
@@ -534,12 +575,21 @@ qboolean LuaHook_G_EntityThink(char *function, int entity)
 		{
 			if(vm->id < 0 )
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			if(!G_LuaCall(vm, function, 1, 0))
-			{
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				if(!G_LuaCall(vm, function, 1, 0))
+				{
+					continue;
+				}
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				if(!G_LuaResume(vm, t, function, 1))
+					continue;
 			}
 		}
 	}
@@ -550,6 +600,7 @@ qboolean LuaHook_G_EntityTouch(char *function, int entity, int other)
 {
 	int         i;
 	lvm_t       *vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++)
 	{
@@ -558,13 +609,23 @@ qboolean LuaHook_G_EntityTouch(char *function, int entity, int other)
 		{
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			lua_pushinteger(vm->L, other);
-			if(!G_LuaCall(vm, function, 2, 0))
-			{
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				lua_pushinteger(vm->L, other);
+				if(!G_LuaCall(vm, function, 2, 0))
+				{
+					continue;
+				}
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				lua_pushinteger(t, other);
+				if(!G_LuaResume(vm, t, function, 2))
+					continue;
 			}
 		}
 	}
@@ -575,6 +636,7 @@ qboolean LuaHook_G_EntityUse(char *function, int entity, int other, int activato
 {
 	int         i;
 	lvm_t       *vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++)
 	{
@@ -583,14 +645,24 @@ qboolean LuaHook_G_EntityUse(char *function, int entity, int other, int activato
 		{
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			lua_pushinteger(vm->L, other);
-			lua_pushinteger(vm->L, activator);
-			if(!G_LuaCall(vm, function, 3, 0))
-			{
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				lua_pushinteger(vm->L, other);
+				lua_pushinteger(vm->L, activator);
+				if(!G_LuaCall(vm, function, 3, 0))
+				{
+					continue;
+				}
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				lua_pushinteger(t, other);
+				lua_pushinteger(t, activator);
+				G_LuaResume(vm, t, function, 3);
 			}
 		}
 	}
@@ -601,6 +673,7 @@ qboolean LuaHook_G_EntityHurt(char *function, int entity, int inflictor, int att
 {
 	int         i;
 	lvm_t       *vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++)
 	{
@@ -609,14 +682,25 @@ qboolean LuaHook_G_EntityHurt(char *function, int entity, int inflictor, int att
 		{
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			lua_pushinteger(vm->L, inflictor);
-			lua_pushinteger(vm->L, attacker);
-			if(!G_LuaCall(vm, function, 3, 0))
-			{
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				lua_pushinteger(vm->L, inflictor);
+				lua_pushinteger(vm->L, attacker);
+				if(!G_LuaCall(vm, function, 3, 0))
+				{
+					continue;
+				}
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				lua_pushinteger(t, inflictor);
+				lua_pushinteger(t, attacker);
+				if(!G_LuaResume(vm, t, function, 3))
+					continue;
 			}
 		}
 	}
@@ -626,7 +710,8 @@ qboolean LuaHook_G_EntityHurt(char *function, int entity, int inflictor, int att
 qboolean LuaHook_G_EntityDie(char *function, int entity, int inflictor, int attacker, int dmg, int mod)
 {
 	int             i;
-	lvm_t       *vm;
+	lvm_t			*vm;
+	lua_State		*t;
 
 	for(i = 0; i < NUM_VMS; i++)
 	{
@@ -635,16 +720,29 @@ qboolean LuaHook_G_EntityDie(char *function, int entity, int inflictor, int atta
 		{
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			lua_pushinteger(vm->L, inflictor);
-			lua_pushinteger(vm->L, attacker);
-			lua_pushinteger(vm->L, dmg);
-			lua_pushinteger(vm->L, mod);
-			if(!G_LuaCall(vm, function, 5, 0))
-			{
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				lua_pushinteger(vm->L, inflictor);
+				lua_pushinteger(vm->L, attacker);
+				lua_pushinteger(vm->L, dmg);
+				lua_pushinteger(vm->L, mod);
+				if(!G_LuaCall(vm, function, 5, 0))
+				{
+					continue;
+				}
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				lua_pushinteger(t, inflictor);
+				lua_pushinteger(t, attacker);
+				lua_pushinteger(t, dmg);
+				lua_pushinteger(t, mod);
+				if(!G_LuaResume(vm, t, function, 5))
+					continue;
 			}
 		}
 	}
@@ -655,6 +753,7 @@ qboolean LuaHook_G_EntityFree(char *function, int entity)
 {
 	int         i;
 	lvm_t       *vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++)
 	{
@@ -663,12 +762,21 @@ qboolean LuaHook_G_EntityFree(char *function, int entity)
 		{
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			if(!G_LuaCall(vm, function, 1, 0))
-			{
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				if(!G_LuaCall(vm, function, 1, 0))
+				{
+					continue;
+				}
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				if(!G_LuaResume(vm, t, function, 1))
+					continue;
 			}
 		}
 	}
@@ -678,17 +786,27 @@ qboolean LuaHook_G_EntityFree(char *function, int entity)
 qboolean LuaHook_G_EntityReached(char *function, int entity) {
 	int			i;
 	lvm_t		*vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++) {
 		vm = lVM[i];
 		if(vm) {
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			if(!G_LuaCall(vm, function, 1, 0))
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				if(!G_LuaCall(vm, function, 1, 0))
+					continue;
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				if(!G_LuaResume(vm, t, function, 1))
+					continue;
+			}
 		}
 	}
 	return qfalse;
@@ -697,17 +815,27 @@ qboolean LuaHook_G_EntityReached(char *function, int entity) {
 qboolean LuaHook_G_EntityReachedAngular(char *function, int entity) {
 	int			i;
 	lvm_t		*vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++) {
 		vm = lVM[i];
 		if(vm) {
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			if(!G_LuaCall(vm, function, 1, 0))
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				if(!G_LuaCall(vm, function, 1, 0))
+					continue;
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				if(!G_LuaResume(vm, t, function, 1))
+					continue;
+			}
 		}
 	}
 	return qfalse;
@@ -717,6 +845,7 @@ qboolean LuaHook_G_EntityTrigger(char *function, int entity, int other)
 {
 	int         i;
 	lvm_t       *vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++)
 	{
@@ -725,13 +854,23 @@ qboolean LuaHook_G_EntityTrigger(char *function, int entity, int other)
 		{
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			lua_pushinteger(vm->L, other);
-			if(!G_LuaCall(vm, function, 2, 0))
-			{
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				lua_pushinteger(vm->L, other);
+				if(!G_LuaCall(vm, function, 2, 0))
+				{
+					continue;
+				}
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				lua_pushinteger(t, other);
+				if(!G_LuaResume(vm, t, function, 2))
+					continue;
 			}
 		}
 	}
@@ -742,6 +881,7 @@ qboolean LuaHook_G_EntitySpawn(char *function, int entity)
 {
 	int         i;
 	lvm_t       *vm;
+	lua_State	*t;
 
 	for(i = 0; i < NUM_VMS; i++)
 	{
@@ -750,12 +890,21 @@ qboolean LuaHook_G_EntitySpawn(char *function, int entity)
 		{
 			if(vm->id < 0)
 				continue;
-			if(!G_LuaGetFunction(vm, function))
-				continue;
-			lua_pushinteger(vm->L, entity);
-			if(!G_LuaCall(vm, function, 1, 0))
-			{
-				continue;
+			t = lua_newthread(vm->L);
+			if(!t) {
+				if(!G_LuaGetFunction(vm, function))
+					continue;
+				lua_pushinteger(vm->L, entity);
+				if(!G_LuaCall(vm, function, 1, 0))
+				{
+					continue;
+				}
+			} else {
+				if(!G_LuaGetFunctionT(t, function))
+					continue;
+				lua_pushinteger(t, entity);
+				if(!G_LuaResume(vm, t, function, 1))
+					continue;
 			}
 		}
 	}
