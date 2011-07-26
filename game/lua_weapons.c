@@ -4,9 +4,7 @@
 
 #ifdef G_LUA
 
-
 static const luaL_Reg lib_weapons[] = {
-	
 	{NULL, NULL}
 };
 

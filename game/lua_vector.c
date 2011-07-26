@@ -343,7 +343,7 @@ int Luaopen_Vector(lua_State *L) {
 void Lua_PushVector(lua_State *L, vec3_t v) {
 	vec_t	*vec;
 
-	vec = lua_newuserdata(L, sizeof(vec3_t));
+	vec = (vec_t *)lua_newuserdata(L, sizeof(vec3_t));
 
 	luaL_getmetatable(L, "vector");
 	lua_setmetatable(L, -2);

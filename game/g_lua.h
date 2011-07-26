@@ -13,7 +13,7 @@
 #include "lualib.h"
 #endif
 
-#define NUM_VMS 8
+#define NUM_VMS 3
 
 #if defined __linux__
 #define HOSTARCH	"UNIX"

@@ -814,6 +814,262 @@ static int Entity_SetParm(lua_State *L) {
 	return 1;
 }
 
+static int Entity_GetActivator(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnil(L);
+		return 1;
+	}
+	Lua_PushEntity(L, lent->e->activator);
+
+	return 1;
+}
+
+static int Entity_SetActivator(lua_State *L) {
+	lent_t *lent;
+	lent_t *activator;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	activator = Lua_GetEntity(L, 2);
+	if(!activator || activator->e)
+		lent->e->activator = NULL;
+	else
+		lent->e->activator = activator->e;
+
+	return 1;
+}
+
+static int Entity_GetAngle(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnumber(L, 0);
+		return 1;
+	}
+	lua_pushnumber(L, lent->e->angle);
+
+	return 1;
+}
+
+static int Entity_SetAngle(lua_State *L) {
+	lent_t *lent;
+	float angle;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	angle = (float)luaL_checknumber(L, 2);
+	lent->e->angle = angle;
+
+	return 1;
+}
+
+static int Entity_GetApos1(lua_State *L) {
+	lent_t *lent;
+	vec3_t null = { 0, 0, 0 };
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		Lua_PushVector(L, null);
+		return 1;
+	}
+	Lua_PushVector(L, lent->e->apos1);
+
+	return 1;
+}
+
+static int Entity_GetApos2(lua_State *L) {
+	lent_t *lent;
+	vec3_t null = { 0, 0, 0 };
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		Lua_PushVector(L, null);
+		return 1;
+	}
+	Lua_PushVector(L, lent->e->apos2);
+
+	return 1;
+}
+
+static int Entity_SetApos1(lua_State *L) {
+	lent_t *lent;
+	vec_t *vec;
+	
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || lent->e)
+		return 1;
+	vec = Lua_GetVector(L, 2);
+	if(!vec)
+		return 1;
+	VectorCopy(vec, lent->e->apos1);
+
+	return 1;
+}
+
+static int Entity_SetApos2(lua_State *L) {
+	lent_t *lent;
+	vec_t *vec;
+	
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || lent->e)
+		return 1;
+	vec = Lua_GetVector(L, 2);
+	if(!vec)
+		return 1;
+	VectorCopy(vec, lent->e->apos2);
+
+	return 1;
+}
+
+static int Entity_GetBluename(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	if(!lent->e->bluename[0])
+		lua_pushstring(L, "");
+	else
+		lua_pushstring(L, lent->e->bluename);
+
+	return 1;
+}
+
+static int Entity_SetBluename(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	if(lua_isstring(L, 2)) {
+		s = (char *)luaL_checkstring(L, 2);
+		lent->e->bluename = G_NewString(s);
+	} else 
+		lent->e->bluename = NULL;
+
+	return 1;
+}
+
+static int Entity_GetBluesound(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->bluesound[0])
+		lua_pushstring(L, "");
+	else
+		lua_pushstring(L, lent->e->bluesound);
+
+	return 1;
+}
+
+static int Entity_SetBluesound(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	if(lua_isstring(L, 2)) {
+		s = (char *)luaL_checkstring(L, 2);
+		lent->e->bluesound = G_NewString(s);
+	} else 
+		lent->e->bluesound = NULL;
+
+	return 1;
+}
+
+static int Entity_GetBooleanstate(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || lent->e) {
+		lua_pushboolean(L, 0);
+		return 1;
+	}
+	lua_pushboolean(L, (int)lent->e->booleanstate);
+
+	return 1;
+}
+
+static int Entity_SetBooleanstate(lua_State *L) {
+	lent_t *lent;
+	qboolean b;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	b = (qboolean)luaL_checkinteger(L, 2);
+
+	lent->e->booleanstate = b;
+
+	return 1;
+}
+
+static int Entity_GetClipmask(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->clipmask);
+
+	return 1;
+}
+
+static int Entity_SetClipmask(lua_State *L) {
+	lent_t *lent;
+	int mask;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	mask = (int)luaL_checknumber(L, 2);
+
+	lent->e->clipmask = mask;
+
+	return 1;
+}
+
+static int Entity_GetCount(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->count);
+
+	return 1;
+}
+
+static int Entity_SetCount(lua_State *L) {
+	lent_t *lent;
+	int		count;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	count = (int)luaL_checknumber(L, 2);
+
+	lent->e->count = count;
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn", Entity_Spawn},
 	{"Find", Entity_Find},
@@ -829,6 +1085,10 @@ static const luaL_Reg Entity_ctor[] = {
 	{"Use", Entity_Use},
 	{NULL, NULL}
 };
+
+void dummy(gentity_t *ent) {
+	ent->damage;
+}
 
 static const luaL_Reg Entity_meta[] = {
 	{"__gc", Entity_GC},
@@ -856,6 +1116,32 @@ static const luaL_Reg Entity_meta[] = {
 
 	{"GetParm", Entity_GetParm},
 	{"SetParm", Entity_SetParm},
+
+	{"GetActivator", Entity_GetActivator},
+	{"SetActivator", Entity_SetActivator},
+
+	{"GetAngle", Entity_GetAngle},
+	{"SetAngle", Entity_SetAngle},
+
+	{"GetApos1", Entity_GetApos1},
+	{"GetApos2", Entity_GetApos2},
+	{"SetApos1", Entity_SetApos1},
+	{"SetApos2", Entity_SetApos2},
+
+	{"GetBluename", Entity_GetBluename},
+	{"SetBluename", Entity_SetBluename},
+
+	{"GetBluesound", Entity_GetBluesound},
+	{"SetBluesound", Entity_SetBluesound},
+
+	{"GetBooleanstate", Entity_GetBooleanstate},
+	{"SetBooleanstate", Entity_SetBooleanstate},
+
+	{"GetClipmask", Entity_GetClipmask},
+	{"SetClipmask", Entity_SetClipmask},
+
+	{"GetCount", Entity_GetCount},
+	{"SetCount", Enitty_SetCount},
 
 	{NULL, NULL}
 };
