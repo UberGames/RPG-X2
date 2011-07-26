@@ -1807,151 +1807,508 @@ static int Entity_SetLuaUse(lua_State *L) {
 	return 1;
 }
 
+
+static int Entity_GetMessage(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->message);
+	}
+
+	return 1;
+}
+
+static int Entity_SetMessage(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->message = NULL;
+	else
+		lent->e->message = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetMethodOfDeath(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->methodOfDeath);
+
+	return 1;
+}
+
+static int Entity_SetMethodOfDeath(lua_State *L) {
+	lent_t *lent;
+	int		mod;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	mod = (int)luaL_checknumber(L, 1);
+
+	lent->e->methodOfDeath = mod;
+
+	return 1;
+}
+
+static int Entity_GetModel(lua_State *L) {
+	lent_t	*lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->model[0])
+		lua_pushstring(L, "");
+	else
+		lua_pushstring(L, lent->e->model);
+
+	return 1;
+}
+
+static int Entity_SetModel(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->model = NULL;
+	else
+		lent->e->model = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetModel2(lua_State *L) {
+	lent_t	*lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->model[0])
+		lua_pushstring(L, "");
+	else
+		lua_pushstring(L, lent->e->model2);
+
+	return 1;
+}
+
+static int Entity_SetModel2(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->model2 = NULL;
+	else
+		lent->e->model2 = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetMovedir(lua_State *L) {
+	lent_t *lent;
+	vec3_t null = { 0, 0, 0 };
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		Lua_PushVector(L, null);
+		return 1;
+	}
+	Lua_PushVector(L, lent->e->movedir);
+
+	return 1;
+}
+
+static int Entity_SetMovedir(lua_State *L) {
+	lent_t	*lent;
+	vec_t	*dir;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	dir = Lua_GetVector(L, 2);
+
+	VectorCopy(dir, lent->e->movedir);
+
+	return 1;
+}
+
+static int Entity_GetMoverstate(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	lua_pushinteger(L, (int)lent->e->moverState);
+
+	return 1;
+}
+
+static int Entity_SetMoverstate(lua_State *L) {
+	lent_t	*lent;
+	moverState_t m;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	m = (moverState_t)luaL_checknumber(L, 2);
+
+	lent->e->moverState = m;
+
+	return 1;
+}
+
+static int Entity_GetN00bCount(lua_State *L) {
+	lent_t *lent;
+	
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->n00bCount);
+
+	return 1;
+}
+
+static int Entity_SetN00bCount(lua_State *L) {
+	lent_t *lent;
+	int		cnt;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	cnt = (int)luaL_checknumber(L, 2);
+
+	lent->e->n00bCount = cnt;
+
+	return 1;
+}
+
+static int Entity_GetNeverFree(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushboolean(L, 0);
+		return 1;
+	}
+	lua_pushboolean(L, (int)lent->e->neverFree);
+
+	return 1;
+}
+
+static int Entity_SetNeverFree(lua_State *L) {
+	lent_t *lent;
+	qboolean b;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	b = (qboolean)lua_toboolean(L, 2);
+
+	lent->e->neverFree = b;
+
+	return 1;
+}
+
+static int Entity_GetNexthink(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->nextthink);
+
+	return 1;
+}
+
+static int Entity_SetNexthink(lua_State *L) {
+	lent_t *lent;
+	int		next;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) 
+		return 1;
+	next = (int)luaL_checknumber(L, 2);
+
+	lent->e->nextthink = next;
+
+	return 1;
+}
+
+static int  Entity_GetNextTrain(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnil(L);
+		return 1;
+	}
+	if(!lent->e->nextTrain) {
+		lua_pushnil(L);
+	} else {
+		Lua_PushEntity(L, lent->e->nextTrain);
+	}
+
+	return 1;
+}
+
+static int Entity_SetNextTrain(lua_State *L) {
+	lent_t *lent;
+	lent_t *next;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	next = Lua_GetEntity(L, 2);
+	if(!next || !next->e)
+		lent->e->nextTrain = NULL;
+	else
+		lent->e->nextTrain = next->e;
+
+	return 1;
+}
+
+static int Entity_GetNoiseIndex(lua_State *L) {
+	lent_t *lent;
+	
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->noise_index);
+
+	return 1;
+}
+
+static int Entity_SetNoiseIndex(lua_State *L) {
+	lent_t *lent;
+	int		idx;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	idx = (int)luaL_checknumber(L, 2);
+
+	lent->e->noise_index = idx;
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
-	{"Spawn", Entity_Spawn},
-	{"Find", Entity_Find},
-	{"FindNumber", Entity_FindNumber},
-	{"FindBModel", Entity_FindBModel},
-	{"GetTarget", Entity_GetTarget},
-	{"CallSpawn", Entity_CallSpawn},
-	{"DelayedCallSpawn", Entity_DelayedCallSpawn },
-	{"Remove", Entity_Remove},
-	{"RemoveUnnamedSpawns", Entity_RemoveUnnamedSpawns},
-	{"RemoveSpawns", Entity_RemoveSpawns},
-	{"RemoveType", Entity_RemoveType},
-	{"Use", Entity_Use},
-	{NULL, NULL}
+	{"Spawn",					Entity_Spawn},
+	{"Find",					Entity_Find},
+	{"FindNumber",				Entity_FindNumber},
+	{"FindBModel",				Entity_FindBModel},
+	{"GetTarget",				Entity_GetTarget},
+	{"CallSpawn",				Entity_CallSpawn},
+	{"DelayedCallSpawn",		Entity_DelayedCallSpawn },
+	{"Remove",					Entity_Remove},
+	{"RemoveUnnamedSpawns",		Entity_RemoveUnnamedSpawns},
+	{"RemoveSpawns",			Entity_RemoveSpawns},
+	{"RemoveType",				Entity_RemoveType},
+	{"Use",						Entity_Use},
+	{NULL,						NULL}
 };
 
 /*void dummy(gentity_t *ent) {
-	ent->luaUse;
+	ent->noise_index;
 }*/
 
 static const luaL_Reg Entity_meta[] = {
-	{"__gc", Entity_GC},
-	{"__tostring", Entity_ToString},
-	{"GetNumber", Entity_GetNumber},
-	{"IsClient", Entity_IsClient},
-	{"GetClientname", Entity_GetClientName},
-	{"Print", Entity_Print},
-	{"CenterPrint", Entity_CenterPrint},
-	{"GetClassname", Entity_GetClassName},
-	{"SetClassname", Entity_SetClassName},
-	{"GetTargetname", Entity_GetTargetName},
-	{"SetTargetname", Entity_SetTargetName},
-	{"Rotate", Entity_Rotate},
+	{"__gc",						Entity_GC},
+	{"__tostring",					Entity_ToString},
+	{"GetNumber",					Entity_GetNumber},
+	{"IsClient",					Entity_IsClient},
+	{"GetClientname",				Entity_GetClientName},
+	{"Print",						Entity_Print},
+	{"CenterPrint",					Entity_CenterPrint},
 
-	{"IsRocket", Entity_IsRocket},
-	{"IsGrenade", Entity_IsGrenade},
-	{"Teleport", Entity_Teleport},
-	{"SetKeyValue", Entity_SetKeyValue},
-	{"GetOrigin", Entity_GetOrigin},
-	{"SetupTrigger", Entity_SetupTrigger},
+	{"GetClassname",				Entity_GetClassName},
+	{"SetClassname",				Entity_SetClassName},
 
-	{"Lock", Entity_Lock},
-	{"Unlock", Entity_Unlock},
-	{"IsLocked", Entity_IsLocked},
+	{"GetTargetname",				Entity_GetTargetName},
+	{"SetTargetname",				Entity_SetTargetName},
 
-	{"GetParm", Entity_GetParm},
-	{"SetParm", Entity_SetParm},
+	{"Rotate",						Entity_Rotate},
 
-	{"GetActivator", Entity_GetActivator},
-	{"SetActivator", Entity_SetActivator},
+	{"IsRocket",					Entity_IsRocket},
+	{"IsGrenade",					Entity_IsGrenade},
+	{"Teleport",					Entity_Teleport},
+	{"SetKeyValue",					Entity_SetKeyValue},
+	{"GetOrigin",					Entity_GetOrigin},
+	{"SetupTrigger",				Entity_SetupTrigger},
 
-	{"GetAngle", Entity_GetAngle},
-	{"SetAngle", Entity_SetAngle},
+	{"Lock",						Entity_Lock},
+	{"Unlock",						Entity_Unlock},
+	{"IsLocked",					Entity_IsLocked},
 
-	{"GetApos1", Entity_GetApos1},
-	{"GetApos2", Entity_GetApos2},
+	{"GetParm",						Entity_GetParm},
+	{"SetParm",						Entity_SetParm},
 
-	{"SetApos1", Entity_SetApos1},
-	{"SetApos2", Entity_SetApos2},
+	{"GetActivator",				Entity_GetActivator},
+	{"SetActivator",				Entity_SetActivator},
 
-	{"GetBluename", Entity_GetBluename},
-	{"SetBluename", Entity_SetBluename},
+	{"GetAngle",					Entity_GetAngle},
+	{"SetAngle",					Entity_SetAngle},
 
-	{"GetBluesound", Entity_GetBluesound},
-	{"SetBluesound", Entity_SetBluesound},
+	{"GetApos1",					Entity_GetApos1},
+	{"GetApos2",					Entity_GetApos2},
 
-	{"GetBooleanstate", Entity_GetBooleanstate},
-	{"SetBooleanstate", Entity_SetBooleanstate},
+	{"SetApos1",					Entity_SetApos1},
+	{"SetApos2",					Entity_SetApos2},
 
-	{"GetClipmask", Entity_GetClipmask},
-	{"SetClipmask", Entity_SetClipmask},
+	{"GetBluename",					Entity_GetBluename},
+	{"SetBluename",					Entity_SetBluename},
 
-	{"GetCount", Entity_GetCount},
-	{"SetCount", Entity_SetCount},
+	{"GetBluesound",				Entity_GetBluesound},
+	{"SetBluesound",				Entity_SetBluesound},
 
-	{"GetDamage", Entity_GetDamage},
-	{"SetDamage", Entity_SetDamage},
+	{"GetBooleanstate",				Entity_GetBooleanstate},
+	{"SetBooleanstate",				Entity_SetBooleanstate},
 
-	{"GetDistance", Entity_GetDistance},
-	{"SetDistance", Entity_SetDistance},
+	{"GetClipmask",					Entity_GetClipmask},
+	{"SetClipmask",					Entity_SetClipmask},
 
-	{"GetEnemy", Entity_GetEnemy},
-	{"SetEnemy", Entity_SetEnemy},
+	{"GetCount",					Entity_GetCount},
+	{"SetCount",					Entity_SetCount},
 
-	{"GetEventTime", Entity_GetEventTime},
-	{"SetEventTime", Entity_SetEventTime},
+	{"GetDamage",					Entity_GetDamage},
+	{"SetDamage",					Entity_SetDamage},
 
-	{"GetFalsename", Entity_GetFalsename},
-	{"SetFalsename", Entity_SetFalsename},
+	{"GetDistance",					Entity_GetDistance},
+	{"SetDistance",					Entity_SetDistance},
 
-	{"GetFalsetarget", Entity_GetFalsetarget},
-	{"SetFalsetarget", Entity_SetFalsetarget},
+	{"GetEnemy",					Entity_GetEnemy},
+	{"SetEnemy",					Entity_SetEnemy},
 
-	{"GetFlags", Entity_GetFlags},
-	{"SetFlags", Entity_SetFlags},
+	{"GetEventTime",				Entity_GetEventTime},
+	{"SetEventTime",				Entity_SetEventTime},
 
-	{"GetFreeAfterEvent", Entity_GetFreeAfterEvent},
-	{"SetFreeAfterEvent", Entity_SetFreeAfterEvent},
+	{"GetFalsename",				Entity_GetFalsename},
+	{"SetFalsename",				Entity_SetFalsename},
 
-	{"GetFreetime", Entity_GetFreetime},
+	{"GetFalsetarget",				Entity_GetFalsetarget},
+	{"SetFalsetarget",				Entity_SetFalsetarget},
 
-	{"GetGreensound", Entity_GetGreensound},
-	{"SetGreensound", Entity_SetGreensound},
+	{"GetFlags",					Entity_GetFlags},
+	{"SetFlags",					Entity_SetFlags},
 
-	{"GetHealth", Entity_GetHealth},
-	{"SetHealth", Entity_SetHealth},
+	{"GetFreeAfterEvent",			Entity_GetFreeAfterEvent},
+	{"SetFreeAfterEvent",			Entity_SetFreeAfterEvent},
 
-	{"GetInUse", Entity_GetInUse},
-	{"SetInUse", Entity_SetInUse},
+	{"GetFreetime",					Entity_GetFreetime},
 
-	{"GetLastEnemy", Entity_GetLastEnemy},
-	{"SetLastEnemy", Entity_SetLastEnemy},
+	{"GetGreensound",				Entity_GetGreensound},
+	{"SetGreensound",				Entity_SetGreensound},
 
-	{"GetLuaDie", Entity_GetLuaDie},
-	{"SetLuaDie", Entity_SetLuaDie},
+	{"GetHealth",					Entity_GetHealth},
+	{"SetHealth",					Entity_SetHealth},
 
-	{"GetLuaEntity", Entity_GetLuaEntity},
-	{"SetLuaEntity", Entity_SetLuaEntity},
+	{"GetInUse",					Entity_GetInUse},
+	{"SetInUse",					Entity_SetInUse},
 
-	{"GetLuaFree", Entity_GetLuaFree},
-	{"SetLuaFree", Entity_SetLuaFree},
+	{"GetLastEnemy",				Entity_GetLastEnemy},
+	{"SetLastEnemy",				Entity_SetLastEnemy},
 
-	{"GetLuaHurt", Entity_GetLuaHurt},
-	{"SetLuaHurt", Entity_SetLuaHurt},
+	{"GetLuaDie",					Entity_GetLuaDie},
+	{"SetLuaDie",					Entity_SetLuaDie},
 
-	{"GetLuaReached", Entity_GetLuaReached},
-	{"SetLuaReached", Entity_SetLuaReached},
+	{"GetLuaEntity",				Entity_GetLuaEntity},
+	{"SetLuaEntity",				Entity_SetLuaEntity},
 
-	{"GetLuaReachedAngular", Entity_GetLuaReachedAngular},
-	{"SetLuaReachedAngular", Entity_SetLuaReachedAngular},
+	{"GetLuaFree",					Entity_GetLuaFree},
+	{"SetLuaFree",					Entity_SetLuaFree},
 
-	{"GetLuaSpawn", Entity_GetLuaSpawn},
-	{"SetLuaSpawn", Entity_SetLuaSpawn},
+	{"GetLuaHurt",					Entity_GetLuaHurt},
+	{"SetLuaHurt",					Entity_SetLuaHurt},
 
-	{"GetLuaThink", Entity_GetLuaThink},
-	{"SetLuaThink", Entity_SetLuaThink},
+	{"GetLuaReached",				Entity_GetLuaReached},
+	{"SetLuaReached",				Entity_SetLuaReached},
 
-	{"GetLuaTouch", Entity_GetLuaTouch},
-	{"SetLuaTouch", Entity_SetLuaTouch},
+	{"GetLuaReachedAngular",		Entity_GetLuaReachedAngular},
+	{"SetLuaReachedAngular",		Entity_SetLuaReachedAngular},
 
-	{"GetLuaTrigger", Entity_GetLuaTrigger},
-	{"SetLuaTrigger", Entity_SetLuaTrigger},
+	{"GetLuaSpawn",					Entity_GetLuaSpawn},
+	{"SetLuaSpawn",					Entity_SetLuaSpawn},
 
-	{"GetLuaUse", Entity_GetLuaUse},
-	{"SetLuaUse", Entity_SetLuaUse},
+	{"GetLuaThink",					Entity_GetLuaThink},
+	{"SetLuaThink",					Entity_SetLuaThink},
+
+	{"GetLuaTouch",					Entity_GetLuaTouch},
+	{"SetLuaTouch",					Entity_SetLuaTouch},
+
+	{"GetLuaTrigger",				Entity_GetLuaTrigger},
+	{"SetLuaTrigger",				Entity_SetLuaTrigger},
+
+	{"GetLuaUse",					Entity_GetLuaUse},
+	{"SetLuaUse",					Entity_SetLuaUse},
+
+	{"GetMessage",					Entity_GetMessage},
+	{"SetMessage",					Entity_SetMessage},
+
+	{"GetMethodOfDeath",			Entity_GetMethodOfDeath},
+	{"SetMethodOFDeath",			Entity_SetMethodOfDeath},
+
+	{"GetModel",					Entity_GetModel},
+	{"SetModel",					Entity_SetModel},
+
+	{"GetModel2",					Entity_GetModel2},
+	{"SetModel2",					Entity_SetModel2},
+
+	{"GetMovedir",					Entity_GetMovedir},
+	{"SetMovedir",					Entity_SetMovedir},
+
+	{"GetMoverstate",				Entity_GetMoverstate},
+	{"SetMoverstate",				Entity_SetMoverstate},
+
+	{"GetN00bCount",				Entity_GetN00bCount},
+	{"SetN00bCount",				Entity_SetN00bCount},
+
+	{"GetNeverFree",				Entity_GetNeverFree},
+	{"SetNeverFree",				Entity_SetNeverFree},
+
+	{"GetNextthink",				Entity_GetNexthink},
+	{"SetNextthink",				Entity_SetNexthink},
+
+	{"GetNextTrain",				Entity_GetNextTrain},
+	{"SetNextTrain",				Entity_SetNextTrain},
+
+	{"GetNoiseIndex",				Entity_GetNoiseIndex},
+	{"SetNoiseIndex",				Entity_SetNoiseIndex},
 
 	{NULL, NULL}
 };
