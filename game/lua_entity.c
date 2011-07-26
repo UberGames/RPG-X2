@@ -2128,6 +2128,234 @@ static int Entity_SetNoiseIndex(lua_State *L) {
 	return 1;
 }
 
+static int Entity_GetOldHealth(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->old_health);
+
+	return 1;
+}
+
+static int Entity_SetOldHealth(lua_State *L) {
+	lent_t *lent;
+	int		old_health;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	old_health = (int)luaL_checknumber(L, 2);
+
+	lent->e->old_health = old_health;
+
+	return 1;
+}
+
+static int Entity_GetPaintarget(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->paintarget[0])
+		lua_pushstring(L, "");
+	else
+		lua_pushstring(L, lent->e->paintarget);
+
+	return 1;
+}
+
+static int Entity_SetPaintarget(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->paintarget = NULL;
+	else
+		lent->e->paintarget = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetPainDebounceTime(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->pain_debounce_time);
+
+	return 1;
+}
+
+static int Entity_SetPainDebounceTime(lua_State *L) {
+	lent_t *lent;
+	int		pdb;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	pdb = (int)luaL_checknumber(L, 2);
+
+	lent->e->pain_debounce_time = pdb;
+
+	return 1;
+}
+
+static int Entity_GetParent(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnil(L);
+		return 1;
+	}
+	if(!lent->e->parent)
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, lent->e->parent);
+
+	return 1;
+}
+
+static int Entity_SetParent(lua_State *L) {
+	lent_t *lent;
+	lent_t *parent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	parent = Lua_GetEntity(L, 2);
+	if(!parent || !parent->e)
+		lent->e->parent = NULL;
+	else
+		lent->e->parent = parent->e;
+
+	return 1;
+}
+
+static int Entity_GetPhysicsBounce(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnumber(L, 0);
+		return 1;
+	}
+	lua_pushnumber(L, lent->e->physicsBounce);
+
+	return 1;
+}
+
+static int Entity_SetPhysicsBounce(lua_State *L) {
+	lent_t *lent;
+	float	pb;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	pb = (float)luaL_checknumber(L, 2);
+
+	lent->e->physicsBounce = pb;
+
+	return 1;
+}
+
+static int Entity_GetPhysicsObject(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushboolean(L, 0);
+		return 1;
+	}
+	lua_pushboolean(L, (int)lent->e->physicsObject);
+
+	return 1;
+}
+
+static int Entity_SetPhysicsObject(lua_State *L) {
+	lent_t *lent;
+	qboolean b;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	b = (qboolean)lua_toboolean(L, 2);
+
+	lent->e->physicsObject = b;
+
+	return 1;
+}
+
+static int Entity_GetPos1(lua_State *L) {
+	lent_t *lent;
+	vec3_t	null = { 0, 0, 0 };
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		Lua_PushVector(L, null);
+		return 1;
+	}
+	Lua_PushVector(L, lent->e->pos1);
+
+	return 1;
+}
+
+static int Entity_SetPos1(lua_State *L) {
+	lent_t	*lent;
+	vec_t	*vec;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	vec = Lua_GetVector(L, 2);
+
+	VectorCopy(vec, lent->e->pos1);
+
+	return 1;
+}
+
+static int Entity_GetPos2(lua_State *L) {
+	lent_t *lent;
+	vec3_t	null = { 0, 0, 0 };
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		Lua_PushVector(L, null);
+		return 1;
+	}
+	Lua_PushVector(L, lent->e->pos2);
+
+	return 1;
+}
+
+static int Entity_SetPos2(lua_State *L) {
+	lent_t	*lent;
+	vec_t	*vec;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	vec = Lua_GetVector(L, 2);
+
+	VectorCopy(vec, lent->e->pos2);
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn",					Entity_Spawn},
 	{"Find",					Entity_Find},
@@ -2145,7 +2373,7 @@ static const luaL_Reg Entity_ctor[] = {
 };
 
 /*void dummy(gentity_t *ent) {
-	ent->noise_index;
+	ent->prevTrain;
 }*/
 
 static const luaL_Reg Entity_meta[] = {
@@ -2309,6 +2537,30 @@ static const luaL_Reg Entity_meta[] = {
 
 	{"GetNoiseIndex",				Entity_GetNoiseIndex},
 	{"SetNoiseIndex",				Entity_SetNoiseIndex},
+
+	{"GetOldHealth",				Entity_GetOldHealth},
+	{"SetOldHealth",				Entity_SetOldHealth},
+
+	{"GetPaintarget",				Entity_GetPaintarget},
+	{"SetPaintarget",				Entity_SetPaintarget},
+
+	{"GetPainDebounceTime",			Entity_GetPainDebounceTime},
+	{"SetPainDebounceTime",			Entity_SetPainDebounceTime},
+
+	{"GetParent",					Entity_GetParent},
+	{"SetParent",					Entity_SetParent},
+
+	{"GetPhysicsBounce",			Entity_GetPhysicsBounce},
+	{"SetPhysicsBounce",			Entity_SetPhysicsBounce},
+
+	{"GetPhysicsObject",			Entity_GetPhysicsObject},
+	{"SetPhysicsObject",			Entity_SetPhysicsObject},
+
+	{"GetPos1",						Entity_GetPos1},
+	{"SetPos1",						Entity_SetPos1},
+
+	{"GetPos2",						Entity_GetPos2},
+	{"SetPos2",						Entity_SetPos2},
 
 	{NULL, NULL}
 };
