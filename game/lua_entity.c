@@ -1070,6 +1070,301 @@ static int Entity_SetCount(lua_State *L) {
 	return 1;
 }
 
+static int Entity_GetDamage(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->damage);
+
+	return 1;
+}
+
+static int Entity_SetDamage(lua_State *L) {
+	lent_t *lent;
+	int		damage;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	damage = (int)luaL_checknumber(L, 2);
+
+	lent->e->damage = damage;
+
+	return 1;
+}
+
+static int Entity_GetDistance(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnumber(L, 0);
+		return 1;
+	}
+	lua_pushnumber(L, lent->e->distance);
+
+	return 1;
+}
+
+static int Entity_SetDistance(lua_State *L) {
+	lent_t *lent;
+	float	distance;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || ! lent->e)
+		return 1;
+	distance = (float)luaL_checknumber(L, 2);
+
+	lent->e->distance = distance;
+
+	return 1;
+}
+
+static int Entity_GetEnemy(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnil(L);
+		return 1;
+	}
+	Lua_PushEntity(L, lent->e->enemy);
+
+	return 1;
+}
+
+static int Entity_SetEnemy(lua_State *L) {
+	lent_t *lent;
+	lent_t *enemy;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || lent->e)
+		return 1;
+	if(lua_isnil(L, 2)) {
+		lent->e->enemy = NULL;
+	} else {
+		enemy = Lua_GetEntity(L, 2);
+		if(!enemy || !enemy->e) {
+			lent->e->enemy = NULL;
+		} else {
+			lent->e->enemy = enemy->e;
+		}
+	}
+
+	return 1;
+}
+
+static int Entity_GetEventTime(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->eventTime);
+
+	return 1;
+}
+
+static int Entity_SetEventTime(lua_State *L) {
+	lent_t *lent;
+	int		eTime;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) 
+		return 1;
+	eTime = (int)luaL_checknumber(L, 2);
+
+	lent->e->eventTime = eTime;
+
+	return 1;
+}
+
+static int Entity_GetFalsename(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+	}
+	if(!lent->e->falsename[0])
+		lua_pushstring(L, "");
+	else
+		lua_pushstring(L, lent->e->falsename);
+
+	return 1;
+}
+
+static int Entity_SetFalsename(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->falsename = NULL;
+	else
+		lent->e->falsename = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_SetTargetName(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) 
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->targetname = NULL;
+	else 
+		lent->e->targetname = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetFalsetarget(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->falsetarget[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->falsetarget);
+	}
+
+	return 1;
+}
+
+static int Entity_SetFalsetarget(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->falsetarget = NULL;
+	else
+		lent->e->falsetarget = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetFlags(lua_State *L) {
+	lent_t *lent;
+	
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->flags);
+
+	return 1;
+}
+
+static int Entity_SetFlags(lua_State *L) {
+	lent_t *lent;
+	int		flags;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) 
+		return 1;
+	flags = (int)luaL_checknumber(L, 2);
+	
+	lent->e->flags = flags;
+
+	return 1;
+}
+
+static int Entity_GetFreeAfterEvent(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushboolean(L, 0);
+		return 1;
+	}
+	lua_pushboolean(L, (int)lent->e->freeAfterEvent);
+
+	return 1;
+}
+
+static int Entity_SetFreeAfterEvent(lua_State *L) {
+	lent_t *lent;
+	qboolean b;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	b = (qboolean)luaL_checknumber(L, 2);
+	
+	lent->e->freeAfterEvent = b;
+
+	return 1;
+}
+
+static int Entity_GetFreetime(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->freetime);
+
+	return 1;
+}
+
+static int Entity_GetGreensound(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->greensound[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->greensound);
+	}
+
+	return 1;
+}
+
+static int Entity_SetGreensound(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) 
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->greensound = NULL;
+	else
+		lent->e->greensound = G_NewString(s);
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn", Entity_Spawn},
 	{"Find", Entity_Find},
@@ -1086,9 +1381,9 @@ static const luaL_Reg Entity_ctor[] = {
 	{NULL, NULL}
 };
 
-void dummy(gentity_t *ent) {
-	//ent->damage;
-}
+/*void dummy(gentity_t *ent) {
+	ent->greensound;
+}*/
 
 static const luaL_Reg Entity_meta[] = {
 	{"__gc", Entity_GC},
@@ -1101,6 +1396,7 @@ static const luaL_Reg Entity_meta[] = {
 	{"GetClassname", Entity_GetClassName},
 	{"SetClassname", Entity_SetClassName},
 	{"GetTargetname", Entity_GetTargetName},
+	{"SetTargetname", Entity_SetTargetName},
 	{"Rotate", Entity_Rotate},
 
 	{"IsRocket", Entity_IsRocket},
@@ -1125,6 +1421,7 @@ static const luaL_Reg Entity_meta[] = {
 
 	{"GetApos1", Entity_GetApos1},
 	{"GetApos2", Entity_GetApos2},
+
 	{"SetApos1", Entity_SetApos1},
 	{"SetApos2", Entity_SetApos2},
 
@@ -1142,6 +1439,35 @@ static const luaL_Reg Entity_meta[] = {
 
 	{"GetCount", Entity_GetCount},
 	{"SetCount", Entity_SetCount},
+
+	{"GetDamage", Entity_GetDamage},
+	{"SetDamage", Entity_SetDamage},
+
+	{"GetDistance", Entity_GetDistance},
+	{"SetDistance", Entity_SetDistance},
+
+	{"GetEnemy", Entity_GetEnemy},
+	{"SetEnemy", Entity_SetEnemy},
+
+	{"GetEventTime", Entity_GetEventTime},
+	{"SetEventTime", Entity_SetEventTime},
+
+	{"GetFalsename", Entity_GetFalsename},
+	{"SetFalsename", Entity_SetFalsename},
+
+	{"GetFalsetarget", Entity_GetFalsetarget},
+	{"SetFalsetarget", Entity_SetFalsetarget},
+
+	{"GetFlags", Entity_GetFlags},
+	{"SetFlags", Entity_SetFlags},
+
+	{"GetFreeAfterEvent", Entity_GetFreeAfterEvent},
+	{"SetFreeAfterEvent", Entity_SetFreeAfterEvent},
+
+	{"GetFreetime", Entity_GetFreetime},
+
+	{"GetGreensound", Entity_GetGreensound},
+	{"SetGreensound", Entity_SetGreensound},
 
 	{NULL, NULL}
 };
