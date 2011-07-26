@@ -1009,7 +1009,7 @@ static int Entity_SetBooleanstate(lua_State *L) {
 	lent = Lua_GetEntity(L, 1);
 	if(!lent || !lent->e)
 		return 1;
-	b = (qboolean)luaL_checkinteger(L, 2);
+	b = (qboolean)lua_toboolean(L, 2);
 
 	lent->e->booleanstate = b;
 
@@ -1312,7 +1312,7 @@ static int Entity_SetFreeAfterEvent(lua_State *L) {
 	lent = Lua_GetEntity(L, 1);
 	if(!lent || !lent->e)
 		return 1;
-	b = (qboolean)luaL_checknumber(L, 2);
+	b = (qboolean)lua_toboolean(L, 2);
 	
 	lent->e->freeAfterEvent = b;
 
@@ -1365,6 +1365,448 @@ static int Entity_SetGreensound(lua_State *L) {
 	return 1;
 }
 
+static int Entity_GetHealth(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->health);
+
+	return 1;
+}
+
+static int Entity_SetHealth(lua_State *L) {
+	lent_t *lent;
+	int		health;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	health = (int)luaL_checknumber(L, 2);
+
+	lent->e->health = health;
+
+	return 1;
+}
+
+static int Entity_GetInUse(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushboolean(L, 0);
+		return 1;
+	}
+	lua_pushboolean(L, (int)lent->e->inuse);
+
+	return 1;
+}
+
+static int Entity_SetInUse(lua_State *L) {
+	lent_t *lent;
+	qboolean b;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) 
+		return 1;
+	b = (qboolean)lua_toboolean(L, 2);
+	lent->e->inuse = b;
+
+	return 1;
+}
+
+static int Entity_GetLastEnemy(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnil(L);
+		return 1;
+	}
+	if(!lent->e->lastEnemy)
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, lent->e->lastEnemy);
+
+	return 1;
+}
+
+static int Entity_SetLastEnemy(lua_State *L) {
+	lent_t *lent;
+	lent_t *lastEnemy;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	lastEnemy = Lua_GetEntity(L, 2);
+	if(!lastEnemy || !lastEnemy->e) 
+		return 1;
+
+	lent->e->lastEnemy = lastEnemy->e;
+
+	return 1;
+}
+
+static int Entity_GetLuaDie(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaDie);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaDie(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaDie = NULL;
+	else
+		lent->e->luaDie = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaEntity(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushboolean(L, 0);
+		return 1;
+	}
+	lua_pushboolean(L, (int)lent->e->luaEntity);
+
+	return 1;
+}
+
+static int Entity_SetLuaEntity(lua_State *L) {
+	lent_t	*lent;
+	qboolean b;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) 
+		return 1;
+	b = (qboolean)lua_toboolean(L, 2);
+
+	lent->e->luaEntity = b;
+
+	return 1;
+}
+
+static int Entity_GetLuaFree(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaFree);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaFree(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaFree = NULL;
+	else
+		lent->e->luaFree = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaHurt(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaHurt);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaHurt(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaHurt = NULL;
+	else
+		lent->e->luaHurt = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaReached(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaReached);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaReached(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaReached = NULL;
+	else
+		lent->e->luaReached = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaReachedAngular(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaReachedAngular);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaReachedAngular(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaReachedAngular = NULL;
+	else
+		lent->e->luaReachedAngular = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaSpawn(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaSpawn);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaSpawn(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaSpawn = NULL;
+	else
+		lent->e->luaSpawn = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaThink(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaThink);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaThink(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaThink = NULL;
+	else
+		lent->e->luaThink = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaTouch(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaTouch);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaTouch(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaTouch = NULL;
+	else
+		lent->e->luaTouch = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaTrigger(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaTrigger);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaTrigger(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaTrigger = NULL;
+	else
+		lent->e->luaTrigger = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetLuaUse(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->luaDie[0]) {
+		lua_pushstring(L, "");
+	} else {
+		lua_pushstring(L, lent->e->luaUse);
+	}
+
+	return 1;
+}
+
+static int Entity_SetLuaUse(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->luaUse = NULL;
+	else
+		lent->e->luaUse = G_NewString(s);
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn", Entity_Spawn},
 	{"Find", Entity_Find},
@@ -1382,7 +1824,7 @@ static const luaL_Reg Entity_ctor[] = {
 };
 
 /*void dummy(gentity_t *ent) {
-	ent->greensound;
+	ent->luaUse;
 }*/
 
 static const luaL_Reg Entity_meta[] = {
@@ -1468,6 +1910,48 @@ static const luaL_Reg Entity_meta[] = {
 
 	{"GetGreensound", Entity_GetGreensound},
 	{"SetGreensound", Entity_SetGreensound},
+
+	{"GetHealth", Entity_GetHealth},
+	{"SetHealth", Entity_SetHealth},
+
+	{"GetInUse", Entity_GetInUse},
+	{"SetInUse", Entity_SetInUse},
+
+	{"GetLastEnemy", Entity_GetLastEnemy},
+	{"SetLastEnemy", Entity_SetLastEnemy},
+
+	{"GetLuaDie", Entity_GetLuaDie},
+	{"SetLuaDie", Entity_SetLuaDie},
+
+	{"GetLuaEntity", Entity_GetLuaEntity},
+	{"SetLuaEntity", Entity_SetLuaEntity},
+
+	{"GetLuaFree", Entity_GetLuaFree},
+	{"SetLuaFree", Entity_SetLuaFree},
+
+	{"GetLuaHurt", Entity_GetLuaHurt},
+	{"SetLuaHurt", Entity_SetLuaHurt},
+
+	{"GetLuaReached", Entity_GetLuaReached},
+	{"SetLuaReached", Entity_SetLuaReached},
+
+	{"GetLuaReachedAngular", Entity_GetLuaReachedAngular},
+	{"SetLuaReachedAngular", Entity_SetLuaReachedAngular},
+
+	{"GetLuaSpawn", Entity_GetLuaSpawn},
+	{"SetLuaSpawn", Entity_SetLuaSpawn},
+
+	{"GetLuaThink", Entity_GetLuaThink},
+	{"SetLuaThink", Entity_SetLuaThink},
+
+	{"GetLuaTouch", Entity_GetLuaTouch},
+	{"SetLuaTouch", Entity_SetLuaTouch},
+
+	{"GetLuaTrigger", Entity_GetLuaTrigger},
+	{"SetLuaTrigger", Entity_SetLuaTrigger},
+
+	{"GetLuaUse", Entity_GetLuaUse},
+	{"SetLuaUse", Entity_SetLuaUse},
 
 	{NULL, NULL}
 };
