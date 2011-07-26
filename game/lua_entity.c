@@ -1087,7 +1087,7 @@ static const luaL_Reg Entity_ctor[] = {
 };
 
 void dummy(gentity_t *ent) {
-	ent->damage;
+	//ent->damage;
 }
 
 static const luaL_Reg Entity_meta[] = {
@@ -1141,7 +1141,7 @@ static const luaL_Reg Entity_meta[] = {
 	{"SetClipmask", Entity_SetClipmask},
 
 	{"GetCount", Entity_GetCount},
-	{"SetCount", Enitty_SetCount},
+	{"SetCount", Entity_SetCount},
 
 	{NULL, NULL}
 };
