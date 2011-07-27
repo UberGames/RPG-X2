@@ -2356,6 +2356,286 @@ static int Entity_SetPos2(lua_State *L) {
 	return 1;
 }
 
+static int Entity_GetPrevTrain(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnil(L);
+		return 1;
+	}
+	if(!lent->e->prevTrain)
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, lent->e->prevTrain);
+
+	return 1;
+}
+
+static int Entity_SetPrevTrain(lua_State *L) {
+	lent_t *lent;
+	lent_t *prev;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	prev = Lua_GetEntity(L, 2);
+	if(!prev || !prev->e)
+		lent->e->prevTrain = NULL;
+	else
+		lent->e->prevTrain = prev->e;
+
+	return 1;
+}
+
+static int Entity_GetRandom(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L,1);
+	if(!lent || !lent->e) {
+		lua_pushnumber(L, 0);
+		return 1;
+	}
+	lua_pushnumber(L, lent->e->random);
+
+	return 1;
+}
+
+static int Entity_SetRandom(lua_State *L) {
+	lent_t *lent;
+	float	rand;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	rand = (float)luaL_checknumber(L, 2);
+
+	lent->e->random = rand;
+
+	return 1;
+}
+
+static int Entity_GetRedsound(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->redsound[0])
+		lua_pushstring(L, "");
+	else
+		lua_pushstring(L, lent->e->redsound);
+
+	return 1;
+}
+
+static int Entity_SetRedsound(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->redsound = NULL;
+	else
+		lent->e->redsound = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetSound1To2(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->sound1to2);
+
+	return 1;
+}
+
+static int Entity_SetSound1To2(lua_State *L) {
+	lent_t *lent;
+	int		s1to2;
+
+	lent  = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s1to2 = (int)luaL_checknumber(L, 2);
+
+	lent->e->sound1to2 = s1to2;
+
+	return 1;
+}
+
+static int Entity_GetSound2To1(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->sound2to1);
+
+	return 1;
+}
+
+static int Entity_SetSound2To1(lua_State *L) {
+	lent_t *lent;
+	int		s2to1;
+
+	lent  = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s2to1 = (int)luaL_checknumber(L, 2);
+
+	lent->e->sound2to1 = s2to1;
+
+	return 1;
+}
+
+static int Entity_GetSoundLoop(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->soundLoop);
+
+	return 1;
+}
+
+static int Entity_SetSoundLoop(lua_State *L) {
+	lent_t *lent;
+	int		sl;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	sl = (int)luaL_checknumber(L, 2);
+
+	lent->e->soundLoop = sl;
+
+	return 1;
+}
+
+static int Entity_GetSoundPos1(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->soundPos1);
+
+	return 1;
+}
+
+static int Entity_SetSoundPos1(lua_State *L) {
+	lent_t *lent;
+	int		sp1;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	sp1 = (int)luaL_checknumber(L, 2);
+
+	lent->e->soundPos1 = sp1;
+
+	return 1;
+}
+
+static int Entity_GetSoundPos2(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->soundPos2);
+
+	return 1;
+}
+
+static int Entity_SetSoundPos2(lua_State *L) {
+	lent_t *lent;
+	int		sp2;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	sp2 = (int)luaL_checknumber(L, 2);
+
+	lent->e->soundPos2 = sp2;
+
+	return 1;
+}
+
+static int Entity_GetSpawnflags(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->spawnflags);
+
+	return 1;
+}
+
+static int Entity_SetSpawnflags(lua_State *L) {
+	lent_t *lent;
+	int		sp;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	sp = (int)luaL_checknumber(L, 2);
+
+	lent->e->spawnflags = sp;
+
+	return 1;
+}
+
+static int Entity_GetSpeed(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushnumber(L, 0);
+		return 1;
+	}
+	lua_pushnumber(L, lent->e->speed);
+
+	return 1;
+}
+
+static int Entity_SetSpeed(lua_State *L) {
+	lent_t *lent;
+	float	speed;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	speed = (float)luaL_checknumber(L, 2);
+
+	lent->e->speed = speed;
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn",					Entity_Spawn},
 	{"Find",					Entity_Find},
@@ -2373,7 +2653,7 @@ static const luaL_Reg Entity_ctor[] = {
 };
 
 /*void dummy(gentity_t *ent) {
-	ent->prevTrain;
+	ent->speed;
 }*/
 
 static const luaL_Reg Entity_meta[] = {
@@ -2561,6 +2841,36 @@ static const luaL_Reg Entity_meta[] = {
 
 	{"GetPos2",						Entity_GetPos2},
 	{"SetPos2",						Entity_SetPos2},
+
+	{"GetPrevTrain",				Entity_GetPrevTrain},
+	{"SetPrevTrain",				Entity_SetPrevTrain},
+
+	{"GetRandom",					Entity_GetRandom},
+	{"SetRandom",					Entity_SetRandom},
+
+	{"GetRedsound",					Entity_GetRedsound},
+	{"SetRedsound",					Entity_SetRedsound},
+
+	{"GetSound1To2",				Entity_GetSound1To2},
+	{"SetSound1To2",				Entity_SetSound1To2},
+
+	{"GetSound2To1",				Entity_GetSound2To1},
+	{"SetSound2To1",				Entity_SetSound2To1},
+
+	{"GetSoundLoop",				Entity_GetSoundLoop},
+	{"SetSoundLoop",				Entity_SetSoundLoop},
+
+	{"GetSoundPos1",				Entity_GetSoundPos1},
+	{"SetSoundPos1",				Entity_SetSoundPos1},
+
+	{"GetSoundPos2",				Entity_GetSoundPos2},
+	{"SetSoundPos2",				Entity_SetSoundPos2},
+
+	{"GetSpawnflags",				Entity_GetSpawnflags},
+	{"SetSpawnflags",				Entity_SetSpawnflags},
+
+	{"GetSpeed",					Entity_GetSpeed},
+	{"SetSpeed",					Entity_SetSpeed},
 
 	{NULL, NULL}
 };
