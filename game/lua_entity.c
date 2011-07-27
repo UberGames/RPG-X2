@@ -2636,6 +2636,146 @@ static int Entity_SetSpeed(lua_State *L) {
 	return 1;
 }
 
+static int Entity_GetSplashDamage(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->splashDamage);
+
+	return 1;
+}
+
+static int Entity_SetSplashDamage(lua_State *L) {
+	lent_t *lent;
+	int		dmg;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	dmg = (int)luaL_checknumber(L, 2);
+
+	lent->e->splashDamage = dmg;
+
+	return 1;
+}
+
+static int Entity_GetSplashMethodOfDeath(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->splashMethodOfDeath);
+
+	return 1;
+}
+
+static int Entity_SetSplashMethodOfDeath(lua_State *L) {
+	lent_t *lent;
+	int		mod;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	mod = (int)luaL_checknumber(L, 2);
+
+	lent->e->splashMethodOfDeath = mod;
+
+	return 1;
+}
+
+static int Entity_GetSplashRadius(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->splashRadius);
+
+	return 1;
+}
+
+static int Entity_SetSplashRadius(lua_State *L) {
+	lent_t *lent;
+	int		radius;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	radius = (int)luaL_checknumber(L, 2);
+
+	lent->e->splashRadius = radius;
+
+	return 1;
+}
+
+static int Entity_GetSwapname(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+	if(!lent->e->swapname[0])
+		lua_pushstring(L, "");
+	else
+		lua_pushstring(L, lent->e->swapname);
+
+	return 1;
+}
+
+static int Entity_SetSwapname(lua_State *L) {
+	lent_t	*lent;
+	char	*s;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	s = (char *)luaL_checkstring(L, 2);
+	if(!s[0])
+		lent->e->swapname = NULL;
+	else 
+		lent->e->swapname = G_NewString(s);
+
+	return 1;
+}
+
+static int Entity_GetTakedamage(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushboolean(L, 0);
+		return 1;
+	}
+	lua_pushboolean(L, (int)lent->e->target);
+
+	return 1;
+}
+
+static int Entity_SetTakedamage(lua_State *L) {
+	lent_t	*lent;
+	qboolean b;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	b = (qboolean)lua_toboolean(L, 2);
+
+	lent->e->takedamage = b;
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn",					Entity_Spawn},
 	{"Find",					Entity_Find},
@@ -2651,10 +2791,6 @@ static const luaL_Reg Entity_ctor[] = {
 	{"Use",						Entity_Use},
 	{NULL,						NULL}
 };
-
-/*void dummy(gentity_t *ent) {
-	ent->speed;
-}*/
 
 static const luaL_Reg Entity_meta[] = {
 	{"__gc",						Entity_GC},
@@ -2872,8 +3008,27 @@ static const luaL_Reg Entity_meta[] = {
 	{"GetSpeed",					Entity_GetSpeed},
 	{"SetSpeed",					Entity_SetSpeed},
 
+	{"GetSplashDamage",				Entity_GetSplashDamage},
+	{"SetSplashDamage",				Entity_SetSplashDamage},
+
+	{"GetSplashMethodOfDeath",		Entity_GetSplashMethodOfDeath},
+	{"SetSplashMethodOfDeath",		Entity_SetSplashMethodOfDeath},
+
+	{"GetSplashRadius",				Entity_GetSplashRadius},
+	{"SetSplashRadius",				Entity_SetSplashRadius},
+
+	{"GetSwapname",					Entity_GetSwapname},
+	{"SetSwapname",					Entity_SetSwapname},
+
+	{"GetTakedamage",				Entity_GetTakedamage},
+	{"SetTakedamage",				Entity_SetTakedamage},
+
 	{NULL, NULL}
 };
+
+/*void dummy(gentity_t *ent) {
+	ent->target;
+}*/
 
 int Luaopen_Entity(lua_State * L)
 {
