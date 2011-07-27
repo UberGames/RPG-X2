@@ -2801,11 +2801,11 @@ static const luaL_Reg Entity_meta[] = {
 	{"Print",						Entity_Print},
 	{"CenterPrint",					Entity_CenterPrint},
 
-	{"GetClassname",				Entity_GetClassName},
-	{"SetClassname",				Entity_SetClassName},
+	{"GetClassname",				Entity_GetClassName}, // args: none; return: string
+	{"SetClassname",				Entity_SetClassName}, // args: string; return: nothing
 
-	{"GetTargetname",				Entity_GetTargetName},
-	{"SetTargetname",				Entity_SetTargetName},
+	{"GetTargetname",				Entity_GetTargetName}, // args: none; return: string
+	{"SetTargetname",				Entity_SetTargetName}, // args: string; return: nothing
 
 	{"Rotate",						Entity_Rotate},
 
@@ -2823,205 +2823,205 @@ static const luaL_Reg Entity_meta[] = {
 	{"GetParm",						Entity_GetParm},
 	{"SetParm",						Entity_SetParm},
 
-	{"GetActivator",				Entity_GetActivator},
-	{"SetActivator",				Entity_SetActivator},
+	{"GetActivator",				Entity_GetActivator}, // args: none; return: ent
+	{"SetActivator",				Entity_SetActivator}, // args: ent; return: nothing
 
-	{"GetAngle",					Entity_GetAngle},
-	{"SetAngle",					Entity_SetAngle},
+	{"GetAngle",					Entity_GetAngle}, // args: none; return: float
+	{"SetAngle",					Entity_SetAngle}, // args: float; return: nothing
 
-	{"GetApos1",					Entity_GetApos1},
-	{"GetApos2",					Entity_GetApos2},
+	{"GetApos1",					Entity_GetApos1}, // args: none; return: vec
+	{"GetApos2",					Entity_GetApos2}, // args: none; return: vec
 
-	{"SetApos1",					Entity_SetApos1},
-	{"SetApos2",					Entity_SetApos2},
+	{"SetApos1",					Entity_SetApos1}, // args: vec; return: nothing
+	{"SetApos2",					Entity_SetApos2}, // args: vec; return: nothing
 
-	{"GetBluename",					Entity_GetBluename},
-	{"SetBluename",					Entity_SetBluename},
+	{"GetBluename",					Entity_GetBluename}, // args: none; return: string
+	{"SetBluename",					Entity_SetBluename}, // args: string; return: nothing
 
-	{"GetBluesound",				Entity_GetBluesound},
-	{"SetBluesound",				Entity_SetBluesound},
+	{"GetBluesound",				Entity_GetBluesound}, // args: none; return: string
+	{"SetBluesound",				Entity_SetBluesound}, // args: string; return: nothing
 
-	{"GetBooleanstate",				Entity_GetBooleanstate},
-	{"SetBooleanstate",				Entity_SetBooleanstate},
+	{"GetBooleanstate",				Entity_GetBooleanstate}, // args: none; return: bool
+	{"SetBooleanstate",				Entity_SetBooleanstate}, // args: bool; return: nothing
 
-	{"GetClipmask",					Entity_GetClipmask},
-	{"SetClipmask",					Entity_SetClipmask},
+	{"GetClipmask",					Entity_GetClipmask}, // args: none; return: int
+	{"SetClipmask",					Entity_SetClipmask}, // args: int; return: nothing
 
-	{"GetCount",					Entity_GetCount},
-	{"SetCount",					Entity_SetCount},
+	{"GetCount",					Entity_GetCount}, // args: none; return: int
+	{"SetCount",					Entity_SetCount}, // args: int; return: nothing
 
-	{"GetDamage",					Entity_GetDamage},
-	{"SetDamage",					Entity_SetDamage},
+	{"GetDamage",					Entity_GetDamage}, // args: none; return: int
+	{"SetDamage",					Entity_SetDamage}, // args: int; return: nothing
 
-	{"GetDistance",					Entity_GetDistance},
-	{"SetDistance",					Entity_SetDistance},
+	{"GetDistance",					Entity_GetDistance}, // args: none; return: float
+	{"SetDistance",					Entity_SetDistance}, // args: float; return: nothing
 
-	{"GetEnemy",					Entity_GetEnemy},
-	{"SetEnemy",					Entity_SetEnemy},
+	{"GetEnemy",					Entity_GetEnemy}, // args: none; return: ent
+	{"SetEnemy",					Entity_SetEnemy}, // args: ent; return: nothing
 
-	{"GetEventTime",				Entity_GetEventTime},
-	{"SetEventTime",				Entity_SetEventTime},
+	{"GetEventTime",				Entity_GetEventTime}, // args: none; return: int
+	{"SetEventTime",				Entity_SetEventTime}, // args: int; return: nothing
 
-	{"GetFalsename",				Entity_GetFalsename},
-	{"SetFalsename",				Entity_SetFalsename},
+	{"GetFalsename",				Entity_GetFalsename}, // args: none; return: string
+	{"SetFalsename",				Entity_SetFalsename}, // args: string; return: nothing
 
-	{"GetFalsetarget",				Entity_GetFalsetarget},
-	{"SetFalsetarget",				Entity_SetFalsetarget},
+	{"GetFalsetarget",				Entity_GetFalsetarget}, // args: none; return: string
+	{"SetFalsetarget",				Entity_SetFalsetarget}, // args: string; return: nothing
 
-	{"GetFlags",					Entity_GetFlags},
-	{"SetFlags",					Entity_SetFlags},
+	{"GetFlags",					Entity_GetFlags}, // args: none; return: int
+	{"SetFlags",					Entity_SetFlags}, // args: int; return: nothing
 
-	{"GetFreeAfterEvent",			Entity_GetFreeAfterEvent},
-	{"SetFreeAfterEvent",			Entity_SetFreeAfterEvent},
+	{"GetFreeAfterEvent",			Entity_GetFreeAfterEvent}, // args: none; return: bool
+	{"SetFreeAfterEvent",			Entity_SetFreeAfterEvent}, // args: bool; return: nothing
 
-	{"GetFreetime",					Entity_GetFreetime},
+	{"GetFreetime",					Entity_GetFreetime}, // args: none; return: int
 
-	{"GetGreensound",				Entity_GetGreensound},
-	{"SetGreensound",				Entity_SetGreensound},
+	{"GetGreensound",				Entity_GetGreensound}, // args: none; return: string
+	{"SetGreensound",				Entity_SetGreensound}, // args: string; return: nothing
 
-	{"GetHealth",					Entity_GetHealth},
-	{"SetHealth",					Entity_SetHealth},
+	{"GetHealth",					Entity_GetHealth}, // args: none; return: int
+	{"SetHealth",					Entity_SetHealth}, // args: int; return: nothing
 
-	{"GetInUse",					Entity_GetInUse},
-	{"SetInUse",					Entity_SetInUse},
+	{"GetInUse",					Entity_GetInUse}, // args: none; return: bool
+	{"SetInUse",					Entity_SetInUse}, // args: bool; return: noting
 
-	{"GetLastEnemy",				Entity_GetLastEnemy},
-	{"SetLastEnemy",				Entity_SetLastEnemy},
+	{"GetLastEnemy",				Entity_GetLastEnemy}, // args: none; return: ent
+	{"SetLastEnemy",				Entity_SetLastEnemy}, // args: ent; return: nothing
 
-	{"GetLuaDie",					Entity_GetLuaDie},
-	{"SetLuaDie",					Entity_SetLuaDie},
+	{"GetLuaDie",					Entity_GetLuaDie}, // args: none; return: string
+	{"SetLuaDie",					Entity_SetLuaDie}, // args: string; return: nothing
 
-	{"GetLuaEntity",				Entity_GetLuaEntity},
-	{"SetLuaEntity",				Entity_SetLuaEntity},
+	{"GetLuaEntity",				Entity_GetLuaEntity}, // args: none; return: bool
+	{"SetLuaEntity",				Entity_SetLuaEntity}, // args: bool; return: nothing
 
-	{"GetLuaFree",					Entity_GetLuaFree},
-	{"SetLuaFree",					Entity_SetLuaFree},
+	{"GetLuaFree",					Entity_GetLuaFree}, // args: none; return: string
+	{"SetLuaFree",					Entity_SetLuaFree},  // args: string; return: nothing
 
-	{"GetLuaHurt",					Entity_GetLuaHurt},
-	{"SetLuaHurt",					Entity_SetLuaHurt},
+	{"GetLuaHurt",					Entity_GetLuaHurt}, // args: none; return: string
+	{"SetLuaHurt",					Entity_SetLuaHurt}, // args: string; return: nothing
 
-	{"GetLuaReached",				Entity_GetLuaReached},
-	{"SetLuaReached",				Entity_SetLuaReached},
+	{"GetLuaReached",				Entity_GetLuaReached}, // args: none; return: string
+	{"SetLuaReached",				Entity_SetLuaReached}, // args: string; return: nothing
 
-	{"GetLuaReachedAngular",		Entity_GetLuaReachedAngular},
-	{"SetLuaReachedAngular",		Entity_SetLuaReachedAngular},
+	{"GetLuaReachedAngular",		Entity_GetLuaReachedAngular}, // args: none; return: string
+	{"SetLuaReachedAngular",		Entity_SetLuaReachedAngular}, // args: string; return: nothing
 
-	{"GetLuaSpawn",					Entity_GetLuaSpawn},
-	{"SetLuaSpawn",					Entity_SetLuaSpawn},
+	{"GetLuaSpawn",					Entity_GetLuaSpawn}, // args: none; return: string
+	{"SetLuaSpawn",					Entity_SetLuaSpawn}, // args: string; return: nothing
 
-	{"GetLuaThink",					Entity_GetLuaThink},
-	{"SetLuaThink",					Entity_SetLuaThink},
+	{"GetLuaThink",					Entity_GetLuaThink}, // args: none; return: string
+	{"SetLuaThink",					Entity_SetLuaThink}, // args: string; return: nothing
 
-	{"GetLuaTouch",					Entity_GetLuaTouch},
-	{"SetLuaTouch",					Entity_SetLuaTouch},
+	{"GetLuaTouch",					Entity_GetLuaTouch}, // args: none; return: string
+	{"SetLuaTouch",					Entity_SetLuaTouch}, // args: string; return: nothing
 
-	{"GetLuaTrigger",				Entity_GetLuaTrigger},
-	{"SetLuaTrigger",				Entity_SetLuaTrigger},
+	{"GetLuaTrigger",				Entity_GetLuaTrigger}, // args: none; return: string
+	{"SetLuaTrigger",				Entity_SetLuaTrigger}, // args: string; return: nothing
 
-	{"GetLuaUse",					Entity_GetLuaUse},
-	{"SetLuaUse",					Entity_SetLuaUse},
+	{"GetLuaUse",					Entity_GetLuaUse}, // args: none; return: string
+	{"SetLuaUse",					Entity_SetLuaUse}, // args: string; return: nothing
 
-	{"GetMessage",					Entity_GetMessage},
-	{"SetMessage",					Entity_SetMessage},
+	{"GetMessage",					Entity_GetMessage}, // args: none; return: string
+	{"SetMessage",					Entity_SetMessage}, // args: string; return: nothing
 
-	{"GetMethodOfDeath",			Entity_GetMethodOfDeath},
-	{"SetMethodOFDeath",			Entity_SetMethodOfDeath},
+	{"GetMethodOfDeath",			Entity_GetMethodOfDeath}, // args: none; return: int
+	{"SetMethodOFDeath",			Entity_SetMethodOfDeath}, // args: int; return: nothing
 
-	{"GetModel",					Entity_GetModel},
-	{"SetModel",					Entity_SetModel},
+	{"GetModel",					Entity_GetModel}, // args: none; return: string
+	{"SetModel",					Entity_SetModel}, // args: string; return: nothing
 
-	{"GetModel2",					Entity_GetModel2},
-	{"SetModel2",					Entity_SetModel2},
+	{"GetModel2",					Entity_GetModel2}, // args: none; return: string
+	{"SetModel2",					Entity_SetModel2}, // args: string; return: nothing
 
-	{"GetMovedir",					Entity_GetMovedir},
-	{"SetMovedir",					Entity_SetMovedir},
+	{"GetMovedir",					Entity_GetMovedir}, // args: none; return: vec
+	{"SetMovedir",					Entity_SetMovedir}, // args: vec; return: nothing
 
-	{"GetMoverstate",				Entity_GetMoverstate},
-	{"SetMoverstate",				Entity_SetMoverstate},
+	{"GetMoverstate",				Entity_GetMoverstate}, // args: none; return: int
+	{"SetMoverstate",				Entity_SetMoverstate}, // args: int; return: nothing
 
-	{"GetN00bCount",				Entity_GetN00bCount},
-	{"SetN00bCount",				Entity_SetN00bCount},
+	{"GetN00bCount",				Entity_GetN00bCount}, // args: none; return: int
+	{"SetN00bCount",				Entity_SetN00bCount}, // args: int; return: nothing
 
-	{"GetNeverFree",				Entity_GetNeverFree},
-	{"SetNeverFree",				Entity_SetNeverFree},
+	{"GetNeverFree",				Entity_GetNeverFree}, // args: none; return: bool
+	{"SetNeverFree",				Entity_SetNeverFree}, // args: bool; return: nothing
 
-	{"GetNextthink",				Entity_GetNexthink},
-	{"SetNextthink",				Entity_SetNexthink},
+	{"GetNextthink",				Entity_GetNexthink}, // args: none; return: int
+	{"SetNextthink",				Entity_SetNexthink}, // args: int; return: nothing
 
-	{"GetNextTrain",				Entity_GetNextTrain},
-	{"SetNextTrain",				Entity_SetNextTrain},
+	{"GetNextTrain",				Entity_GetNextTrain}, // args: none; return: ent
+	{"SetNextTrain",				Entity_SetNextTrain}, // args: ent; return: nothing
 
-	{"GetNoiseIndex",				Entity_GetNoiseIndex},
-	{"SetNoiseIndex",				Entity_SetNoiseIndex},
+	{"GetNoiseIndex",				Entity_GetNoiseIndex}, // args: none; return: int
+	{"SetNoiseIndex",				Entity_SetNoiseIndex}, // args: int; return: nothing
 
-	{"GetOldHealth",				Entity_GetOldHealth},
-	{"SetOldHealth",				Entity_SetOldHealth},
+	{"GetOldHealth",				Entity_GetOldHealth}, // args: none; return: int
+	{"SetOldHealth",				Entity_SetOldHealth}, // args: int; return: nothing
 
-	{"GetPaintarget",				Entity_GetPaintarget},
-	{"SetPaintarget",				Entity_SetPaintarget},
+	{"GetPaintarget",				Entity_GetPaintarget}, // args: none; return: string
+	{"SetPaintarget",				Entity_SetPaintarget}, // args: string; return: nothing
 
-	{"GetPainDebounceTime",			Entity_GetPainDebounceTime},
-	{"SetPainDebounceTime",			Entity_SetPainDebounceTime},
+	{"GetPainDebounceTime",			Entity_GetPainDebounceTime}, // args: none; return: int
+	{"SetPainDebounceTime",			Entity_SetPainDebounceTime}, // args: int; return: nothing
 
-	{"GetParent",					Entity_GetParent},
-	{"SetParent",					Entity_SetParent},
+	{"GetParent",					Entity_GetParent}, // args: none; return: ent
+	{"SetParent",					Entity_SetParent}, // args: ent; return: nothing
 
-	{"GetPhysicsBounce",			Entity_GetPhysicsBounce},
-	{"SetPhysicsBounce",			Entity_SetPhysicsBounce},
+	{"GetPhysicsBounce",			Entity_GetPhysicsBounce}, // args: none; return: float
+	{"SetPhysicsBounce",			Entity_SetPhysicsBounce}, // args: float; return: nothing
 
-	{"GetPhysicsObject",			Entity_GetPhysicsObject},
-	{"SetPhysicsObject",			Entity_SetPhysicsObject},
+	{"GetPhysicsObject",			Entity_GetPhysicsObject}, // args: none; return: bool
+	{"SetPhysicsObject",			Entity_SetPhysicsObject}, // args: bool; return: nothing
 
-	{"GetPos1",						Entity_GetPos1},
-	{"SetPos1",						Entity_SetPos1},
+	{"GetPos1",						Entity_GetPos1}, // args: none; return: vec
+	{"SetPos1",						Entity_SetPos1}, // args: vec; return: nothing
 
-	{"GetPos2",						Entity_GetPos2},
-	{"SetPos2",						Entity_SetPos2},
+	{"GetPos2",						Entity_GetPos2}, // args: none; return: vec
+	{"SetPos2",						Entity_SetPos2}, // args: vec; return: nothing
 
-	{"GetPrevTrain",				Entity_GetPrevTrain},
-	{"SetPrevTrain",				Entity_SetPrevTrain},
+	{"GetPrevTrain",				Entity_GetPrevTrain}, // args: none; return: ent
+	{"SetPrevTrain",				Entity_SetPrevTrain}, // args: ent; return: nothing
 
-	{"GetRandom",					Entity_GetRandom},
-	{"SetRandom",					Entity_SetRandom},
+	{"GetRandom",					Entity_GetRandom}, // args: none; return: float
+	{"SetRandom",					Entity_SetRandom}, // args: float; return: nothing
 
-	{"GetRedsound",					Entity_GetRedsound},
-	{"SetRedsound",					Entity_SetRedsound},
+	{"GetRedsound",					Entity_GetRedsound}, // args: none; return: string
+	{"SetRedsound",					Entity_SetRedsound}, // args: string; return: nothing
 
-	{"GetSound1To2",				Entity_GetSound1To2},
-	{"SetSound1To2",				Entity_SetSound1To2},
+	{"GetSound1To2",				Entity_GetSound1To2}, // args: none; return: int
+	{"SetSound1To2",				Entity_SetSound1To2}, // args: int; return: nothing
 
-	{"GetSound2To1",				Entity_GetSound2To1},
-	{"SetSound2To1",				Entity_SetSound2To1},
+	{"GetSound2To1",				Entity_GetSound2To1}, // args: none; return: int
+	{"SetSound2To1",				Entity_SetSound2To1}, // args: int return: nothing
 
-	{"GetSoundLoop",				Entity_GetSoundLoop},
-	{"SetSoundLoop",				Entity_SetSoundLoop},
+	{"GetSoundLoop",				Entity_GetSoundLoop}, // args: none; return: int
+	{"SetSoundLoop",				Entity_SetSoundLoop}, // args: int; return: nothing
 
-	{"GetSoundPos1",				Entity_GetSoundPos1},
-	{"SetSoundPos1",				Entity_SetSoundPos1},
+	{"GetSoundPos1",				Entity_GetSoundPos1}, // args: none; return: int
+	{"SetSoundPos1",				Entity_SetSoundPos1}, // args: int; return: nothing
 
-	{"GetSoundPos2",				Entity_GetSoundPos2},
-	{"SetSoundPos2",				Entity_SetSoundPos2},
+	{"GetSoundPos2",				Entity_GetSoundPos2}, // args: none; return: int
+	{"SetSoundPos2",				Entity_SetSoundPos2}, // args: int; return: nothing
 
-	{"GetSpawnflags",				Entity_GetSpawnflags},
-	{"SetSpawnflags",				Entity_SetSpawnflags},
+	{"GetSpawnflags",				Entity_GetSpawnflags}, // args: none; return: int
+	{"SetSpawnflags",				Entity_SetSpawnflags}, // args: int; return: nothing
 
-	{"GetSpeed",					Entity_GetSpeed},
-	{"SetSpeed",					Entity_SetSpeed},
+	{"GetSpeed",					Entity_GetSpeed}, // args: none; return: float
+	{"SetSpeed",					Entity_SetSpeed}, // args: float; return: nothing
 
-	{"GetSplashDamage",				Entity_GetSplashDamage},
-	{"SetSplashDamage",				Entity_SetSplashDamage},
+	{"GetSplashDamage",				Entity_GetSplashDamage}, // args: none; return: int
+	{"SetSplashDamage",				Entity_SetSplashDamage}, // args: int; return: nothing
 
-	{"GetSplashMethodOfDeath",		Entity_GetSplashMethodOfDeath},
-	{"SetSplashMethodOfDeath",		Entity_SetSplashMethodOfDeath},
+	{"GetSplashMethodOfDeath",		Entity_GetSplashMethodOfDeath}, // args: none; return: int
+	{"SetSplashMethodOfDeath",		Entity_SetSplashMethodOfDeath}, // args: int; return: nothing
 
-	{"GetSplashRadius",				Entity_GetSplashRadius},
-	{"SetSplashRadius",				Entity_SetSplashRadius},
+	{"GetSplashRadius",				Entity_GetSplashRadius}, // args: none; return: int
+	{"SetSplashRadius",				Entity_SetSplashRadius}, // args: int; return: nothing
 
-	{"GetSwapname",					Entity_GetSwapname},
-	{"SetSwapname",					Entity_SetSwapname},
+	{"GetSwapname",					Entity_GetSwapname}, // args: none; return: string
+	{"SetSwapname",					Entity_SetSwapname}, // args: string; return: nothing
 
-	{"GetTakedamage",				Entity_GetTakedamage},
-	{"SetTakedamage",				Entity_SetTakedamage},
+	{"GetTakedamage",				Entity_GetTakedamage}, // args: none; return: bool
+	{"SetTakedamage",				Entity_SetTakedamage}, // args: bool; return: nothing
 
 	{NULL, NULL}
 };
