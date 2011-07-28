@@ -913,8 +913,7 @@ static int Entity_SetApos1(lua_State *L) {
 	if(!lent || lent->e)
 		return 1;
 	vec = Lua_GetVector(L, 2);
-	if(!vec)
-		return 1;
+
 	VectorCopy(vec, lent->e->apos1);
 
 	return 1;
@@ -928,8 +927,7 @@ static int Entity_SetApos2(lua_State *L) {
 	if(!lent || lent->e)
 		return 1;
 	vec = Lua_GetVector(L, 2);
-	if(!vec)
-		return 1;
+
 	VectorCopy(vec, lent->e->apos2);
 
 	return 1;
