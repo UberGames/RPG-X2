@@ -992,20 +992,6 @@ static int Entity_GetBooleanstate(lua_State *L) {
 	return 1;
 }
 
-static int Entity_SetBooleanstate(lua_State *L) {
-	lent_t *lent;
-	qboolean b;
-
-	lent = Lua_GetEntity(L, 1);
-	if(!lent || !lent->e)
-		return 1;
-	b = (qboolean)lua_toboolean(L, 2);
-
-	lent->e->booleanstate = b;
-
-	return 1;
-}
-
 static int Entity_GetClipmask(lua_State *L) {
 	lent_t *lent;
 
@@ -1362,19 +1348,6 @@ static int Entity_GetInUse(lua_State *L) {
 	return 1;
 }
 
-static int Entity_SetInUse(lua_State *L) {
-	lent_t *lent;
-	qboolean b;
-
-	lent = Lua_GetEntity(L, 1);
-	if(!lent || !lent->e) 
-		return 1;
-	b = (qboolean)lua_toboolean(L, 2);
-	lent->e->inuse = b;
-
-	return 1;
-}
-
 static int Entity_GetLastEnemy(lua_State *L) {
 	lent_t *lent;
 
@@ -1439,20 +1412,6 @@ static int Entity_GetLuaEntity(lua_State *L) {
 		return 1;
 	}
 	lua_pushboolean(L, (int)lent->e->luaEntity);
-
-	return 1;
-}
-
-static int Entity_SetLuaEntity(lua_State *L) {
-	lent_t	*lent;
-	qboolean b;
-
-	lent = Lua_GetEntity(L, 1);
-	if(!lent || !lent->e) 
-		return 1;
-	b = (qboolean)lua_toboolean(L, 2);
-
-	lent->e->luaEntity = b;
 
 	return 1;
 }
@@ -1708,7 +1667,7 @@ static int Entity_SetMethodOfDeath(lua_State *L) {
 	lent = Lua_GetEntity(L, 1);
 	if(!lent || !lent->e)
 		return 1;
-	mod = (int)luaL_checknumber(L, 1);
+	mod = (int)luaL_checknumber(L, 2);
 
 	lent->e->methodOfDeath = mod;
 
@@ -2564,20 +2523,6 @@ static int Entity_GetTakedamage(lua_State *L) {
 	return 1;
 }
 
-static int Entity_SetTakedamage(lua_State *L) {
-	lent_t	*lent;
-	qboolean b;
-
-	lent = Lua_GetEntity(L, 1);
-	if(!lent || !lent->e)
-		return 1;
-	b = (qboolean)lua_toboolean(L, 2);
-
-	lent->e->takedamage = b;
-
-	return 1;
-}
-
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn",					Entity_Spawn},
 	{"Find",					Entity_Find},
@@ -2644,7 +2589,6 @@ static const luaL_Reg Entity_meta[] = {
 	{"SetBluesound",				Entity_SetBluesound}, // args: string; return: nothing
 
 	{"GetBooleanstate",				Entity_GetBooleanstate}, // args: none; return: bool
-	{"SetBooleanstate",				Entity_SetBooleanstate}, // args: bool; return: nothing
 
 	{"GetClipmask",					Entity_GetClipmask}, // args: none; return: int
 	{"SetClipmask",					Entity_SetClipmask}, // args: int; return: nothing
@@ -2685,7 +2629,6 @@ static const luaL_Reg Entity_meta[] = {
 	{"SetHealth",					Entity_SetHealth}, // args: int; return: nothing
 
 	{"GetInUse",					Entity_GetInUse}, // args: none; return: bool
-	{"SetInUse",					Entity_SetInUse}, // args: bool; return: noting
 
 	{"GetLastEnemy",				Entity_GetLastEnemy}, // args: none; return: ent
 	{"SetLastEnemy",				Entity_SetLastEnemy}, // args: ent; return: nothing
@@ -2694,7 +2637,6 @@ static const luaL_Reg Entity_meta[] = {
 	{"SetLuaDie",					Entity_SetLuaDie}, // args: string; return: nothing
 
 	{"GetLuaEntity",				Entity_GetLuaEntity}, // args: none; return: bool
-	{"SetLuaEntity",				Entity_SetLuaEntity}, // args: bool; return: nothing
 
 	{"GetLuaFree",					Entity_GetLuaFree}, // args: none; return: string
 	{"SetLuaFree",					Entity_SetLuaFree},  // args: string; return: nothing
@@ -2823,7 +2765,6 @@ static const luaL_Reg Entity_meta[] = {
 	{"SetSwapname",					Entity_SetSwapname}, // args: string; return: nothing
 
 	{"GetTakedamage",				Entity_GetTakedamage}, // args: none; return: bool
-	{"SetTakedamage",				Entity_SetTakedamage}, // args: bool; return: nothing
 
 	{NULL, NULL}
 };
