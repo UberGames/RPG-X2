@@ -9,35 +9,15 @@
 static int Entity_GetTarget(lua_State * L)
 {
 	lent_t     *lent;
-	lent_t     *target;
 	gentity_t      *t = NULL;
 
-	target = (lent_t *)lua_newuserdata(L, sizeof(lent_t));
-	luaL_getmetatable(L, "game.entity");
-	lua_setmetatable(L, -2);
-
 	lent = Lua_GetEntity(L, 1);
-
-
-	if(!lent->e)
-	{
-		Com_Printf("Entity_Target - invalid entity!\n");
-		return 0;
-	}
-	if(!lent->e->target)
-	{
-		Com_Printf("Entity_Target - no target!\n");
-		return 0;
-	}
-
 	t = G_PickTarget(lent->e->target);
-	if(!t)
-	{
-		G_Printf("Entity_Target - Couldn't find target %s\n", lent->e->target);
-		return 0;
+	if(!lent || !lent->e || !t) {
+		lua_pushnil(L);
+		return 1;
 	}
-
-	target->e = t;
+	Lua_PushEntity(L, t);
 
 	return 1;
 }
@@ -45,90 +25,47 @@ static int Entity_GetTarget(lua_State * L)
 // entity.FindBModel(int bmodel)
 // finds entity by brush model
 static int Entity_FindBModel(lua_State *L) {
-	lent_t		*lent;
+	gentity_t	*ent;
 	int			bmodel;
 
-	lent = (lent_t *)lua_newuserdata(L, sizeof(lent_t));
-
-	luaL_getmetatable(L, "game.entity");
-	lua_setmetatable(L, -2);
-
 	bmodel = luaL_checkint(L, 1);
+	ent = G_Find(NULL, FOFS(model), va("*%i", bmodel));
+	if(!ent)
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, ent);
 
-	lent->e = G_Find(NULL, FOFS(model), va("*%i", bmodel));
-	if(lent->e)
-		return 1;
-	return 0;
+	return 1;
 }
 
 // entity.FindNumber(int num)
 // finds entity by number
 static int Entity_FindNumber(lua_State * L)
 {
-	lent_t     *lent;
-	int             entnum;
-	gentity_t      *ent;
-
-	lent = (lent_t *)lua_newuserdata(L, sizeof(lent_t));
-
-	luaL_getmetatable(L, "game.entity");
-	lua_setmetatable(L, -2);
+	int			 entnum;
+	gentity_t	*ent;
 
 	entnum = luaL_checknumber(L, 1);
-
-	lent->e = NULL;
-
 	ent = &g_entities[entnum];
-	if(ent)
-	{
-		if(ent->inuse)
-		{
-			lent->e = ent;
-			return 1;
-		}
-	}
-	return 0;
+	if(!ent || !ent->inuse)
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, ent);
+
+	return 1;
 }
 
 // entity.Find(string targetname)
 // finds and returns an entity by it's targetname
 static int Entity_Find(lua_State * L)
 {
-	char           *s;
-	lent_t     *lent;
-	int             i;
-	gentity_t      *t;
+	gentity_t      *t = NULL;
 
-	lent = (lent_t *)lua_newuserdata(L, sizeof(lent_t));
-
-	luaL_getmetatable(L, "game.entity");
-	lua_setmetatable(L, -2);
-
-	s = (char *)luaL_checkstring(L, 1);
-
-	lent->e = NULL;
-
-	for(i = 0; i < level.num_entities; i++)
-	{
-		t = &g_entities[i];
-
-		if(!t || !t->inuse)
-			continue;
-
-		if(Q_stricmp(t->targetname, s) == 0)
-		{
-			LUA_DEBUG("Entity_Find - Found an entity.");
-			lent->e = t;
-			break;
-		}
-
-	}
-
-	if(!lent->e)
-	{
-		Com_Printf("Entity_Find - entity '%s' not found!\n", s);
-		return 0;
-	}
+	t = G_Find(t, FOFS(targetname), (char *)luaL_checkstring(L, 1));
+	if(!t)
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, t);
 
 	return 1;
 }
@@ -141,7 +78,7 @@ static int Entity_Use(lua_State * L)
 
 	lent = Lua_GetEntity(L, 1);
 
-	if(!lent || !lent->e || !lent->e->use) return 0;
+	if(!lent || !lent->e || !lent->e->use) return 1;
 
 	if(lent->e->luaUse)
 		LuaHook_G_EntityUse(lent->e->luaUse, lent->e-g_entities, lent->e-g_entities, lent->e-g_entities);
@@ -162,15 +99,9 @@ static int Entity_Teleport(lua_State * L)
 	target = Lua_GetEntity(L, 2);
 
 	if(!lent || !lent->e)
-	{
-		Com_Printf("Entity_Teleport - invalid entity!\n");
-		return 0;
-	}
+		return 1;
 	if(!target || !target->e)
-	{
-		Com_Printf("Entity_Teleport - invalid target!\n");
-		return 0;
-	}
+		return 1;
 
 	if(lent->e->client)
 		TeleportPlayer(lent->e, target->e->s.origin, target->e->s.angles, TP_NORMAL);
@@ -183,13 +114,9 @@ static int Entity_Teleport(lua_State * L)
 static int Entity_IsRocket(lua_State * L)
 {
 	lent_t     *lent;
-	qboolean        rocket = qfalse;
-
-	luaL_getmetatable(L, "game.entity");
-	lua_setmetatable(L, -2);
+	qboolean    rocket = qfalse;
 
 	lent = Lua_GetEntity(L, 1);
-
 	if(lent->e && !Q_stricmp(lent->e->classname, "rocket"))
 		rocket = qtrue;
 
@@ -203,10 +130,9 @@ static int Entity_IsRocket(lua_State * L)
 static int Entity_IsGrenade(lua_State * L)
 {
 	lent_t     *lent;
-	qboolean        grenade = qfalse;
+	qboolean    grenade = qfalse;
 
 	lent = Lua_GetEntity(L, 1);
-
 	if(Q_stricmp(lent->e->classname, "grenade"))
 		grenade = qtrue;
 
@@ -219,14 +145,10 @@ static int Entity_IsGrenade(lua_State * L)
 // Spawn a new entity if possible
 static int Entity_Spawn(lua_State * L)
 {
-	lent_t     *lent;
+	gentity_t *ent;
 
-	lent = (lent_t *)lua_newuserdata(L, sizeof(lent_t));
-
-	luaL_getmetatable(L, "game.entity");
-	lua_setmetatable(L, -2);
-
-	lent->e = G_Spawn();
+	ent = G_Spawn();
+	Lua_PushEntity(L, ent);
 
 	return 1;
 }
@@ -238,7 +160,10 @@ static int Entity_GetNumber(lua_State * L)
 	lent_t     *lent;
 
 	lent = Lua_GetEntity(L, 1);
-	lua_pushnumber(L, lent->e - g_entities);
+	if(!lent || !lent->e)
+		lua_pushinteger(L, -1);
+	else
+		lua_pushinteger(L, lent->e - g_entities);
 
 	return 1;
 }
@@ -252,6 +177,7 @@ static int Entity_IsClient(lua_State * L)
 	lent = Lua_GetEntity(L, 1);
 	
 	if(!lent || !lent->e) {
+		lua_pushboolean(L, 0);
 		return 1;
 	}
 
@@ -269,6 +195,7 @@ static int Entity_GetClientName(lua_State * L)
 	lent = Lua_GetEntity(L, 1);
 
 	if(!lent || !lent->e || !lent->e->classname) {
+		lua_pushnil(L);
 		return 1;
 	}
 
@@ -286,7 +213,7 @@ static int Entity_Print(lua_State * L)
 
 	lent = Lua_GetEntity(L, 1);
 
-	if(!lent|| !lent->e) return 0;
+	if(!lent|| !lent->e) return 1;
 
 	if(!lent->e->client)
 		return luaL_error(L, "\'Print\' must be used with a client entity");
@@ -313,7 +240,7 @@ static int Entity_Print(lua_State * L)
 
 	trap_SendServerCommand(lent->e - g_entities, va("print \"%s\n\"", buf));
 
-	return 0;
+	return 1;
 }
 
 static int Entity_CenterPrint(lua_State * L)
@@ -325,7 +252,7 @@ static int Entity_CenterPrint(lua_State * L)
 
 	lent = Lua_GetEntity(L, 1);
 	
-	if(!lent || !lent->e) return 0;
+	if(!lent || !lent->e) return 1;
 
 	if(!lent->e->client)
 		return luaL_error(L, "\'CenterPrint\' must be used with a client entity");
@@ -352,7 +279,7 @@ static int Entity_CenterPrint(lua_State * L)
 
 	trap_SendServerCommand(lent->e - g_entities, va("cp \"" S_COLOR_WHITE "%s\n\"", buf));
 
-	return 0;
+	return 1;
 }
 
 extern qboolean G_ParseField(const char *key, const char *value, gentity_t *ent);
@@ -983,11 +910,22 @@ static int Entity_GetBooleanstate(lua_State *L) {
 	lent_t *lent;
 
 	lent = Lua_GetEntity(L, 1);
-	if(!lent || lent->e) {
+	if(!lent || !lent->e) {
 		lua_pushboolean(L, 0);
 		return 1;
 	}
 	lua_pushboolean(L, (int)lent->e->booleanstate);
+
+	return 1;
+}
+
+static int Entity_SetBooleanstate(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	lent->e->booleanstate = (qboolean)lua_toboolean(L, 2);
 
 	return 1;
 }
@@ -2518,7 +2456,18 @@ static int Entity_GetTakedamage(lua_State *L) {
 		lua_pushboolean(L, 0);
 		return 1;
 	}
-	lua_pushboolean(L, (int)lent->e->target);
+	lua_pushboolean(L, (int)lent->e->takedamage);
+
+	return 1;
+}
+
+static int Entity_SetTakedamage(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	lent->e->takedamage = (qboolean)lua_toboolean(L, 2);
 
 	return 1;
 }
@@ -2669,6 +2618,7 @@ static const luaL_Reg Entity_meta[] = {
 	{"SetBluesound",				Entity_SetBluesound}, // args: string; return: nothing
 
 	{"GetBooleanstate",				Entity_GetBooleanstate}, // args: none; return: bool
+	{"SetBooleanstate",				Entity_SetBooleanstate}, // args: bool; return: nothing
 
 	{"GetClipmask",					Entity_GetClipmask}, // args: none; return: int
 	{"SetClipmask",					Entity_SetClipmask}, // args: int; return: nothing
@@ -2845,6 +2795,7 @@ static const luaL_Reg Entity_meta[] = {
 	{"SetSwapname",					Entity_SetSwapname}, // args: string; return: nothing
 
 	{"GetTakedamage",				Entity_GetTakedamage}, // args: none; return: bool
+	{"SetTakedamage",				Entity_SetTakedamage}, // args: bool; return: nothing
 
 	{"SetTarget",					Entity_SetTarget}, // args: string; return: nothing
 
@@ -2860,9 +2811,9 @@ static const luaL_Reg Entity_meta[] = {
 	{NULL, NULL}
 };
 
-void dummy(gentity_t *ent) {
+/*void dummy(gentity_t *ent) {
 	ent->targetShaderName;
-}
+}*/
 
 int Luaopen_Entity(lua_State * L)
 {
@@ -2882,12 +2833,14 @@ void Lua_PushEntity(lua_State * L, gentity_t * ent)
 {
 	lent_t     *lent;
 
-	lent = (lent_t *)lua_newuserdata(L, sizeof(lent_t));
-
-	luaL_getmetatable(L, "game.entity");
-	lua_setmetatable(L, -2);
-
-	lent->e = ent;
+	if(!ent || !ent->inuse)
+		lua_pushnil(L);
+	else {
+		lent = (lent_t *)lua_newuserdata(L, sizeof(lent_t));
+		luaL_getmetatable(L, "game.entity");
+		lua_setmetatable(L, -2);
+		lent->e = ent;
+	}
 }
 
 lent_t *Lua_GetEntity(lua_State * L, int argNum)
