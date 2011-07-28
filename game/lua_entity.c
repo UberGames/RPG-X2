@@ -910,7 +910,7 @@ static int Entity_SetApos1(lua_State *L) {
 	vec_t *vec;
 	
 	lent = Lua_GetEntity(L, 1);
-	if(!lent || lent->e)
+	if(!lent || !lent->e)
 		return 1;
 	vec = Lua_GetVector(L, 2);
 
@@ -924,7 +924,7 @@ static int Entity_SetApos2(lua_State *L) {
 	vec_t *vec;
 	
 	lent = Lua_GetEntity(L, 1);
-	if(!lent || lent->e)
+	if(!lent || !lent->e)
 		return 1;
 	vec = Lua_GetVector(L, 2);
 
@@ -1701,7 +1701,7 @@ static int Entity_GetModel2(lua_State *L) {
 	lent_t	*lent;
 
 	lent = Lua_GetEntity(L, 1);
-	if(!lent || lent->e) 
+	if(!lent || !lent->e) 
 		lua_pushnil(L);
 	else
 		lua_pushstring(L, lent->e->model2);
@@ -2523,6 +2523,86 @@ static int Entity_GetTakedamage(lua_State *L) {
 	return 1;
 }
 
+static int Entity_SetTarget(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	lent->e->target = (char *)luaL_checkstring(L, 2);
+
+	return 1;
+}
+
+static int Entity_GetTargetname2(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		lua_pushnil(L);
+	else
+		lua_pushstring(L, lent->e->targetname2);
+
+	return 1;
+}
+
+static int Entity_SetTargetname2(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	lent->e->targetname2 = (char *)luaL_checkstring(L, 2);
+
+	return 1;
+}
+
+static int Entity_GetTargetShaderName(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		lua_pushnil(L);
+	else
+		lua_pushstring(L, lent->e->targetShaderName);
+
+	return 1;
+}
+
+static int Entity_SetTargetShaderName(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	lent->e->targetShaderName = (char *)luaL_checkstring(L, 2);
+
+	return 1;
+}
+
+static int Entity_GetTargetShaderNewName(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		lua_pushnil(L);
+	else
+		lua_pushstring(L, lent->e->targetShaderNewName);
+
+	return 1;
+}
+
+static int Entity_SetTargetShaderNewName(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	lent->e->targetShaderNewName = (char *)luaL_checkstring(L, 2);
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn",					Entity_Spawn},
 	{"Find",					Entity_Find},
@@ -2766,12 +2846,23 @@ static const luaL_Reg Entity_meta[] = {
 
 	{"GetTakedamage",				Entity_GetTakedamage}, // args: none; return: bool
 
+	{"SetTarget",					Entity_SetTarget}, // args: string; return: nothing
+
+	{"GetTargetname2",				Entity_GetTargetname2}, // args: none; return: string
+	{"SetTargetname2",				Entity_SetTargetname2}, // args: string; return: nothing
+
+	{"GetTargetShaderName",			Entity_GetTargetShaderName}, // args: none; return: string
+	{"SetTargetShaderName",			Entity_SetTargetShaderName}, // args: string; return: nothing
+
+	{"GetTargetShaderNewName",		Entity_GetTargetShaderNewName}, // args: none; return: string
+	{"SetTargetShaderNewName",		Entity_SetTargetShaderNewName}, // args: string; return: nothing
+
 	{NULL, NULL}
 };
 
-/*void dummy(gentity_t *ent) {
-	ent->target;
-}*/
+void dummy(gentity_t *ent) {
+	ent->targetShaderName;
+}
 
 int Luaopen_Entity(lua_State * L)
 {
