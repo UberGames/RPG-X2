@@ -11,17 +11,17 @@ static int Sound_PlaySound(lua_State *L) {
 	lent_t	*l;
 
 	l = Lua_GetEntity(L,1);
-	if(!l || !l->e) return 0;
+	if(!l || !l->e) return 1;
 
 	sound = (char*)luaL_checkstring(L,2);
-	if(!sound[0]) return 0;
+	if(!sound[0]) return 1;
 
 	chan = luaL_checknumber(L,3);
 
 	snd = G_SoundIndex(sound);
 	G_AddEvent(l->e, EV_SCRIPT_SOUND, snd + (chan << 8));
 
-	return 0;
+	return 1;
 }
 
 static const luaL_Reg lib_sound[] = {

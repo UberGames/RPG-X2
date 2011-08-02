@@ -260,6 +260,7 @@
     <ClCompile Include="lua.c" />
     <ClCompile Include="luac.c" />
     <ClCompile Include="lua_cinematic.c" />
+    <ClCompile Include="lua_cvar.c" />
     <ClCompile Include="lua_game.c" />
     <ClCompile Include="lua_entity.c" />
     <ClCompile Include="g_active.c">

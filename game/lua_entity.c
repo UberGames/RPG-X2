@@ -2552,6 +2552,113 @@ static int Entity_SetTargetShaderNewName(lua_State *L) {
 	return 1;
 }
 
+static int Entity_GetTargetEnt(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) 
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, lent->e->target_ent);
+
+	return 1;
+}
+
+static int Entity_SetTargetEnt(lua_State *L) {
+	lent_t *lent;
+	lent_t *targ;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	targ = Lua_GetEntity(L, 2);
+	if(!targ || !targ->e)
+		return 1;
+
+	lent->e->target_ent = targ->e;
+
+	return 1;
+}
+
+static int Entity_GetTeam(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		lua_pushnil(L);
+	else
+		lua_pushstring(L, lent->e->team);
+
+	return 1;
+}
+
+static int Entity_SetTeam(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	lent->e->team = (char *)luaL_checkstring(L, 2);
+
+	return 1;
+}
+
+static int Entity_GetTeamchain(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, lent->e->teamchain);
+
+	return 1;
+}
+
+static int Entity_SetTeamchain(lua_State *L) {
+	lent_t *lent;
+	lent_t *team;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	team = Lua_GetEntity(L, 2);
+	if(!team || !team->e)
+		return 1;
+
+	lent->e->teamchain = team->e;
+
+	return 1;
+}
+
+static int Entity_GetTeammaster(lua_State *L) {
+	lent_t *lent;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		lua_pushnil(L);
+	else
+		Lua_PushEntity(L, lent->e->teammaster);
+
+	return 1;
+}
+
+static int Entity_SetTeammaster(lua_State *L) {
+	lent_t *lent;
+	lent_t *team;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	team = Lua_GetEntity(L, 2);
+	if(!team || !team->e)
+		return 1;
+
+	lent->e->teammaster = team->e;
+
+	return 1;
+}
+
 static const luaL_Reg Entity_ctor[] = {
 	{"Spawn",					Entity_Spawn},
 	{"Find",					Entity_Find},
@@ -2808,12 +2915,24 @@ static const luaL_Reg Entity_meta[] = {
 	{"GetTargetShaderNewName",		Entity_GetTargetShaderNewName}, // args: none; return: string
 	{"SetTargetShaderNewName",		Entity_SetTargetShaderNewName}, // args: string; return: nothing
 
+	{"GetTargetEnt",				Entity_GetTargetEnt}, // args: none; return: ent
+	{"SetTargetEnt",				Entity_SetTargetEnt}, // args: ent; return: nothing
+
+	{"GetTeam",						Entity_GetTeam}, // args: none; return: string
+	{"SetTeam",						Entity_SetTeam}, // args: string; return nothing
+
+	{"GetTeamchain",				Entity_GetTeamchain}, // args: none; return: ent
+	{"SetTeamchain",				Entity_SetTeamchain}, // args: ent; return: nothing
+
+	{"GetTeammaster",				Entity_GetTeammaster},
+	{"SetTeammaster",				Entity_SetTeammaster},
+
 	{NULL, NULL}
 };
 
-/*void dummy(gentity_t *ent) {
-	ent->targetShaderName;
-}*/
+void dummy(gentity_t *ent) {
+	ent->timestamp;
+}
 
 int Luaopen_Entity(lua_State * L)
 {
