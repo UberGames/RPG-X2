@@ -2813,8 +2813,10 @@ void SP_target_levelchange(gentity_t *ent) {
 
 	if(!ent->wait)
 		ent->count = 5;
-	if(ent->wait < -1)
+	else if(ent->wait < -1)
 		ent->count = -1;
+	else
+		ent->count = (int)ent->wait;
 
 	ent->use = target_levelchange_use;
 }
