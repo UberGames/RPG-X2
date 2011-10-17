@@ -2828,3 +2828,51 @@ void SP_target_levelchange(gentity_t *ent) {
 void SP_target_holodeck(gentity_t *ent) {
 
 }
+
+//RPG-X | Harry Young | 15/10/2011 | MOD START
+#ifdef XTRA
+/*QUAKED target_shaderremap (1 0 0) (-8 -8 -8) (8 8 8)
+This will remap the shader "falsename" with shader "truename" and vice versa.
+It will save you some vfx-usables.
+
+This Entity only works on RPGXEF
+
+*/
+void target_shaderremap_think(gentity_t *ent) {
+	float f = 0;
+	if(!ent->spawnflags) {
+		f = level.time * 0.001;
+		AddRemap(ent->falsename, ent->truename, f);
+		ent->spawnflags = 1;
+		ent->nextthink = -1;
+	} else {
+		f = level.time * 0.001;
+		AddRemap(ent->falsename, ent->falsename, f);
+		ent->spawnflags = 0;
+		ent->nextthink = -1;
+	}
+	trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());
+}
+
+void target_shaderremap_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+	ent->think = target_shaderremap_think;
+	ent->nextthink = level.time + 50; /* level.time + one frame */
+}
+
+void SP_target_shaderremap(gentity_t *ent) {
+	if(!ent->falsename) {
+		G_Printf(S_COLOR_RED "target_shaderremap without falsename-shader at %s!\n", vtos(ent->s.origin));
+		G_FreeEntity(ent);
+		return;
+	}
+
+	if(!ent->truename) {
+		G_Printf(S_COLOR_RED "target_shaderremap without truename-shader at %s!\n", vtos(ent->s.origin));
+		G_FreeEntity(ent);
+		return;
+	}
+
+	ent->use = target_shaderremap_use;
+}
+#endif
+//RPG-X | Harry Young | 15/10/2011 | MOD END
