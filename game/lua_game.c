@@ -166,10 +166,10 @@ static int Game_MessagePrint(lua_State *L) {
 	}
 
 	if(clNum != -1 && clNum >= 0 && clNum < level.maxclients)
-		trap_SendServerCommand(clNum, va("cp \"" S_COLOR_WHITE "%s\n\"", buf));
+		trap_SendServerCommand(clNum, va("servermsg \"" S_COLOR_WHITE "%s\n\"", buf));
 	else {
 		for(i = 0; i < level.maxclients; i++)
-			trap_SendServerCommand(i, va("cp \"" S_COLOR_WHITE "%s\n\"", buf));
+			trap_SendServerCommand(i, va("servermsg \"" S_COLOR_WHITE "%s\n\"", buf));
 	}
 
 	LUA_DEBUG("Game_MessagePrint - return: printed string");
