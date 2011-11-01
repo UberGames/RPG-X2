@@ -1,3 +1,9 @@
-To compile for rpgxEF change the following things:
-q_shared.h line 54: #define XTRA 0 to #define XTRA 1
-bg_public.h line 6: #define XTRA 0 to #define XTRA 1
+To compile for rpgxEF set the following lines to #define XTRA 1.
+To compile for other engines set the following lines to #define XTRA 0.
+
+in cgame:
+cg_public.h line 11
+
+in game:
+bg_public.h line 6
+q_shared.h line 54 
