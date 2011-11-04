@@ -3326,8 +3326,400 @@ void SP_func_mover(gentity_t *ent) {
 	level.numBrushEnts++;
 }
 
-// Basic spawn function for func_stasis_door
-void SP_func_stasis_door(gentity_t *ent) {
-	trap_SetBrushModel(ent, ent->model);
-	trap_LinkEntity(ent);
+/*
+-------------------------------------------
+
+func_stasis_door rewrite
+by Ubergames Harry Young
+based upon SP-code
+
+-------------------------------------------
+*/
+
+/*
+
+Presets
+ent->count state of the door where
+1 = closed
+2 = open
+
+ent->n00bCount locked indicator
+1 = locked
+2 = unlocked
+
+*/
+
+/*
+-------------------------------------------
+
+close2_stasis_door 
+will finish up the closing at level.time + 1000
+
+-------------------------------------------
+*/
+
+void close2_stasis_door( gentity_t *ent )
+{
+
+		// The door is fully closed (and faded) so don't draw the door model anymore
+		ent->s.modelindex2 = 0;
+		ent->flags &= ~EF_NODRAW; // let the bmodel draw
+		ent->flags &= ~SVF_NOCLIENT;
+
+		// Now would be a good time to close the area portal.
+		trap_AdjustAreaPortalState( ent, qfalse );
+		ent->nextthink = -1;
+		return;
+	G_Printf( "^1Entity closed\n", 0 );
+
+}
+/*
+-------------------------------------------
+
+close1_stasis_door 
+will begin the closing of the door
+
+-------------------------------------------
+*/
+
+void close1_stasis_door( gentity_t *ent )
+{
+
+		// Door isn't there, so make it come back
+		ent->count = 1;//closing
+		ent->flags &= ~SVF_NOCLIENT;
+		ent->r.contents = CONTENTS_SOLID;
+
+		G_AddEvent( ent, EV_GENERAL_SOUND, G_SoundIndex( "sound/movers/doors/stasisdoor.wav" ));
+	
+		ent->think = close2_stasis_door;
+		ent->nextthink = level.time + 1000;
+	G_Printf( "^1Entity closing\n", 0 );
+}
+/*
+-------------------------------------------
+
+block_stasis_door 
+checks if someone is near the door
+
+-------------------------------------------
+*/
+
+void block_stasis_door( gentity_t *ent ) 
+{
+	int			ct = 0;
+	int			i;
+	gentity_t	*entity_list[MAX_GENTITIES];
+
+	// Do a quick check to see if someone is close to the door...pos1 is actually the door origin
+	ct = G_RadiusList( ent->pos1, 128, ent, qtrue, entity_list );
+
+	if ( ct )
+	{
+		for ( i = 0; i < ct; i++ )
+		{
+			if ( entity_list[i]->client )
+			{
+				ent->nextthink = level.time + 500; //blocked, check back in .5 secs
+				break;
+			}
+		}
+	}
+	else
+	{
+		ent->think = close1_stasis_door;
+		ent->nextthink = level.time + 50;
+	}
+	G_Printf( "^1Entity blockcheck\n", 0 );
+
+}
+/*
+-------------------------------------------
+
+open2_stasis_door 
+will finish up the opening at level.time + 1000
+
+-------------------------------------------
+*/
+
+void open2_stasis_door( gentity_t *ent )
+{
+
+		ent->flags |= SVF_NOCLIENT;
+		ent->r.contents = 0;
+		ent->flags |= EF_NODRAW;
+
+		if ( ent->wait >= 0 )
+		{
+			ent->think = block_stasis_door ;
+			ent->nextthink = level.time + ( ent->wait * 1000 );
+		}
+		else
+		{
+			return;
+		}
+	G_Printf( "^1Entity open\n", 0 );
+
+}
+/*
+-------------------------------------------
+
+open1_stasis_door 
+will begin theopening of the door
+
+-------------------------------------------
+*/
+
+void open1_stasis_door( gentity_t *ent )
+{
+		// make it go away
+		ent->count = 2; //opening
+
+		// Now we add the model back in since we need to be able to fade something out...and bmodels can't do that.
+		ent->s.modelindex2 = G_ModelIndex( ent->model2 );
+		ent->s.eFlags |= EF_NODRAW;
+
+		G_AddEvent( ent, EV_GENERAL_SOUND, G_SoundIndex( "sound/movers/doors/stasisdoor.wav" ));
+
+		// Now would be a good time to open up the area portal..heh heh.
+		trap_AdjustAreaPortalState( ent, qtrue );
+
+	ent->think = open2_stasis_door;
+	ent->nextthink = level.time + 1000;
+	G_Printf( "^1Entity opening\n", 0 );
+}
+/*
+-------------------------------------------
+
+locked_stasis_door 
+checks if the door is locked and aborts if needed
+
+-------------------------------------------
+*/
+
+void locked_stasis_door( gentity_t *ent )
+{
+	if ( ent->n00bCount == 2)
+	{
+		ent->think = open1_stasis_door;
+		ent->nextthink = level.time + 50;
+	}
+	else
+	{
+		return;
+	}
+	G_Printf( "^1Entity lockcheck\n", 0 );
+}
+/*
+-------------------------------------------
+
+lockup_stasis_door 
+locks the door off
+
+-------------------------------------------
+*/
+
+void lockup_stasis_door( gentity_t *ent )
+{
+
+	if ( ent->n00bCount == 2 )
+	{
+		ent->n00bCount = 1;
+		//show darker model
+		if ( ent->count == 2 ) //close door
+		{
+			ent->think = block_stasis_door;
+			ent->nextthink = level.time + 50;
+		}
+		// posibly message
+	}
+	else if ( ent->n00bCount == 1 )
+	{
+		ent->n00bCount = 2;
+		//show lighter model
+		// posibly message
+	}
+	G_Printf( "^1Entity lock-toggle\n", 0 );
+}
+/*
+-------------------------------------------
+
+toggle_stasis_door 
+will manage the door-toggeling
+
+-------------------------------------------
+*/
+
+void toggle_stasis_door( gentity_t *ent )
+{
+
+	if ( ent->wait >= 0 )
+	{
+		ent->think = locked_stasis_door;
+		ent->nextthink = level.time + 50;
+	}
+	else 
+	{
+		if ( ent->count == 2 ) 
+		{
+			ent->think = block_stasis_door;
+			ent->nextthink = level.time + 50;
+		}
+		else if ( ent->count == 1 ) 
+		{
+			ent->think = locked_stasis_door;
+			ent->nextthink = level.time + 50;
+		}
+	}
+	G_Printf( "^1Entity toggeling\n", 0 );
+}
+/*
+-------------------------------------------
+
+use_stasis_door 
+will be called when the entity is used
+
+-------------------------------------------
+*/
+
+void use_stasis_door(gentity_t *ent, gentity_t *other, gentity_t *activator)
+{
+	if(!Q_stricmp(activator->target, ent->targetname))
+	{
+		ent->think = toggle_stasis_door;
+		ent->nextthink = level.time + 50;
+	}
+	else if(!Q_stricmp(activator->target, ent->swapname))
+	{
+		ent->think = locked_stasis_door;
+		ent->nextthink = level.time + 50;
+	}
+	G_Printf( "^1Entity used\n", 0 );
+}
+/*
+-------------------------------------------
+
+touch_stasis_door 
+triggers the door on touch
+
+-------------------------------------------
+*/
+
+void touch_stasis_door( gentity_t *ent, gentity_t *other, trace_t *trace )
+{
+	// The door is solid so it's ok to open it, otherwise,
+	//	the door is already open and we don't need to bother with the state change
+	if ( other->parent->count == 1 )
+	{
+		ent->think = toggle_stasis_door;
+		ent->nextthink	 = level.time + 50;
+	}
+	G_Printf( "^1Entity touched\n", 0 );
+}
+
+/*
+-------------------------------------------
+
+spawn_trigger_stasis_door 
+spawns the door-trigger
+
+-------------------------------------------
+*/
+
+void spawn_trigger_stasis_door( gentity_t *ent ) {
+	gentity_t		*other;
+	vec3_t		mins, maxs;
+	int			i, best;
+
+	if(!ent) return;
+	if(ent->wait == -1) return; // we don't want this for toggle only, do we?
+
+	// find the bounds of everything on the team
+	VectorCopy (ent->r.absmin, mins);
+	VectorCopy (ent->r.absmax, maxs);
+
+	// Copy maxs and mins to s.origin2 and s.angles2 for scanable door
+	VectorCopy(maxs, ent->s.origin2);
+	VectorCopy(mins, ent->s.angles2);
+
+	// find the thinnest axis, which will be the one we expand
+	best = 0;
+	for ( i = 1 ; i < 3 ; i++ ) {
+		if ( maxs[i] - mins[i] < maxs[best] - mins[best] ) {
+			best = i;
+		}
+	}
+
+	maxs[best] += 128;
+	mins[best] -= 128;
+	
+
+	// create a trigger with this size
+	other = G_Spawn ();
+	VectorCopy (mins, other->r.mins);
+	VectorCopy (maxs, other->r.maxs);
+	other->parent = ent;
+	other->r.contents = CONTENTS_TRIGGER;
+	other->touch = touch_stasis_door;
+	ent->nextthink = -1;
+	G_Printf( "^1Spawnage complete\n", 0 );
+
+}
+
+//-------------------------------------------
+/*QUAKED func_stasis_door (0 .5 .8) START_LOCKED
+A bmodel that just sits there and opens when a player gets close to it.
+
+START_LOCKED:	door is locked at spawn
+
+"targetname"	will open the door
+"swapname"		will lock the door (SELF/NO_ACTIVATOR needed)
+"wait"			time to wait before closing, -1 for manual trigger, default is 5 seconds
+
+*/
+void SP_func_stasis_door( gentity_t *ent ) 
+{
+	trap_SetBrushModel( ent, ent->model );
+
+	G_SoundIndex( "sound/movers/doors/stasisdoor.wav" );
+	G_SoundIndex( "sound/movers/switches/stasisneg.wav" );
+
+	// Stasis doors have a model2, so precache me now
+	G_ModelIndex( "models/mapobjects/stasis/door2.md3" );
+	ent->model2 = "models/mapobjects/stasis/door.md3";
+	InitMover( ent );
+	
+	// Now that we have the model precached, clear this out so it doesn't draw the model
+	//	until we are ready to do the actual fade.
+	ent->s.modelindex2 = 0;
+
+	// sigh...ent->s.origin seems to be some kind of translational offset for the brush....so don't try and set 
+	//	the "correct" door origin because it should actually be <0 0 0>..hence the stashing of the origin in pos1.
+	VectorAdd( ent->r.absmax, ent->r.absmin, ent->pos1 );
+	VectorScale( ent->pos1, 0.5f, ent->pos1 );
+	VectorCopy( ent->pos1, ent->pos2 );
+	
+	G_SetOrigin( ent, ent->s.origin );
+
+	// Auto create a door trigger so the designers don't have to
+	ent->think = spawn_trigger_stasis_door;
+	ent->nextthink = level.time + 50 * 5; // give the target a chance to spawn in
+	//ent->trigger_formation = qfalse;
+
+	ent->use = use_stasis_door;
+	//ent->flags |= SVF_STASIS_DOOR;
+	ent->count = 3;
+	if (!ent->wait)
+	{
+		ent->wait = 5;
+	}
+
+	if (ent->spawnflags & 1)
+	{
+		ent->n00bCount = 1;
+		//show darker model
+	}
+
+	trap_LinkEntity (ent);
+	G_Printf( "^1Spawnage in progress\n", 0 );
 }
