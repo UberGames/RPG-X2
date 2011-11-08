@@ -3631,8 +3631,6 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 	vec3_t		mins, maxs;
 	int			i, best;
 
-	if(!ent) return;
-	if(ent->wait == -1) return; // we don't want this for toggle only, do we?
 
 	// find the bounds of everything on the team
 	VectorCopy (ent->r.absmin, mins);
@@ -3650,9 +3648,8 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 		}
 	}
 
-	maxs[best] += 128;
-	mins[best] -= 128;
-	
+		maxs[best] += 128;
+		mins[best] -= 128;
 
 	// create a trigger with this size
 	other = G_Spawn ();
@@ -3661,8 +3658,11 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 	other->parent = ent;
 	other->r.contents = CONTENTS_TRIGGER;
 	other->touch = touch_stasis_door;
-	ent->nextthink = -1;
+	other->nextthink = -1;
+
+	trap_LinkEntity (other);
 	G_Printf( "^1Spawnage complete\n", 0 );
+
 
 }
 
@@ -3708,7 +3708,7 @@ void SP_func_stasis_door( gentity_t *ent )
 
 	ent->use = use_stasis_door;
 	//ent->flags |= SVF_STASIS_DOOR;
-	ent->count = 3;
+	ent->count = 1;
 	if (!ent->wait)
 	{
 		ent->wait = 5;

@@ -16,7 +16,7 @@ static int Game_Print(lua_State *L) {
 
 	LUA_DEBUG("Game_Print - start: ");
 
-	for(i = 1; i <= n; i++)
+	for(i = 1; i < n; i++)
 	{
 		const char     *s;
 
@@ -56,7 +56,7 @@ static int Game_CenterPrint(lua_State *L) {
 
 	LUA_DEBUG("Game_CenterPrint - start: ");
 
-	for(i = 1; i <= n; i++)
+	for(i = 1; i < n; i++)
 	{
 		const char     *s;
 
@@ -76,12 +76,8 @@ static int Game_CenterPrint(lua_State *L) {
 		lua_pop(L, 1);
 	}
 
-	if(clNum != -1 && clNum >= 0 && clNum < level.maxclients)
-		trap_SendServerCommand(clNum, va("servercprint \"" S_COLOR_WHITE "%s\n\"", buf));
-	else {
-		for(i = 0; i < level.maxclients; i++)
-			trap_SendServerCommand(i, va("servercprint \"" S_COLOR_WHITE "%s\n\"", buf));
-	}
+	
+	trap_SendServerCommand(clNum, va("servercprint \"" S_COLOR_WHITE "%s\n\"", buf));
 
 	LUA_DEBUG("Game_CenterPrint - return: printed string");
 	return 0;
@@ -102,7 +98,7 @@ static int Game_ClientPrint(lua_State *L) {
 
 	LUA_DEBUG("Game_ClientPrint - start: ");
 
-	for(i = 1; i <= n; i++) {
+	for(i = 1; i < n; i++) {
 		const char		*s;
 
 		lua_pushvalue(L, -1);
@@ -145,14 +141,14 @@ static int Game_MessagePrint(lua_State *L) {
 
 	LUA_DEBUG("Game_MessagePrint - start: ");
 
-	for(i = 1; i <= n; i++)
+	for(i = 1; i < n; i++)
 	{
 		const char     *s;
 
 		lua_pushvalue(L, -1);
 		lua_pushvalue(L, i);
 		lua_call(L, 1, 1);
-		s = lua_tostring(L, -1);
+		s = lua_tostring(L, 2);
 
 		if(s == NULL)
 		{
@@ -165,12 +161,7 @@ static int Game_MessagePrint(lua_State *L) {
 		lua_pop(L, 1);
 	}
 
-	if(clNum != -1 && clNum >= 0 && clNum < level.maxclients)
-		trap_SendServerCommand(clNum, va("servermsg \"" S_COLOR_WHITE "%s\n\"", buf));
-	else {
-		for(i = 0; i < level.maxclients; i++)
-			trap_SendServerCommand(i, va("servermsg \"" S_COLOR_WHITE "%s\n\"", buf));
-	}
+	trap_SendServerCommand(clNum, va("servermsg \"" S_COLOR_WHITE "%s\n\"", buf));
 
 	LUA_DEBUG("Game_MessagePrint - return: printed string");
 	return 0;
