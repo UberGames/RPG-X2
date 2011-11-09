@@ -3631,6 +3631,7 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 	vec3_t		mins, maxs;
 	int			i, best;
 
+	if (ent->wait == -1) return;
 
 	// find the bounds of everything on the team
 	VectorCopy (ent->r.absmin, mins);
@@ -3658,7 +3659,7 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 	other->parent = ent;
 	other->r.contents = CONTENTS_TRIGGER;
 	other->touch = touch_stasis_door;
-	other->nextthink = -1;
+	ent->nextthink = -1;
 
 	trap_LinkEntity (other);
 	G_Printf( "^1Spawnage complete\n", 0 );
