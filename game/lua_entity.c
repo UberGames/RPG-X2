@@ -1740,6 +1740,33 @@ static int Entity_SetN00bCount(lua_State *L) {
 	return 1;
 }
 
+static int Entity_GetWait(lua_State *L) {
+	lent_t *lent;
+	
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e) {
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	lua_pushinteger(L, lent->e->wait);
+
+	return 1;
+}
+
+static int Entity_SetWait(lua_State *L) {
+	lent_t *lent;
+	int		wait;
+
+	lent = Lua_GetEntity(L, 1);
+	if(!lent || !lent->e)
+		return 1;
+	wait = (int)luaL_checknumber(L, 2);
+
+	lent->e->wait = wait;
+
+	return 1;
+}
+
 static int Entity_GetNeverFree(lua_State *L) {
 	lent_t *lent;
 
@@ -2822,6 +2849,9 @@ static const luaL_Reg Entity_meta[] = {
 
 	{"GetN00bCount",				Entity_GetN00bCount}, // args: none; return: int
 	{"SetN00bCount",				Entity_SetN00bCount}, // args: int; return: nothing
+
+	{"GetWait",						Entity_GetWait}, // args: none; return: int
+	{"SetWait",						Entity_SetWait}, // args: int; return: nothing
 
 	{"GetNeverFree",				Entity_GetNeverFree}, // args: none; return: bool
 	{"SetNeverFree",				Entity_SetNeverFree}, // args: bool; return: nothing
