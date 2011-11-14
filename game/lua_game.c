@@ -63,7 +63,7 @@ static int Game_CenterPrint(lua_State *L) {
 		lua_pushvalue(L, -1);
 		lua_pushvalue(L, i);
 		lua_call(L, 1, 1);
-		s = lua_tostring(L, -1);
+		s = lua_tostring(L, 2);
 
 		if(s == NULL)
 		{
@@ -104,7 +104,7 @@ static int Game_ClientPrint(lua_State *L) {
 		lua_pushvalue(L, -1);
 		lua_pushvalue(L, i);
 		lua_call(L, 1, 1);
-		s = lua_tostring(L, -1);
+		s = lua_tostring(L, 2);
 
 		if(s == NULL)
 		{
