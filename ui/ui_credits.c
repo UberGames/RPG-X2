@@ -66,12 +66,15 @@
 #define NAME_PARKER			"Chris 'Parker' Vad"
 #define NAME_HOCKING		"AdmiralHocking"
 
+#define NAME_YOUNG			"Hendrik 'Harry Young' Gerritzen"
+
 //Developer Uber professional sounding titles
 #define	TITLE_LEADER		"Project Lead"
 #define	TITLE_LPROG			"Lead Coding"
 #define TITLE_L2DAS			"Lead 2-D & Audio Art"
 #define	TITLE_L3D			"Lead 3-D Art"
 #define	TITLE_LMAPPER		"Lead Level Design"
+#define	TITLE_LLUA			"Lead Lua Coding"
 
 //Programming titles
 #define TITLE_PROG			"Primary Coding"
@@ -90,6 +93,7 @@
 
 //Mapping titles
 #define	TITLE_LEVELART		"Level Design"
+#define	TITLE_LUAENH		"Lua Level Enhancement"
 
 //Audio Titles
 #define	TITLE_LAUDIO		"Audio Lead"
@@ -183,7 +187,7 @@ static creditsInfo_t	creditsInfo[MAX_MENUS] =
 			{ NAME_JAY,				TITLE_LPROG },
 			{ NAME_SHARKY,			TITLE_L2DAS },
 			{ NAME_TIM,				TITLE_L3D },
-			{ NAME_WILL,			TITLE_LMAPPER }  
+			{ NAME_WILL,			TITLE_LMAPPER }, 
 		}
 	},
 
@@ -196,8 +200,9 @@ static creditsInfo_t	creditsInfo[MAX_MENUS] =
 			{ NAME_PHENIX,			TITLE_PROG },
 			{ NAME_RED,				TITLE_ADPROG },
 			{ NAME_MARCIN,			TITLE_PROG }, // Scooter was originally here...sorry... not enough space!
-			{ NAME_SCOOTER,			TITLE_ADPROG },
+			//{ NAME_SCOOTER,			TITLE_ADPROG }, //one had to go.
 			{ NAME_GSIO01,			TITLE_PROG },
+			{ NAME_YOUNG,			TITLE_LLUA }  
 		}
 	},
 
@@ -234,6 +239,7 @@ static creditsInfo_t	creditsInfo[MAX_MENUS] =
 			{ NAME_PHENIX,				TITLE_LEVELART },
 			//{ NAME_SCOOTER,			TITLE_LEVELART }, //I think he wanted to be taken off
 			//{ NAME_WILL,				TITLE_LEVELART },
+			{ NAME_YOUNG,				TITLE_LUAENH }  
 		}
 	},
 
@@ -277,6 +283,7 @@ static creditsInfo_t	creditsInfo[MAX_MENUS] =
 			{ "AdmiralHocking",			"" },
 			{ "Lee Wolfgang",			"" },
 			{ "Quince",					"" },
+			{ NAME_YOUNG,				"" },  
 			/*{ "Alex L.",				"" },
 			{ "Chase Benedict",			"" },
 			{ "Jake Conhale",			"" },
