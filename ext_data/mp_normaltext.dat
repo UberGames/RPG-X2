@@ -1,0 +1,686 @@
+
+"ELITE FORCE - RPG-X : MAIN MENU"
+"ELITE FORCE - RPG-X : CD KEY"
+"ELITE FORCE - RPG-X : DEMOS"
+"ELITE FORCE - RPG-X : CONFIGURE"
+"ELITE FORCE - RPG-X : SOLO MATCH"
+"ELITE FORCE - RPG-X : MULTI MATCH"
+"ELITE FORCE - RPG-X : MODS"
+"ELITE FORCE - RPG-X : CREDITS"
+"ELITE FORCE - RPG-X : QUIT MENU"
+"ELITE FORCE - RPG-X : INGAME MENU"
+"ELITE FORCE - RPG-X : TEAM MENU"
+"ELITE FORCE - RPG-X : EMOTES MENU"
+"ELITE FORCE - RPG-X : ADMIN MENU"
+"ELITE FORCE - RPG-X : CLIENT MENU"
+"ELITE FORCE - RPG-X : AUDIO MENU"
+
+// Ingame Menu
+"INGAME MENU"
+
+// Team Menu
+"TEAM MENU"
+
+// Demos Screen
+"DEMONSTRATIONS"
+"CURRENT FILE"
+"CURRENT DEMOS AVAILABLE"
+
+// Main Menu
+"ALPHA"
+"STELLAR CARTOGRAPHY"
+"THE UNITED FEDERATION OF PLANETS, FOUNDED IN 2161. CAPITAL PLANET:EARTH."
+"SIGNED TRUCE WITH FEDERATION IN 2367. CAPITAL PLANET:CARDASSIA PRIME."
+"CULTURE WHICH RUTHLESSLY EMBRACES CAPITALISM. CAPITAL PLANET:FERENGINAR."
+"AN OFFSHOOT OF THE VULCAN CULTURE. CAPITAL PLANETS:ROMULUS & REMUS."
+"HAD FIRST CONTACT WITH FEDERATION IN 2218. CAPITAL PLANET:QO'NOS."
+"POWERFUL ALLIANCE OF GAMMA QUADRANT PLANETARY GROUPS."
+"NCC-74656, INTREPID CLASS STARSHIP, CURRENTLY RETURNING FROM DELTA QUADRANT."
+"CYBORG RACE, FIRST INTRODUCED TO THE FEDERATION BY ENTITY KNOWN AS 'Q'"
+"ARTIFICIAL 70,000 LIGHT YEAR PASSAGEWAY BETWEEN BAJOR AND GAMMA QUADRANT"
+"CENTRE OF THE MILKY WAY GALAXY, RUMOURED LOCATION OF SHA KA REE."
+"ONE QUARTER OF MILKY WAY GALAXY, CONTAINS THE UNITED FEDERATION OF PLANETS."
+"ONE QUARTER OF MILKY WAY GALAXY, CONTAINS THE KLINGON AND ROMULAN EMPIRES."
+"ONE QUARTER OF MILKY WAY GALAXY, UNEXPLORED, BELIEVED HOME OF THE BORG."
+"ONE QUARTER OF MILKY WAY GALAXY, CURRENTLY EXPLORED BY USE OF BAJORAN WORMHOLE."
+
+// Video Setup Menu
+"VIDEO CONFIGURE"
+"HIGH QUALITY"
+"NORMAL"
+"FAST"
+"FASTEST"
+"CUSTOM"
+"DEFAULT"
+"VOODOO"
+"NORMAL (4:3)"
+"WIDESCREEN (16:9)"
+"WIDESCREEN (16:10)"
+"OFF"
+"ON"
+"320X240"
+"400X300"
+"512X384"
+"640X480"
+"800X600"
+"960X720"
+"1024x768"
+"1152x864"
+"1280x1024"
+"1600x1200"
+"2048x1536"
+"856x480 Wide Screen"
+"DEFAULT"
+"16-BIT"
+"32-BIT"
+"LIGHTMAP"
+"VERTEX"
+"LOW"
+"MEDIUM"
+"HIGH"
+"VERY HIGH"
+"BILINEAR"
+"TRILINEAR"
+
+// Player setup
+"ELITE FORCE - RPG-X : CHANGE PLAYER"
+"PLAYER CONFIGURE"
+"NONE"
+"95"
+"90"
+"85"
+"80"
+"75"
+"70"
+"65"
+"60"
+"55"
+"50"
+"45"
+"40"
+"35"
+"30"
+"25"
+"20"
+"15"
+"10"
+"5"
+
+// Video Driver Menu
+"VIDEO DRIVER"
+"VIDEO DRIVERS"
+"VENDOR:"
+"VERSION:"
+"RENDERER:"
+"PIXELFORMAT:"
+"EXTENSIONS:"
+
+// Setup / Controls / Weapons
+"WEAPON KEYS CONFIGURE"
+
+// Sound Menu
+"SOUND CONFIGURE"
+
+// Game Options
+"NONE"
+"GAME OPTIONS CONFIGURE"
+
+// Quit screen
+"SHIP SYSTEMS"
+"QUIT ELITE FORCE: RPG-X?"
+
+	// Multiplayer Server
+"LOCAL"
+"MPLAYER"
+"INTERNET1"
+"FAVOURITES"
+"ALL"
+"FREE FOR ALL"
+"TEAM HOLOMATCH"
+"TOURNAMENT"
+"CAPTURE THE FLAG"
+"EXCESSIVE"
+"FEDERATION"
+"GLADIATOR ARENA"
+"IN2TAGIB"
+"PINBALL"
+"Q32EF"
+"ROLE PLAYING"
+"TEAM ELITE"
+"RPG-X2"
+
+"SERVER NAME"
+"MAP NAME"
+"OPEN PLAYER SPOTS"
+"GAME TYPE"
+"PING TIME"
+
+"FIND SERVER"
+"CREATE SERVER"
+"SPECIFY SERVER"
+
+//	Specify server
+"ADDRESS"
+"PORT"
+
+"FREE FOR ALL"
+"TEAM HOLOMATCH"
+"TOURNAMENT"
+"CAPTURE THE FLAG"
+
+"NO"
+"YES"
+
+// Mods Menu
+"ELITE FORCE : RPG-X"
+"MODS"
+"AVAILABLE MODS"
+
+// Single Player Menu
+"SINGLE PLAYER"		
+"GRADE"
+"ACCESS DENIED"
+"OPPONENTS"
+"PLAYER DATA"
+
+// Change Player Menu
+"PLAYER DATA"
+
+// Single Player Reset Menu
+"RESET PLAYER"
+
+// Setup / Controls / Attack/Look
+"ATTACK/LOOK KEYS CONFIGURE"
+
+// Setup / Controls / Movement
+"MOVEMENT KEYS CONFIGURE"
+
+// Setup / Controls / Mouse/JoyStick
+"MOUSE/JOYSTICK CONFIGURE"
+"MOUSE"
+"JOYSTICK"
+
+// Skill levels
+"CADET"
+"ENSIGN"
+"LIEUTENANT"
+"COMMANDER"
+"CAPTAIN"
+
+// Dedicated server
+"NO"
+"LAN"
+"INTERNET"
+
+// Player type
+"OPEN"
+"HC"
+"CLOSED"
+
+// Player team
+"BLUE"
+"RED"
+
+// Single Player Reset
+"WARNING: This resets the single player standings"
+"to zero. Do this only if you want to start over"
+"from the beginning."
+"Reset Player Standings?"
+
+//Demo screen
+"No Demos Found."
+
+"Please enter your CD Key"
+"The CD Key is valid, thank you."
+"A valid CD key is required.  Please see your documentation."
+
+"Loading"
+"Connecting to"
+"Press Esc to abort"
+	
+"Waiting for new key ... ESCAPE to cancel"
+"Press ENTER or CLICK to change"
+"Press BACKSPACE to clear"
+"Use Arrow Keys or CLICK to change"
+"WARNING: This will reset all"
+"controls to their default values."
+"RPG-X 2"
+"http://ef.rpg-x.net"
+
+"NAME"
+"Effects"
+
+"Enter file name:"
+
+"Host Name"
+"Map"
+"Players"
+"Type"
+"Port"
+"Ping"
+
+"WARNING: This will reset ALL "
+"options to their default values."
+
+"Eliminated :"
+"(TIE)"
+
+
+"WARNING: This resets all of the"
+"single player game variables."
+"Do this only if you want to"
+"start over from the beginning."
+
+"0 = NO LIMIT"
+
+"CREATE SHORTCUT KEY"
+
+"SHOW ROSTER"
+"USE ITEM"
+"RUN/WALK"
+"WALK FORWARD"
+"BACKPEDAL"
+"STEP LEFT"
+"STEP RIGHT"
+"UP/JUMP"
+"DOWN/CROUCH"
+"TURN LEFT"
+"TURN RIGHT"
+"SIDESTEP/TURN"
+"LOOK UP"
+"LOOK DOWN"
+"LASER"
+"CENTRE VIEW"
+"ZOOM VIEW"
+"HOLSTER ITEM" 
+"ITEMS ROW 1"
+"ITEMS ROW 2"
+"ITEMS ROW 3"
+"ITEMS ROW 4"
+"ITEMS ROW 5"
+"WEAPON 6"
+"WEAPON 7"
+"WEAPON 8"
+"WEAPON 9"
+"ATTACK"
+"ALT ATTACK"
+"PREV WEAPON"
+"NEXT WEAPON"
+"PLAYER TALKS"
+
+"EQUIP BELT"
+"DROP ITEM"
+
+"CHAT - LOCAL"
+"CHAT - GLOBAL"
+"CHAT - TARGET"
+"CHAT - ATTACKER"
+"CHAT - CLASS"
+
+"TOGGLE 3RD PERSON"
+"COMMIT ANGLES"
+"REVERT ANGLES"
+"RESET ANGLES"
+
+"ZOOM FORWARD"
+"ZOOM BACKWARD"
+"PAN LEFT"
+"PAN RIGHT"
+"PAN UP"
+"PAN DOWN"
+"ROTATE LEFT"
+"ROTATE RIGHT"
+"PITCH UP"
+"PITCH DOWN"
+
+"MODEL VIEW CONFIGURE"
+
+"WARNING" 
+"THIS WILL RESET ALL OPTIONS"
+"TO THE DEFAULT VALUES."
+"CONTINUE?"
+
+"DEFAULT CONFIGURE"
+
+"OTHER OPTIONS CONFIGURE"
+
+"REPLY - CONFIGURE"
+"OFF"
+"UPPER RIGHT"
+"LOWER RIGHT"
+"LOWER LEFT"
+
+"<= 28.8K"
+"33.6K"
+"56K"
+"ISDN"
+"LAN/CABLE/xDSL"
+
+"NETWORK CONFIGURE"
+
+"SERVER INFO"
+"SERVER OPTIONS"
+
+"HC SELECT"
+"ELITE FORCE - RPG-X : SERVER INFO"
+"FREE"
+
+"ELITE FORCE - RPG-X : ADD HC'S"
+"ADD HC'S"
+
+"HOLOGRAPHIC CHARACTERS"
+"SETTINGS"
+
+"ELITE FORCE - RPG-X : REMOVE HC'S"
+"REMOVE HC'S"
+
+"ELITE FORCE - RPG-X : TEAM ORDERS"
+"TEAM ORDERS"
+
+"I Am the Leader"
+"Defend the Base"
+"Follow Me"
+"Get Enemy Flag"
+"Camp Here"
+"Report"
+"I Relinquish Command"
+"Roam"
+
+"%s defend the base."
+"%s follow me."
+"%s get enemy flag."
+"%s camp here."
+"%s report."
+"%s roam."
+
+"NETWORK"
+"SOUND"
+
+"%d of %d Holomatch Servers."
+"Press SPACE to stop"
+
+"No Response From Master Server." 
+"No Servers Found."
+"Hit REFRESH to update."
+"Scanning For Servers."
+
+"CURRENT MAP"
+"SORT PARAMETERS"
+
+"SERVER INFORMATION"
+
+"HOLOMATCH"
+"WINNERS"
+
+"ENGLISH"
+"DEUTSCH"
+
+"BRIDGE: Control centre of the ship. Conn (Flight Controller) is both helm and navigation, Ops (Operations) allocates resources such as power, sensor and computer time, Tactical deals with weaponry, defence, and internal security."
+"FORWARD PHASERS: phasers are the primary offensive weapon of Voyager. They are a particle/beam projector that can only be used at sub-light speeds but have an effective range of 300,000 kilometres."
+"FORWARD PHOTON TORPEDO LAUNCHERS: Photon torpedoes carry a small amount of matter and antimatter bound together in a magnetic bottle."
+"VENTRAL PHASERS: the phaser strip located along the bottom section of Voyager. Phaser is short for PHASED ENERGY RECTIFICATION."
+"MID-HULL PHASER STRIP: located on both sides of Voyager, these have a firing arc of 180 degrees along either side of the ship."
+"BUSSARD COLLECTORS : Electromagnetic devices designed to collect hydrogen gas for use by ships fusion reactors. Concept initially proposed by physicist Robert W. Bussard in 1960."
+"WARP NACELLES : Large outboard structures which house the warp-drive engines. The nacelles lower when the engines are not in use. The articulated design allows use of warp speed without damaging the fabric of space."
+"RCS (MANOEUVRING) THRUSTERS: propulsion units designed to move Voyager at very low speeds. Useful for navigating the ship in and around small areas such as space docks."
+"VOYAGER : STARSHIP NCC - 74656: 344 meters long, 1.5 million metric tons with a basic hull structure of tritanium/duranium. Built at Earth Station McKinley and launched on Stardate 48038.5."
+
+"SOLO MATCH TYPES"
+"LEVELS %d - %d"
+"SKILL LEVEL"
+"POINT LIMIT"
+"HUMAN"
+"PLAYERS"
+
+"ACCESSING . . ."
+"HOLOGRAPHIC CHARACTERS : %d - %d"
+"SAFE"
+"BEST"
+"MODELS"
+"CD KEY"
+
+"Awaiting challenge"
+"Awaiting authorization"
+"Awaiting connection"
+"Awaiting gamestate..."
+
+"NEDERLANDS"
+"NO MAPS FOUND"
+"ADVANCED SERVER SETTINGS"
+
+"ERROR"
+"Must be between 1 and 60"
+"Must be between 0 and 64"
+"Must be between 150 and 1000"
+"Must be between 0 and 5000"
+"Must be between 0 and 10000"
+"Must be between 0 and 100"
+"Must be between 0 and MAX CLIENTS"
+
+"SYSTEM 1"
+"... ELITE FORCE - RPG-X ..."
+
+"Bat'leth Workout"
+"Captain Proton"
+"A Christmas Carol"
+"Day of Honor"
+"Don Carlo"
+"Flotter"
+"French Resistance"
+"Golf"
+"Grease Monkey"
+"Insurrection Alpha"
+"Klingon Battle"
+"Ktarian Moonrise"
+"Medical Consultant"
+"Orbital Skydiving"
+"Socialization"
+"Torres 2-1-6"
+"Torres Zeta-1"
+"Velocity"
+
+"ELITE FORCE: RPG-X"
+
+"Star Trek: Voyager and related elements are trademarks of Paramount Pictures (C) 2007"
+"This product contains software technology licensed from Id Software, Inc. Id Technology (C) 1999-2007"
+"LEAVING HOLOMATCH"
+
+"OR"
+
+"ELITE FORCE - RPG-X : CONFIRMATION"
+"CONFIRMATION"
+"RESTART HOLOMATCH?"
+"INTERNET2"
+"INTERNET3"
+"INTERNET4"
+"INTERNET5"
+"Default value 5"
+"Default value 8"
+"Default value 250"
+"Default value 800"
+"Default value 500"
+"Default value 1"
+"Default value 0 (OFF)"
+
+"ELITE FORCE: RPG-X"
+"BY UBERGAMES"
+"For more info visit http://www.ubergames.net"
+
+" "
+" "
+" "
+
+"Press 'BACKSPACE' to clear."
+
+"Adjust brightness setting"
+"until symbol in box"
+"can barely be seen"
+
+"ELITE FORCE : INITIAL CONFIGURE"
+"INITIAL CONFIGURE"
+
+"Standard issue sidearm used by Federation away teams."
+"Powerful Federation weapon issued for dangerous missions."
+"Infinity Modulator : Anti-Borg weapon designed by Seven of Nine."
+"Developed by Scavenger culture during captivity by The Forge."
+"Living weapon created by the Etherian race."
+"Allows great accuracy and distance in launching a Federation grenade."
+"Hirogen weapon that utilizes phased tetryons."
+"Advanced Federation weapon capable of immense destruction."
+"Discovered by Hazard Team while on mission in abandoned Dreadnought Gunship."
+
+"WELCOME TO RPG-X . . ."
+"CLOSING DATA LINK . . ."
+
+"Insert the CD"
+"Bad CD Key"
+
+"Must be between 0 and 120"
+"Default value 0"
+
+"Must be between 0 and 30"
+"Default value 5"
+
+"Must be between 0 and 120"
+"Default value 0"
+
+"ROLEPLAY SESSION"
+"ROLE PLAYING"
+
+"BLUE"
+"RED"
+"SCREEN"
+"OF"
+
+"Downloading:"
+"Estimated time left:"
+"Transfer rate:"
+"estimating"
+"(%s of %s copied)"
+"(%s copied)"
+"%s/Sec"
+"ELITE FORCE - RPG-X : ADVANCED SETTINGS"
+"DO YOU WISH TO LEAVE THE CURRENT SESSION?"
+
+"FONTS (DEVELOPER ONLY)"
+"THIS WILL RESET THE MENU - CONTINUE?"
+
+"Brightness settings will not take affect"
+"until the 'ACCEPT' button has been activated."
+
+"Recommended Players"
+"Exit and lose video settings?"
+
+"Unpure client detected. Invalid .PK3 files referenced!"
+"Cannot validate pure client!"
+"You were kicked."
+"timed out"
+"server shut down"
+"disconnected"
+"broken download"
+"Server command overflow"
+"Lost reliable commands"
+"A3D not available."
+
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"No Class"
+"Security"
+"Medical"
+"Alien"
+"Command"
+"Science"
+"Engineer"
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"Borg"
+"USE INVENTORY"
+"USE OBJECT"
+"FLASHLIGHT"
+"PARAMETERS"
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"Must be between 0 and 600"
+"Default value 120"
+"Must be a positive number"
+"Default value 180"
+"ACTION HERO"
+//RPG-X Text
+
+//Credits Menu
+"CREDITS"
+
+//Emotes menu
+"EMOTES"
+
+//Admin menu
+"ADMIN OPTIONS"
+
+"Marine"
+"n00b"
+"Your changes have been applied."
+"CHARACTERS"
+"CHARACTER DATA"
+"CHOOSE AN EMOTE"
+"MODEL OFFSET"
+"EMOTE LIST"
+"EMOTE PARAMETERS"
+
+"PLAYER STATISTICS"
+"CLASS"
+"RANK"
+"AGE"
+"RACE"
+"HEIGHT"
+"WEIGHT"
+"MODEL"
+"ID NUMBER"
+"PLAYER STATUS"
+
+"QUICK CONNECT"
+"This menu is linked with your favorite servers list."
+"Press 'Refresh' to begin."
+
+"MAIN PARAMETERS"
+"ITEM REQUISITION"
+"INJURY REVIVAL"
+"BROADCAST ANNOUNCEMENT"
+"ACTIVATE ENTITY"
+"TRANSPORTER CONTROLS"
+"EFFECTS SPAWN"
+"CHARACTER SPAWN"
+"BIND CONTROLS"
+
+//Admin Scroll Options
+"ME"
+"ALL"
+
+"MINE"
+"ALL"
+
+"Radius"
+"Chunk Type (1-5)"
+"Spark Interval (1000 = 1 sec)"
+"Time Length (1000 = 1 sec)"
+"Drip Type (0,1,2)"
+"Drip Intensity (0.0-1.0)"
+"Shake Intensity"
+
+"BINDINGS:"
+
+//Admin Client Options
+"CLIENT STATISTICAL INFORMATION"
+"CLIENT EJECTION"
+"FORCE CLIENT PARAMETERS"
+
+//Admin Audio
+"PLAY MUSIC TRACK"
+"PLAY SOUND EFFECT"
+
+"Turbolift System"
+"Specify Desired Deck"
+
+"Transporter System"
+"Holodeck System"
+
+"Couldn't locate rpgxid.dat file. Please ensure it is in the RPG-X directory."
+"The rpgxid.dat file is not the right size.  Please re-install it."
+"The rpgxid.dat file was not valid.  This may have been because it was tampered with. Please re-install RPG-X."
+

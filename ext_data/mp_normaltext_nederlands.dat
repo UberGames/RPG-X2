@@ -1,0 +1,685 @@
+"ELITE FORCE - RPG-X : HOOFDMENU"
+"ELITE FORCE - RPG-X : CD SLEUTEL"
+"ELITE FORCE - RPG-X : DEMOS"
+"ELITE FORCE - RPG-X : INSTELLINGEN"
+"ELITE FORCE - RPG-X : ENKEL SPEL"
+"ELITE FORCE - RPG-X : ONLINE SPEL"
+"ELITE FORCE - RPG-X : MODS"
+"ELITE FORCE - RPG-X : INFO"
+"ELITE FORCE - RPG-X : EIND MENU"
+"ELITE FORCE - RPG-X : SPEL MENU"
+"ELITE FORCE - RPG-X : TEAM MENU"
+"ELITE FORCE - RPG-X : BEWEGINGEN MENU"
+"ELITE FORCE - RPG-X : ADMIN MENU"
+"ELITE FORCE - RPG-X : CLIENT MENU"
+"ELITE FORCE - RPG-X : AUDIO MENU"
+
+// Ingame Menu
+"SPEL MENU"
+
+// Team Menu
+"TEAM MENU"
+
+// Demos Screen
+"DEMONSTRATIES"
+"HUIDIG BESTAND"
+"HUIDIGE DEMO'S BESCHIKBAAR"
+
+// Main Menu
+"ALPHA"
+"STELLAR CARTOGRAPHY"
+"THE UNITED FEDERATION OF PLANETS, FOUNDED IN 2161. CAPITAL PLANET:EARTH."
+"SIGNED TRUCE WITH FEDERATION IN 2367. CAPITAL PLANET:CARDASSIA PRIME."
+"CULTURE WHICH RUTHLESSLY EMBRACES CAPITALISM. CAPITAL PLANET:FERENGINAR."
+"AN OFFSHOOT OF THE VULCAN CULTURE. CAPITAL PLANETS:ROMULUS & REMUS."
+"HAD FIRST CONTACT WITH FEDERATION IN 2218. CAPITAL PLANET:QO'NOS."
+"POWERFUL ALLIANCE OF GAMMA QUADRANT PLANETARY GROUPS."
+"NCC-74656, INTREPID CLASS STARSHIP, CURRENTLY RETURNING FROM DELTA QUADRANT."
+"CYBORG RACE, FIRST INTRODUCED TO THE FEDERATION BY ENTITY KNOWN AS 'Q'"
+"ARTIFICIAL 70,000 LIGHT YEAR PASSAGEWAY BETWEEN BAJOR en GAMMA QUADRANT"
+"CENTRE OF THE MILKY WAY GALAXY, RUMOURED LOCATION OF SHA KA REE."
+"ONE QUARTER OF MILKY WAY GALAXY, CONTAINS THE UNITED FEDERATION OF PLANETS."
+"ONE QUARTER OF MILKY WAY GALAXY, CONTAINS THE KLINGON en ROMULAN EMPIRES."
+"ONE QUARTER OF MILKY WAY GALAXY, UNEXPLORED, BELIEVED HOME OF THE BORG."
+"ONE QUARTER OF MILKY WAY GALAXY, CURRENTLY EXPLORED BY USE OF BAJORAN WORMHOLE."
+
+// Video Setup Menu
+"VIDEO CONFIGURATIE"
+"HOGE KWALITEIT"
+"NORMAAL"
+"SNEL"
+"SNELSTE"
+"ANDERS"
+"STANDAARD"
+"VOODOO"
+"NORMAAL (4:3)"
+"BREEDBEELD (16:9)"
+"BREEDBEELD (16:10)"
+"UIT"
+"AAN"
+"320X240"
+"400X300"
+"512X384"
+"640X480"
+"800X600"
+"960X720"
+"1024x768"
+"1152x864"
+"1280x1024"
+"1600x1200"
+"2048x1536"
+"856x480 16:9"
+"STANDAARD"
+"16-BIT"
+"32-BIT"
+"LIGHTMAP"
+"VERTEX"
+"LAAG"
+"NORMAAL"
+"HOOG"
+"ZEER HOOG"
+"BILINEAR"
+"TRILINEAR"
+
+// Player setup
+"ELITE FORCE - RPG-X : VERANDER SPELER"
+"SPELER OPTIES"
+"GEEN"
+"95"
+"90"
+"85"
+"80"
+"75"
+"70"
+"65"
+"60"
+"55"
+"50"
+"45"
+"40"
+"35"
+"30"
+"25"
+"20"
+"15"
+"10"
+"5"
+
+// Video Driver Menu
+"VIDEO BESTURING"
+"VIDEO BESTURING"
+"MERK:"
+"VERSIE:"
+"RENDERER:"
+"PIXELFORMAAT:"
+"EXTENSIES:"
+
+// Setup / Controls / Weapons
+"WAPEN TOETSEN"
+
+// Sound Menu
+"GELUIDS OPTIES"
+
+// Game Options
+"GEEN"
+"SPEL OPTIES"
+
+// Quit screen
+"SCHILD SYSTEEM"
+"RPG-X VERLATEN?"
+
+	// Multiplayer Server
+"LOCAAL"
+"MULTISPELER"
+"INTERNET1"
+"FAVORIETEN"
+"ALLE"
+"FREE FOR ALL"
+"TEAM HOLOMATCH"
+"TOURNAMENT"
+"CAPTURE THE FLAG"
+"EXCESSIVE"
+"FEDERATION"
+"GLADIATOR ARENA"
+"IN2TAGIB"
+"PINBALL"
+"Q32EF"
+"ROLLENSPEL"
+"TEAM ELITE"
+"RPG-X"
+
+"SERVER NAAM"
+"MAP NAAM"
+"LEGE PLEKKEN"
+"SPELTYPE"
+"PING"
+
+"ZOEK SERVER"
+"MAAK SERVER"
+"SPECIFICEER SERVER"
+
+//	Specify server
+"ADRES"
+"POORT"
+
+"FREE FOR ALL"
+"TEAM HOLOMATCH"
+"TOURNAMENT"
+"CAPTURE THE FLAG"
+
+"NEE"
+"JA"
+
+// Mods Menu
+"ELITE FORCE : RPG-X"
+"MODS"
+"BESCHIKBARE MODS"
+
+// Single Player Menu
+"SINGLEPLAYER"		
+"NIVEAU"
+"TOEGANG GEWEIGERD"
+"TEGENSTANDERS"
+"SPELER OPTIES"
+
+// Change Player Menu
+"SPELER OPTIES"
+
+// Single Player Reset Menu
+"RESET SPELER"
+
+// Setup / Controls / Attack/Look
+"AANVAL/KIJK TOETSEN"
+
+// Setup / Controls / Movement
+"BEWEGING TOETSEN"
+
+// Setup / Controls / Mouse/JoyStick
+"MUIS/JOYSTICK OPTIES"
+"MUIS"
+"JOYSTICK"
+
+// Skill levels
+"KADET"
+"ENSIGN"
+"LUITENANT"
+"COMMANDANT"
+"KAPITEIN"
+
+// Dedicated server
+"JA"
+"LAN"
+"INTERNET"
+
+// Player type
+"OPEN"
+"HC"
+"GESLOTEN"
+
+// Player team
+"BLUE"
+"RED"
+
+// Single Player Reset
+"WAARSCHUWING:"
+"Dit verwijderd alle instellingen, Doe dit"
+"alleen als je helemaal opnieuw wil beginnen."
+"Configuratie resetten?"
+
+//Demo screen
+"Geen Demos Gevonden."
+
+"Type je CD Sleutel in."
+"Deze CD Sleutel klopt, dank u."
+"Een echte CD Sleutel is nodig."
+
+"Laden"
+"Aan het verbinden naar"
+"Druk op ESC om te annuleren"
+	
+"Wachten voor nieuwe sleutel ... ESC=stoppen"
+"Druk op ENTER of KLIK om te veranderen"
+"Druk op BACKSPACE om leeg te maken"
+"Gebruik pijltjes of KLIK om te veranderen."
+"WAARSCHUWING:"
+"Dit reset alles naar de standaard waarden."
+"RPG-X 2"
+"http://www.rpg-x.net"
+
+"NAAM"
+"Effecten"
+
+"Voer in bestandsnaam:"
+
+"Server Naam"
+"Map"
+"Spelers"
+"Type"
+"Poort"
+"Ping"
+
+"WAARSCHUWING:"
+"Dit reset alles naar de standaard waarden."
+
+"Geelimineerd :"
+"(TIE)"
+
+
+"WAARSCHUWING:"
+"Dit verwijdert alle instellingen."
+"Doe dit alleen als je helemaal"
+"opnieuw wil beginnen."
+
+"0 = GEEN LIMIET"
+
+"MAAK SNELTOETS"
+
+"BEKIJK ROSTER"
+"GEBRUIK ITEM"
+"LOOP/REN"
+"LOOP VOORUIT"
+"STAP ACHTERUIT"
+"STAP LINKS"
+"STAP RECHTS"
+"SPRINGEN"
+"KRUIPEN"
+"DRAAI NAAR LINKS"
+"DRAAI NAAR RECHTS"
+"STAP OPZIJ"
+"KIJK NAAR BOVEN"
+"KIJK NAAR BENEDEN"
+"LASER"
+"CENTREER"
+"ZOOM IN"
+"VERBERG ITEM" 
+"ITEM RIJ 1"
+"ITEM RIJ 2"
+"ITEM RIJ 3"
+"ITEM RIJ 4"
+"ITEM RIJ 5"
+"WAPEN 6"
+"WAPEN 7"
+"WAPEN 8"
+"WAPEN 9"
+"SCHIETEN"
+"ALT SCHIETN"
+"VORIG WAPEN"
+"VOLGEND WAPEN"
+"PRATEN"
+
+"UITRUSTEN"
+"GOOI ITEM"
+
+"CHAT - LOCAAL"
+"CHAT - GLOBAAL"
+"CHAT - DOEL"
+"CHAT - AANVALLER"
+"CHAT - KLASSE"
+
+"3e/1e PERSOON"
+"HOEKEN HOUDEN"
+"KEER HOEKEN TERUG"
+"HOEKEN RESETTEN"
+
+"ZOOM IN"
+"ZOOM UIT"
+"SCHUIF LINKS"
+"SCHUIF NAAR RECHTS"
+"SCHUIF NAAR BOVEN"
+"SCHUIF NAAR BENEDEN"
+"DRAAI NAAR LINKS"
+"DRAAI NAAR RECHTS"
+"DRAAI NAAR BOVEN"
+"DRAAI NAAR BENEDEN"
+
+"SPELER BEZICHTIGING"
+
+"WAARSCHUWING: Dit verwijderd"
+"alle instellingen. Doe dit"
+"alleen als je helemaal opnieuw"
+"wil beginnen."
+
+"STANDAARD OPTIES"
+
+"ANDERE OPTIES"
+
+"BEANTWOORDEN OPTIES"
+"UIT"
+"RECHTSBOVEN"
+"RECHTSONDER"
+"LINKSONDER"
+
+"<= 28.8K"
+"33.6K"
+"56K"
+"ISDN"
+"LAN/KABEL/xDSL"
+
+"NETWERK OPTIES"
+
+"SERVER INFO"
+"SERVER OPTIES"
+
+"HC SELECT"
+"ELITE FORCE - RPG-X : SERVER INFO"
+"VRIJ"
+
+"ELITE FORCE - RPG-X : VOEG HC'S TOE"
+"HC'S TOEVOEGEN"
+
+"HOLOGRAFISCHE KARAKTERS"
+"OPTIES"
+
+"ELITE FORCE - RPG-X : VERWIJDER HC'S"
+"VERWIJDER HC'S"
+
+"ELITE FORCE - RPG-X : TEAM BEVELEN"
+"TEAM BEVELEN"
+
+"Ik ben de leider."
+"Verdedig de basis."
+"Volg mij."
+"Pak de vlag van de vijand!"
+"Kampeer hier."
+"Status?"
+"Ik geef de command op."
+"Doe wat je wil."
+
+"%s verdedig de basis."
+"%s volg mij."
+"%s pak de vijandelijke vlag."
+"%s kampeer hier."
+"%s wat is je status."
+"%s doe wat je wilt."
+
+"NETWERK"
+"GELUID"
+
+"%d van %d Holomatch Servers."
+"Druk op SPATIE om te stoppen"
+
+"Geen antwoord van de hoofdserver." 
+"Geen servers gevonden."
+"Druk op UPDATE om te vernieuwen."
+"Scannen naar servers..."
+
+"HUIDIGE MAP"
+"SORTEER PARAMETERS"
+
+"SERVER INFORMATIE"
+
+"HOLOMATCH"
+"WINNERS"
+
+"ENGLISH"
+"DEUTSCH"
+
+"BRIDGE: Control centre of the ship. Conn (Flight Controller) is both helm en navigation, Ops (Operations) allocates resources such as power, sensor en computer time, Tactical deals with weaponry, defence, en internal security."
+"FORWARD PHASERS: phasers are the primary offensive WAPEN of Voyager. They are a particle/beam projector that can only be used at sub-light speeds but have an effective range of 300,000 kilometres."
+"FORWARD PHOTON TORPEDO LAUNCHERS: Photon torpedoes carry a small amount of matter en antimatter bound together in a magnetic bottle. Torpedoes are launched at warp speed making them ideal for use during faster than light travel."
+"VENTRAL PHASERS: the phaser strip located along the bottom section of Voyager. Phaser is short for PHASED ENERGY RECTIFICATION."
+"MID-HULL PHASER STRIP: located on both sides of Voyager, these have a firing arc of 180 degrees along either side of the ship."
+"BUSSARD COLLECTORS : Electromagnetic devices designed to collect hydrogen gas for use by ships fusion reactors. Concept initially proposed by physicist Robert W. Bussard in 1960."
+"WARP NACELLES : Large outboard structures which house the warp-drive engines. The nacelles lower when the engines are not in use. The articulated design allows use of warp speed without damaging the fabric of space."
+"RCS (MANOEUVRING) THRUSTERS: propulsion units designed to move Voyager at very low speeds. Useful for navigating the ship in en around small areas such as space docks."
+"VOYAGER : STARSHIP NCC - 74656: 344 meters long, 1.5 million metric tons with a basic hull structure of tritanium/duranium. Built at Earth Station McKinley en launched on Stardate 48038.5. Commanded by Captain Kathryn Janeway."
+
+"SOLO MATCH TYPES"
+"LEVELS %d - %d"
+"MOEILIJKHEID"
+"PUNT LIMIET"
+"MENS"
+"SPELERS"
+
+"VERBINEN..."
+"HOLOGRAFISCHE KARAKTERS : %d - %d"
+"VEILIG"
+"BESTE"
+"MODELLEN"
+"CD SLEUTEL"
+
+"Wachten op toelating..."
+"Wachten op machtiging..."
+"Wachten op connectie..."
+"Wachten op status..."
+
+"NEDERLANDS"
+"GEEN MAPS GEVONDEN"
+"GEAVANCEERDE INSTELLINGEN"
+
+"ERROR"
+"Moet tussen 1 en 60 zijn"
+"Moet tussen 0 en 64 zijn"
+"Moet tussen 150 en 1000 zijn"
+"Moet tussen 0 en 5000 zijn"
+"Moet tussen 0 en 10000 zijn"
+"Moet tussen 0 en 100 zijn"
+"Moet tussen 0 en MAX CLIENTS zijn"
+
+"SYSTEEM 1"
+"... ELITE FORCE - RPG-X ..."
+
+"Bat'leth Workout"
+"Captain Proton"
+"A Christmas Carol"
+"Day of Honor"
+"Don Carlo"
+"Flotter"
+"French Resistance"
+"Golf"
+"Grease Monkey"
+"Insurrection Alpha"
+"Klingon Battle"
+"Ktarian Moonrise"
+"Medical Consultant"
+"Orbital Skydiving"
+"Socialization"
+"Torres 2-1-6"
+"Torres Zeta-1"
+"Velocity"
+
+"ELITE FORCE: RPG-X"
+
+"Star Trek: Voyager en related elements are trademarks of Paramount Pictures (C) 2007"
+"This product contains software technology licensed from Id Software, Inc. Id Technology (C) 1999-2007"
+"HOLOMATCH SLUITEN..."
+
+"OF"
+
+"ELITE FORCE - RPG-X : BEVESTIGING"
+"BEVESTIGING"
+"HERSTART HOLOMATCH?"
+"INTERNET2"
+"INTERNET3"
+"INTERNET4"
+"INTERNET5"
+"Standaard waarde 5"
+"Standaard waarde 8"
+"Standaard waarde 250"
+"Standaard waarde 800"
+"Standaard waarde 500"
+"Standaard waarde 1"
+"Standaard waarde 0 (UIT)"
+
+"ELITE FORCE: RPG-X"
+"DOOR UBERGAMES"
+"Voor meer info go naar http://www.ubergames.net"
+
+" "
+" "
+" "
+
+"Druk op BACKSPACE om leeg te maken"
+
+"Verander de helderheid todat"
+"je het symbool nauwelijks"
+"nauwelijks kan zien"
+
+"ELITE FORCE : BEGIN OPTIES"
+"BEGIN OPTIES"
+
+"Standard issue sidearm used by Federation away teams."
+"Powerful Federation WAPEN issued for dangerous missions."
+"Infinity Modulator : Anti-Borg WAPEN designed by Seven of Nine."
+"Developed by Scavenger culture during captivity by The Forge."
+"Living WAPEN created by the Etherian race."
+"Allows great accuracy en distance in launching a Federation grenade."
+"Hirogen WAPEN that utilizes phased tetryons."
+"Advanced Federation WAPEN capable of immense destruction."
+"Discovered by Hazard Team while on mission in abandoned Dreadnought Gunship."
+
+"WELKOM IN RPG-X . . ."
+"VERBREEK DATA LINK . . ."
+
+"Doe de CD erin"
+"Verkeerde CD sleutel"
+
+"Moet tussen  0 en 120 zijn"
+"Standaard waarde 0"
+
+"Moet tussen  0 en 30 zijn"
+"Standaard waarde 5"
+
+"Moet tussen  0 en 120 zijn"
+"Standaard waarde 0"
+
+"ROLLENSPEL SESSIE"
+"ROLLENSPEL"
+
+"BLAUW"
+"ROOD"
+"SCHERM"
+"OF"
+
+"Downloaden:"
+"Ingeschatte tijd LINKS:"
+"Snelheid:"
+"berekenen"
+"(%s van %s gekopieerd)"
+"(%s gekopieerd)"
+"%s/Sec"
+"ELITE FORCE - RPG-X : GEAVANCEERDE OPTIES"
+"WIL JE DEZE SESSIE ECHT VERLATEN?"
+
+"FONTS (VOOR PROGRAMMEURS)"
+"DIT ZAL HET MENU RESETTEN - DOORGAAN?"
+
+"Helderheid opties worden pas toegepast als"
+"je op de 'ACCEPTEER' knop hebt gedrukt"
+
+"Aanbevolen Spelers"
+"Sluit en verlies video opties?"
+
+"Unpure client detected. Invalid .PK3 files referenced!"
+"Cannot validate pure client!"
+"Je was gekicked"
+"uitgepinged"
+"server afgesloten"
+"verbinding verbroken"
+"kapotte download"
+"Server bevel overvloed"
+"Belijkrijke bevelen verloren"
+"A3D niet beschikbaar"
+
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"Geen Klasse"
+"Beveiliging"
+"Medisch"
+"Buitenaards"
+"Leiding"
+"Wetenschap"
+"Technicus"
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"Borg"
+"GEBRUIK UITRUSTING"
+"GEBRUIK OBJECT"
+"ZAKLAMP"
+"PARAMETERS"
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"Moet tussen  0 en 600 zijn"
+"Standaard waarde 120"
+"Moet positief nummer zijn"
+"Standaard waarde 180"
+"ACTIE HELD"
+//RPG-X Text
+
+//Credits Menu
+"INFO"
+
+//Emotes menu
+"BEWEGINGEN"
+
+//Admin menu
+"ADMIN OPTIES"
+
+"Marine"
+"n00b"
+"Je veranderingen zijn toegepast."
+"KARAKTERS"
+"KARAKTER DATA"
+"KIES BEWEGING"
+"VERSCHUIVING"
+"BEWEGING LIJST"
+"BEWEGING PARAMETERS"
+
+"PLAYER STATISTIEKEN"
+"KLASSE"
+"RANG"
+"LEEFTIJD"
+"VOLK"
+"HOOGTE"
+"GEWICHT"
+"MODEL"
+"ID NR"
+"SPELER STATUS"
+
+"METEEN VERBINDEN"
+"Dit scherm is gelinkt met je favoriete servers menu."
+"Druk op 'Herladen' op te beginnen."
+
+"HOOFD PARAMETERS"
+"ITEM OPVORDERING"
+"LATEN BIJKOMEN"
+"MEDEDELING UITZENDEN"
+"ACTIVEER ENTITY"
+"TRANSPORTER PANEEL"
+"EFFECTEN SPROEIEN"
+"NPC MAKEN"
+"BIND"
+
+//Admin Scroll Options
+"MIJ"
+"IEDEREEN"
+
+"MIJN"
+"IEDEREEN"
+
+"Straal"
+"Brok Type (1-5)"
+"Vonk Interval (0.0-1.0)"
+"Tijdsduur (1000 = 1 sec)"
+"Druppel Type (0,1,2)"
+"Druppel Intensiteit (0.0-1.0)"
+"Schok intensiteit"
+
+"BINDINGEN:"
+
+//Admin Client Options
+"CLIENT STATISCHE INFORMATIE"
+"CLIENT EJECTIE"
+"FORCEER CLIENT PARAMETERS"
+
+//Admin Audio
+"SPEEL MUZIEK"
+"SPEEL GELUIDSEFFECT"
+
+"Turbolift Systeem"
+"Specificeer Dek"
+
+"Transporter Systeem"
+"Holodeck Systeem"
+
+"Kon rpgxid.dat bestand niet vinden. Check of het in de RPG-X map is."
+"Het rpgxid.dat bestand heeft niet de juiste grootte. Herinstalleer het."
+"Het rpgxid.dat bestand is niet geldig. Misschien omdat er mee geklooid is. Herinstalleer RPG-X"
+

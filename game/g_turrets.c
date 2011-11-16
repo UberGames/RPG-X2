@@ -807,21 +807,21 @@ void SP_misc_turret (gentity_t *base)
 	}
 }
 
-/*
-void laser_arm_fire (gentity_t *ent)
+
+/*void laser_arm_fire (gentity_t *ent)
 {
 	vec3_t	start, end, fwd, rt, up;
 	trace_t	trace;
 
-	if ( ent->last_move_time < level.time && ent->alt_fire )
+	if ( ent->health < level.time && ent->booleanstate )
 	{
 		// If I'm firing the laser and it's time to quit....then quit!
-		ent->alt_fire = qfalse;
+		ent->booleanstate = qfalse;
 //		ent->e_ThinkFunc = thinkF_NULL;
 //		return;
 	}
 
-	ent->nextthink = level.time + FRAMETIME;
+	ent->nextthink = ent->health = level.time + FRAMETIME;
 
 	// If a fool gets in the laser path, fry 'em
 	AngleVectors( ent->r.currentAngles, fwd, rt, up );
@@ -834,19 +834,19 @@ void laser_arm_fire (gentity_t *ent)
 	trap_Trace( &trace, start, NULL, NULL, end, -1, MASK_SHOT );//ignore
 	
 	// Only deal damage when in alt-fire mode
-	if ( trace.fraction < 1.0 && ent->alt_fire )
+	if ( trace.fraction < 1.0 && ent->booleanstate )
 	{
 		if ( trace.entityNum < ENTITYNUM_WORLD )
 		{
 			gentity_t *hapless_victim = &g_entities[trace.entityNum];
 			if ( hapless_victim && hapless_victim->takedamage && ent->damage )
 			{
-				G_Damage( hapless_victim, ent, ent->nextTrain->activator, fwd, trace.endpos, ent->damage, DAMAGE_IGNORE_TEAM, MOD_SURGICAL_LASER );
+				G_Damage( hapless_victim, ent, ent->nextTrain->activator, fwd, trace.endpos, ent->damage, DAMAGE_ALL_TEAMS, 1 );
 			}
 		}
 	}
 	
-	if ( ent->alt_fire )
+	if ( ent->booleanstate )
 	{
 		CG_FireLaser( start, trace.endpos, trace.plane.normal, ent->nextTrain->startRGBA, qfalse );
 	}
@@ -870,7 +870,7 @@ void laser_arm_use (gentity_t *self, gentity_t *other, gentity_t *activator)
 //		self->lastEnemy->lastEnemy->e_ThinkFunc = thinkF_laser_arm_fire;
 //		self->lastEnemy->lastEnemy->nextthink = level.time + FRAMETIME;
 		//For 3 seconds
-		self->lastEnemy->lastEnemy->alt_fire = qtrue; // Let 'er rip!
+		self->lastEnemy->lastEnemy->booleanstate = qtrue; // Let 'er rip!
 		self->lastEnemy->lastEnemy->last_move_time = level.time + self->lastEnemy->lastEnemy->wait;
 		G_Sound(self->lastEnemy->lastEnemy, G_SoundIndex("sound/enemies/l_arm/fire.wav"));
 		break;
@@ -919,8 +919,8 @@ void laser_arm_use (gentity_t *self, gentity_t *other, gentity_t *activator)
 		G_Sound( self->lastEnemy->lastEnemy, G_SoundIndex( "sound/enemies/l_arm/move.wav" ) );
 		break;
 	}
-}
-*/
+}*/
+
 /*QUAKED misc_laser_arm (1 0 0) (-8 -8 -8) (8 8 8) 
 
 What it does when used depends on it's "count" (can be set by a script)
@@ -940,8 +940,8 @@ What it does when used depends on it's "count" (can be set by a script)
 
   "startRGBA" - laser color, Red Green Blue Alpha, range 0 to 1 (default  1.0 0.85 0.15 0.75 = Yellow-Orange)
 */
-/*
-void laser_arm_start (gentity_t *base)
+
+/*void laser_arm_start (gentity_t *base)
 {
 	vec3_t	armAngles;
 	vec3_t	headAngles;
@@ -1059,12 +1059,12 @@ void laser_arm_start (gentity_t *base)
 	// The head should always think, since it will be either firing a damage laser or just a target laser
 	head->e_ThinkFunc = thinkF_laser_arm_fire;
 	head->nextthink = level.time + FRAMETIME;
-	head->alt_fire = qfalse; // Don't do damage until told to
+	head->booleanstate = qfalse; // Don't do damage until told to
 }
 
 void SP_laser_arm (gentity_t *base)
 {
-	base->e_ThinkFunc = thinkF_laser_arm_start;
+	base->think = laser_arm_start;
 	base->nextthink = level.time + FRAMETIME;
 }
 */

@@ -1,0 +1,684 @@
+
+"ELITE FORCE - RPG-X : HAUPTMENÜ"
+"ELITE FORCE - RPG-X : CD KEY"
+"ELITE FORCE - RPG-X : DEMOS"
+"ELITE FORCE - RPG-X : KONFIGURIEREN"
+"ELITE FORCE - RPG-X : EINZELSPIELER"
+"ELITE FORCE - RPG-X : MEHRSPIELER"
+"ELITE FORCE - RPG-X : MODS"
+"ELITE FORCE - RPG-X : CREDITS"
+"ELITE FORCE - RPG-X : BEENDEN"
+"ELITE FORCE - RPG-X : SPIELMENÜ"
+"ELITE FORCE - RPG-X : TEAMMENÜ"
+"ELITE FORCE - RPG-X : EMOTESMENÜ"
+"ELITE FORCE - RPG-X : ADMINMENÜ"
+"ELITE FORCE - RPG-X : CLIENTMENÜ"
+"ELITE FORCE - RPG-X : AUDIOMENÜ"
+
+// Ingame Menu
+"SPIELMENÜ"
+
+// Team Menu
+"TEAMMENÜ"
+
+// Demos Screen
+"DEMOS"
+"AKTUELLE DATEI"
+"VERFÜGBARE DEMOS"
+
+// Main Menu
+"ALPHA"
+"STELLARE KARTOGRAPHIE"
+"VEREINTE FÖDERATION DER PLANETEN, GEGRÜNDET 2161. HAUPTPLANET: ERDE."
+"WAFFENSTILLSTAND MIT DER FÖDERATION 2367. HAUPTPLANET: CARDASSIA."
+"KULTUR DES SKRUPELLOSEN KAPITALISMUS. HAUPTPLANET: FERENGINAR."
+"SEITENLINIE DER VULKANISCHEN KULTUR. HAUPTPLANETEN: ROMULUS & REMUS."
+"ERSTER KONTAKT MIT DER FÖDERATION 2218. HAUPTPLANET: QO'NOS."
+"MÄCHTIGE ALLIANZ VON PLANETARISCHEN GRUPPEN IM GAMMA-QUADRANTEN."
+"NCC-74656, INTREPID-KLASSE, AUF DEM RÜCKWEG AUS DEM DELTA-QUADRANTEN."
+"RASSE DER CYBORG, ERSTKONTAKT MIT DER FÖDERATION DURCH EIN WESEN NAMENS 'Q'."
+"KÜNSTLICHER, 70.000 LICHTJAHRE LANGER DURCHGANG VON BAJOR ZUM GAMMA-QUADRANTEN."
+"ZENTRUM DER MILCHSTRASSE, ANGEBLICHER ORT VON SHA KA REE."
+"EIN VIERTEL DER MILCHSTRASSE, ENTHÄLT DIE VEREINIGTE FÖDERATION DER PLANETEN."
+"EIN VIERTEL DER MILCHSTRASSE MIT DEN KLINGONISCHEN UND ROMULANISCHEN IMPERIEN."
+"EIN VIERTEL DER MILCHSTRASSE, UNERFORSCHT, VERMUTLICH HEIMAT DER BORG."
+"EIN VIERTEL DER MILCHSTRASSE, MOMENTAN ERFORSCHT DURCH BAJORANISCHES WURMLOCH."
+
+// Video Setup Menu
+"GRAFIKSETUP"
+"HOHE QUALITÄT"
+"NORMAL"
+"SCHNELL"
+"SCHNELLSTE"
+"EIGEN"
+"STANDARD"
+"VOODOO"
+"NORMAL (4:3)"
+"BILDFORMAT (16:9)"
+"BILDFORMAT (16:10)"
+"AUS"
+"EIN"
+"320X240"
+"400X300"
+"512X384"
+"640X480"
+"800X600"
+"960X720"
+"1024x768"
+"1152x864"
+"1280x1024"
+"1600x1200"
+"2048x1536"
+"856x480 Widescreen"
+"STANDARD"
+"16-BIT"
+"32-BIT"
+"LIGHTMAP"
+"VERTEX"
+"NIEDRIG"
+"MITTEL"
+"HOCH"
+"SEHR HOCH"
+"BILINEAR"
+"TRILINEAR"
+
+// Player setup
+"ELITE FORCE - RPG-X: SPIELERWECHSEL"
+"SPIELERSETUP"
+"KEIN"
+"95"
+"90"
+"85"
+"80"
+"75"
+"70"
+"65"
+"60"
+"55"
+"50"
+"45"
+"40"
+"35"
+"30"
+"25"
+"20"
+"15"
+"10"
+"5"
+
+// Video Driver Menu
+"GRAFIKTREIBER"
+"GRAFIKTREIBER"
+"HERSTELLER:"
+"VERSION:"
+"RENDERER:"
+"PIXELFORMAT:"
+"ERWEITERUNGEN:"
+
+// Setup / Controls / Weapons
+"WAFFENTASTEN-SETUP"
+
+// Sound Menu
+"SOUNDSETUP"
+
+// Game Options
+"KEINES"
+"SPIELOPTIONEN-SETUP"
+
+// Quit screen
+"SCHIFFSSYSTEME"
+"RPG-X BEENDEN?"
+
+	// Multiplayer Server
+"LOKAL"
+"MPLAYER"
+"INTERNET1"
+"FAVORITEN"
+"ALLE"
+"FREI FÜR ALLE"
+"TEAM-HOLOMATCH"
+"TURNIER"
+"CAPTURE THE FLAG"
+"EXCESSIVE"
+"FEDERATION"
+"GLADIATOR ARENA"
+"IN2TAGIB"
+"PINBALL"
+"Q32EF"
+"RPG"
+"TEAM ELITE"
+"RPG-X2"
+
+"SERVERNAME"
+"KARTENNAME"
+"OFFENE SPIELERPLÄTZE"
+"SPIELTYP"
+"PINGZEIT"
+
+"SERVER FINDEN"
+"SERVER ERSTELLEN"
+"SERVER SPEZIFIZIEREN"
+
+//	Specify server
+"ADRESSE"
+"PORT"
+
+"FREI FÜR ALLE"
+"TEAM-HOLOMATCH"
+"TURNIER"
+"CAPTURE THE FLAG"
+
+"NEIN"
+"JA"
+
+// Mods Menu
+"ELITE FORCE: RPG-X"
+"MODIFIKATIONEN"
+"VERFÜGBARE MODIFIKATIONEN"
+
+// Single Player Menu
+"EINZELSPIELER"		
+"RANG"
+"ZUGRIFF VERWEIGERT"
+"GEGNER"
+"SPIELERDATEN"
+
+// Change Player Menu
+"SPIELERDATEN"
+
+// Single Player Reset Menu
+"SPIELER ZURÜCKSETZEN"
+
+// Setup / Controls / Attack/Look
+"ANGR.-/UMSEHTASTEN-SETUP"
+
+// Setup / Controls / Movement
+"BEWEGUNGSTASTEN-SETUP"
+
+// Setup / Controls / Mouse/JoyStick
+"MAUS-/JOYSTICK-SETUP"
+"MAUS"
+"JOYSTICK"
+
+// Skill levels
+"KADETT"
+"FÄHNRICH"
+"LIEUTENANT"
+"COMMANDER"
+"CAPTAIN"
+
+// Dedicated server
+"NEIN"
+"LAN"
+"INTERNET"
+
+// Player type
+"OFFEN"
+"HC"
+"GESCHLOSSEN"
+
+// Player team
+"BLAU"
+"ROT"
+
+// Single Player Reset
+"WARNUNG: Hier werden die Einzelspieler-Einstellungen"
+"auf Null zurückgesetzt. Tun Sie dies nur, wenn"
+"Sie wieder von vorn beginnen möchten."
+"Spielereinstellungen zurücksetzen?"
+
+//Demo screen
+"Keine Demos gefunden."
+
+"Bitte geben Sie Ihren CD-Key ein"
+"Der CD-Key ist gültig, danke."
+"Ein gültiger CD-Key wird benötigt. Nähere Hinweise im Handbuch."
+
+"Laden"
+"Verbinden mit"
+"Esc zum Abbruch drücken"
+	
+"Warten auf neuen Key ... Esc zum Abbruch"
+"EINGABETASTE oder KLICKEN zum Ändern"
+"RÜCKTASTE zum Löschen"
+"Pfeiltasten oder KLICKEN zum Ändern"
+"WARNUNG: Dies setzt ALLE Steuerungen"
+"auf ihren Standard zurück."
+"RPG-X 2"
+"http://ef.rpg-x.net"
+
+"Name"
+"Effekte"
+
+"Dateinamen eingeben:"
+
+"Hostname"
+"Karte"
+"Spieler"
+"Typ"
+"Port"
+"Ping"
+
+"WARNUNG: Dies setzt ALLE Optionen"
+"auf ihren Standard zurück."
+
+"Eliminiert:"
+"(UNENTSCHIEDEN)"
+
+
+"WARNUNG: Dies setzt alle"
+"Einzelspielervariablen zurück."
+"Tun Sie dies nur, wenn Sie"
+"wieder von vorn beginnen möchten."
+
+"0 = NO LIMIT"
+
+"CREATE SHORTCUT KEY"
+
+"PUNKTE ZEIGEN"
+"BENUTZEN"
+"LAUFEN/GEHEN"
+"VORWÄRTS"
+"ZURÜCK"
+"SCHRITT LINKS"
+"SCHRITT RECHTS"
+"AUF/SPRUNG"
+"AB/DUCKEN"
+"LINKS DREHEN"
+"RECHTS DREHEN"
+"SEITE/DREHEN"
+"BLICK AUF"
+"BLICK AB"
+"BLICK MAUS"
+"SICHT ZENTRIEREN"
+"SICHT ZOOMEN"
+"WAFFE WEGSTECKEN"
+"WAFFE 1"
+"WAFFE 2"
+"WAFFE 3"
+"WAFFE 4"
+"WAFFE 5"
+"WAFFE 6"
+"WAFFE 7"
+"WAFFE 8"
+"WAFFE 9"
+"ANGRIFF"
+"ALT. ANGRIFF"
+"LETZTE WAFFE"
+"NÄCHSTE WAFFE"
+"PLAYER TALKS"
+"EQUIP BELT"
+"DROP ITEM"
+"CHAT - LOKAL"
+"CHAT - GLOBAL"
+"CHAT - ZEIL"
+"CHAT - ANGREIFER"
+"CHAT - KLASSE"
+
+"3. PERSON"
+"WINKEL FESTLEGEN"
+"WINKEL UMKEHREN"
+"WINKEL ZURÜCKSETZEN"
+
+"ZOOM VORWÄRTS"
+"ZOOM RÜCKWÄRTS"
+"LINKS SCHWENKEN"
+"RECHTS SCHWENKEN"
+"HOCH SCHWENKEN"
+"RUNTER SCHWENKEN"
+"RECHTS DREHEN"
+"LINKS DREHEN"
+"NEIGUNG HOCH"
+"NEIGUNG RUNTER"
+
+"MODEL SICHT EINSTELLUNGEN"
+
+"WARNUNG" 
+"DIES STELLT ALLE OPTIONEN"
+"AUF DEN STANDARD ZURÜCK."
+"FORTFAHREN?"
+
+"STANDARDSETUP"
+
+"OPTIONSSETUP"
+
+"ANTWORTSETUP"
+"AUS"
+"OBEN RECHTS"
+"UNTEN RECHTS"
+"UNTEN LINKS"
+
+"<= 28.8K"
+"33.6K"
+"56K"
+"ISDN"
+"LAN/KABEL/xDSL"
+
+"NETZWERK SETUP"
+
+"SERVERINFO"
+"SERVEROPTIONEN"
+
+"HC AUSWÄHLEN"
+"ELITE FORCE HOLOMATCH: SERVERINFO"
+"FREI"
+
+"ELITE FORCE - RPG-X : HCS HINZUFÜGEN"
+"HCS HINZUFÜGEN"
+
+"HOLOGRAFISCHE CHARAKTERE"
+"EINSTELLUNGEN"
+
+"ELITE FORCE - RPG-X : HCS ENTFERNEN"
+"HCS ENTFERNEN"
+
+"ELITE FORCE - RPG-X : TEAM-BEFEHLE"
+"TEAM-BEFEHLE"
+
+"Ich bin der Anführer"
+"Verteidigen Sie die Basis"
+"Folgen Sie mir"
+"Holen Sie die feindliche Flagge"
+"Lagern Sie hier"
+"Bericht"
+"Ich verzichte auf das Kommando"
+"Umherstreifen"
+
+"%s, verteidigen Sie die Basis."
+"%s, folgen Sie mir."
+"%s, holen Sie die feindliche Flagge."
+"%s, lagern Sie hier."
+"%s, Bericht."
+"%s, umherstreifen."
+
+"NETZWERK"
+"SOUND"
+
+"%d von %d Holomatch-Servern."
+"LEERTASTE zum Aufhören"
+
+"Keine Antwort vom Master-Server" 
+"Keine Server gefunden."
+"UPDATE für Aktualisierung klicken."
+"Nach Servern scannen."
+
+"AKTUELLE KARTE"
+"PARAMETER SORTIEREN"
+
+"SERVERINFORMATION"
+
+"HOLOMATCH"
+"GEWINNER"
+
+"ENGLISH"
+"DEUTSCH"
+
+"BRÜCKE: Kontrollzentrum des Schiffes. Der Flug-Controller ist zugleich Steuermann als auch für die Navigation verantwortlich, Taktische Offiziere kümmern sich um Waffen, Verteidigung und die innere Sicherheit."
+"VORDERE PHASER: Phaser sind die primären Angriffswaffen der Voyager. Es handelt sich dabei um Partikel-/Beam-Projektoren, aber eine Reichweite von 300.000 Kilometern haben."
+"PHOTONTORPEDO-WERFER: Photonentorpedos enthalten kleine Mengen von Materie und Antimaterie in einem magnetischen Gefäss."
+"VENTRALE PHASER: Der Phaserstreifen, der entlang der unteren Sektion der Voyager verläuft. Phaser ist eine Abkürzung für PHASEN-ENERGIE-REKTIFIZIERUNG."
+"MITHÜLLEN-PHASERSTREIFEN: Die Phaserstreifen liegen an beiden Seiten der Voyager und haben einen Abschusswinkel von 180 Grad."
+"BUSSARD-KOLLEKTOREN: Elektromagnetische Geräte, entwickelt für das Sammeln von Wasserstoff für Fusionsreaktoren von Schiffen. Konzept ursprünglich 1960 vorgeschlagen von Physiker Robert W. Bussard."
+"WARPGONDELN: Grosse Aussenkonstruktionen, die den Warp-Antrieb beherbergen. Die Gondeln senken sich, wenn der Antrieb nicht aktiviert ist. Das gegliederte Design macht es möglich, ohne das Raumgefüge zu schädigen."
+"RCS-MANÖVRIERANTRIEB: Antriebseinheiten, mit der die Voyager sich sehr langsam fortbewegen kann. Nützlich, um das Schiff in kleinen Bereichen wie beispielsweise in Raumhäfen zu steuern."
+"VOYAGER: RAUMSCHIFF NCC - 74656: 344 Meter lang, 1,5 Millionen metrische Tonnen schwer mit einem Rumpf aus Tritanium/Duranium. Gebaut auf der Erdenstation McKinley; Start: Sternzeit 48038.5. Kommandantin: Captain Kathryn Janeway."
+
+"SOLO-MATCH-ARTEN"
+"LEVELS %d - %d"
+"SCHWIERIGKEITSGRAD"
+"PUNKTLIMIT"
+"MENSCH"
+"SPIELER"
+
+"ZUGRIFF . . ."
+"HOLOGRAFISCHE CHARAKTERE: %d - %d"
+"SICHER"
+"BESTE"
+"MODELLE"
+"CD-KEY"
+
+"Warten auf Herausforderung"
+"Warten auf Autorisierung"
+"Warten auf Verbindung"
+"Warten auf Spielstatus ..."
+
+"NEDERLANDS"
+"KEINE KARTEN GEFUNDEN"
+"ERW. SERVER-EINSTELLUNGEN"
+
+"FEHLER"
+"Muss zwischen 1 und 60 liegen"
+"Muss zwischen 0 und 64 liegen"
+"Muss zwischen 150 und 1000 liegen"
+"Muss zwischen 0 und 5000 liegen"
+"Muss zwischen 0 und 10000 liegen"
+"Muss zwischen 1.0 und 10.0 liegen"
+"Muss zwischen 0 und MAX SPIELERZAHL liegen"
+
+"SYSTEM 1"
+"... ELITE FORCE - RPG-X ..."
+
+"Bat'leth-Training"
+"Captain Proton"
+"Weihnachtslied"
+"Tag der Ehre"
+"Don Carlo"
+"Flotter"
+"Französischer Widerstand"
+"Golf"
+"Mechaniker"
+"Aufstand Alpha"
+"Klingonenkampf"
+"Ktarianischer Mondaufgang"
+"Medizinischer Berater"
+"Orbitales Skydiving"
+"Sozialisierung"
+"Torres 2-1-6"
+"Torres Zeta-1"
+"Geschwindigkeit"
+
+"ELITE FORCE: RPG-X"
+
+"TM, (R), (C) 2000 Paramount Pictures, Inc. Alle Rechte vorbehalten. Star Trek: Voyager und alle zugehörigen Marken sind Warenzeichen von Paramount Pictures."
+"Dieses Produkt enthält von Id Software, Inc. lizenzierte Software-Technologie. Id Technology (C) 1999, 2000 Id Software, Inc. Alle Rechte vorbehalten."
+"HOLOMATCH VERLASSEN"
+
+"OR"
+
+"ELITE FORCE - RPG-X : BESTÄTIGUNG"
+"BESTÄTIGUNG"
+"NEUSTART?"
+"INTERNET2"
+"INTERNET3"
+"INTERNET4"
+"INTERNET5"
+"Standardwert 5"
+"Standardwert 8"
+"Standardwert 250"
+"Standardwert 800"
+"Standardwert 500"
+"Standardwert 3"
+"Standardwert 0 (AUS)"
+
+"ELITE FORCE: RPG-X"
+"VON UBERGAMES"
+"Mehr Informationen auf: http://www.ubergames.net"
+
+" "
+" "
+" "
+
+"Drücken Sie die 'RÜCKTASTE' zum Löschen."
+
+"Stellen Sie die Helligkeit ein,"
+"bis das Symbol im Kasten"
+"kaum noch zu sehen ist."
+
+"ELITE FORCE - RPG-X : ERSTKONFIGURATION"
+"ERSTKONFIGURATION"
+
+"Standardwaffe für Aussenteams der Föderation."
+"Feuerkräftige Waffe der Föderation für gefährliche Missionen."
+"Unendlichkeits-Modulator: Anti-Borgwaffe entwickelt von Seven of Nine."
+"Entwickelt von der Kultur der Scavenger während der Gefangenschaft der Forge."
+"Lebendige Waffe entwickelt von den Etherianern."
+"Ermöglicht hohe Genauigkeit und Entfernung beim Feuern einer Föderationsgranate."
+"Hirogenwaffe mit Phaser-Tetryons."
+"Fortschrittliche Waffe der Föderation mit erheblichem Zerstörungspotenzial."
+"Entdeckt vom Hazard-Team auf der Mission im verlassenen Dreadnought-Kampfschiff."
+
+"WILKOMMEN ZU RPG-X . . ."
+"UNTERBRECHE DATENVERBINDUNG . . ."
+
+"Legen Sie die CD ein"
+"Ungültiger CD-Key"
+
+"Muss zwischen 0 und 120 liegen"
+"Standardwert 0"
+
+"Muss zwischen 0 und 30 liegen"
+"Standardwert 5"
+
+"Muss zwischen 0 und 120 liegen"
+"Standardwert 0"
+
+"ROLLENSPIEL"
+"ROLLENSPIELEN"
+
+"BLAU"
+"ROT"
+"SEITE"
+"VON"
+
+"Download:"
+"Restzeit:"
+"Transferrate:"
+"Kalkulieren"
+"(%s von %s kopiert)"
+"(%s kopiert)"
+"%s/Sek."
+"ELITE FORCE - RPG-X : ERWEITERTE OPTIONEN"
+"WILLST DU DIE AKTUELLE SITZUNG BEENDEN?"
+
+"SCHRIFTEN (NUR FÜR ENTWICKLER)"
+"DAS PROGRAMM WIRD NEU GESTARTET - WEITER?"
+
+"Die Helligkeitseinstellungen werden erst"
+"durch den Button 'ÜBERNEHMEN' vorgenommen."
+
+"Spieler mit Auszeichnungen"
+"Verlassen und Grafikeinstellungen verwerfen?"
+
+"Fehlerhaften Client entdeckt. Falsche .PK3-Datei gefunden!"
+"Kann Client nicht verifizieren!"
+"Sie wurden rausgeworfen."
+"Zeitüberschreitung"
+"Server heruntergefahren"
+"Verbindung unterbrochen"
+"Unterbrochener Download"
+"Server-Kommandoüberlauf"
+"Unzuverlässige Daten"
+"A3D nicht verfügbar."
+
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"Keine Klasse"
+"Sicherheit"
+"Sanitäter"
+"Alien"
+"Kommando"
+"Forschung"
+"Ingineur"
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"Borg"
+"INVENTAR BENUTZEN"
+"OBJEKT BENUTZEN"
+"TASCHENLAMPE"
+"PARAMETER"
+// NEW TEXT TO BE TRANSLATED - 03/13/01
+"Muss zwischen 0 und 600 liegen"
+"Standartwert 120"
+"Muss ein positiver Wert sein"
+"Standartwert 180"
+"ACTION HERO"
+//RPG-X Text
+
+//Credits Menu
+"CREDITS"
+
+//Emotes menu
+"EMOTES"
+
+//Admin menu
+"ADMIN OPTIONEN"
+
+"Marine"
+"n00b"
+"Deine Änderungen wurden übernommen."
+"CHARAKTÄRE"
+"CHARAKTER DATEN"
+"EMOTE AUSWÄHLEN"
+"MODEL OFFSET"
+"EMOTE LISTE"
+"EMOTE PARAMETER"
+
+"SPIELER STATISTIKEN"
+"KLASSE"
+"RANG"
+"ALTER"
+"RASSE"
+"GRÖSSE"
+"GEWICHT"
+"MODEL"
+"ID NUMMER"
+"SPIELER STATUS"
+
+"SCHNELL VERBINDEN"
+"Dieses Menü ist verbunden mit deiner Favoritenliste."
+"'Erneuern' drücken um zu beginnen."
+
+"HAUPT PARAMTER"
+"ITEM BEDARF"
+"VERLETZUNG WIEDERBELEBEN"
+"ANKÜNDIGUNG"
+"ENTITY AKTIVIEREN"
+"TRANSPORTER KONTROLLEN"
+"EFFEKT ERSTELLEN"
+"CHARAKTER ERSTELLEN"
+"TASTEN BINDEN"
+
+//Admin Scroll Options
+"MICH"
+"ALLE"
+
+"MEINE"
+"ALLE"
+
+"Radius"
+"Brocken Type (1-5)"
+"Funken Intervall (0.0-1.0)"
+"Zeit Länge (1000 = 1 sec)"
+"Tropfen Typ (0, 1,2)"
+"Tropfen stärke (0.0-1.0)"
+"Rüttel stärke"
+
+"TASTEN:"
+
+//Admin Client Options
+"STATISTISCHE CLIENT INFORMATIONEN"
+"CLIENT RAUSWURF"
+"CLIENT PARAMETER ERZWINGEN"
+
+//Admin Audio
+"MUSIK ABSPIELEN"
+"SOUNDEFFEKT ABSPIELEN"
+
+"Turbolift System"
+"Gewünschtes Deck auswählen"
+
+"Transporter System"
+"Holodeck System"
+
+"Konnte rpgxid.dat Datei nicht finden. Bitte stellen Sie sicher, dass sie sich im RPG-X Verzeichnis befindet."
+"Die rpgxid.dat Datei hat nicht die richtige Größe. Bitte installieren sie RPG-X erneut."
+"Die rpgxid.dat Datei ist nicht Korrekt. Dies kann daher kommen das sie manipuliert wurde. Bitte installieren sie RPG-X erneut."
+
