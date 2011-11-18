@@ -1,12 +1,13 @@
 -- Startup
 function InitGame(levelTime, randomSeed, restart)
 	game.Print("Lua Level Init...");
+	
 	game.Print("-map_restart ...");
 		game.Print("--workaround-setup ...");
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "target_levelchange");
-			ent:SetKeyValue("targetname", "map_restart");
-			ent:SetKeyValue("target", "borg1");
+			ent:SetClassname("target_levelchange");
+			ent:SatTargetname("map_restart");
+			ent:SetTarget("borg1");
 			entity.CallSpawn(ent);
 		game.Print("--trigger-setup ...");
 		if restart == 1 then
@@ -15,480 +16,473 @@ function InitGame(levelTime, randomSeed, restart)
 			ent = entity.Find("map_restart")
 			entity.Use(ent)
 		end
+		
 	game.Print("-Removing unused entities...");
-		ent = entity.Find("borg_munro");
-		entity.Remove(ent);
-		ent = entity.Find("borg_alexa");
-		entity.Remove(ent);
-		ent = entity.Find("deathborg");
-		entity.Remove(ent);
-		ent = entity.Find("deathborg1");
-		entity.Remove(ent);
-		ent = entity.FindBModel(127);
-		entity.Remove(ent);
+		entity.Remove(entity.Find("borg_munro"));
+		entity.Remove(entity.Find("borg_alexa"));
+		entity.Remove(entity.Find("deathborg"));
+		entity.Remove(entity.Find("deathborg1"));
+		entity.Remove(entity.FindBModel(127));
+		
 	game.Print("-Updating and fixing Forcefields and Plasmafilters...");
 		game.Print("--Forcefield Room 1");
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "forcefield1");
-			ent:SetKeyValue("health", "1");  
-			ent:SetKeyValue("spawnflags", "1"); 
-			ent:SetKeyValue("splashDamage", "75");  
-			ent:SetKeyValue("splashRadius", "75");
-			ent:SetKeyValue("material", "1");  
-			ent:SetKeyValue("model", "models/mapobjects/borg/disnode.md3"); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("forcefield1");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(1); 
+			ent:SetSplashDamage(75);  
+			ent:SetSplashRadius(75);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/disnode.md3"); 
 			mover.SetPosition(ent, -181, -160, 48);     
-			mover.SetAngles(ent, 0, 0, 0);
+			mover.SetAngles(ent, 0, 0, 0); 			
 			entity.CallSpawn(ent); 
+			
 			ent = entity.FindBModel(88);
-			ent:SetKeyValue("classname", "func_forcefield");      
+			ent:SetClassname("func_forcefield");      
 			entity.CallSpawn(ent); 
+			
 		game.Print("--Plasmafilter Room 2");
-			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "grate3");
-			ent:SetKeyValue("health", "1");     
-			ent:SetKeyValue("spawnflags", "9");  
-			ent:SetKeyValue("splashDamage", "250");  
-			ent:SetKeyValue("splashRadius", "150");
-			ent:SetKeyValue("material", "1");    
-			ent:SetKeyValue("model", "models/mapobjects/borg/tank.md3"); 
+			ent = entity.Spawn(); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("grate3");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(9); 	
+			ent:SetSplashDamage(250);  
+			ent:SetSplashRadius(150);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/tank.md3");
 			mover.SetPosition(ent, -707, -48, 32);      
-			mover.SetAngles(ent, 0, 0, 0);
+			mover.SetAngles(ent, 0, 0, 0);			
 			entity.CallSpawn(ent); 
+			
 			ent = entity.FindBModel(13);
-			ent:SetKeyValue("classname", "func_breakable");  
-			ent:SetKeyValue("spawnflags", "1");  
-			ent:SetKeyValue("material", "1");      
-			entity.CallSpawn(ent);     
+			ent:SetClassname("func_breakable");  
+			ent:SetSpawnflags(1);  
+			ent:SetKeyValue("material", 1);      
+			entity.CallSpawn(ent);  
+			   
 		game.Print("--Forcefield Room 2");
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "forcefield2");
-			ent:SetKeyValue("health", "1");
-			ent:SetKeyValue("spawnflags", "1");
-			ent:SetKeyValue("splashDamage", "75");  
-			ent:SetKeyValue("splashRadius", "75");
-			ent:SetKeyValue("material", "1");    
-			ent:SetKeyValue("model", "models/mapobjects/borg/disnode.md3"); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("forcefield2");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(1); 
+			ent:SetSplashDamage(75);  
+			ent:SetSplashRadius(75);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/disnode.md3");  
 			mover.SetPosition(ent, -182, 672, 128);      
-			mover.SetAngles(ent, 0, 0, 0);
+			mover.SetAngles(ent, 0, 0, 0);			
 			entity.CallSpawn(ent); 
+			
 			ent = entity.FindBModel(87);
-			ent:SetKeyValue("classname", "func_forcefield");      
+			ent:SetClassname("func_forcefield");      
 			entity.CallSpawn(ent);  
+			
 		game.Print("--Plasmafilter Room 3 Corridor");
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "grate");
-			ent:SetKeyValue("health", "1");     
-			ent:SetKeyValue("spawnflags", "9"); 
-			ent:SetKeyValue("splashDamage", "250");  
-			ent:SetKeyValue("splashRadius", "150"); 
-			ent:SetKeyValue("material", "1");    
-			ent:SetKeyValue("model", "models/mapobjects/borg/tank.md3"); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("grate");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(9); 	
+			ent:SetSplashDamage(250);  
+			ent:SetSplashRadius(150);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/tank.md3"); 
 			mover.SetPosition(ent, 760, 86, 16);   
-			mover.SetAngles(ent, 0, 90, 0);
-			entity.CallSpawn(ent); 
+			mover.SetAngles(ent, 0, 90, 0); 			
+			entity.CallSpawn(ent);
+			 
 			ent = entity.FindBModel(50);
-			ent:SetKeyValue("classname", "func_breakable");  
-			ent:SetKeyValue("spawnflags", "1");  
-			ent:SetKeyValue("material", "1");      
-			entity.CallSpawn(ent);   
+			ent:SetClassname("func_breakable");  
+			ent:SetSpawnflags(1);  
+			ent:SetKeyValue("material", 1);        
+			entity.CallSpawn(ent);
+			   
 		game.Print("--Plasmafilter Room 3 Ladder");
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "grate1");
-			ent:SetKeyValue("health", "1");     
-			ent:SetKeyValue("spawnflags", "9");   
-			ent:SetKeyValue("splashDamage", "250");  
-			ent:SetKeyValue("splashRadius", "150");
-			ent:SetKeyValue("material", "1");     
-			ent:SetKeyValue("model", "models/mapobjects/borg/tank.md3"); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("grate1");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(9); 	
+			ent:SetSplashDamage(250);  
+			ent:SetSplashRadius(150);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/tank.md3"); 
 			mover.SetPosition(ent, 453, 592, 96);      
 			mover.SetAngles(ent, 0, 0, 0);
+			
 			entity.CallSpawn(ent); 
 			ent = entity.FindBModel(40);
-			ent:SetKeyValue("classname", "func_breakable");  
-			ent:SetKeyValue("spawnflags", "1");  
-			ent:SetKeyValue("material", "1");      
-			entity.CallSpawn(ent);    
+			ent:SetClassname("func_breakable");  
+			ent:SetSpawnflags(1);  
+			ent:SetKeyValue("material", 1);         
+			entity.CallSpawn(ent); 
+			   
 	game.Print("-Final Room Firework...");
 		game.Print("--Set up Plasmafilters");
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "finalroom");
-			ent:SetKeyValue("targetname", "blowup");
-			ent:SetKeyValue("health", "1");     
-			ent:SetKeyValue("spawnflags", "9"); 
-			ent:SetKeyValue("splashDamage", "250");  
-			ent:SetKeyValue("splashRadius", "150");
-			ent:SetKeyValue("material", "1");       
-			ent:SetKeyValue("model", "models/mapobjects/borg/tank.md3"); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("finalroom");
+			ent:SetTargetname("blowup");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(9); 	
+			ent:SetSplashDamage(250);  
+			ent:SetSplashRadius(150);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/tank.md3"); 
 			mover.SetPosition(ent, 479, 1727, -344);      
 			mover.SetAngles(ent, 0, 180, 0);
+			
 			entity.CallSpawn(ent); 
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "finalroom");
-			ent:SetKeyValue("targetname", "blowup");
-			ent:SetKeyValue("health", "1");     
-			ent:SetKeyValue("spawnflags", "9");  
-			ent:SetKeyValue("splashDamage", "250");  
-			ent:SetKeyValue("splashRadius", "150");
-			ent:SetKeyValue("material", "1");      
-			ent:SetKeyValue("model", "models/mapobjects/borg/tank.md3"); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("finalroom");
+			ent:SetTargetname("blowup");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(9); 	
+			ent:SetSplashDamage(250);  
+			ent:SetSplashRadius(150);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/tank.md3");
 			mover.SetPosition(ent, 513, 1761, -344);      
 			mover.SetAngles(ent, 0, 90, 0);
-			entity.CallSpawn(ent); 
+			entity.CallSpawn(ent);
+			 
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "finalroom");
-			ent:SetKeyValue("targetname", "blowup");
-			ent:SetKeyValue("health", "1");     
-			ent:SetKeyValue("spawnflags", "9");  
-			ent:SetKeyValue("splashDamage", "250");  
-			ent:SetKeyValue("splashRadius", "150");  
-			ent:SetKeyValue("material", "1");    
-			ent:SetKeyValue("model", "models/mapobjects/borg/tank.md3"); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("finalroom");
+			ent:SetTargetname("blowup");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(9); 	
+			ent:SetSplashDamage(250);  
+			ent:SetSplashRadius(150);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/tank.md3");
 			mover.SetPosition(ent, 545, 1727, -344);      
 			mover.SetAngles(ent, 0, 0, 0);
 			entity.CallSpawn(ent); 
+			
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "misc_model_breakable");
-			ent:SetKeyValue("target", "finalroom");
-			ent:SetKeyValue("targetname", "blowup");
-			ent:SetKeyValue("health", "1");     
-			ent:SetKeyValue("spawnflags", "9");  
-			ent:SetKeyValue("splashDamage", "250");  
-			ent:SetKeyValue("splashRadius", "150"); 
-			ent:SetKeyValue("material", "1");    
-			ent:SetKeyValue("model", "models/mapobjects/borg/tank.md3"); 
+			ent:SetClassname("misc_model_breakable");
+			ent:SetTarget("finalroom");
+			ent:SetTargetname("blowup");
+			ent:SetHealth(1);  
+			ent:SetSpawnflags(9); 	
+			ent:SetSplashDamage(250);  
+			ent:SetSplashRadius(150);
+			ent:SetKeyValue("material", 1);  
+			ent:SetModel("models/mapobjects/borg/tank.md3"); 
 			mover.SetPosition(ent, 513, 1695, -344);      
 			mover.SetAngles(ent, 0, 270, 0);
 			entity.CallSpawn(ent); 
+			
 		game.Print("--Convert forcefield");
 			ent = entity.FindBModel(70);
-			ent:SetKeyValue("classname", "func_forcefield"); 
-			ent:SetKeyValue("targetname", "blowup");     
+			ent:SetClassname("func_forcefield"); 
+			ent:SetTargetname("blowup");     
 			entity.CallSpawn(ent);  
+			
 		game.Print("--Some Breakables");
 			ent = entity.FindBModel(63);
-			ent:SetKeyValue("classname", "func_breakable");  
-			ent:SetKeyValue("spawnflags", "1");  
-			ent:SetKeyValue("material", "1");      
-			entity.CallSpawn(ent);  
+			ent:SetClassname("func_breakable");  
+			ent:SetSpawnflags(1);  
+			ent:SetKeyValue("material", 1);         
+			entity.CallSpawn(ent);
+			  
 			ent = entity.FindBModel(60);
-			ent:SetKeyValue("classname", "func_breakable");  
-			ent:SetKeyValue("spawnflags", "1");  
-			ent:SetKeyValue("material", "1"); 
-			entity.CallSpawn(ent);  
+			ent:SetClassname("func_breakable");  
+			ent:SetSpawnflags(1);  
+			ent:SetKeyValue("material", 1);   
+			entity.CallSpawn(ent); 
+			 
 			ent = entity.FindBModel(157);  
 			ent:SetKeyValue("material", "1"); 
-			entity.CallSpawn(ent);  
+			entity.CallSpawn(ent);
+			  
 		game.Print("--making it work");
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "target_counter");
-			ent:SetKeyValue("target", "finalroomtrigger");
-			ent:SetKeyValue("targetname", "finalroom");   
-			ent:SetKeyValue("count", "1");   
+			ent:SetClassname("target_counter");
+			ent:SetTarget("finalroomtrigger");
+			ent:SetTargetname("finalroom");   
+			ent:SetCount(1);   
 			mover.SetPosition(ent, 0, 0, 0);     
-			entity.CallSpawn(ent);  
+			entity.CallSpawn(ent);
+			  
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "target_relay");
-			ent:SetKeyValue("target", "shutdown");
-			ent:SetKeyValue("targetname", "finalroomtrigger");  
-			ent:SetKeyValue("luaUse", "finalroomdrop");   
+			ent:SetClassname("target_relay");
+			ent:SetTarget("shutdown");
+			ent:SetTargetname("finalroomtrigger");  
+			ent:SetLuaUse("finalroomdrop");   
 			mover.SetPosition(ent, 0, 0, 0);     
-			entity.CallSpawn(ent);  
+			entity.CallSpawn(ent);
+			  
 			ent = entity.Spawn();
-			ent:SetKeyValue("classname", "target_relay");
-			ent:SetKeyValue("target", "blowup");
-			ent:SetKeyValue("targetname", "finalroomtrigger");   
+			ent:SetClassname("target_relay");
+			ent:SetTarget("blowup");
+			ent:SetTargetname("finalroomtrigger");   
 			mover.SetPosition(ent, 0, 0, 0);     
-			entity.CallSpawn(ent);  
+			entity.CallSpawn(ent);
+			  
 	game.Print("-Some Decorative Work...");
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "misc_model_breakable");
-		ent:SetKeyValue("spawnflags", "17");
-		ent:SetKeyValue("model", "models/mapobjects/borg/plugin.md3"); 
+		ent:SetClassname("misc_model_breakable");
+		ent:SetSpawnflags(17);
+		ent:SetModel("models/mapobjects/borg/plugin.md3"); 
 		mover.SetPosition(ent, -819, 7, 64);     
 		mover.SetAngles(ent, 0, 270, 0);
-		entity.CallSpawn(ent);   
+		entity.CallSpawn(ent); 
+		  
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "misc_model_breakable");
-		ent:SetKeyValue("spawnflags", "17");
-		ent:SetKeyValue("model", "models/mapobjects/borg/plugin2.md3"); 
+		ent:SetClassname("misc_model_breakable");
+		ent:SetSpawnflags(17);
+		ent:SetModel("models/mapobjects/borg/plugin2.md3");  
 		mover.SetPosition(ent, 649, 32, 48);     
 		mover.SetAngles(ent, 0, 0, 0);
-		entity.CallSpawn(ent);  
+		entity.CallSpawn(ent); 
+		 
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "misc_model_breakable");
-		ent:SetKeyValue("spawnflags", "17");
-		ent:SetKeyValue("model", "models/mapobjects/borg/plugin.md3"); 
+		ent:SetClassname("misc_model_breakable");
+		ent:SetSpawnflags(17);
+		ent:SetModel("models/mapobjects/borg/plugin.md3"); 
 		mover.SetPosition(ent, -245, 817, -84);     
 		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);   
+		entity.CallSpawn(ent);  
+		 
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "misc_model_breakable");
-		ent:SetKeyValue("spawnflags", "17");
-		ent:SetKeyValue("model", "models/mapobjects/borg/plugin2.md3"); 
+		ent:SetClassname("misc_model_breakable");
+		ent:SetSpawnflags(17);
+		ent:SetModel("models/mapobjects/borg/plugin2.md3"); 
 		mover.SetPosition(ent, -12, 817, -84);     
 		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);  
+		entity.CallSpawn(ent); 
+		 
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "misc_model_breakable");
-		ent:SetKeyValue("spawnflags", "25"); 
-		ent:SetKeyValue("targetname", "blowup"); 
-		ent:SetKeyValue("splashDamage", "75");  
-		ent:SetKeyValue("splashRadius", "75");
-		ent:SetKeyValue("material", "1");  
-		ent:SetKeyValue("model", "models/mapobjects/borg/plugin.md3"); 
+		ent:SetClassname("misc_model_breakable");
+		ent:SetSpawnflags(25); 
+		ent:SetTargetname("blowup"); 
+		ent:SetSplashDamage(75);  
+		ent:SetSplashRadius(75);
+		ent:SetKeyValue("material", 1);  
+		ent:SetModel("models/mapobjects/borg/plugin.md3"); 
 		mover.SetPosition(ent, 553, 1728, -256);     
 		mover.SetAngles(ent, 0, 0, 0);
-		entity.CallSpawn(ent); 
+		entity.CallSpawn(ent);
+		 
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "misc_model_breakable");
-		ent:SetKeyValue("spawnflags", "17"); 
-		ent:SetKeyValue("model", "models/mapobjects/borg/plugin2.md3"); 
+		ent:SetClassname("misc_model_breakable");
+		ent:SetSpawnflags(17);
+		ent:SetModel("models/mapobjects/borg/plugin2.md3"); 
 		mover.SetPosition(ent, 184, 1791, -80);     
 		mover.SetAngles(ent, 0, 270, 0);
 		entity.CallSpawn(ent);  
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "misc_model_breakable");
-		ent:SetKeyValue("spawnflags", "17"); 
-		ent:SetKeyValue("model", "models/weapons2/imod/imod2_w.md3"); 
+		ent:SetClassname("misc_model_breakable");
+		ent:SetSpawnflags(17);
+		ent:SetModel("models/weapons2/imod/imod2_w.md3");
 		mover.SetPosition(ent, -128, 1087, -98);     
 		mover.SetAngles(ent, 0, 180, 0);
 		entity.CallSpawn(ent);  
+		
 	game.Print("-Midway Drop prep...");
 		ent = entity.Spawn();
 		ent.SetupTrigger(ent, 24, 72, 104);
-		ent:SetKeyValue("classname", "trigger_multiple");
-		ent:SetKeyValue("target", "midwaydroppercount");
-		ent:SetKeyValue("wait", 1);
-		entity.CallSpawn(ent); 
+		ent:SetClassname("trigger_multiple");
+		ent:SetTarget("midwaydroppercount");
+		ent:SetWait(1);
 		mover.SetPosition(ent, 216, 1088, 266); 
+		entity.CallSpawn(ent); 
+		
 		ent = entity.Spawn();  
-		ent:SetKeyValue("classname", "target_counter");
-		ent:SetKeyValue("targetname", "midwaydroppercount"); 
-		ent:SetKeyValue("target", "midwaydropper");  
-		ent:SetKeyValue("count", "1");   
+		ent:SetClassname("target_counter");
+		ent:SetTargetname("midwaydroppercount"); 
+		ent:SetTarget("midwaydropper");  
+		ent:SetCount(1);   
 		mover.SetPosition(ent, 0, 0, 0);     
 		entity.CallSpawn(ent);
+		
 		ent = entity.FindBModel(41);   
-		ent:SetKeyValue("classname", "func_static");
-		ent:SetKeyValue("spawnflags", "0"); 
-		ent:SetKeyValue("targetname", "midwaydropbrush");     
-		entity.CallSpawn(ent);  
+		ent:SetClassname("func_static");
+		ent:SetTargetname("midwaydropbrush");     
+		entity.CallSpawn(ent); 
+		 
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "target_relay");
-		ent:SetKeyValue("targetname", "midwaydropper"); 
-		ent:SetKeyValue("target", "xclip");  
-		ent:SetKeyValue("luaUse", "midwaydrop");   
-		mover.SetPosition(ent, 0, 0, 0);     
-		entity.CallSpawn(ent);  
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "target_delay");
-		ent:SetKeyValue("targetname", "midwaydropper"); 
-		ent:SetKeyValue("target", "splatpanel");  
-		ent:SetKeyValue("wait", "1");   
+		ent:SetClassname("target_relay");
+		ent:SetTargetname("midwaydropper"); 
+		ent:SetTarget("xclip");  
+		ent:SetLuaUse("midwaydrop");   
 		mover.SetPosition(ent, 0, 0, 0);     
 		entity.CallSpawn(ent);
+		  
+		ent = entity.Spawn();
+		ent:SetClassname("target_delay");
+		ent:SetTargetname("midwaydropper"); 
+		ent:SetTarget("splatpanel");  
+		ent:SetWait(1);   
+		mover.SetPosition(ent, 0, 0, 0);     
+		entity.CallSpawn(ent);
+		
 	game.Print("-I-Mod Room FFs and other stuff...");
 		ent = entity.FindBModel(125);
-		ent:SetKeyValue("classname", "func_forcefield");
-		ent:SetKeyValue("targetname", "imod_ff");
+		ent:SetClassname("func_forcefield");
+		ent:SatTargetname("imod_ff");
 		entity.CallSpawn(ent);
+		
 		ent = entity.FindBModel(126);
-		ent:SetKeyValue("classname", "func_forcefield");
-		ent:SetKeyValue("targetname", "imod_ff");
+		ent:SetClassname("func_forcefield");
+		ent:SatTargetname("imod_ff");
 		entity.CallSpawn(ent);
+		
 		ent = entity.FindBModel(152);
 		entity.Remove(ent);
+		
 		ent = entity.FindBModel(146);
-		ent:SetKeyValue("spawnflags", "8");
-		ent:SetKeyValue("target", "imod_ff");
-		ent:SetKeyValue("targetname", "imod_fu");
-		ent:SetKeyValue("wait", "1");
-		ent:SetKeyValue("luaUse", "sound146");
+		ent:SetSpawnflags(8);
+		ent:SetTarget("imod_ff");
+		ent:SetTargetname("imod_fu");
+		ent:SetWait(1);
+		ent:SetLuaUse("borgsound");
 		entity.CallSpawn(ent);
+		
 		ent = entity.FindBModel(17);
-		ent:SetKeyValue("spawnflags", "8");
-		ent:SetKeyValue("target", "imod_fu");
-		ent:SetKeyValue("wait", "1");
+		ent:SetSpawnflags(8);
+		ent:SetTarget("imod_fu");
+		ent:SetWait(1);
 		ent:SetKeyValue("dmg", "3");
-		entity.CallSpawn(ent);  
+		entity.CallSpawn(ent);
+		  
 		ent = entity.FindBModel(24);
-		ent:SetKeyValue("spawnflags", "8");
-		ent:SetKeyValue("wait", "1");    
-		entity.CallSpawn(ent);   
+		ent:SetSpawnflags(8);
+		ent:SetWait(1);    
+		entity.CallSpawn(ent); 
+		  
 	game.Print("-The Last FF...");
 		ent = entity.FindBModel(151);
-		ent:SetKeyValue("classname", "func_usable");
-		ent:SetKeyValue("spawnflags", "8");
-		ent:SetKeyValue("wait", "1");    
-		ent:SetKeyValue("target", "forcefield4");
-		ent:SetKeyValue("luaUse", "sound151");
+		ent:SetClassname("func_usable");
+		ent:SetSpawnflags(8");
+		ent:SetWait(1");    
+		ent:SetTarget("forcefield4");
+		ent:SetLuaUse("borgsound");
 		entity.CallSpawn(ent);
+		
 		ent = entity.FindBModel(52);
-		ent:SetKeyValue("classname", "func_forcefield");
+		ent:SetClassname("func_forcefield");
 		entity.CallSpawn(ent);
+		
 	game.Print("-Transfer...");
 		ent = entity.Spawn();
 		ent.SetupTrigger(ent, 16, 152, 176);
-		ent:SetKeyValue("classname", "trigger_multiple");
-		ent:SetKeyValue("target", "transfercount");
-		ent:SetKeyValue("wait", 1);
-		entity.CallSpawn(ent);
+		ent:SetClassname("trigger_multiple");
+		ent:SetTarget("transfercount");
+		ent:SetWait(1);  
 		mover.SetPosition(ent, 919, 2177, -115);
+		entity.CallSpawn(ent);
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "target_counter");
-		ent:SetKeyValue("targetname", "transfercount");
-		ent:SetKeyValue("target", "transfer");
-		ent:SetKeyValue("count", "1");
+		ent:SetClassname("target_counter");
+		ent:SatTargetname("transfercount");
+		ent:SetTarget("transfer");
+		ent:SetCount(1");
 		mover.SetPosition(ent, 0, 0, 0);
 		entity.CallSpawn(ent);
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "target_levelchange");
-		ent:SetKeyValue("targetname", "transfer");
-		ent:SetKeyValue("target", "borg2");
-		ent:SetKeyValue("wait", "-1");
+		ent:SetClassname("target_levelchange");
+		ent:SatTargetname("transfer");
+		ent:SetTarget("borg2");
+		ent:SetWait(-1");
 		mover.SetPosition(ent, 0, 0, 0);
 		entity.CallSpawn(ent);
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "target_relay");
-		ent:SetKeyValue("targetname", "transfer");
-		ent:SetKeyValue("target", "forcefield4");
+		ent:SetClassname("target_relay");
+		ent:SatTargetname("transfer");
+		ent:SetTarget("forcefield4");
 		mover.SetPosition(ent, 0, 0, 0);
 		entity.CallSpawn(ent);
+		
 	game.Print("-Lift A fix...");
 		ent = entity.FindBModel(147);
-		ent:SetKeyValue("classname", "func_usable");
-		ent:SetKeyValue("spawnflags", "8");
-		ent:SetKeyValue("wait", "1");    
-		ent:SetKeyValue("target", "plat1");
-		ent:SetKeyValue("luaUse", "sound147");
-		entity.CallSpawn(ent);  
+		ent:SetClassname("func_usable");
+		ent:SetSpawnflags(8");
+		ent:SetWait(1");    
+		ent:SetTarget("plat1");
+		ent:SetLuaUse("borgsound");
+		entity.CallSpawn(ent);
+		  
 		ent = entity.FindBModel(148);
-		ent:SetKeyValue("classname", "func_usable");
-		ent:SetKeyValue("spawnflags", "8");
-		ent:SetKeyValue("wait", "1");    
-		ent:SetKeyValue("target", "plat1");
-		ent:SetKeyValue("luaUse", "sound148");
+		ent:SetClassname("func_usable");
+		ent:SetSpawnflags(8");
+		ent:SetWait(1");    
+		ent:SetTarget("plat1");
+		ent:SetLuaUse("borgsound");
 		entity.CallSpawn(ent); 
+		
 		ent = entity.FindBModel(91);
-		ent:SetKeyValue("wait", "-1");
+		ent:SetWait(-1");
 		ent:SetKeyValue("angle", "-2");  
-		ent:SetKeyValue("count", "24");        
+		ent:SetCount(24");        
 		entity.CallSpawn(ent); 
+		
 	game.Print("-Lift B fix...");
 		ent = entity.FindBModel(149);
-		ent:SetKeyValue("classname", "func_usable");
-		ent:SetKeyValue("spawnflags", "8");
-		ent:SetKeyValue("wait", "1");    
-		ent:SetKeyValue("target", "plat2");
-		ent:SetKeyValue("luaUse", "sound149");
-		entity.CallSpawn(ent);  
+		ent:SetClassname("func_usable");
+		ent:SetSpawnflags(8");
+		ent:SetWait(1");    
+		ent:SetTarget("plat2");
+		ent:SetLuaUse("borgsound");
+		entity.CallSpawn(ent);
+		  
 		ent = entity.FindBModel(150);
-		ent:SetKeyValue("classname", "func_usable");
-		ent:SetKeyValue("spawnflags", "8");
-		ent:SetKeyValue("wait", "1");    
-		ent:SetKeyValue("target", "plat2");
-		ent:SetKeyValue("luaUse", "sound150");
-		entity.CallSpawn(ent);    
+		ent:SetClassname("func_usable");
+		ent:SetSpawnflags(8");
+		ent:SetWait(1");    
+		ent:SetTarget("plat2");
+		ent:SetLuaUse("borgsound");
+		entity.CallSpawn(ent);
+		    
 		ent = entity.FindBModel(89);
-		ent:SetKeyValue("wait", "-1");
+		ent:SetWait(-1");
 		ent:SetKeyValue("angle", "-2");   
-		ent:SetKeyValue("count", "24");    
+		ent:SetCount(24");    
 		entity.CallSpawn(ent); 
+		
 	game.Print("-Setting up spawnpoints...");
 		entity.RemoveSpawns();
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
+		ent:SetClassname("info_player_deathmatch");
 		mover.SetPosition(ent, 171, 1090, -103);  
 		mover.SetAngles(ent, 0, 180, 0);
 		entity.CallSpawn(ent);
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
+		ent:SetClassname("info_player_deathmatch");
 		mover.SetPosition(ent, 143, -400, -8); 
 		mover.SetAngles(ent, 0, 90, 0);
 		entity.CallSpawn(ent);
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
+		ent:SetClassname("info_player_deathmatch");
 		mover.SetPosition(ent, 172, -400, -8); 
 		mover.SetAngles(ent, 0, 90, 0);
 		entity.CallSpawn(ent);
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
+		ent:SetClassname("info_player_deathmatch");
 		mover.SetPosition(ent, 202, -400, -8);  
 		mover.SetAngles(ent, 0, 90, 0);
 		entity.CallSpawn(ent);
+		
 		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
+		ent:SetClassname("info_player_deathmatch");
 		mover.SetPosition(ent, 232, -400, -8);
 		mover.SetAngles(ent, 0, 90, 0);
 		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 143, -372, -8);
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 172, -372, -8); 
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 202, -372, -8);
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 232, -372, -8);
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 143, -338, -8);
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 172, -338, -8); 
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 202, -338, -8);
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 232, -338, -8);
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 143, -307, -8); 
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 172, -307, -8); 
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 202, -307, -8);
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
-		ent = entity.Spawn();
-		ent:SetKeyValue("classname", "info_player_deathmatch");
-		mover.SetPosition(ent, 232, -307, -8);
-		mover.SetAngles(ent, 0, 90, 0);
-		entity.CallSpawn(ent);
+		
 	game.Print("-Breakable-Mod...");
 		game.Print("--func_breakable...");
 			ent = entity.FindBModel(39);
@@ -496,507 +490,608 @@ function InitGame(levelTime, randomSeed, restart)
 			ent:SetKeyValue("splashDamage", "75");
 			ent:SetKeyValue("splashRadius", "75");
 			entity.CallSpawn(ent);
+			
 			ent = entity.FindBModel(38);
 			ent:SetKeyValue("team", "2")
 			entity.CallSpawn(ent);
+			
 			ent = entity.FindBModel(123);
 			ent:SetKeyValue("material", "2");
 			ent:SetKeyValue("splashDamage", "75");
 			ent:SetKeyValue("splashRadius", "75");
 			entity.CallSpawn(ent);
+			
 			ent = entity.FindBModel(124);
 			ent:SetKeyValue("team", "2")
 			entity.CallSpawn(ent)
+			
 			ent = entity.FindBModel(138);
 			ent:SetKeyValue("material", "2");
 			ent:SetKeyValue("splashDamage", "75");
 			ent:SetKeyValue("splashRadius", "75");
 			entity.CallSpawn(ent);
+			
 			ent = entity.FindBModel(22);
 			ent:SetKeyValue("team", "2")
 			entity.CallSpawn(ent)
+			
 			ent = entity.FindBModel(82);
 			ent:SetKeyValue("material", "1");
 			ent:SetKeyValue("splashDamage", "75");
 			ent:SetKeyValue("splashRadius", "75");
 			entity.CallSpawn(ent);
+			
 			ent = entity.FindBModel(28);
 			ent:SetKeyValue("material", "2");
 			ent:SetKeyValue("splashDamage", "75");
 			ent:SetKeyValue("splashRadius", "75");
 			entity.CallSpawn(ent);
+			
 			ent = entity.FindBModel(27);
 			ent:SetKeyValue("team", "2")
 			entity.CallSpawn(ent)
+			
 			ent = entity.FindBModel(26);
 			ent:SetKeyValue("material", "2");
 			ent:SetKeyValue("splashDamage", "75");
 			ent:SetKeyValue("splashRadius", "75");
 			entity.CallSpawn(ent);
+			
 			ent = entity.FindBModel(137);
 			ent:SetKeyValue("team", "2")
 			entity.CallSpawn(ent)
+			
 		game.Print("--misc_model_breakable...");
 			game.Print("---checking for local or dedicated...");
 				if not entity.FindNumber(334) == nil then
 				ent = entity.FindNumber(334);
 				test = ent.GetClassname(ent);
 				if test == "misc_model_breakable" then
+				
 			game.Print("----dedicated...");
 				ent = entity.FindNumber(199);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(200);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(308);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(309);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(310);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(311);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(312);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(313);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(314);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(315);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(316);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(317);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(318);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(319);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(320);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(321);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(322);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(323);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(324);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(325);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(326);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(327);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(328);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(329);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(330);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(331);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(332);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(333);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(334);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent); 
+				
 				ent = entity.FindNumber(400);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
 				else
+				
 			game.Print("----local...");
 				ent = entity.FindNumber(199);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(200);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(306);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(307);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(308);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(309);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(310);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(311);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(312);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(313);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(314);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(315);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(316);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(317);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(318);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(319);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(320);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(321);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(322);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(323);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(324);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(325);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(326);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(327);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(328);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(329);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(330);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(331);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(332);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(392);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);;
 				entity.CallSpawn(ent);
 				end
 				else
+				
 			game.Print("----local...");
 				ent = entity.FindNumber(199);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(200);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(306);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(307);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(308);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(309);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(310);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(311);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(312);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(313);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(314);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(315);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(316);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(317);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(318);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(319);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(320);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(321);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(322);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(323);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(324);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(325);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(326);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(327);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(328);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(329);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(330);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(331);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(332);
-				ent:SetKeyValue("material", "2");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 2);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);
 				entity.CallSpawn(ent);
+				
 				ent = entity.FindNumber(392);
-				ent:SetKeyValue("material", "1");
-				ent:SetKeyValue("splashDamage", "75");
-				ent:SetKeyValue("splashRadius", "75");
+				ent:SetKeyValue("material", 1);
+				ent:SetSplashDamage(75);
+				ent:SetSplashRadius(75);;
 				entity.CallSpawn(ent);
 				end
 game.Print("...Done"); 	
@@ -1007,65 +1102,43 @@ end
 function finalroomdrop(ent, other, activator) 
 	ent = entity.FindBModel(72);
 	mover.ToAngles(ent, 45, 90, 0, 20) 
-	mover.ToPosition(ent, 400, 496, 1728, -912)     
+	mover.ToPosition(ent, 400, 496, 1728, -912)  
+	ent:SetLuaReached("midwaydropH");
+	ent:SetLuaReachedAngular("midwaydropHA");   
 	ent = entity.Spawn();
-	ent:SetKeyValue("classname", "misc_model_breakable");
-	ent:SetKeyValue("spawnflags", "17"); 
-	ent:SetKeyValue("model", "models/mapobjects/borg/plugin2_d1.md3"); 
+	ent:SetClassname("misc_model_breakable");
+	ent:SetSpawnflags(17); 
+	ent:SetModel("models/mapobjects/borg/plugin2_d1.md3"); 
 	mover.SetPosition(ent, 553, 1728, -256);     
 	mover.SetAngles(ent, 0, 0, 0);
 	entity.CallSpawn(ent); 
 end
 
 function midwaydrop(ent, other, activator) 
-	ent = entity.FindBModel(41);
-	ent:SetKeyValue("luaReached", "midwaydrop2");
+	ent:SetLuaReached("luaReached", "midwaydrop2");
 	mover.ToPosition(ent, 175, 96, 1088, 288)
 end
 
 function midwaydrop2(ent) 
-	ent = entity.FindBModel(41);
 	mover.Halt(ent);
-	ent:SetKeyValue("luaReached", "midwaydropH");
-	ent:SetKeyValue("luaReachedAngular", "midwaydropHA");
+	ent:SetLuaReached("midwaydropH");
+	ent:SetLuaReachedAngular("midwaydropHA");
 	mover.ToAngles(ent, 60, -90, 0, 0) 
 	mover.ToPosition(ent, 175, 32, 1088, 90)
 end
 
 function midwaydropH(ent) 
-	ent = entity.FindBModel(41);
 	mover.Halt(ent);      
-	ent:SetKeyValue("luaReached", "null");
+	ent:SetLuaReached("null");
 end
 
 function midwaydropHA(ent) 
-	ent = entity.FindBModel(41);
 	mover.HaltAngles(ent);      
-	ent:SetKeyValue("luaReachedAngular", "null");
+	ent:SetLuaReachedAngular("null");
 end
 	
 --Sounds
 
-function sound146(ent, other, activator)
-    sound.PlaySound(entity.FindBModel(146), "sound/movers/switches/borglcarswitch.mp3", 0);
-end
-
-function sound147(ent, other, activator)
-    sound.PlaySound(entity.FindBModel(147), "sound/movers/switches/borglcarswitch.mp3", 0);
-end
-
-function sound148(ent, other, activator)
-    sound.PlaySound(entity.FindBModel(148), "sound/movers/switches/borglcarswitch.mp3", 0);
-end
-
-function sound149(ent, other, activator)
-    sound.PlaySound(entity.FindBModel(149), "sound/movers/switches/borglcarswitch.mp3", 0);
-end
-
-function sound150(ent, other, activator)
-    sound.PlaySound(entity.FindBModel(150), "sound/movers/switches/borglcarswitch.mp3", 0);
-end
-
-function sound151(ent, other, activator)
-    sound.PlaySound(entity.FindBModel(151), "sound/movers/switches/borglcarswitch.mp3", 0);
+function borgsound(ent, other, activator)
+    sound.PlaySound(ent, "sound/movers/switches/borglcarswitch.mp3", 0);
 end
