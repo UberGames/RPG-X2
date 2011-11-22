@@ -21,6 +21,9 @@
 #elif defined WIN32
 #define HOSTARCH	"WIN32"
 #define EXTENSION	"dll"
+#elif defined __APPLE__
+#define HOSTARCH	"UNIX"
+#define EXTENSION	"dylib"
 #endif
 
 #define Lua_RegisterGlobal(L, n, v) (lua_pushstring(L, v), lua_setglobal(L, n))
