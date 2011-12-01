@@ -1,22 +1,26 @@
-// Copyright (C) 1999-2000 Id Software, Inc.
-//
-// cg_draw.c -- draw all of the graphical elements during
-// active (after loading) gameplay
+/*
+ * Copyright (C) 1999-2000 Id Software, Inc.
+ *
+ * cg_draw.c -- draw all of the graphical elements during
+ * active (after loading) gameplay
+ */
 
 #include "cg_local.h"
 #include "cg_text.h"
 #include "cg_screenfx.h"
 
-// set in CG_ParseTeamInfo
+/* set in CG_ParseTeamInfo */
 int sortedTeamPlayers[TEAM_MAXOVERLAY];
 int	numSortedTeamPlayers;
 int drawTeamOverlayModificationCount = -1;
 
-//TiM: dCross
-//qboolean CG_WorldCoordToScreenCoord(vec3_t worldCoord, float *x, float *y, qboolean clamp);
-//end dCross
+/*
+ * TiM: dCross
+ * qboolean CG_WorldCoordToScreenCoord(vec3_t worldCoord, float *x, float *y, qboolean clamp);
+ * end dCross
+ */
 
-//TiM: Tricorder Parameters
+/* TiM: Tricorder Parameters */
 vec3_t	vfwd;
 vec3_t	vright;
 vec3_t	vup;
@@ -31,7 +35,7 @@ extern void InitPostGameMenuStruct();
 
 static void CG_InterfaceStartup();
 
-char *ingame_text[IGT_MAX];		//	Holds pointers to ingame text
+char *ingame_text[IGT_MAX];		/*	Holds pointers to ingame text */
 
 int zoomFlashTime=0;
 
@@ -43,58 +47,58 @@ int zoomFlashTime=0;
 
 interfacegraphics_s interface_graphics[IG_MAX] = 
 {
-//	type		timer	x		y		width	height	file/text						graphic,	min		max		color			style			ptr
-	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },					// IG_GROW
+/*	type		timer	x		y		width	height	file/text										graphic,	min		max		color			style			ptr */
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,										0,		0,		0,		CT_NONE,		0 },					/* IG_GROW */
 
-	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },				 	// IG_HEALTH_START
-	{ SG_GRAPHIC,	0.0,	5,		429,	32,		64,		"gfx/interface/rpgx_healthbar_leftcorner",		0,		0,		0,		CT_DKBROWN1,	0 },				 	// IG_HEALTH_BEGINCAP
-	{ SG_GRAPHIC,	0.0,	64,		429,	6,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKBROWN1,	0 },				 	// IG_HEALTH_BOX1
-	{ SG_GRAPHIC,	0.0,	72,		429,	0,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTBROWN1,	0 },				 	// IG_HEALTH_SLIDERFULL
-	{ SG_GRAPHIC,	0.0,	0,		429,	0,		25,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKBROWN1,	0 },				 	// IG_HEALTH_SLIDEREMPTY
-	{ SG_GRAPHIC,	0.0,	72,		429,	16,		32,		"gfx/interface/rpgx_healthbar_endcap",		0,		0,		147,	CT_DKBROWN1,	0 },				 	// IG_HEALTH_ENDCAP
-	{ SG_NUMBER,	0.0,	23,		425,	16,		32,		NULL,							0,		0,		0,		CT_LTBROWN1,	NUM_FONT_BIG },	 	// IG_HEALTH_COUNT
-	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },				 	// IG_HEALTH_END
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,										0,		0,		0,		CT_NONE,		0 },				 	/* IG_HEALTH_START */
+	{ SG_GRAPHIC,	0.0,	5,		429,	32,		64,		"gfx/interface/rpgx_healthbar_leftcorner",	0,		0,		0,		CT_DKBROWN1,	0 },				 	/* IG_HEALTH_BEGINCAP */
+	{ SG_GRAPHIC,	0.0,	64,		429,	6,		25,		"gfx/interface/ammobar",					0,		0,		0,		CT_DKBROWN1,	0 },				 	/* IG_HEALTH_BOX1 */
+	{ SG_GRAPHIC,	0.0,	72,		429,	0,		25,		"gfx/interface/ammobar",					0,		0,		0,		CT_LTBROWN1,	0 },				 	/* IG_HEALTH_SLIDERFULL */
+	{ SG_GRAPHIC,	0.0,	0,		429,	0,		25,		"gfx/interface/ammobar",					0,		0,		0,		CT_DKBROWN1,	0 },				 	/* IG_HEALTH_SLIDEREMPTY */
+	{ SG_GRAPHIC,	0.0,	72,		429,	16,		32,		"gfx/interface/rpgx_healthbar_endcap",		0,		0,		147,	CT_DKBROWN1,	0 },				 	/* IG_HEALTH_ENDCAP */
+	{ SG_NUMBER,	0.0,	23,		425,	16,		32,		NULL,										0,		0,		0,		CT_LTBROWN1,	NUM_FONT_BIG },	 		/* IG_HEALTH_COUNT */
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,										0,		0,		0,		CT_NONE,		0 },				 	/* IG_HEALTH_END */
 
-	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },				 	// IG_ARMOR_START
-	{ SG_GRAPHIC,	0.0,	20,		458,	32,		16,		"gfx/interface/armorcap1",		0,		0,		0,		CT_DKPURPLE1,	0 },			 	// IG_ARMOR_BEGINCAP
-	{ SG_GRAPHIC,	0.0,	64,		458,	6,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0 },			 	// IG_ARMOR_BOX1
-	{ SG_GRAPHIC,	0.0,	72,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTPURPLE1,	0 },			 	// IG_ARMOR_SLIDERFULL
-	{ SG_GRAPHIC,	0.0,	0,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0 },			 	// IG_ARMOR_SLIDEREMPTY
-	{ SG_GRAPHIC,	0.0,	72,		458,	16,		16,		"gfx/interface/armorcap2",		0,		0,		147,	CT_DKPURPLE1,	0 },			 	// IG_ARMOR_ENDCAP
-	{ SG_NUMBER,	0.0,	44,		458,	16,		16,		NULL,							0,		0,		0,		CT_LTPURPLE1,	NUM_FONT_SMALL }, 	// IG_ARMOR_COUNT
-	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },			 	// IG_ARMOR_END
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,										0,		0,		0,		CT_NONE,		0 },				 	/* IG_ARMOR_START */
+	{ SG_GRAPHIC,	0.0,	20,		458,	32,		16,		"gfx/interface/armorcap1",					0,		0,		0,		CT_DKPURPLE1,	0 },			 		/* IG_ARMOR_BEGINCAP */
+	{ SG_GRAPHIC,	0.0,	64,		458,	6,		12,		"gfx/interface/ammobar",					0,		0,		0,		CT_DKPURPLE1,	0 },			 		/* IG_ARMOR_BOX1 */
+	{ SG_GRAPHIC,	0.0,	72,		458,	0,		12,		"gfx/interface/ammobar",					0,		0,		0,		CT_LTPURPLE1,	0 },			 		/* IG_ARMOR_SLIDERFULL */
+	{ SG_GRAPHIC,	0.0,	0,		458,	0,		12,		"gfx/interface/ammobar",					0,		0,		0,		CT_DKPURPLE1,	0 },			 		/* IG_ARMOR_SLIDEREMPTY */
+	{ SG_GRAPHIC,	0.0,	72,		458,	16,		16,		"gfx/interface/armorcap2",					0,		0,		147,	CT_DKPURPLE1,	0 },			 		/* IG_ARMOR_ENDCAP */
+	{ SG_NUMBER,	0.0,	44,		458,	16,		16,		NULL,										0,		0,		0,		CT_LTPURPLE1,	NUM_FONT_SMALL }, 		/* IG_ARMOR_COUNT */
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,										0,		0,		0,		CT_NONE,		0 },			 		/* IG_ARMOR_END */
 
-	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },			 	// IG_AMMO_START
-	{ SG_GRAPHIC,	0.0,	613,	429,	32,		64,		"gfx/interface/ammouppercap1",	0,		0,		0,		CT_LTPURPLE2,	0 },			 	// IG_AMMO_UPPER_BEGINCAP
-	{ SG_GRAPHIC,	0.0,	607,	429,	16,		32,		"gfx/interface/ammouppercap2",	0,		0,		572,	CT_LTPURPLE2,	0 },			 	// IG_AMMO_UPPER_ENDCAP
-	{ SG_GRAPHIC,	0.0,	613,	458,	16,		16,		"gfx/interface/ammolowercap1",	0,		0,		0,		CT_LTPURPLE2,	0 },			 	// IG_AMMO_LOWER_BEGINCAP
-	{ SG_GRAPHIC,	0.0,	578,	458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_LTPURPLE1,	0 },			 // IG_AMMO_SLIDERFULL
-	{ SG_GRAPHIC,	0.0,	0,		458,	0,		12,		"gfx/interface/ammobar",		0,		0,		0,		CT_DKPURPLE1,	0 },			 	// IG_AMMO_SLIDEREMPTY
-	{ SG_GRAPHIC,	0.0,	607,	458,	16,		16,		"gfx/interface/ammolowercap2",	0,		0,		572,	CT_LTPURPLE2,	0 },			 	// IG_AMMO_LOWER_ENDCAP
-	{ SG_NUMBER,	0.0,	573,	425,	16,		32,		NULL,							0,		0,		0,		CT_LTPURPLE1,	NUM_FONT_BIG }, 	// IG_AMMO_COUNT
-	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,							0,		0,		0,		CT_NONE,		0 },			 	// IG_AMMO_END
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,										0,		0,		0,		CT_NONE,		0 },			 		/* IG_AMMO_START */
+	{ SG_GRAPHIC,	0.0,	613,	429,	32,		64,		"gfx/interface/ammouppercap1",				0,		0,		0,		CT_LTPURPLE2,	0 },			 		/* IG_AMMO_UPPER_BEGINCAP */
+	{ SG_GRAPHIC,	0.0,	607,	429,	16,		32,		"gfx/interface/ammouppercap2",				0,		0,		572,	CT_LTPURPLE2,	0 },			 		/* IG_AMMO_UPPER_ENDCAP */
+	{ SG_GRAPHIC,	0.0,	613,	458,	16,		16,		"gfx/interface/ammolowercap1",				0,		0,		0,		CT_LTPURPLE2,	0 },			 		/* IG_AMMO_LOWER_BEGINCAP */
+	{ SG_GRAPHIC,	0.0,	578,	458,	0,		12,		"gfx/interface/ammobar",					0,		0,		0,		CT_LTPURPLE1,	0 },			 		/* IG_AMMO_SLIDERFULL */
+	{ SG_GRAPHIC,	0.0,	0,		458,	0,		12,		"gfx/interface/ammobar",					0,		0,		0,		CT_DKPURPLE1,	0 },			 		/* IG_AMMO_SLIDEREMPTY */
+	{ SG_GRAPHIC,	0.0,	607,	458,	16,		16,		"gfx/interface/ammolowercap2",				0,		0,		572,	CT_LTPURPLE2,	0 },			 		/* IG_AMMO_LOWER_ENDCAP */
+	{ SG_NUMBER,	0.0,	573,	425,	16,		32,		NULL,										0,		0,		0,		CT_LTPURPLE1,	NUM_FONT_BIG }, 		/* IG_AMMO_COUNT */
+	{ SG_VAR,		0.0,	0,		0,		0,		0,		NULL,										0,		0,		0,		CT_NONE,		0 },			 		/* IG_AMMO_END */
 
 };
 
 #define LOWEROVERLAY_Y (SCREEN_HEIGHT - ICON_SIZE - 15)
 
-//------------------------------------------------------
+/*------------------------------------------------------*/
 
 lensFlare_t lensFlare[MAX_LENS_FLARES];
 
 lensReflec_s lensReflec[10] = 
 {
-	//width, height, offset, positive, color, shadername, shaders placeholder
-	{ 23,	23,		0.192,	qtrue,		{ 0.73, 0.50, 0.23 },	"gfx/effects/flares/flare_straight",		0 }, //Brown1 //5.2
-	{ 9,	9,		0.37,	qtrue,		{ 0.37, 0.58, 0.55 },	"gfx/effects/flares/flare_straight",		0 }, //Aqua1 //2.7
-	{ 14,	14,		0.25,	qfalse,		{ 0.37, 0.79, 0.76 },	"gfx/effects/flares/flare_radial",			0 }, //Turquoise1 //4.0
-	{ 86,	86,		0.556,	qfalse,		{ 0.73, 0.50, 0.23 },	"gfx/effects/flares/flare_inverseradial",	0 }, //BigBrownInverseRad //1.8
-	{ 49,	49,		0.476,	qfalse,		{ 0.73, 0.50, 0.23 },	"gfx/effects/flares/flare_straight",		0 }, //StraightBrown2 //2.1
-	{ 35,	35,		0.667,	qfalse,		{ 0.34,	0.40, 0.44 },	"gfx/effects/flares/flare_straight",		0 }, //Grey1 //1.5
-	{ 32,	32,		0.769,	qfalse,		{ 0.20,	0.38, 0.62 },	"gfx/effects/flares/flare_radial",			0 }, //BlueRad //1.3
-	{ 122,	122,	1.1,	qfalse,		{ 0.31, 0.65, 0.36 },	"gfx/effects/flares/flare_inverseradial",	0 }, //BigInverseGreen //0.9
-	{ 254,	254,	1.429,	qfalse,		{ 1.00,	1.00, 1.00 },	"gfx/effects/flares/flare_chromadisc",		0 }, //ChromaHoop //0.7
-	{ 52,	52,		1.429,	qtrue,		{ 0.40, 0.56, 0.42 },	"gfx/effects/flares/flare_inverseradial",	0 }, //Green offset //0.7
+/*   width, height, offset, positive, 	color, 					shadername, 								shaders placeholder */
+	{ 23,	23,		0.192,	qtrue,		{ 0.73, 0.50, 0.23 },	"gfx/effects/flares/flare_straight",		0 }, /* Brown1 5.2 */
+	{ 9,	9,		0.37,	qtrue,		{ 0.37, 0.58, 0.55 },	"gfx/effects/flares/flare_straight",		0 }, /* Aqua1 2.7 */
+	{ 14,	14,		0.25,	qfalse,		{ 0.37, 0.79, 0.76 },	"gfx/effects/flares/flare_radial",			0 }, /* Turquoise1 4.0 */
+	{ 86,	86,		0.556,	qfalse,		{ 0.73, 0.50, 0.23 },	"gfx/effects/flares/flare_inverseradial",	0 }, /* BigBrownInverseRad 1.8 */
+	{ 49,	49,		0.476,	qfalse,		{ 0.73, 0.50, 0.23 },	"gfx/effects/flares/flare_straight",		0 }, /* StraightBrown2 2.1 */
+	{ 35,	35,		0.667,	qfalse,		{ 0.34,	0.40, 0.44 },	"gfx/effects/flares/flare_straight",		0 }, /* Grey1 1.5 */
+	{ 32,	32,		0.769,	qfalse,		{ 0.20,	0.38, 0.62 },	"gfx/effects/flares/flare_radial",			0 }, /* BlueRad 1.3 */
+	{ 122,	122,	1.1,	qfalse,		{ 0.31, 0.65, 0.36 },	"gfx/effects/flares/flare_inverseradial",	0 }, /* BigInverseGreen 0.9 */
+	{ 254,	254,	1.429,	qfalse,		{ 1.00,	1.00, 1.00 },	"gfx/effects/flares/flare_chromadisc",		0 }, /* ChromaHoop 0.7 */
+	{ 52,	52,		1.429,	qtrue,		{ 0.40, 0.56, 0.42 },	"gfx/effects/flares/flare_inverseradial",	0 }, /* Green offset 0.7 */
 };
 
 #define HALF_SCREEN_WIDTH (SCREEN_WIDTH*0.5)
@@ -109,19 +113,19 @@ void CG_InitLensFlare( vec3_t worldCoord,
 {
 	int i;
 
-	//First thing's first.... I understand if you hate flares :'(
+	/* First thing's first.... I understand if you hate flares :'( */
 	if (!cg_dynamiclensflares.value)
 		return; 
 
-	for (i = 0; i < MAX_LENS_FLARES; i++) { //find the next free slot
+	for (i = 0; i < MAX_LENS_FLARES; i++) { /* find the next free slot */
 		if ( !lensFlare[i].qfull ) {
-			//VectorCopy(worldCoord, lensFlare[i].worldCoord);
+			/* VectorCopy(worldCoord, lensFlare[i].worldCoord); */
 			lensFlare[i].worldCoord[0] = worldCoord[0];
 			lensFlare[i].worldCoord[1] = worldCoord[1];
 			lensFlare[i].worldCoord[2] = worldCoord[2];
 			lensFlare[i].w1 = w1;
 			lensFlare[i].h1 = h1;
-			//VectorCopy(glowColor, lensFlare[i].glowColor);
+			/* VectorCopy(glowColor, lensFlare[i].glowColor); */
 			lensFlare[i].glowColor[0] = glowColor[0];
 			lensFlare[i].glowColor[1] = glowColor[1];
 			lensFlare[i].glowColor[2] = glowColor[2];
@@ -129,7 +133,7 @@ void CG_InitLensFlare( vec3_t worldCoord,
 			lensFlare[i].hazeOffset = hazeOffset;
 			lensFlare[i].minDist = minDist;
 			lensFlare[i].maxDist = maxDist;
-			//VectorCopy(streakColor, lensFlare[i].streakColor);
+			/* VectorCopy(streakColor, lensFlare[i].streakColor); */
 			lensFlare[i].streakColor[0] = streakColor[0];
 			lensFlare[i].streakColor[1] = streakColor[1];
 			lensFlare[i].streakColor[2] = streakColor[2];
@@ -178,13 +182,15 @@ static qboolean CG_WorldCoordToScreenCoord(vec3_t worldCoord, float *x, float *y
 	float xzi;
 	float yzi;
 
-//	xcenter = cg.refdef.width / 2;//gives screen coords adjusted for resolution
-//	ycenter = cg.refdef.height / 2;//gives screen coords adjusted for resolution
+/*	xcenter = cg.refdef.width / 2;*//*gives screen coords adjusted for resolution*/
+/*	ycenter = cg.refdef.height / 2;*//*gives screen coords adjusted for resolution*/
 	
-	//NOTE: did it this way because most draw functions expect virtual 640x480 coords
-	//	and adjust them for current resolution
-	//xcenter = 640 * 0.5;//gives screen coords in virtual 640x480, to be adjusted when drawn
-	//ycenter = 480 * 0.5;//gives screen coords in virtual 640x480, to be adjusted when drawn
+	/*
+	 * NOTE: did it this way because most draw functions expect virtual 640x480 coords
+	 *	and adjust them for current resolution
+	 */
+	/*xcenter = 640 * 0.5;*//*gives screen coords in virtual 640x480, to be adjusted when drawn*/
+	/*ycenter = 480 * 0.5;*//*gives screen coords in virtual 640x480, to be adjusted when drawn*/
 	xcenter = 640 >> 1;
 	ycenter = 480 >> 1;
 
@@ -195,7 +201,7 @@ static qboolean CG_WorldCoordToScreenCoord(vec3_t worldCoord, float *x, float *y
 	transformed[1] = DotProduct(local,up);
 	transformed[2] = DotProduct(local,fwd);		
 
-	// Make sure Z is not negative.
+	/* Make sure Z is not negative. */
 	if(transformed[2] < 0.01)
 	{
 		if ( clamp )
@@ -207,9 +213,9 @@ static qboolean CG_WorldCoordToScreenCoord(vec3_t worldCoord, float *x, float *y
 			return qfalse;
 		}
 	}
-	// Simple convert to screen coords.
-	xzi = xcenter / transformed[2] * (96.0/cg.refdef.fov_x);//90 //95
-	yzi = ycenter / transformed[2] * (102.0/cg.refdef.fov_y);//90 //105
+	/* Simple convert to screen coords. */
+	xzi = xcenter / transformed[2] * (96.0/cg.refdef.fov_x);/*90*/ /*95*/
+	yzi = ycenter / transformed[2] * (102.0/cg.refdef.fov_y);/*90*/ /*105*/
 
 	*x = (float)(xcenter + xzi * transformed[0]);
 	*y = (float)(ycenter - yzi * transformed[1]);
@@ -239,9 +245,11 @@ but much less worse than what was before. :)
 
 static float CG_FlareScreenTrans(int x, int y, int xmin, int ymin, int xmax, int ymax ) 
 {
-	//Think about it, when the XY points are in separate quadrants of the screen, 
-	//they're all the same values anyway, but just either negative or positive. 
-	//Making them all positive, and working on just that set kills about 8 birds with a fricken' huge stone. >:)
+	/*
+	 * Think about it, when the XY points are in separate quadrants of the screen,
+	 * they're all the same values anyway, but just either negative or positive.
+	 * Making them all positive, and working on just that set kills about 8 birds with a fricken' huge stone. >:)
+	 */
 	int lx = abs(x);
 	int ly = abs(y);
 	int lxmin = abs(xmin);
@@ -250,30 +258,30 @@ static float CG_FlareScreenTrans(int x, int y, int xmin, int ymin, int xmax, int
 	int lymax = abs(ymax);
 	int xDif = lxmax - lxmin;
 	int yDif = lymax - lymin;
-	float grad = ( (float)lymax/(float)lxmax ); //calc the grad as if (xmin, ymin) were the origin
+	float grad = ( (float)lymax/(float)lxmax ); /* calc the grad as if (xmin, ymin) were the origin */
 
 	float alpha = 1.0;
 
-	//if xy is under minimums, just make it 1 :P
+	/* if xy is under minimums, just make it 1 :P */
 	if (lx < lxmin && ly < lymin ) {
 		return alpha;
 	}
 
-	if ( ly < (lx * grad) ) {//point is running along the side bar
+	if ( ly < (lx * grad) ) {/* point is running along the side bar */
 		alpha = (float)( 1.0 - ( (float)lx - (float)lxmin ) / (float)xDif );
-		//CG_Printf("SIDE BAR!!!! alpha = %f, ly = %i, lymin = %i, yDif = %i\n", alpha, ly, lymin, yDif);
+		/* CG_Printf("SIDE BAR!!!! alpha = %f, ly = %i, lymin = %i, yDif = %i\n", alpha, ly, lymin, yDif); */
 	}
 
-	if ( ly > ( lx * grad) ) {//point is running along the top bar
+	if ( ly > ( lx * grad) ) {/* point is running along the top bar */
 		alpha = (float)( 1.0 - ( (float)ly - (float)lymin ) / (float)yDif );
-		//CG_Printf("TOP BAR!!!! alpha = %f, lx = %i, lxmin = %i, xDif = %i, xEq = %f\n", alpha, lx, lxmin, xDif, ((float)lx * grad) );
+		/* CG_Printf("TOP BAR!!!! alpha = %f, lx = %i, lxmin = %i, xDif = %i, xEq = %f\n", alpha, lx, lxmin, xDif, ((float)lx * grad) ); */
 	}
 
-	//if xy has exceeded maxes, just make it 0 :P
+	/* if xy has exceeded maxes, just make it 0 :P */
 	if ( lx >= lxmax || ly >= lymax )
 		alpha = 0.0;
 
-	//Lock it just in case something weird happened. :S
+	/* Lock it just in case something weird happened. :S */
 	if ( alpha > 1.0 )
 		alpha = 1.0;
 	if ( alpha < 0.0 )
@@ -298,15 +306,15 @@ static float CG_CorrelateMaxMinDist( float len, int min, int max ) {
 
 	float alpha = 1.0;
 
-	if ( min == max && max == 0 ) //This means it will always be off
+	if ( min == max && max == 0 ) /* This means it will always be off */
 		return 0.0;
 
-	if ( min <= 0 ) //this means that the parameter wants it to always be on
+	if ( min <= 0 ) /* this means that the parameter wants it to always be on */
 		return alpha;
 
-	alpha = /*1.0 -*/ ( len - (float)min ) / ((float)max - (float)min); //calculate the alpha
+	alpha = /*1.0 -*/ ( len - (float)min ) / ((float)max - (float)min); /* calculate the alpha */
 
-	if (alpha > 1.0 ) //Clamp it.... again
+	if (alpha > 1.0 ) /* Clamp it.... again */
 		alpha = 1.0;
 	if (alpha < 0.0 )
 		alpha = 0.0;

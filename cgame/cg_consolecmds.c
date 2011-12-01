@@ -1,7 +1,10 @@
-// Copyright (C) 1999-2000 Id Software, Inc.
-//
-// cg_consolecmds.c -- text commands typed in at the local console, or
-// executed by a key binding
+/*
+ *
+ * Copyright (C) 1999-2000 Id Software, Inc.
+ *
+ * cg_consolecmds.c -- text commands typed in at the local console, or
+ * executed by a key binding
+ */
 
 #include "cg_local.h"
 
@@ -88,20 +91,20 @@ static void CG_ClientPos_f ( void )
 
 static void CG_ScoresDown_f( void ) {
 	if ( cg.scoresRequestTime + 2000 < cg.time ) {
-		// the scores are more than two seconds out of data,
-		// so request new ones
+		/* the scores are more than two seconds out of data,
+		   so request new ones */
 		cg.scoresRequestTime = cg.time;
 		trap_SendClientCommand( "score" );
 
-		// leave the current scores up if they were already
-		// displayed, but if this is the first hit, clear them out
+		/* leave the current scores up if they were already
+		   displayed, but if this is the first hit, clear them out */
 		if ( !cg.showScores ) {
 			cg.showScores = qtrue;
 			cg.numScores = 0;
 		}
 	} else {
-		// show the cached contents even if they just pressed if it
-		// is within two seconds
+		/* show the cached contents even if they just pressed if it
+		   is within two seconds */
 		cg.showScores = qtrue;
 	}
 }
@@ -141,25 +144,6 @@ static void CG_TellAttacker_f( void ) {
 	trap_SendClientCommand( command );
 }
 
-/*
-=================
-Cmd_ShakeCamera_f
-=================
-*/
-/*void CG_ShakeCamera_cmd( void ) {
-	//vec3_t		end, start, forward, up;
-	//gclient_t *client;
-	//gentity_t *other;
-	//gentity_t *sayA;
-
-	//if ( ent->client->sess.sessionClass != PC_ADMIN ) {
-	//	return;
-	//}
-	CG_CameraShake( 300, 30000 );
-	//AngleVectors(ent->parent->client->ps.viewangles, forward, right, up);
-}*/
-
-
 void CG_Cough_cmd( void )
 {
 	CG_Printf("                       ,.                      \n");	CG_Printf("          ..:,        :Xt.       ,:.            \n");
@@ -183,96 +167,6 @@ void CG_Cough_cmd( void )
 }
 
 /*
-static const char* cmdStr[][] =
-	{ "rankList", "crewman\t - \tCrewman\n
-					cadet1\t - \tCadet 4th Class\n
-					cadet2\t - \tCadet 3rd Class\n
-					cadet3\t - \tCadet 2nd Class\n
-					cadet4\t - \tCadet 1st Class\n
-					ensign\t - \tEnsign\n
-					ltjg\t - \tLieutenant Junior Grade\n
-					lt\t - \tLieutenant\n
-					ltcmdr\t - \tLt.Commander\n
-					cmdr\t - \tCommander\n
-					capt\t - \tCaptain\n
-					cmmdr\t - \tCommodore\n
-					adm2\t - \tRear Admiral\n
-					adm3\t - \tVice Admiral\n
-					adm4\t - \tAdmiral\n
-					adm5\t - \tFleet Admiral\n
-					-=Use Page Up & Page Down to scroll=-\n" },
-	{ "classlist", "Command\n
-					Science\n
-					Security\n
-					Engineer\n
-					Medical\n
-					Alien\n" },
-	{ "adminlist", "admins\n
-					disarm_tripmine\n
-					drag\n
-					forcename\n
-					forcekill\n
-					forcekillradius\n
-					forceclass\n
-					forcerank\n
-					forcemodel\n
-					give\n
-					giveto\n
-					kicktarget\n
-					msg\n
-					n00b\n
-					revive\n
-					shake\n
-					undrag\n
-					-=Use Page Up & Page Down to scroll=-\n" };*/
-
-
-/*const char* cmdStr[3][2] =
-{
-	{ "rankList", "crewman\t - \tCrewman\ncadet1\t - \tCadet 4th Class\ncadet2\t - \tCadet 3rd Class\ncadet3\t - \tCadet 2nd Class\ncadet4\t - \tCadet 1st Class\nensign\t - \tEnsign\nltjg\t - \tLieutenant Junior Grade\nlt\t - \tLieutenant\nltcmdr\t - \tLt.Commander\ncmdr\t - \tCommander\ncapt\t - \tCaptain\ncmmdr\t - \tCommodore\nadm2\t - \tRear Admiral\nadm3\t - \tVice Admiral\nadm4\t - \tAdmiral\nadm5\t - \tFleet Admiral\n-=Use Page Up & Page Down to scroll=-\n" },
-	{ "classlist", "Command\nScience\nSecurity\nEngineer\nMedical\nAlien\n" },
-	{ "adminlist", "admins\ndisarm_tripmine\ndrag\nforcename\nforcekill\nforcekillradius\nforceclass\nforcerank\nforcemodel\ngive\ngiveto\nkicktarget\nmsg\nn00b\nrevive\nshake\nundrag\n-=Use Page Up & Page Down to scroll=-\n" }
-};*/
-
-/*
-=========================
-CG_CmdList_cmd
-TiM: This is to help those keep track
-of those freeky huge list of things
-we've put in this mod
-FIX: Meh... since the majority
-of these are dynamic now and need calculation
-I'll put them in separate funcs.
-=========================
-*/
-
-/*void CG_CmdList_cmd ( void ) {
-	char	StrArg[MAX_STRING_CHARS];
-	int i;
-
-	trap_Argv( 1, StrArg, sizeof(StrArg) );
-
-	if ( !StrArg[0] ) {
-		CG_Printf( "\nUsage: Displays a list of commands and variables for easy access\nCommand: cmdList <Name of list to show>\n\nAvailable lists are:\n" );
-
-		for ( i = 0; i < sizeof( cmdStr ) / sizeof( cmdStr[0] ); i++ ) {
-			CG_Printf( "%s\n", cmdStr[i][0] );
-		}
-		
-		return;
-	}
-
-	for ( i = 0; i < sizeof( cmdStr ) / sizeof( cmdStr[0]); i++ ) {
-		if ( !Q_stricmp( StrArg, cmdStr[i][0]) ) {
-			CG_Printf( "\n%s\n", cmdStr[i][1] );
-			return;
-		}
-	}
-
-	CG_Printf( "ERROR: Invalid Argument. Please check for validity and spelling errors.\n" );
-}*/
-
-/*
 =========================
 CG_RankList_cmd
 TiM: Scans the rank struct, and gets
@@ -282,14 +176,14 @@ the names of all the ranks we can use ATM
 void CG_RankList_cmd( void ) {
 	int i;
 
-	//Print Titles
+	/* Print Titles */
 	CG_Printf( S_COLOR_CYAN "RPG-X: Available Ranks\n");
 	CG_Printf( S_COLOR_GREEN "Console Name \t - \t Formal Name\n" );
 
-	//Loop thru each val and print them
+	/* Loop thru each val and print them */
 	for ( i = 0; i < MAX_RANKS; i++ ) {
-		//if ( strlen( cgs.ranksData[i].consoleName ) < 1 || strlen( cgs.ranksData[i].formalName ) < 1 ) 
-		//	return;
+		/*if ( strlen( cgs.ranksData[i].consoleName ) < 1 || strlen( cgs.ranksData[i].formalName ) < 1 )
+			return; */
 		
 		if ( cgs.ranksData[i].consoleName[0] ) 
 			CG_Printf( "%s \t - \t %s\n", cgs.ranksData[i].consoleName, cgs.ranksData[i].formalName );
@@ -308,14 +202,14 @@ the names of all the ranks we can use ATM
 void CG_ClassList_cmd( void ) {
 	int i;
 
-	//Print Titles
+	/* Print Titles */
 	CG_Printf( S_COLOR_CYAN "RPG-X: Available Classes\n");
 	CG_Printf( S_COLOR_GREEN "Formal Name\n" );
 
-	//Loop thru each val and print them
+	/* Loop thru each val and print them */
 	for ( i = 0; i < MAX_CLASSES; i++ ) {
-		//if ( strlen( cgs.ranksData[i].consoleName ) < 1 || strlen( cgs.ranksData[i].formalName ) < 1 ) 
-		//	return;
+		/* if ( strlen( cgs.ranksData[i].consoleName ) < 1 || strlen( cgs.ranksData[i].formalName ) < 1 )
+			return; */
 		
 		if ( cgs.classData[i].formalName[0] ) 
 			CG_Printf( "%s\n", cgs.classData[i].formalName[0] );
@@ -337,19 +231,19 @@ void CG_BeamList_cmd( void ) {
 	const char *locStr;
 	int i;
 
-	//Print Titles
+	/* Print Titles */
 	CG_Printf( S_COLOR_CYAN "RPG-X Current Beam Locations\n" );
 	CG_Printf( S_COLOR_GREEN "Location Name \t - \t Location Index\n" );
 
-	//Based off the string data that is transmitted to the CG on Init
-	//Get the name and index of each location
+	/* Based off the string data that is transmitted to the CG on Init
+	   Get the name and index of each location */
 	for ( i = 1; i < MAX_LOCATIONS; i++ ) {
 		locStr = CG_ConfigString( CS_LOCATIONS + i );
 
 		if ( locStr[0] ) {
 			CG_Printf( "%s \t - \t%i\n", locStr, i );
 		}
-		locStr = NULL; //reset just in case
+		locStr = NULL; /* reset just in case */
 	}
 }
 
@@ -381,8 +275,8 @@ void CG_Emote_f( void ) {
 	int				i;
 	animation_t		*anims;
 	int				animLength;
-	//int				animLengthUpper;
-	//int				animLengthLower;
+	/* int				animLengthUpper;
+	   int				animLengthLower; */
 	qboolean		emoteFound=qfalse;
 
 	argStr = CG_Argv( 1 );
@@ -391,8 +285,8 @@ void CG_Emote_f( void ) {
 		return;
 	}
 
-	//TiM: Hack override for eyes shut, angry eyes and alert mode.
-	//No more data is needed
+	/* TiM: Hack override for eyes shut, angry eyes and alert mode.
+	   No more data is needed */
 	if ( !Q_stricmp( argStr, "eyes_shut" ) || !Q_stricmp( argStr, "eyes_frown" ) || !Q_stricmpn( argStr, "alert", 5 ) || !Q_stricmpn( argStr, "alert2", 6 ) ) 
 	{
 		trap_SendClientCommand( va( "doEmote %s", argStr ) );
@@ -404,9 +298,9 @@ void CG_Emote_f( void ) {
 		return;
 	} 
 
-	//find out emote in the list
-	//value of numEmotes calced in bg_misc.c
-	//or if an int was supplied as an arg, use that
+	/* find out emote in the list
+	   value of numEmotes calced in bg_misc.c
+	   or if an int was supplied as an arg, use that */
 	/*if ( !argStr[0] >= '0' && argStr[0] <= '9' ) 
 	{
 		i = atoi( argStr );
@@ -423,7 +317,7 @@ void CG_Emote_f( void ) {
 	else 
 	{*/
 		for ( i = 0; i < bg_numEmotes; i++ ) 
-		{ //i < sizeof( emoteList ) / sizeof( emoteList[0] )
+		{ /* i < sizeof( emoteList ) / sizeof( emoteList[0] ) */
 			emote = &bg_emoteList[i];
 
 			if ( emote && !Q_stricmp( emote->name, argStr ) ) 
@@ -432,7 +326,7 @@ void CG_Emote_f( void ) {
 				break;
 			}
 		}
-	//}
+	/*} */
 
 	if ( !emoteFound ) {
 		CG_Printf( S_COLOR_RED "ERROR: Specified emote not found\n" );
@@ -441,25 +335,25 @@ void CG_Emote_f( void ) {
 
 	anims = &cg_animsList[cgs.clientinfo[ cg.predictedPlayerState.clientNum ].animIndex].animations[ emote->enumName ];
 	
-	//if anim num less than 0, then this is a stub anim
+	/* if anim num less than 0, then this is a stub anim */
 	if ( !anims || anims->numFrames < 0 ) {
 		CG_Printf( S_COLOR_RED "ERROR: Current character cannot perform that emote.\n" );
 		return;
 	}
 
-	//Anim length for lower model
+	/* Anim length for lower model */
 	if ( !( emote->animFlags & EMOTE_LOOP_UPPER ) && !( emote->animFlags & EMOTE_LOOP_LOWER ) ) {
-		//numFrames * (1000 / fps = frameLerp ) = time length
+		/* numFrames * (1000 / fps = frameLerp ) = time length */
 		animLength = anims->numFrames * anims->frameLerp;
 	}
 	else {
 		animLength = -1;
 	}
 
-	//send the command to the server
+	/* send the command to the server */
 	trap_SendClientCommand( va( "doEmote %i %i", i, animLength ) );
 
-	//add this emote to the emotes recently played menu
+	/* add this emote to the emotes recently played menu */
 	{
 		int j;
 		char* cvar;
@@ -469,10 +363,10 @@ void CG_Emote_f( void ) {
 		for ( j = 1; j <= NUM_CVAR_STORES; j++ ) {
 			cvar = va( "ui_recentEmote%i", j );
 
-			//found a free slot
+			/* found a free slot */
 			trap_Cvar_VariableStringBuffer( cvar, buffer, 256 );
 
-			//oh this emote's already here... no point adding it again
+			/* oh this emote's already here... no point adding it again */
 			if ( atoi(buffer) == i ) {
 				foundSlot = qtrue;
 				break;				
@@ -485,7 +379,7 @@ void CG_Emote_f( void ) {
 			}
 		}
 
-		//whup... no slot found. better push them all forward one
+		/* whup... no slot found. better push them all forward one */
 		if ( !foundSlot ) {
 			char* cvar2;
 
@@ -730,7 +624,7 @@ void CG_ThirdPersonPitchUpUp_f ( void ) {
 }
 
 
-//------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------*/
 
 const char*		cVars[] = { "cg_thirdPersonRange", "cg_thirdPersonAngle",
 						"cg_thirdPersonVertOffset", "cg_thirdPersonHorzOffset",
@@ -740,8 +634,8 @@ vmCvar_t*		TPSVars[] = { &cg_thirdPersonRange, &cg_thirdPersonAngle,
 						&cg_thirdPersonVertOffset, &cg_thirdPersonHorzOffset,
 						&cg_thirdPersonPitchOffset };
 
-//Set the third person values back to their hard-coded CVAR counter parts
-//Ie revert any temporary changes.
+/* Set the third person values back to their hard-coded CVAR counter parts
+   Ie revert any temporary changes. */
 void CG_ThirdPersonRevert_f ( void ) {
 
 	int i;
@@ -750,14 +644,16 @@ void CG_ThirdPersonRevert_f ( void ) {
 	for (i = 0; i < 5; i++ ){
 		trap_Cvar_VariableStringBuffer ( cVars[i], value, sizeof( value ) );
 		TPSVars[i]->value = atof( value );
-		//Q_strncpyz( TPSVars[i]->string, value, 256 );
+		/* Q_strncpyz( TPSVars[i]->string, value, 256 ); */
 	}
 }
 
-//TiM : If the default values for these CVARs are changed in cg_main.c, update them here.
-//I would consider linking directly to the values, but with scope, and then locating them in the
-//struct array, this is way faster.
-//Resets the values to the game's defaults. Useful if you screwed up the view big time.
+/*
+ * TiM : If the default values for these CVARs are changed in cg_main.c, update them here.
+ * I would consider linking directly to the values, but with scope, and then locating them in the
+ * struct array, this is way faster.
+ * Resets the values to the game's defaults. Useful if you screwed up the view big time.
+ */
 void CG_ThirdPersonReset_f ( void ) {
 	int	defValues[] = { 80, 0, 16, 0, 0 };
 	int i;
@@ -768,8 +664,10 @@ void CG_ThirdPersonReset_f ( void ) {
 	}
 }
 
-//Takes the current values from all of the thirdperson pointer variables, and sets the
-//hard coded CVARs to the same value, effectively making them permanent
+/*
+ * Takes the current values from all of the thirdperson pointer variables, and sets the
+ * hard coded CVARs to the same value, effectively making them permanent
+ */
 void CG_ThirdPersonCommit_f ( void ) {
 	int i;
 
@@ -780,43 +678,42 @@ void CG_ThirdPersonCommit_f ( void ) {
 	//since no screen changes occur. Let the user know something happened.
 }
 
-//Toggles between first and third person
+/* Toggles between first and third person */
 void CG_ToggleThirdPerson_f ( void ) {
 	int value;
 
-	value = !( cg_thirdPerson.integer > 0 ); //This is cool. It'll toggle the value each call.
+	value = !( cg_thirdPerson.integer > 0 ); /* This is cool. It'll toggle the value each call. */
 
 	trap_Cvar_Set( "cg_thirdPerson", va( "%i", value ) );
 }
 
-//TiM - Test the ability to handle binary data streams
-//void CG_LoadBinaryData( void )
-//{
-//	const char *fileRoute = "rpgx.idkey";
-//	fileHandle_t		f;
-//	int					len;
-//	byte				buffer[SECURITY_SIZE];
-//	rpgxSecurityFile_t	*c;
-//
-//	if (!fileRoute)
-//		return;
-//
-//	len = trap_FS_FOpenFile( fileRoute, &f, FS_READ );
-//
-//	if ( !len )
-//		return;
-//
-//	trap_FS_Read( buffer, len,	f );
-//
-//	trap_FS_FCloseFile( f );
-//
-//	c = (rpgxSecurityFile_t *)((byte *)buffer);
-//
-//	CG_Printf( "ID: %i, Hash: %i, PID: %i\n", c->ID, c->hash > 0xFFFF ? 1 : 0, c->playerID > 0xFFFF ? 1 : 0);
-//	CG_Printf( "%i\n", (unsigned)atoi( sv_securityHash.string ) > 0xFFFF ? 1 : 0 );
-//}
+/*TiM - Test the ability to handle binary data streams
+void CG_LoadBinaryData( void )
+{
+	const char *fileRoute = "rpgx.idkey";
+	fileHandle_t		f;
+	int					len;
+	byte				buffer[SECURITY_SIZE];
+	rpgxSecurityFile_t	*c;
 
-//================================================================================
+	if (!fileRoute)
+		return;
+
+	len = trap_FS_FOpenFile( fileRoute, &f, FS_READ );
+
+	if ( !len )
+		return;
+
+	trap_FS_Read( buffer, len,	f );
+	trap_FS_FCloseFile( f );
+
+	c = (rpgxSecurityFile_t *)((byte *)buffer);
+
+	CG_Printf( "ID: %i, Hash: %i, PID: %i\n", c->ID, c->hash > 0xFFFF ? 1 : 0, c->playerID > 0xFFFF ? 1 : 0);
+	CG_Printf( "%i\n", (unsigned)atoi( sv_securityHash.string ) > 0xFFFF ? 1 : 0 );
+}*/
+
+/*================================================================================*/
 
 typedef struct {
 	char	*cmd;
@@ -836,32 +733,32 @@ static consoleCommand_t	commands[] = {
 	{ "+zoom",					CG_ZoomDown_f },
 	{ "-zoom",					CG_ZoomUp_f },
 
-	//TiM : Modelview code
-	{ "+thirdPersonForward",	CG_ThirdPersonForwardDown_f },		//moving the camera forward
+	/* TiM : Modelview code */
+	{ "+thirdPersonForward",	CG_ThirdPersonForwardDown_f },		/* moving the camera forward */
 	{ "-thirdPersonForward",	CG_ThirdPersonForwardUp_f }, 
-	{ "+thirdPersonBackward",	CG_ThirdPersonBackwardDown_f },		//moving the camera backward
+	{ "+thirdPersonBackward",	CG_ThirdPersonBackwardDown_f },		/* moving the camera backward */
 	{ "-thirdPersonBackward",	CG_ThirdPersonBackwardUp_f },
-	{ "+thirdPersonLeft",		CG_ThirdPersonLeftDown_f },			//moving the camera left
+	{ "+thirdPersonLeft",		CG_ThirdPersonLeftDown_f },			/* moving the camera left */
 	{ "-thirdPersonLeft",		CG_ThirdPersonLeftUp_f },
-	{ "+thirdPersonRight",		CG_ThirdPersonRightDown_f },		//moving the camera right
+	{ "+thirdPersonRight",		CG_ThirdPersonRightDown_f },		/* moving the camera right */
 	{ "-thirdPersonRight",		CG_ThirdPersonRightUp_f },
-	{ "+thirdPersonUp",			CG_ThirdPersonUpDown_f },			//moving the camera up
+	{ "+thirdPersonUp",			CG_ThirdPersonUpDown_f },			/* moving the camera up */
 	{ "-thirdPersonUp",			CG_ThirdPersonUpUp_f },
-	{ "+thirdPersonDown",		CG_ThirdPersonDownDown_f },			//moving the camera down
+	{ "+thirdPersonDown",		CG_ThirdPersonDownDown_f },			/* moving the camera down */
 	{ "-thirdPersonDown",		CG_ThirdPersonDownUp_f },
-	{ "+thirdPersonAngleLeft",	CG_ThirdPersonAngleLeftDown_f },	//rotating the camera left
+	{ "+thirdPersonAngleLeft",	CG_ThirdPersonAngleLeftDown_f },	/* rotating the camera left */
 	{ "-thirdPersonAngleLeft",	CG_ThirdPersonAngleLeftUp_f },
-	{ "+thirdPersonAngleRight",	CG_ThirdPersonAngleRightDown_f },	//rotating the camera right
+	{ "+thirdPersonAngleRight",	CG_ThirdPersonAngleRightDown_f },	/* rotating the camera right */
 	{ "-thirdPersonAngleRight",	CG_ThirdPersonAngleRightUp_f },
-	{ "+thirdPersonPitchDown",	CG_ThirdPersonPitchDownDown_f },	//pitching the camera down
+	{ "+thirdPersonPitchDown",	CG_ThirdPersonPitchDownDown_f },	/* pitching the camera down */
 	{ "-thirdPersonPitchDown",	CG_ThirdPersonPitchDownUp_f },
-	{ "+thirdPersonPitchUp",	CG_ThirdPersonPitchUpDown_f },		//pitching the camera up
+	{ "+thirdPersonPitchUp",	CG_ThirdPersonPitchUpDown_f },		/* pitching the camera up */
 	{ "-thirdPersonPitchUp",	CG_ThirdPersonPitchUpUp_f },
-	{ "thirdPersonRevert",		CG_ThirdPersonRevert_f },			//revert current view to previous settings
-	{ "thirdPersonReset",		CG_ThirdPersonReset_f },			//reset values to CVAR defaults
-	{ "thirdPersonCommit",		CG_ThirdPersonCommit_f },			//set CVARs to current settings
-	{ "thirdPerson",			CG_ToggleThirdPerson_f },			//Toggle the 3rd persn CVAR
-	//TiM
+	{ "thirdPersonRevert",		CG_ThirdPersonRevert_f },			/* revert current view to previous settings */
+	{ "thirdPersonReset",		CG_ThirdPersonReset_f },			/* reset values to CVAR defaults */
+	{ "thirdPersonCommit",		CG_ThirdPersonCommit_f },			/* set CVARs to current settings */
+	{ "thirdPerson",			CG_ToggleThirdPerson_f },			/* Toggle the 3rd persn CVAR */
+	/* TiM */
 
 	{ "clientPos",				CG_ClientPos_f },
 	{ "sizeup",					CG_SizeUp_f },
@@ -872,18 +769,18 @@ static consoleCommand_t	commands[] = {
 	{ "tell_target",			CG_TellTarget_f },
 	{ "tell_attacker",			CG_TellAttacker_f },
 	{ "tcmd",					CG_TargetCommand_f },
-	{ "loaddefered",			CG_LoadDeferredPlayers },	// spelled wrong, but not changing for demo...
+	{ "loaddefered",			CG_LoadDeferredPlayers },			/* spelled wrong, but not changing for demo... */
 	{ "+analysis",				CG_ObjectivesDown_f },
 	{ "-analysis",				CG_ObjectivesUp_f },
-	//{ "+shake",				CG_ShakeCamera_cmd },
+	/*{ "+shake",				CG_ShakeCamera_cmd },*/
 	{ "iloverpg-x",				CG_Cough_cmd },
-	//{ "commandList",			 CG_CmdList_cmd },
+	/*{ "commandList",			 CG_CmdList_cmd },*/
 	{ "rankList",				CG_RankList_cmd },
 	{ "locationList",			CG_BeamList_cmd },
 	{ "classList",				CG_ClassList_cmd },
 	{ "emote",					CG_Emote_f },
 	{ "locedit",				CG_LocEdit_f },
-	//{ "fileID",					CG_LoadBinaryData }
+	/*{ "fileID",					CG_LoadBinaryData }*/
 };
 
 
@@ -926,25 +823,26 @@ void CG_InitConsoleCommands( void ) {
 		trap_AddCommand( commands[i].cmd );
 	}
 
-	//
-	// the game server will interpret these commands, which will be automatically
-	// forwarded to the server after they are not recognized locally
-	//
-	//	TiM: This trap command also adds the commands to the 'tab list' that users can
-	//	use thru the console, so adding any and all game side commands (that we want the users to know about/access of course lol ;P )
-	//	would be a good idea too. :)
+	/*
+	 * the game server will interpret these commands, which will be automatically
+	 * forwarded to the server after they are not recognized locally
+	 *
+	 *	TiM: This trap command also adds the commands to the 'tab list' that users can
+	 *	use thru the console, so adding any and all game side commands (that we want the users to know about/access of course lol ;P )
+	 *	would be a good idea too. :)
+	 */
 	trap_AddCommand ("kill");
 	trap_AddCommand ("say");
 	trap_AddCommand ("say_team");
-	// START MOD
+	/* START MOD */
 	trap_AddCommand ("say_class");
-	//trap_AddCommand ("giveTo");
+	/*trap_AddCommand ("giveTo");*/
 	trap_AddCommand ("forceName");
 	trap_AddCommand ("forceKill");
 	trap_AddCommand ("forceKillRadius");
 	trap_AddCommand ("forceClass");
 	trap_AddCommand ("kickTarget");
-	// END MOD
+	/* END MOD */
 	trap_AddCommand ("give");
 	trap_AddCommand ("god");
 	trap_AddCommand ("notarget");
@@ -957,9 +855,9 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("setviewpos");
 	trap_AddCommand ("vote");
 	trap_AddCommand ("callvote");
-	trap_AddCommand ("loaddeferred");	// spelled wrong, but not changing for demo
+	trap_AddCommand ("loaddeferred");	/* spelled wrong, but not changing for demo */
 
-	//TiM - uh START MOD AGAIN
+	/*TiM - uh START MOD AGAIN */
 	trap_AddCommand("laser");
 	trap_AddCommand("flashlight");
 	trap_AddCommand("cloak");
@@ -971,7 +869,7 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand("shake");
 	trap_AddCommand("drag");
 	trap_AddCommand("undrag");
-	trap_AddCommand("flushTripmines"); //disarm_tripmines
+	trap_AddCommand("flushTripmines"); /* disarm_tripmines */
 	trap_AddCommand("rank");
 	trap_AddCommand("forceRank");
 	trap_AddCommand("forceModel");
@@ -1011,17 +909,23 @@ void CG_InitConsoleCommands( void ) {
 
 	trap_AddCommand("mapsList");
 
-	//END MOD AGAIN
-	//TiM - May I just say. WOAH! THAT'S A LOT!! O_O!
+	/*
+	 * END MOD AGAIN
+	 * TiM - May I just say. WOAH! THAT'S A LOT!! O_O!
+	 */
 
-    //START MOD AGAIN - xD
-    //by Marcin - 04/12/2008
+    /*
+     * START MOD AGAIN - xD
+     * by Marcin - 04/12/2008
+     */
     trap_AddCommand("drop");
     trap_AddCommand("flushDropped");
-    //END MOD
+    /* END MOD */
 
-	//START MOD ANOTHER TIME AGAIN xD
-	//GSIO01 | 08/05/2009
+	/*
+	 * START MOD ANOTHER TIME xD
+	 * GSIO01 | 08/05/2009
+	 */
 	trap_AddCommand("lock");
 	trap_AddCommand("ffColor");
 	trap_AddCommand("remodulate");
@@ -1043,11 +947,11 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand("spawnTEnt");
 	trap_AddCommand("flushTEnts");
 
-	//XPRERIMENTAL
+	/* XPRERIMENTAL */
 	trap_AddCommand("universalTrans");
-	//END MOD
+	/* END MOD  */
 
-	//temp
+	/* temp */
 	trap_AddCommand("ui_holodeck");
 
 	#ifdef XTRA
@@ -1062,7 +966,7 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand("lua_status");
 	#endif
 
-	// CCAM
+	/* CCAM */
 	trap_AddCommand("camtest");
 	trap_AddCommand("camtestend");
 }
