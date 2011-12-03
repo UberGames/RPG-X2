@@ -1422,6 +1422,12 @@ case EV_SHAKE_SOUND:
 		CG_PhaserFX(cent);
 		break;
 
+	case EV_FX_DISRUPTOR:
+		s = CG_ConfigString(CS_SOUNDS + es->time);
+		trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, s));
+		CG_DisruptorFX(cent);
+		break;
+
 	case EV_SET_CLOAK:
 		ci->silentCloak = es->eventParm;
 		break;

@@ -2041,6 +2041,7 @@ void CG_ElectricalExplosion( vec3_t start, vec3_t dir, float radius );
 
 //RPG-X | GSIO01 | 09/05/2009
 void CG_PhaserFX(centity_t *cent);
+void CG_DisruptorFX(centity_t *cent); //RPG-X | Harry Young | 03.12.2011
 void CG_TorpedoFX(centity_t *cent);
 void CG_ParticleFire(vec3_t origin, int size);
 void CG_ShowTrigger(centity_t *cent);

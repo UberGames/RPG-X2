@@ -1176,3 +1176,54 @@ void CG_ShowTrigger(centity_t *cent) {
 	}
 }
 
+//RPG-X | Harry Young | 03.12.2011
+void FX_DisruptorFire2(vec3_t startpos, vec3_t endpos, vec3_t normal, qboolean impact, float scale)
+{
+	refEntity_t		beam;
+	//float			size;
+	//vec3_t			velocity;
+	//int				sparks;
+	vec3_t			rgb = { 1,0.9,0.6}, rgb2={1,0.3,0};
+
+	// Draw beam first.
+	memset( &beam, 0, sizeof( beam ) );
+	VectorCopy( startpos, beam.origin);
+	VectorCopy( endpos, beam.oldorigin );
+	beam.reType = RT_LINE;
+	beam.customShader = cgs.media.disruptorBeam;
+	AxisClear( beam.axis );
+	beam.shaderRGBA[0] = 0xff;
+	beam.shaderRGBA[1] = 0xff;
+	beam.shaderRGBA[2] = 0xff;
+	beam.shaderRGBA[3] = 0xff;
+	beam.data.line.width = scale + ( crandom() * 0.6f );
+	beam.data.line.stscale = 5.0;
+	trap_R_AddRefEntityToScene( &beam );
+	if (impact)
+	{
+		FX_AddQuad2( endpos, normal, (0.75f * scale) + random() * .75 + 1.0f, 0.0f, 0.5f, 0.0f, rgb, rgb2, rand() % 360, 300 + random() * 200, 
+			cgs.media.disruptorStreak );
+	}
+}
+
+qboolean DisruptorFX_Think(localEntity_t *le) {
+	vec3_t	dir;
+	qboolean impact = qfalse;
+	le->data.spawner.nextthink = cg.time;
+	VectorSubtract(le->data.spawner.dir, le->refEntity.origin, dir);
+	VectorNormalize(dir);
+	if(le->data.spawner.data2 == 1)
+		impact = qtrue;
+
+	FX_DisruptorFire2(le->refEntity.origin, le->data.spawner.dir, dir, impact, le->data.spawner.data1);
+
+	return qtrue;
+}
+
+void CG_DisruptorFX(centity_t *cent) {
+	localEntity_t *le;
+	le = FX_AddSpawner(cent->currentState.origin, cent->currentState.origin2, NULL, NULL, qfalse, 0, 0, cent->currentState.time2, DisruptorFX_Think, 10);
+	le->data.spawner.data1 = cent->currentState.angles[0];
+	le->data.spawner.data2 = cent->currentState.angles[2];
+	le->data.spawner.nextthink = cg.time + (int)cent->currentState.angles[1];
+}

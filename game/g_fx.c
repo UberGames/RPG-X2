@@ -861,7 +861,7 @@ void SP_fx_electrical_explosion( gentity_t *ent )
 	trap_LinkEntity( ent );
 }
 
-/*QUAKED fx_phaser (0 0 1) (-8 -8 -8) (8 8 8) NO_SOUND
+/*QUAKED fx_phaser (0 0 1) (-8 -8 -8) (8 8 8) NO_SOUND DISRUPTOR
 A phaser effect.
 
 "target"	endpoint
@@ -876,7 +876,15 @@ A phaser effect.
 void phaser_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	if(ent->count == PHASER_FX_UNLINKED)
 		return;
-	G_AddEvent(ent, EV_FX_PHASER, 0);
+	if(ent->spawnflags & 2)
+	{ 
+		G_AddEvent(ent, EV_FX_DISRUPTOR, 0);
+	}
+	else 
+	{
+		G_AddEvent(ent, EV_FX_PHASER, 0);
+	}
+
 }
 
 void phaser_link(gentity_t *ent) {
