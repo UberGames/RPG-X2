@@ -244,30 +244,6 @@ typedef int		clipHandle_t;
 
 #define	MAX_NAME_LENGTH		32		// max length of a client name
 
-//client->sess.sessionClass and client->ps.persistant[PERS_CLASS]
-/*typedef enum
-{//FIXME: restrict pickups to the proper PC?
-	PC_NOCLASS,//default
-	PC_INFILTRATOR,//fast, low attack
-	PC_SNIPER,//sneaky, snipe only
-	PC_HEAVY,//slow, heavy attack
-	PC_DEMO,//go boom
-	PC_MEDIC,//heal
-	PC_TECH,//operate
-	PC_BORG,//special weapons, slower, adapting shields
-	PC_ACTIONHERO,//has everything
-	PC_SECURITY,//for escorts
-	PC_MEDICAL,//for escorts
-	PC_COMMAND,//for escorts
-	PC_SCIENCE,//for escorts
-	PC_ENGINEER,//for escorts
-	PC_ALIEN,//for escorts
-	PC_ALPHAOMEGA22,//for escorts
-	PC_ADMIN,//for escorts
-	PC_N00B,//for escorts
-	NUM_PLAYER_CLASSES
-} pclass_t;*/
-
 typedef int	pclass_t;
 
 // paramters for command buffer stuffing
