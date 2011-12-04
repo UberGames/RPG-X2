@@ -1227,3 +1227,730 @@ void CG_DisruptorFX(centity_t *cent) {
 	le->data.spawner.data2 = cent->currentState.angles[2];
 	le->data.spawner.nextthink = cg.time + (int)cent->currentState.angles[1];
 }
+
+// Additional ports from SP by Harry Young
+
+/*
+======================
+CG_CookingSteam
+
+Creates a basic cooking steam effect
+======================
+*/
+/*void CG_CookingSteam( vec3_t origin, float radius )
+{
+	vec3_t dir;
+
+	VectorSet( dir, crandom()*2, crandom()*2, crandom() + radius); // always move mostly up
+	VectorScale( dir, random() * 5 + 2, dir );
+
+	FX_AddSprite( origin, dir, NULL, radius, radius * 2, 0.4F, 0.0, 0, 0, 1000, cgs.media.steamShader );
+}
+/*
+======================
+CG_ElectricFire
+
+Creates an electric fire effect
+======================
+*/
+
+/*void CG_ElectricFire( vec3_t origin, vec3_t normal )
+{
+	FXTrail	*particle;
+	vec3_t	dir, direction, start, end;
+	vec3_t	velocity, accel;
+	float	scale, alpha;
+	int		numSparks;
+
+	AngleVectors( normal, normal, NULL, NULL);
+
+	numSparks = 4 + (random() * 8.0f);
+	
+	for ( int i = 0; i < numSparks; i++ )
+	{	
+		scale = 0.3f + (random() *0.4);
+
+		for ( int j = 0; j < 3; j ++ )
+			dir[j] = normal[j] + (0.4f * crandom());
+		
+		VectorNormalize(dir);
+
+		VectorMA( origin, -1.0f + ( random() * 2.0f ), dir, start );
+		VectorMA( start, 2.0f + ( random() * 12.0f ), dir, end );
+
+		FX_AddLine( start,
+					end,
+					1.0f,
+					scale,
+					0.0f,
+					1.0f,
+					0.0f,
+					75.0f,
+					cgs.media.sparkShader );
+	}
+ 
+	scale = 0.5f + (random() * 0.5f);
+
+	VectorScale( normal, 300, velocity );
+	VectorSet( accel, 0, 0, -600 );
+
+	particle = FX_AddTrail( start,
+							velocity,
+							accel,
+							6.0f,
+							-24.0f,
+							scale,
+							-scale,
+							1.0f,
+							0.5f,
+							0.0f,
+							200.0f,
+							cgs.media.sparkShader,
+							FXF_BOUNCE );
+
+	if ( particle == NULL )
+		return;
+
+	FXE_Spray( dir, 200, 200, 0.2f, 300, (FXPrimitive *) particle );
+
+	VectorMA( origin, 1, normal, direction );
+	VectorSet( velocity, 0, 0, 8 );
+
+	for ( i = 0; i < 3; i++)
+	{
+		scale = 6.0f + (random() * 8.0f);
+		alpha = 0.1 + (random() * 0.4f);
+
+		FX_AddSprite( direction, 
+					velocity, 
+					NULL, 
+					scale,
+					scale,
+					alpha,
+					0.0,
+					random()*45.0f,
+					0.0f,
+					1000.0f,
+					cgs.media.steamShader );
+
+		VectorMA( velocity, 9.0, normal, velocity);
+	}
+}
+
+/*
+======================
+CG_ForgeBolt
+
+Creates an orange electricity bolt effect with a pulse that travels down the beam
+======================
+*/
+
+/*void ForgeBoltFireback( vec3_t start, vec3_t end, vec3_t velocity, vec3_t user )
+{
+	FX_AddElectricity( start, end, 1.0, user[DATA_RADIUS], 5.0, 1.0, 0.0, 200, cgs.media.pjBoltShader, 
+						(int)user[DATA_EFFECTS], user[DATA_CHAOS] );
+}
+
+//---------------------------------------------------
+bool ForgeBoltPulse( FXPrimitive *fx, centity_t *ent )
+{
+	vec3_t			origin, new_org;
+	trace_t			trace;
+	qboolean		remove = qfalse;
+
+	VectorCopy( fx->m_origin, origin );
+	fx->UpdateOrigin();
+	VectorCopy( fx->m_origin, new_org );
+
+	CG_Trace( &trace, origin, NULL, NULL, new_org, -1, CONTENTS_SOLID );
+
+	if ( trace.fraction < 1.0f && !trace.startsolid && !trace.allsolid )
+	{
+		// The effect hit something, presumably a barrier, so kill it
+		remove = qtrue;
+		return false;
+	}
+
+	vec3_t		normal, rgb1 ={ 1.0F, 0.5F, 0.4F}, rgb2 ={ 1.0F, 1.0F, 0.3F};//, org;
+	FXCylinder	*fxc;
+
+	// Convert the direction of travel in to a normal;
+	VectorCopy( fx->m_velocity, normal );
+	VectorNormalize( normal );
+	VectorScale( normal, -1, normal );
+
+	fxc = FX_AddCylinder( new_org, normal, 16, 0, 16 - random() * 8, 0, 32 + random() * 24, 0, 0.2F, 0.2F, rgb1, rgb1, 1, cgs.media.psychicShader, 0.6F );
+
+	if ( fxc == NULL )
+		return false;
+
+	fxc->SetFlags( FXF_WRAP );
+	fxc->SetSTScale( Q_irand(1,3) );
+
+	fxc = FX_AddCylinder( new_org, normal, 8, 0, 12 - random() * 8, 0, 24 + random() * 24, 0, 0.2F, 0.2F, rgb2, rgb2, 1, cgs.media.psychicShader, 0.6F );
+
+	if ( fxc == NULL )
+		return false;
+
+	fxc->SetFlags( FXF_WRAP );
+	fxc->SetSTScale( Q_irand(1,2) );
+
+	return true;
+}
+
+//-----------------------------
+void CG_ForgeBolt( centity_t *cent )
+{
+	qboolean	pulse;
+	int			effects;
+	float		chaos, radius;
+	
+	// Set up all of the parms
+	pulse = (cent->gent->spawnflags & 8) ? qtrue : qfalse;
+	effects = (cent->gent->spawnflags & 16) ? FXF_TAPER : 0;
+	effects = (cent->gent->spawnflags & 32) ? (FXF_WRAP | effects) : effects;
+	chaos = cent->gent->random;
+	radius = cent->gent->radius;
+
+	// Delayed bolt that should "work" a while
+	if ( cent->gent->spawnflags & 2 )
+	{
+		vec3_t data;
+
+		// This sucks, but the spawn function needs some extra bits of info
+		data[DATA_EFFECTS] = effects;
+		data[DATA_CHAOS] = chaos;
+		data[DATA_RADIUS] = radius;
+
+		FX_AddSpawner( cent->lerpOrigin, cent->currentState.origin2, NULL, data, 70, random() * 25, 450, (void *) ForgeBoltFireback );
+	}
+	else
+	{
+		FX_AddElectricity( cent->lerpOrigin, cent->currentState.origin2, 1.0, radius, 5.0, 1.0, 0.0, 200, cgs.media.pjBoltShader, 
+						effects, chaos );
+
+		if ( rand() & 1 )
+			FX_AddElectricity( cent->currentState.origin2, cent->lerpOrigin, 1.0, radius * 2, 5.0, 1.0, 0.0, 200, cgs.media.pjBoltShader, 
+						effects, chaos );
+
+		if ( cg.time > cent->gent->delay && pulse )
+		{
+			vec3_t	dir;
+			float	amt;
+
+			VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, dir );
+			VectorNormalize( dir );
+			amt = 200 + random() * 100;
+			VectorScale( dir, amt, dir );
+
+			FX_AddParticle( cent, cent->lerpOrigin, dir, NULL, 16, 0.0, 1.0, 1.0,
+						0.0, 0.0, 6000, cgs.media.ltblueParticleShader, FXF_NODRAW, ForgeBoltPulse );
+
+			cent->gent->delay = cg.time + 500;
+		}
+	}
+
+	// Bolt that generates sparks at the impact point
+	if ( cent->gent->spawnflags & 4 )
+	{
+		vec3_t	dir;
+
+		VectorSubtract( cent->lerpOrigin, cent->currentState.origin2, dir );
+		VectorNormalize( dir );
+
+		BoltSparkSpew( cent->currentState.origin2, dir, cgs.media.dkorangeParticleShader );
+	}
+}
+
+/*
+===========================
+Plasma
+
+Create directed and scaled plasma jet
+===========================
+*/
+
+/*void CG_Plasma( vec3_t start, vec3_t end, vec4_t startRGBA, vec4_t endRGBA )
+{
+	vec3_t	v, sp, sRGB, eRGB;
+	float	detail, len, salpha, ealpha;
+
+	detail = FX_DetailLevel( start, 16, 1200 );
+	if ( detail == 0 )
+		return;
+
+	salpha = Vector4to3( startRGBA, sRGB );
+	ealpha = Vector4to3( endRGBA, eRGB );
+
+	// Orient the plasma
+	VectorSubtract( end, start, v );
+	len = VectorNormalize( v );
+	VectorMA( start, 0.5f, v, sp );
+
+	// Stash a quad at the base to make the effect look a bit more solid
+	FX_AddQuad( sp, v, NULL, NULL, len * 0.36f, 0.0f, salpha, salpha, sRGB, sRGB, 0.0f, 45.0f, 0.0f, 200, cgs.media.prifleImpactShader );
+	
+	// Add a subtle, random flutter to the cone direction
+	v[0] += crandom() * 0.04;
+	v[1] += crandom() * 0.04;
+	v[2] += crandom() * 0.04;
+	
+	// Wanted the effect to be scalable based on the length of the jet. 
+	FX_AddCylinder( start, v, len * 0.05, len * 2.0f, len * 0.16f, len * 0.32f, len * 0.40f, len * 0.64f, 
+					salpha, ealpha, sRGB, eRGB, 200, cgs.media.plasmaShader, 0.3f );
+	FX_AddCylinder( start, v, len * 0.05, len * 4.0f, len * 0.16f, len * 0.32f, len * 0.28f, len * 0.64f, 
+					salpha, ealpha, sRGB, eRGB, 200, cgs.media.plasmaShader, 0.2f );
+	FX_AddCylinder( start, v, len * 0.25, len * 8.0f, len * 0.20f, len * 0.32f, len * 0.02f, len * 0.32f, 
+					salpha, ealpha, sRGB, eRGB, 200, cgs.media.plasmaShader, 0.1f );
+}
+
+/*
+======================
+CG_ParticleStream
+
+particle stream fx for STASIS level
+======================
+*/
+
+/*bool particle_stream_think( FXPrimitive *fx, centity_t *ent )
+{
+	vec3_t old_org;
+
+	// Make it flicker. . .always safe to do this
+	fx->m_scale = random() * 12 + 2;
+	fx->m_alpha = random() * 0.4 + 0.6;
+
+	// If the ent was somehow removed, we don't want to continue any further.
+	if ( !ent )
+		return false;
+
+	// Stash the old position so that we can draw a trailer line
+	VectorCopy( fx->m_origin, old_org );
+
+	// Update the position of the particle.
+	fx->m_origin[0]  = cos(cg.time * 0.01 + fx->m_velocity[0]) * fx->m_velocity[1] + ent->lerpOrigin[0];
+	fx->m_origin[1]  = sin(cg.time * 0.01 + fx->m_velocity[0]) * fx->m_velocity[1] + ent->lerpOrigin[1];
+	fx->m_origin[2] += (fx->m_velocity[2] * cg.frametime * 0.001);
+
+	FX_AddLine( fx->m_origin, old_org, 1.0f, 2.0f, -4.0f, 0.6f, 0.0, 500, cgs.media.IMOD2Shader );
+
+	return true;
+}
+
+//------------------------------------------------------------------------------
+void CG_ParticleStream( centity_t *cent )
+{
+	vec3_t	vel, org, dir;
+	float	len, time;
+
+	// This effect will currently only travel directly up or down--never sideways
+	VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, dir );
+	len = VectorNormalize( dir );
+
+	// since the movement direction is limited, use the velocity var a bit more efficiently
+	vel[0] = random() * 360;						// random position around the cylinder
+	vel[1] = random() > 0.9  ? 20 : 6;				// random radius
+	vel[2] = dir[2] * 120 + dir[2] * random() * 50;	// random velocity (up or down)
+
+	// Set the particle position
+	org[0] = cos(cg.time * 0.01 + vel[0]) * vel[1] + cent->lerpOrigin[0];
+	org[1] = sin(cg.time * 0.01 + vel[0]) * vel[1] + cent->lerpOrigin[1];
+	org[2] = cent->lerpOrigin[2];
+
+	// Calculate how long the thing should live based on it's velocity and the distance it has to travel
+	time = len / vel[2] * 1000;
+
+	// Use a couple of different kinds to break up the monotony
+	if ( rand() & 1 )
+	{
+		FX_AddParticle( cent, org, vel, NULL, 16, 0.0, 1.0, 1.0,
+						0.0, 0.0, time, cgs.media.ltblueParticleShader, 0, particle_stream_think );
+	}
+	else
+	{
+		FX_AddParticle( cent, org, vel, NULL, 16, 0.0, 1.0, 1.0,
+						0.0, 0.0, time, cgs.media.purpleParticleShader, 0, particle_stream_think );
+	}
+}
+
+/*
+======================
+CG_TransporterStream
+
+particle stream fx for forge level
+The particles will accelerate up to the half-way point of the cylinder, then deccelerate til they hit their target
+======================
+*/
+
+/*void CG_TransporterStream( centity_t *cent )
+{
+	vec3_t	vel, accel, dir, pos, right, up;
+	float	len, time, acceleration, scale, dis, vf;
+
+	VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, dir );
+	len = VectorNormalize( dir );
+	MakeNormalVectors( dir, right, up );
+
+	for ( int t=0; t < 3; t++ )
+	{
+		// Create start offset within a circular radius
+		VectorMA( cent->lerpOrigin, 8 * crandom(), right, pos );
+		VectorMA( pos, 8 * crandom(), up, pos );
+
+		acceleration = 80 + random() * 50;
+		VectorScale( dir, acceleration, accel ); // acceleration vector
+		VectorScale( dir, 0.0001, vel );		// Ideally, vel would be zero, so just make it really small
+
+		dis = ( len * 0.8f );					// the two segs will be overlapping to cover up the middle
+
+		// This is derived from dis = (vi)(t)  +  (1/2)(a)(t)^2 where the inital velocity (vi) = zero
+		time = sqrt( 2  / acceleration * dis );	// Calculate how long the thing will take to travel that distance
+		
+		scale = 1.5f + random() * 4;
+
+		// These will spawn at the base and accelerate towards the middle
+		if ( rand() & 1 )
+		{
+			FX_AddSprite( pos, vel, accel, 
+						scale, 0.0f, 
+						1.0f, 0.0f, 
+						0.0f, 
+						0.0f, 
+						time * 1000, 
+						cgs.media.orangeParticleShader );
+		}
+		else
+		{
+			FX_AddSprite( pos, vel, accel, 
+						scale, 0.0f, 
+						1.0f, 0.0f, 
+						0.0f, 
+						0.0f, 
+						time * 1000, 
+						cgs.media.dkorangeParticleShader );
+		}
+
+		// These will be spawned somewhere in the middle and deccelerate till they reach the end of their target
+		VectorMA( pos, len - dis, dir, pos );
+		VectorScale( accel, -1, accel );
+
+		vf = sqrt( 2 * dis * acceleration ); // calculate the how fast it would be moving at the end of its path
+		VectorScale( dir, vf, vel );		//	this will be the _initial_ velocity for those starting in the middle
+
+		if ( rand() & 1 )
+		{
+			FX_AddSprite( pos, vel, accel, 
+						scale, 0.0f, 
+						0.0f, 1.0f, 
+						0.0f, 
+						0.0f, 
+						time * 1000, 
+						cgs.media.orangeParticleShader );
+		}
+		else
+		{
+			FX_AddSprite( pos, vel, accel, 
+						scale, 0.0f, 
+						0.0f, 1.0f, 
+						0.0f, 
+						0.0f, 
+						time * 1000, 
+						cgs.media.dkorangeParticleShader );
+		}
+	}
+}
+
+/*
+-------------------------
+CG_ExplosionTrail
+-------------------------
+*/
+
+/*bool explosionTrailThink( FXPrimitive *fx, centity_t *ent )
+{
+	localEntity_t	*le=0;
+	vec3_t			direction, origin, new_org, angles, dir;
+	trace_t			trace;
+	float			scale;
+	int				i;
+	qboolean		remove = qfalse;
+
+	VectorCopy( fx->m_origin, origin );
+	fx->UpdateOrigin();
+	VectorCopy( fx->m_origin, new_org );
+
+	CG_Trace( &trace, origin, NULL, NULL, new_org, -1, CONTENTS_SOLID );
+
+	if ( trace.fraction < 1.0f && !trace.startsolid && !trace.allsolid )
+	{
+		// The effect hit something, presumably a barrier, so kill it
+		// When the effect gets killed like this, it dies quickly and looks a bit thin.
+		// Maybe something else should be done as well...
+		remove = qtrue;
+		//FIXME: FX_RemoveEffect( fx );
+		return false;
+	}
+
+	scale = 80 * 0.03f;
+
+	VectorSubtract( new_org, origin, dir );
+	VectorNormalize( dir );
+	vectoangles( dir, angles );
+		
+	//Orient the explosions to face the camera
+	VectorSubtract( cg.refdef.vieworg, origin, direction );
+	VectorNormalize( direction );
+
+	for ( i = 0; i < 3 + (int)remove * 6; i++)
+	{
+		angles[2] = crandom() * 360;
+
+		AngleVectors( angles, NULL, dir, NULL );
+		VectorMA( origin, random() * 50.0f, dir, new_org );
+
+		le = CG_MakeExplosion( new_org, direction, cgs.media.explosionModel, 6, cgs.media.surfaceExplosionShader, 400 + (int)remove * 800, qfalse, random() * 1.0 + 0.8 );//random() * 1.0 + 1.0 );
+	}
+
+	le->light = 150;
+	VectorSet( le->lightColor, 64, 192, 255 );
+
+	//Shake the camera and damage everything in an area
+	CG_ExplosionEffects( origin, 3.0f, 600 );
+	G_RadiusDamage( origin, ent->gent, 150, 80, NULL, MOD_UNKNOWN );
+
+	return true;
+}
+
+//------------------------------------------------------------------------------
+void CG_ExplosionTrail( centity_t *cent )
+{
+	vec3_t			dir;
+	float			len;
+
+	VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, dir );
+	len = VectorNormalize( dir );
+	VectorScale( dir, 325, dir );
+
+	FX_AddParticle( cent, cent->lerpOrigin, dir, NULL, 16, 0.0, 1.0, 1.0,
+						0.0, 0.0, 6000, cgs.media.ltblueParticleShader, FXF_NODRAW, explosionTrailThink );
+}
+
+/*
+----------------------
+CG_BorgEnergyBeam
+
+A scanning type beam
+----------------------
+*/
+
+/*void CG_BorgEnergyBeam( centity_t *cent )
+{
+	vec3_t		normal, angles, base, dir, dir2, rgb;
+	float		len, alpha;
+
+	VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, normal );
+	len = VectorNormalize( normal );
+	vectoangles( normal, angles );
+	alpha = Vector4to3( cent->gent->startRGBA, rgb );
+
+/*	// Code to make the thing "snap" when it's doing the beam slices
+	if ( abs( cent->gent->pos2[0] ) >= cent->gent->radius )
+	{
+		// Snap back to start and move to the next slice
+		cent->gent->pos2[0] = cent->gent->radius;
+		cent->gent->pos2[1] -= ( cg.frametime * 0.0003 * cent->gent->speed );
+	}
+
+	// The slice has moved past the end so snap back to the first slice position
+	if ( abs( cent->gent->pos2[1] ) >= cent->gent->radius )
+	{
+		cent->gent->pos2[1] = cent->gent->radius;
+	}
+
+	// Always move across the slice
+	cent->gent->pos2[0] -= ( cg.frametime * 0.001 * cent->gent->speed );
+*/
+
+	/*if ( cent->gent->spawnflags & 2 )
+	{
+		// Trace a cone
+		angles[2] = cent->gent->angle;
+	}
+
+	AngleVectors( angles, NULL, dir, dir2 );
+
+	if ( cent->gent->spawnflags & 2 )
+	{
+		// Cone
+		VectorMA( cent->currentState.origin2, cent->gent->radius, dir, base );
+	}
+	else
+	{
+		// Swinging pendulum
+		VectorMA( cent->currentState.origin2, cent->gent->radius * ( sin( cent->gent->angle * 0.03f )), dir, base );
+		VectorMA( base, cent->gent->radius * ( cos( cent->gent->angle * 0.003f )), dir2, base );
+		// Do "snapping" beam slices
+//		VectorMA( cent->currentState.origin2, cent->gent->pos2[0], dir, base );
+//		VectorMA( base, cent->gent->pos2[1], dir2, base );
+	}
+
+	// Main trace laser
+	FX_AddLine( cent->lerpOrigin, base, 64, 0.8f, 5.0f, alpha, 0.0, rgb, rgb, 120, cgs.media.whiteLaserShader );
+	// Faint trail at base.  Is this really adding anything useful?
+	FX_AddLine( cent->gent->pos1, base, 1, 1.0, 2.0, alpha * 0.2, 0.0, rgb, rgb, 1000, cgs.media.whiteLaserShader );
+	// Faint trace cone, adds a bit of meat to the effect
+	FX_AddTri( cent->lerpOrigin, cent->gent->pos1, base, alpha * 0.2, 0.0, rgb, rgb, 800, cgs.media.solidWhiteShader );
+	// Laser impact point
+	FX_AddSprite( base, NULL, NULL, random() * 2, 0.0, alpha, 0.0, rgb, rgb, 0.0, 0.0, 100, cgs.media.waterDropShader );
+
+	VectorCopy( base, cent->gent->pos1 );
+	cent->gent->angle += cent->gent->speed * 0.08f;
+}
+
+/*
+----------------------
+CG_ShimmeryThing
+
+Creates column or cone of shimmering lines
+Kind of looks like a teleporter effect
+----------------------
+*/
+
+/*void CG_ShimmeryThing( vec3_t start, vec3_t end, float radius, qboolean taper )
+{
+	vec3_t	normal, angles, base, top, dir;
+	float	len;
+
+	VectorSubtract( end, start, normal );
+	len = VectorNormalize( normal );
+	vectoangles( normal, angles );
+
+	for ( int i=0; i < 2; i++)
+	{
+		// Spawn the shards of light around a cylinder
+		angles[2] = crandom() * 360;
+		AngleVectors( angles, NULL, dir, NULL );
+
+		// See if the effect should be tapered at the top
+		if ( taper )
+		{
+			VectorMA( start, radius * 0.25f, dir, top );
+		}
+		else
+		{
+			VectorMA( start, radius, dir, top );
+		}
+
+		VectorMA( end, radius, dir, base );
+
+		// Use a couple of different kinds to break up the monotony..
+		if ( rand() & 1 )
+		{
+			FX_AddLine( top, base, 1.0f, len * 0.008f, len * 0.19f, 0.3f, 0.0f, random() * 200 + 600, cgs.media.ltblueParticleShader );
+		}
+		else
+		{
+			FX_AddLine( top, base, 1.0f, len * 0.008f, len * 0.19f, 0.2f, 0.0f, random() * 200 + 600, cgs.media.spark2Shader );
+		}
+	}
+}
+
+/*
+-------------------------
+CG_ShimmeryThing_Spawner
+-------------------------
+*/
+
+/*void CG_Shimmer( vec3_t position, vec3_t dest, vec3_t dir, vec3_t other )
+{
+	CG_ShimmeryThing( position, dest, other[0], (qboolean) other[1] );
+}
+
+void CG_ShimmeryThing_Spawner( vec3_t start, vec3_t end, float radius, qboolean taper, int duration )
+{
+	vec3_t	packed = { radius, (float) taper, 0 };
+
+	FX_AddSpawner( start, end, NULL, packed, 100, 0, duration, (void *) CG_Shimmer, NULL, 512 );
+}
+
+/*
+----------------------
+CG_Borg_Bolt
+
+Yellow bolts that spark when the endpoints get close together
+----------------------
+*/
+/*void CG_Borg_Bolt( centity_t *cent )
+{
+	vec3_t	diff, neworg, start, end;
+	float	len;
+
+	if (!cent->gent->enemy){
+		return;//we lost him
+	}
+	VectorCopy( cent->gent->enemy->currentOrigin, end );
+	
+	if ( cent->gent->target2 )
+	{
+		VectorCopy( cent->gent->chain->currentOrigin, start );
+	}
+	else
+	{
+		VectorCopy( cent->lerpOrigin, start );
+	}
+
+	// Get the midpoint of the seg
+	VectorSubtract( end, start, diff );
+	len = VectorNormalize( diff );
+	VectorMA( start, len * 0.5, diff, neworg );
+
+	// If the length is pretty short, then spawn a glow spark
+	if ( len > 0 && len < 12 )
+	{
+		int		ct;
+		vec3_t	angles, dir;
+		FXTrail	*particle;
+
+		FX_AddSprite( neworg, NULL, NULL, random() * (128 / len) + 12, 16.0, 0.6f, 0.0, 0.0, 0.0, 300, 
+					cgs.media.yellowParticleShader );
+
+		vectoangles( dir, angles );
+
+		ct = 12 - len;
+
+		// fun sparks
+		for ( int t=0; t < ct; t++ )
+		{
+			angles[1] = random() * 360;
+			AngleVectors( angles, dir, NULL, NULL );
+			dir[2] = random() * 0.3f;
+
+			particle = FX_AddTrail( neworg, NULL, NULL, 8.0f + random() * 6, -16.0f, 1, -1,
+							1.0f, 0.0f, 0.25f, 700.0f, cgs.media.yellowParticleShader );
+
+			if ( particle == NULL )
+				return;
+
+			FXE_Spray( dir, 100, 150, 0.5f, 300 + (rand() & 300), (FXPrimitive *) particle );
+		}
+
+		// If it's really short, spark and make a noise.  Tried this without the if (len>0... and it was way
+		//	too obnoxious
+		if ( len <= 5 )
+		{
+			cgi_S_StartSound( neworg, 0, 0, cgi_S_RegisterSound( "sound/enemies/borg/borgtaser.wav") );
+		}
+	}
+
+	// Use this to scale down the width of the bolts.  Otherwise, they will look pretty fairly nasty when they
+	//	get too short.
+	len = len / 32;
+
+	FX_AddElectricity( start, end, 1.0, len, 5.0, 1.0, 0.0, 200, cgs.media.yellowBoltShader );
+
+	if ( rand() & 1 )
+	{
+		FX_AddElectricity( end, start, 1.0, len, 5.0, 1.0, 0.0, 200, cgs.media.yellowBoltShader );
+	}
+}*/
+

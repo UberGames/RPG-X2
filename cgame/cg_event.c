@@ -1759,6 +1759,65 @@ case EV_SHAKE_SOUND:
 		cg.cinematicFade = !cg.cinematicFade;
 		break;
 
+// Additional ports from SP by Harry Young
+
+	/*case EV_FX_COOKING_STEAM:
+		DEBUGNAME("EV_FX_COOKING_STEAM");
+		CG_CookingSteam( cent->lerpOrigin, cent->gent->radius );
+		break;
+
+	case EV_FX_ELECFIRE:
+		DEBUGNAME("EV_FX_ELECFIRE");
+		// Don't play this sound quite so much...
+		if ( rand() & 1 )
+		{
+			cgi_S_StartSound (NULL, es->number, CHAN_BODY, cgi_S_RegisterSound ( va("sound/ambience/spark%d.wav", Q_irand(1,6)) ));
+		}
+		CG_ElectricFire( cent->lerpOrigin, cent->currentState.angles );
+		break;
+
+	case EV_FX_FORGE_BOLT:
+		DEBUGNAME("EV_FX_FORGE_BOLT");
+		CG_ForgeBolt( cent );
+		break;
+
+	case EV_FX_PLASMA:
+		DEBUGNAME("EV_FX_PLASMA");
+		CG_Plasma( cent->lerpOrigin, cent->currentState.origin2, cent->gent->startRGBA, cent->gent->finalRGBA );		
+		break;
+
+	case EV_FX_STREAM:
+		DEBUGNAME("EV_FX_STREAM");
+		CG_ParticleStream( cent );
+		break;
+
+	case EV_FX_TRANSPORTER_STREAM:
+		DEBUGNAME("EV_FX_TRANSPORTER_STREAM");
+		CG_TransporterStream( cent );
+		break;
+
+	case EV_FX_EXPLOSION_TRAIL:
+		DEBUGNAME("EV_FX_EXPLOSION_TRAIL");
+		CG_ExplosionTrail( cent );
+		break;
+
+	case EV_FX_BORG_ENERGY_BEAM:
+		DEBUGNAME("EV_FX_BORG_ENERGY_BEAM");
+		CG_BorgEnergyBeam( cent );
+		break;
+
+	case EV_FX_SHIMMERY_THING:
+		DEBUGNAME("EV_FX_SHIMMERY_THING");
+		CG_ShimmeryThing( cent->lerpOrigin, cent->currentState.origin2, cent->gent->radius, cent->gent->spawnflags & 2 );
+		break;
+
+	case EV_FX_BORG_BOLT:
+		DEBUGNAME("EV_FX_BORG_BOLT");
+		CG_Borg_Bolt( cent );
+		break;*/
+
+// Default
+
 	default:
 		DEBUGNAME("UNKNOWN");
 		CG_Error( "Unknown event: %i", event );
@@ -1800,4 +1859,3 @@ void CG_CheckEvents( centity_t *cent ) {
 
 	CG_EntityEvent( cent, cent->lerpOrigin );
 }
-
