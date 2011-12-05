@@ -28,17 +28,14 @@ OBJ = \
   fx_transporter.o \
   fx_tetrion.o \
   fx_stasis.o \
-  fx_scavenger.o \
+  fx_hypospray.o \
   fx_quantum.o \
   fx_phaser.o \
   fx_misc.o \
   fx_lib.o \
   fx_item.o \
-  fx_imod.o \
   fx_grenade.o \
-  fx_dreadnought.o \
   fx_compression.o \
-  fx_borg.o \
   cg_weapons.o \
   cg_view.o \
   cg_snapshot.o \
@@ -98,17 +95,14 @@ cg_servercmds.o : cg_servercmds.c; $(DO_CC)
 cg_snapshot.o : cg_snapshot.c; $(DO_CC)
 cg_view.o : cg_view.c; $(DO_CC)
 cg_weapons.o : cg_weapons.c; $(DO_CC)
-fx_borg.o : fx_borg.c; $(DO_CC)
 fx_compression.o : fx_compression.c; $(DO_CC)
-fx_dreadnought.o : fx_dreadnought.c; $(DO_CC)
 fx_grenade.o : fx_grenade.c; $(DO_CC)
-fx_imod.o : fx_imod.c; $(DO_CC)
 fx_item.o : fx_item.c; $(DO_CC)
 fx_lib.o : fx_lib.c; $(DO_CC)
 fx_misc.o : fx_misc.c; $(DO_CC)
 fx_phaser.o : fx_phaser.c; $(DO_CC)
 fx_quantum.o : fx_quantum.c; $(DO_CC)
-fx_scavenger.o : fx_scavenger.c; $(DO_CC)
+fx_hypospray.o : fx_scavenger.c; $(DO_CC)
 fx_stasis.o : fx_stasis.c; $(DO_CC)
 fx_tetrion.o : fx_tetrion.c; $(DO_CC)
 fx_transporter.o : fx_transporter.c; $(DO_CC)
