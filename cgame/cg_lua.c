@@ -4,6 +4,12 @@
 
 #ifdef G_LUA
 
+#if defined(__linux__) || defined(__WIN32__) || defined(__APPLE__) || 1 /* linux, mingw32, OS X - the 1 is temporary*/
+#include <dirent.h> /* Note the MSVC project assumes mingw is installed at C:\MinGW\include */
+#else // MSVC
+// TODO: I don't care much about MSVC as I user mingw on Windows to compile :P
+#endif
+
 lvm_t       *lVM[NUM_VMS];
 fileHandle_t lualog;
 
@@ -99,8 +105,20 @@ qboolean LoadLuaFile(char *path, int num_vm)
 
 qboolean CG_LuaInit()
 {
+	#if defined(__linux__) || defined(__WIN32__) || defined(__APPLE__) || 1 /* linux, mingw32, OS X - the 1 is temporary*/
+	DIR *pdir = NULL;
+	struct dirent *pent = NULL;
+	#else // MSVC
+
+	#endif
 
 	CG_Printf("------- CG_LuaInit -------\n");
+
+	#if defined(__linux__) || defined(__WIN32__) || defined(__APPLE__) || 1 /* linux, mingw32, OS X - the 1 is temporary*/
+	
+	#else // MSVC
+
+	#endif
 
 	// not much to do for now
 	if(cg_logLua.integer) {
