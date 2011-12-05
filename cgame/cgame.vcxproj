@@ -269,6 +269,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS</PreprocessorDefinitions>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
     </ClCompile>
+    <ClCompile Include="cg_lua.c" />
     <ClCompile Include="cg_main.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;_DEBUG;_WINDOWS</PreprocessorDefinitions>
@@ -461,6 +462,7 @@
     <ClInclude Include="..\game\bg_public.h" />
     <ClInclude Include="cg_anims.h" />
     <ClInclude Include="cg_local.h" />
+    <ClInclude Include="cg_lua.h" />
     <ClInclude Include="cg_public.h" />
     <ClInclude Include="cg_screenfx.h" />
     <ClInclude Include="cg_text.h" />
