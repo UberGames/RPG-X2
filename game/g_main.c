@@ -711,7 +711,7 @@ void QDECL G_PrintfClient(gentity_t *ent, const char *fmt, ...) {
 	va_end	 (argptr);
 
 	#ifdef G_LUA
-	LuaHook_G_ClientPrint(text, ent);
+	LuaHook_G_ClientPrint(text, ent-g_entities);
 	#endif
 	
 	trap_SendServerCommand(ent-g_entities, va("print \"%s\n\"", text));
