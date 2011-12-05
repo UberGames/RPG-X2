@@ -128,6 +128,9 @@
     <ClCompile Include="fx_disruptor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cg_lua.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\bg_local.h">
@@ -161,6 +164,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tr_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cg_lua.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
