@@ -86,7 +86,7 @@ play any keyframed sounds - only when start a new frame
 This func is called once for legs and once for torso
 */
 //void CG_PlayerAnimSounds( animsounds_t *animSounds, int frame, int entNum, qboolean metal )
-void CG_PlayerAnimSounds( animsounds_t *animSounds, int frame, int entNum, int surfType)
+void CG_PlayerAnimSounds( animsounds_t *animSounds, int frame, int eNum, int surfType)
 {
 	int		i;
 	int		holdSnd = -1;
@@ -153,7 +153,7 @@ void CG_PlayerAnimSounds( animsounds_t *animSounds, int frame, int entNum, int s
 	{
 		if (holdSnd != 0)	// 0 = default sound, ie file was missing
 		{
-			trap_S_StartSound( NULL, entNum, CHAN_BODY, holdSnd ); //CHAN_AUTO
+			trap_S_StartSound( NULL, eNum, CHAN_BODY, holdSnd ); //CHAN_AUTO
 		}
 
 	}
@@ -307,6 +307,7 @@ This file's presence is not required
 
 ======================
 */
+#ifdef QVM
 static int CG_ParseAnimationSndFile( const char *filename, int animFileIndex ) 
 {
 	char		*text_p;
@@ -396,6 +397,108 @@ static int CG_ParseAnimationSndFile( const char *filename, int animFileIndex )
 
 	return i;
 }
+#else
+/* TODO: dynamic file size? */
+static int CG_ParseAnimationSndFile( const char *filename, int animFileIndex ) 
+{
+	char		*text_p;
+	int			len;
+	char		*token;
+	char		*text;
+	fileHandle_t	f;
+	int			i, j, upper_i, lower_i;
+	animsounds_t	*lowerAnimSounds;
+	animsounds_t	*upperAnimSounds;
+	animation_t		*animations;
+
+	text = (char *)malloc(sizeof(char)*20000);
+	if(!text) {
+		Com_Error(ERR_FATAL, "CG_ParseAnimationSndFile: couldn't alloce cate %u byte\n", sizeof(char)*20000);
+		return 0;
+	}
+
+	/*if ( knownAnimFileSets[animFileIndex].soundsCached )
+	{//already cached this one
+		return;
+	}*/
+
+	for ( i = 0; i < cg_numSndAnims; i++ ) {
+		if ( !Q_stricmp( filename, cg_animsSndList[i].animSndFileRoute ) )  {
+			free(text);
+			return i;
+		}
+	}
+
+	//Mark this anim set so that we know we tried to load he sounds, don't care if the load failed
+	//knownAnimFileSets[animFileIndex].soundsCached = qtrue;
+
+	animations		= cg_animsList[animFileIndex].animations;
+	lowerAnimSounds = cg_animsSndList[cg_numSndAnims].lowerAnimSounds;
+	upperAnimSounds = cg_animsSndList[cg_numSndAnims].upperAnimSounds;
+
+	//initialize anim sound array
+	for(i = 0; i < MAX_ANIM_SOUNDS; i++)
+	{
+		upperAnimSounds[i].numRandomAnimSounds = 0;
+		lowerAnimSounds[i].numRandomAnimSounds = 0;
+		for(j = 0; j < MAX_RANDOM_ANIMSOUNDS; j++)
+		{
+			upperAnimSounds[i].soundIndex[j] = -1;
+			lowerAnimSounds[i].soundIndex[j] = -1;
+		}
+	}
+
+	// load the file
+	len = trap_FS_FOpenFile( filename, &f, FS_READ );
+	if ( len <= 0 ) 
+	{//no file
+		free(text);
+		return -1;
+	}
+	if ( len >= sizeof( text ) - 1 ) 
+	{
+		CG_Printf( "File %s too long\n", filename );
+		free(text);
+		return -1;
+	}
+
+	trap_FS_Read( text, len, f );
+	text[len] = 0;
+	trap_FS_FCloseFile( f );
+
+	// parse the text
+	text_p = text;
+	upper_i =0;
+	lower_i =0;
+
+	// read information for batches of sounds (UPPER or LOWER)
+	while ( 1 ) 
+	{
+		// Get base frame of sequence
+		token = COM_Parse( &text_p );
+		if ( !token || !token[0] ) 
+		{
+			break;
+		}
+
+		if ( !Q_stricmp(token,"UPPERSOUNDS") )	// A batch of upper sounds
+		{
+			ParseAnimationSndBlock( filename, upperAnimSounds, animations, &upper_i, &text_p ); 
+		}
+
+		else if ( !Q_stricmp(token,"LOWERSOUNDS") )	// A batch of lower sounds
+		{
+			ParseAnimationSndBlock( filename, lowerAnimSounds, animations, &lower_i, &text_p ); 
+		}
+	}
+
+	i = cg_numSndAnims;
+	cg_numSndAnims++;
+
+	free(text);
+	return i;
+}
+#endif
 
 /*
 =============================================================================
