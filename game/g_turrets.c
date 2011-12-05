@@ -5,9 +5,9 @@
 //extern team_t TranslateTeamName( const char *name );
 //extern	cvar_t	*g_spskill;
 
-//client side shortcut hacks from cg_local.h
-extern void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent );
-extern void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal );
+//client side shortcut hacks from cg_local.h - nah sorry that won't work as we are MP
+//extern void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent );
+//extern void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal );
 
 
 #define	ARM_ANGLE_RANGE		60
@@ -848,11 +848,11 @@ void laser_arm_fire (gentity_t *ent)
 	
 	if ( ent->booleanstate )
 	{
-		CG_FireLaser( start, trace.endpos, trace.plane.normal, ent->nextTrain->startRGBA, qfalse );
+		//CG_FireLaser( start, trace.endpos, trace.plane.normal, ent->nextTrain->startRGBA, qfalse );
 	}
 	else
 	{
-		CG_AimLaser( start, trace.endpos, trace.plane.normal );
+		//CG_AimLaser( start, trace.endpos, trace.plane.normal );
 	}
 }
 
@@ -981,7 +981,7 @@ void laser_arm_start (gentity_t *base)
 	//FIXME: need an actual model
 	base->s.modelindex = G_ModelIndex("models/mapobjects/dn/laser_base.md3");
 	base->s.eType = ET_GENERAL;
-	G_SpawnVector4( "startRGBA", "1.0 0.85 0.15 0.75", (float *)&base->startRGBA );
+	//G_SpawnVector4( "startRGBA", "1.0 0.85 0.15 0.75", (float *)&base->startRGBA );
 	//anglespeed - how fast it can track the player, entered in degrees per second, so we divide by FRAMETIME/1000
 	if ( !base->speed )
 	{

@@ -1304,13 +1304,14 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qbo
 	float	scale = 1.0f, alpha;
 	int		life = 0;
 
-	if ( !(FX_DetailLevel( start, 16, 1200 ) ))
-		return;
+	/* FIXME: FX_DetailLevel defined nowhere */
+	/*if ( !(FX_DetailLevel( start, 16, 1200 ) ))
+		return;*/
 
 	// Orient the laser spray
 	VectorSubtract( end, start, dir );
 	VectorNormalize( dir );
-	alpha = Vector4to3( laserRGB, lRGB );
+	/*alpha = Vector4to3( laserRGB, lRGB );*/ /* FIXME: Vector4to3 defined nowhere */
 
 	VectorMA( end, 0.5f, normal, pos );
 	MakeNormalVectors( normal, right, up );
@@ -1326,13 +1327,13 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qbo
 					200, 
 					cgs.media.waterDropShader );
 
-	FX_AddLine3( start, end, 
+	/*FX_AddLine3( start, end, 
 					1.0f, 
 					3.0f, 5.0f, 
 					alpha, 0.0f, 
 					lRGB, lRGB, 
 					125, 
-					cgs.media.whiteLaserShader );
+					cgs.media.whiteLaserShader );*/ /* FIXME: FX_AddLine3 not defined */
 
 	FX_AddLine( start, end, 
 					1.0f, 
@@ -1405,13 +1406,13 @@ void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal )
 	vec3_t		lRGB = {1.0,0.0,0.0};
 
 	// Beam
-	FX_AddLine3( start, end, 
+	/*FX_AddLine3( start, end, 
 					1.0f, 
 					5.5f, 5.0f, 
 					random() * 0.2 + 0.2, 0.1f,
 					lRGB, lRGB,
 					150,
-					cgs.media.whiteLaserShader );
+					cgs.media.whiteLaserShader );*/ /* FIXME: FX_AddLine3 not defined */
 
 	FX_AddLine( start, end, 
 					1.0f, 
