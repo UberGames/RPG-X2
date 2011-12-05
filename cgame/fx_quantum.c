@@ -1,65 +1,6 @@
 #include "cg_local.h"
 #include "fx_local.h"
 
-
-// think function for the quantum explosion particles
-//unused
-/*qboolean explosionTailThink(localEntity_t *le)
-{
-	refEntity_t	*re = &le->refEntity;
-	float		length = 20;
-
-	// leave a cool tail
-	CG_AddTrail(FX_AddTrail( re->origin, 
-					le->data.particle.dir, qtrue, 
-					length, 0, 
-					le->data.particle.radius*0.8, le->data.particle.dradius, 
-					0.2, 0.0, // alpha, dalpha
-					0, 
-					1, 
-					cgs.media.yellowParticleShader ));
-	
-	return qtrue;
-}*/
-
-/*
--------------------------
-FX_QuantumThink
--------------------------
-*/
-
-	/*vec3_t worldCoord;
-	int w1;
-	int h1;
-	vec3_t glowColor;
-	float glowOffset;
-	float hazeOffset;
-	int minDist;
-	int maxDist;
-	vec3_t streakColor;
-	int	streakDistMin;
-	int streakDistMax;
-	int streakW;
-	int streakH;
-	qboolean whiteStreaks;
-	int reflecDistMin;
-	int reflecDistMax;
-	qboolean reflecAnamorphic;
-	qboolean defReflecs;
-	qboolean clamp;
-	float maxAlpha;
-	int startTime;
-	int upTime;
-	int holdTime;
-	int downTime;
-	qboolean qfull;
-
-static lensFlare_t quantumFlare = { {0.0, 0.0, 0.0}, 100, 100, // worldCoord, w1, h1
-							 {0.0, 1.0, 1.0}, 1.1, 1.3, 1000, 40,//glowColor, glowOffset, hazeOffset, minDist, maxDist
-							 {0.0, 1.0, 1.0}, 1000, 40, 600, 10, qtrue, //streakColor, sDistMin, sDistMax, sW, sH, whitestreaks
-							 0, 1, qfalse, qfalse, qfalse, //rDistMin, rDistMax, rAna, rDef, clamp
-							 1.0, 0, 0, 0, 0, qtrue }; //maxalpha, start, up, hold, down, full	*/
-
 void FX_QuantumThink( centity_t *cent, const struct weaponInfo_s *weapon )
 {
 	vec3_t	line1end, line2end, axis[3], rgb;

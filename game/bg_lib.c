@@ -1,9 +1,10 @@
-// Copyright (C) 1999-2000 Id Software, Inc.
-//
-// Copyright (C) 1999-2000 Id Software, Inc.
-//
-// bg_lib,c -- standard C library replacement routines used by code
-// compiled for the virtual machine
+/* Copyright (C) 1999-2000 Id Software, Inc.
+ *
+ * Copyright (C) 1999-2000 Id Software, Inc.
+ *
+ * bg_lib,c -- standard C library replacement routines used by code
+ * compiled for the virtual machine
+ */
 
 #include "q_shared.h"
 
@@ -48,7 +49,7 @@ static const char rcsid[] =
 	"$Id: bg_lib.c,v 1.23 2000/02/04 06:46:50 zoid Exp $";
 #endif /* LIBC_SCCS and not lint */
 
-//typedef int		 cmp_t(const void *, const void *);
+/*typedef int		 cmp_t(const void *, const void *); */
 static char* med3(char *, char *, char *, cmp_t *);
 static void	 swapfunc(char *, char *, int, int);
 
@@ -186,10 +187,10 @@ loop:	SWAPINIT(a, es);
 /*		qsort(pn - r, r / es, es, cmp);*/
 }
 
-//==================================================================================
+/*==================================================================================*/
 
 
-// this file is excluded from release builds because of intrinsics
+/* this file is excluded from release builds because of intrinsics */
 
 size_t strlen( const char *string ) {
 	const char	*s;
@@ -282,7 +283,7 @@ int toupper( int c ) {
 }
 
 #endif
-//#ifndef _MSC_VER
+/*#ifndef _MSC_VER*/
 
 void *memmove( void *dest, const void *src, size_t count ) {
 	int		i;
@@ -343,10 +344,10 @@ double sqrt( double x ) {
 		return 0;
 	}
 
-	// initial guess
+	/* initial guess */
 	y = x / 2;
 
-	// refine
+	/* refine */
 	maxError = x * 0.001;
 
 	do {
@@ -540,20 +541,20 @@ double atan2( double y, double x ) {
 
 	if ( x < 0 ) {
 		if ( y >= 0 ) {
-			// quad 1
+			/* quad 1 */
 			base = M_PI / 2;
 			temp = x;
 			x = y;
 			y = -temp;
 		} else {
-			// quad 2
+			/* quad 2 */
 			base = M_PI;
 			x = -x;
 			y = -y;
 		}
 	} else {
 		if ( y < 0 ) {
-			// quad 3
+			/* quad 3 */
 			base = 3 * M_PI / 2;
 			temp = x;
 			x = -y;
@@ -571,7 +572,7 @@ double atan2( double y, double x ) {
 		dir = 1;
 	}
 
-	// calcualte angle in octant 0
+	/* calcualte angle in octant 0 */
 	if ( x == 0 ) {
 		return base;
 	}
@@ -612,7 +613,7 @@ double atof( const char *string ) {
 	int		c;
 
 
-	// skip whitespace
+	/* skip whitespace */
 	while ( *string <= ' ' ) {
 		if ( !*string ) {
 			return 0;
@@ -620,7 +621,7 @@ double atof( const char *string ) {
 		string++;
 	}
 
-	// check sign
+	/* check sign */
 	switch ( *string ) {
 	case '+':
 		string++;
@@ -635,7 +636,7 @@ double atof( const char *string ) {
 		break;
 	}
 
-	// read digits
+	/* read digits */
 	value = 0;
 	c = string[0];
 	if ( c != '.' ) {
@@ -651,7 +652,7 @@ double atof( const char *string ) {
 		string++;
 	}
 
-	// check for decimal point
+	/* check for decimal point */
 	if ( c == '.' ) {
 		double fraction;
 
@@ -668,7 +669,7 @@ double atof( const char *string ) {
 
 	}
 
-	// not handling 10e10 notation...
+	/* not handling 10e10 notation... */
 
 	return value * sign;
 }
@@ -681,7 +682,7 @@ double _atof( const char **stringPtr ) {
 
 	string = *stringPtr;
 
-	// skip whitespace
+	/* skip whitespace */
 	while ( *string <= ' ' ) {
 		if ( !*string ) {
 			*stringPtr = string;
@@ -690,7 +691,7 @@ double _atof( const char **stringPtr ) {
 		string++;
 	}
 
-	// check sign
+	/* check sign */
 	switch ( *string ) {
 	case '+':
 		string++;
@@ -705,7 +706,7 @@ double _atof( const char **stringPtr ) {
 		break;
 	}
 
-	// read digits
+	/* read digits */
 	value = 0;
 	if ( string[0] != '.' ) {
 		do {
@@ -718,7 +719,7 @@ double _atof( const char **stringPtr ) {
 		} while ( 1 );
 	}
 
-	// check for decimal point
+	/* check for decimal point */
 	if ( c == '.' ) {
 		double fraction;
 
@@ -735,7 +736,7 @@ double _atof( const char **stringPtr ) {
 
 	}
 
-	// not handling 10e10 notation...
+	/* not handling 10e10 notation... */
 	*stringPtr = string;
 
 	return value * sign;
@@ -750,7 +751,7 @@ int atoi( const char *string ) {
 	int		c;
 
 
-	// skip whitespace
+	/* skip whitespace */
 	while ( *string <= ' ' ) {
 		if ( !*string ) {
 			return 0;
@@ -758,7 +759,7 @@ int atoi( const char *string ) {
 		string++;
 	}
 
-	// check sign
+	/* check sign */
 	switch ( *string ) {
 	case '+':
 		string++;
@@ -773,7 +774,7 @@ int atoi( const char *string ) {
 		break;
 	}
 
-	// read digits
+	/* read digits */
 	value = 0;
 	do {
 		c = *string++;
@@ -784,7 +785,7 @@ int atoi( const char *string ) {
 		value = value * 10 + c;
 	} while ( 1 );
 
-	// not handling 10e10 notation...
+	/* not handling 10e10 notation... */
 
 	return value * sign;
 }
@@ -798,7 +799,7 @@ int _atoi( const char **stringPtr ) {
 
 	string = *stringPtr;
 
-	// skip whitespace
+	/* skip whitespace */
 	while ( *string <= ' ' ) {
 		if ( !*string ) {
 			return 0;
@@ -806,7 +807,7 @@ int _atoi( const char **stringPtr ) {
 		string++;
 	}
 
-	// check sign
+	/* check sign */
 	switch ( *string ) {
 	case '+':
 		string++;
@@ -821,7 +822,7 @@ int _atoi( const char **stringPtr ) {
 		break;
 	}
 
-	// read digits
+	/* read digits */
 	value = 0;
 	do {
 		c = *string++;
@@ -832,7 +833,7 @@ int _atoi( const char **stringPtr ) {
 		value = value * 10 + c;
 	} while ( 1 );
 
-	// not handling 10e10 notation...
+	/* not handling 10e10 notation... */
 
 	*stringPtr = string;
 
@@ -849,7 +850,7 @@ double fabs( double x ) {
 
 
 
-//=========================================================
+/*=========================================================*/
 
 
 #define ALT			0x00000001		/* alternate form */
@@ -909,27 +910,29 @@ void AddInt( char **buf_p, int val, int width, int flags ) {
 	*buf_p = buf;
 }
 
-//TiM - Required since the native QVM code can't handle UInts... >_<
-//This is AddInt horribly mutilated. ;P
+/*
+ * TiM - Required since the native QVM code can't handle UInts... >_<
+ * This is AddInt horribly mutilated. ;P
+ */
 void AddULong( char **buf_p, unsigned long val, int width, int flags ) {
 	char	text[32];
 	int		digits;
-	//int		signedVal;
+	/*int		signedVal;*/
 	char	*buf;
 
 	digits = 0;
-	//signedVal = val;
-	//if ( val < 0 ) {
-	//	val = -val;
-	//}
+	/*signedVal = val;
+	if ( val < 0 ) {
+		val = -val;
+	}*/
 	do {
 		text[digits++] = '0' + val % 10;
 		val /= 10;
 	} while ( val );
 
-	//if ( signedVal < 0 ) {
-	//	text[digits++] = '-';
-	//}
+	/*if ( signedVal < 0 ) {
+		text[digits++] = '-';
+	}*/
 
 	buf = *buf_p;
 
@@ -954,10 +957,12 @@ void AddULong( char **buf_p, unsigned long val, int width, int flags ) {
 	*buf_p = buf;
 }
 
-//TiM - 'borrowed' from Q3 1.32 and modified so it can handle the
-//rounding up system that EF has.
-//I'm going to bet it was because of this id Software chose to
-//round down floats from then on
+/*
+ * TiM - 'borrowed' from Q3 1.32 and modified so it can handle the
+ * rounding up system that EF has.
+ * I'm going to bet it was because of this id Software chose to
+ * round down floats from then on
+ */
 void AddFloat( char **buf_p, float fval, int width, int prec ) {
 	char		text[32];
 	int			digits;
@@ -965,15 +970,15 @@ void AddFloat( char **buf_p, float fval, int width, int prec ) {
 	char		*buf;
 	int			val;
 
-	// get the sign
+	/* get the sign */
 	signedVal = fval;
 	if ( fval < 0 ) {
 		fval = -fval;
 	}
 
-	//Com_Printf( "wholeNumber = %i, roundsUp = %i\n", fval, wholeNumber, roundsUp );
+	/*Com_Printf( "wholeNumber = %i, roundsUp = %i\n", fval, wholeNumber, roundsUp );*/
 
-	// write the float number
+	/* write the float number */
 	digits = 0;
 	val = (int)fval;
 	if ( fval - val < 0.0f )
@@ -1003,11 +1008,11 @@ void AddFloat( char **buf_p, float fval, int width, int prec ) {
 
 	if (prec < 0)
 		prec = 6;
-	// write the fraction
+	/* write the fraction */
 	digits = 0;
 	while (digits < prec) {
 		fval -= (int)fval;
-		fval = Q_fabs(fval); //if it gets rounded up, it becomes neg, so just abs it
+		fval = Q_fabs(fval); /* if it gets rounded up, it becomes neg, so just abs it */
 		fval *= 10.0;
 		val = (int)fval;
 		text[digits++] = '0' + (val % 10);
@@ -1165,7 +1170,7 @@ int vsprintf( char *buffer, const char *fmt, va_list argptr ) {
 	arg = (int *)argptr;
 
 	while( qtrue ) {
-		// run through the format string until we hit a '%' or '\0'
+		/* run through the format string until we hit a '%' or '\0' */
 		for ( ch = *fmt; (ch = *fmt) != '\0' && ch != '%'; fmt++ ) {
 			*buf_p++ = ch;
 		}
@@ -1173,10 +1178,10 @@ int vsprintf( char *buffer, const char *fmt, va_list argptr ) {
 			goto done;
 		}
 
-		// skip over the '%'
+		/* skip over the '%' */
 		fmt++;
 
-		// reset formatting state
+		/* reset formatting state */
 		flags = 0;
 		width = 0;
 		prec = -1;
@@ -1227,7 +1232,7 @@ reswitch:
 		case 'f':
 			AddFloat( &buf_p, *(double *)arg, width, prec );
 #ifdef __LCC__
-			arg += 1;	// everything is 32 bit in my compiler
+			arg += 1;	/* everything is 32 bit in my compiler */
 #else
 			arg += 2;
 #endif
@@ -1236,7 +1241,7 @@ reswitch:
 			AddString( &buf_p, (char *)*arg, width, prec );
 			arg++;
 			break;
-		//TiM
+		/* TiM */
 		case 'u':
 			AddULong( &buf_p, *(unsigned long *)arg, width, flags );
 			arg++;
