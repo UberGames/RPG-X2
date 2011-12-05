@@ -63,6 +63,8 @@ field_t fields[] = {
 	{"luaParm4", FOFS(luaParm4), F_LSTRING},
 	{"luaEntity", FOFS(luaEntity), F_INT},
 	#endif
+	{"startRGBA", FOFS(startRGBA), F_VECTOR4},
+	{"endRGBA", FOFS(endRGBA), F_VECTOR4},
 	{NULL}
 };
 
@@ -550,6 +552,7 @@ qboolean G_ParseField( const char *key, const char *value, gentity_t *ent ) {
 	byte	*b;
 	float	v;
 	vec3_t	vec;
+	vec4_t  vec4;
 	int i;
 
 	for ( f=fields ; f->name ; f++ ) {
@@ -566,6 +569,13 @@ qboolean G_ParseField( const char *key, const char *value, gentity_t *ent ) {
 				((float *)(b+f->ofs))[0] = vec[0];
 				((float *)(b+f->ofs))[1] = vec[1];
 				((float *)(b+f->ofs))[2] = vec[2];
+				break;
+			case F_VECTOR4:
+				i  = sscanf (value, "%f %f %f %f", &vec4[0], &vec[1], &vec[2], &vec[3]);
+				((float *)(b+f->ofs))[0] = vec[0];
+				((float *)(b+f->ofs))[0] = vec[1];
+				((float *)(b+f->ofs))[0] = vec[2];
+				((float *)(b+f->ofs))[0] = vec[3];
 				break;
 			case F_INT:
 				*(int *)(b+f->ofs) = atoi(value);

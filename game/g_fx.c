@@ -139,7 +139,7 @@ void steam_think( gentity_t *ent )
 
 	// FIXME: This may be a bit weird for steam bursts*/
 	// If a fool gets in the bolt path, zap 'em
-	if ( ent->damage || ) 
+	if ( ent->damage ) 
 	{
 		vec3_t	start, temp;
 		trace_t	trace;
@@ -172,12 +172,12 @@ void steam_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 		return;
 	if ( self->count )
 	{
-		ent->think = 0;
+		self->think = 0;
 		self->nextthink = -1;
 	}
 	else
 	{
-		ent->think = steam_think;
+		self->think = steam_think;
 		self->nextthink = level.time + 100;
 	}
 	

@@ -386,6 +386,8 @@ struct gentity_s {
 	char		*luaParm4;
 	qboolean	luaEntity;
 #endif
+	vec4_t		startRGBA;
+	vec4_t		endRGBA;
 };
 
 /** \enum clientConnected_t

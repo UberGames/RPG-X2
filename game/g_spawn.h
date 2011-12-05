@@ -7,6 +7,7 @@ typedef enum {
 	F_LSTRING,			// string on disk, pointer in memory, TAG_LEVEL
 	F_GSTRING,			// string on disk, pointer in memory, TAG_GAME
 	F_VECTOR,
+	F_VECTOR4,
 	F_ANGLEHACK,
 	F_ENTITY,			// index on disk, pointer in memory
 	F_ITEM,				// index on disk, pointer in memory
