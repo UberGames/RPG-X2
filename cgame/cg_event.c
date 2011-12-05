@@ -1755,23 +1755,23 @@ case EV_SHAKE_SOUND:
 		break;
 
 	case EV_LASERTURRET_AIM:
-		DEBUGNAME("EV_CAMMODE_TOGGLE");
+		DEBUGNAME("EV_LASERTURRET_AIM");
 		CG_AimLaser( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles);
 		break;
 
 	case EV_LASERTURRET_FIRE:
-		DEBUGNAME("EV_CAMMODE_TOGGLE");
-		CG_FireLaser( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles, cent->currentState.angles2, cent->currentState.scale);
+		DEBUGNAME("EV_LASERTURRET_FIRE");
+		//CG_FireLaser( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles, cent->currentState.angles2, cent->currentState.scale);
 		break;
 
 // Additional ports from SP by Harry Young
 
 	/*case EV_FX_COOKING_STEAM:
 		DEBUGNAME("EV_FX_COOKING_STEAM");
-		CG_CookingSteam( cent->lerpOrigin, cent->gent->radius );
+		CG_CookingSteam( cent->lerpOrigin, cent->currentState.angles[0] );
 		break;
 
-	case EV_FX_ELECFIRE:
+	/*case EV_FX_ELECFIRE:
 		DEBUGNAME("EV_FX_ELECFIRE");
 		// Don't play this sound quite so much...
 		if ( rand() & 1 )

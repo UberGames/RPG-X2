@@ -1067,17 +1067,13 @@ void SP_fx_fire(gentity_t *ent) {
 	ent->nextthink = level.time + 1000;
 }
 
-
-
-
-
 // Additional ports from SP by Harry Young
 
 /*QUAKED fx_cooking_steam (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 Emits slowly moving steam puffs that rise up from the specified point
 
   "targetname" - toggles effect on/off whenver used
-  "radius" - smoke puff size ( default 3.0 )
+  "distance" - smoke puff size ( default 3.0 )
 */
 
 //------------------------------------------
@@ -1090,18 +1086,14 @@ Emits slowly moving steam puffs that rise up from the specified point
 //------------------------------------------
 void cooking_steam_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
-	if (self->behaviorSet[BSET_USE])
-	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
-
 	if ( self->count )
 	{
-		self->e_ThinkFunc = thinkF_NULL;
+		self->think = NULL;
+		self->nextthink = -1;
 	}
 	else
 	{
-		self->e_ThinkFunc = thinkF_cooking_steam_think;
+		self->think = cooking_steam_think;
 		self->nextthink = level.time + 200;
 	}
 	
@@ -1111,30 +1103,32 @@ void cooking_steam_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 //------------------------------------------
 void SP_fx_cooking_steam( gentity_t	*ent )
 {
-	G_SpawnFloat( "radius", "3.0", &ent->radius );
+	if (!ent->distance) ent->distance = 3.0;
 
-	gi.linkentity( ent );
+	ent->s.angles[0] = ent->distance;
+
+	trap_LinkEntity( ent );
 
 	if (ent->targetname)
 	{
-		ent->e_UseFunc = useF_cooking_steam_use;
+		ent->use = cooking_steam_use;
 	}
 
 	ent->count = !(ent->spawnflags & 1);
 
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
-		ent->e_ThinkFunc = thinkF_cooking_steam_think;
+		ent->think = cooking_steam_think;
 		ent->nextthink = level.time + 2000;
 	}
 	else
 	{
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 	}
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
-}
+}*/
 
 /*QUAKED fx_elecfire (0 0 1) (-8 -8 -8) (8 8 8)
 Emits sparks at the specified point in the specified direction
@@ -1142,7 +1136,7 @@ Spawns smoke puffs.
 */
 
 //------------------------------------------
-/*void electric_fire_think( gentity_t *ent )
+void electric_fire_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_ELECFIRE, 0 );
 	ent->nextthink = level.time + (750 + (random() * 300));
@@ -1151,7 +1145,7 @@ Spawns smoke puffs.
 //------------------------------------------
 void SP_fx_electricfire( gentity_t	*ent )
 {
-	ent->e_ThinkFunc = thinkF_electric_fire_think;
+	ent->think = electric_fire_think;
 	ent->nextthink = level.time + 500;
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
@@ -1164,7 +1158,7 @@ void SP_fx_electricfire( gentity_t	*ent )
 	G_SoundIndex("sound/ambience/spark5.wav");
 	G_SoundIndex("sound/ambience/spark6.wav");
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 }
 
 /*QUAKED fx_forge_bolt (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF DELAYED SPARKS PULSE TAPER SMOOTH
@@ -1187,20 +1181,20 @@ Emits freaky orange bolts, sending pulses down the length of the beam if desired
 //------------------------------------------
 /*void forge_bolt_think( gentity_t *ent )
 {
-	vec3_t	start, temp;
-	trace_t	trace;
-
 	G_AddEvent( ent, EV_FX_FORGE_BOLT, ent->spawnflags & 2 );
 	ent->nextthink = level.time + (ent->wait + crandom() * ent->wait * 0.25) * 1000;
 
 	// If a fool gets in the bolt path, zap 'em
 	if ( ent->damage ) 
 	{
-		VectorSubtract( ent->s.origin2, ent->currentOrigin, temp );
-		VectorNormalize( temp );
-		VectorMA( ent->currentOrigin, 1, temp, start );
+		vec3_t	start, temp;
+		trace_t	trace;
 
-		gi.trace( &trace, start, NULL, NULL, ent->s.origin2, -1, MASK_SHOT );//ignore
+		VectorSubtract( ent->s.origin2, ent->r.currentOrigin, temp );
+		VectorNormalize( temp );
+		VectorMA( ent->r.currentOrigin, 1, temp, start );
+
+		trap_Trace( &trace, start, NULL, NULL, ent->s.origin2, -1, MASK_SHOT );//ignore
 
 		if ( trace.fraction < 1.0 )
 		{
@@ -1209,7 +1203,7 @@ Emits freaky orange bolts, sending pulses down the length of the beam if desired
 				gentity_t *victim = &g_entities[trace.entityNum];
 				if ( victim && victim->takedamage )
 				{
-					G_Damage( victim, ent, ent->activator, temp, trace.endpos, ent->damage, 0, MOD_UNKNOWN );
+					G_Damage( victim, ent, ent->activator, temp, trace.endpos, ent->damage, 0, MOD_LAVA );
 				}
 			}
 		}
@@ -1219,18 +1213,14 @@ Emits freaky orange bolts, sending pulses down the length of the beam if desired
 //------------------------------------------
 void forge_bolt_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 {
-	if (self->behaviorSet[BSET_USE])
-	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
-
 	if ( self->count )
 	{
-		self->e_ThinkFunc = thinkF_NULL;
+		self->think = NULL;
+		self->nextthink = -1;
 	}
 	else
 	{
-		self->e_ThinkFunc = thinkF_forge_bolt_think;
+		self->think = forge_bolt_think;
 		self->nextthink = level.time + 200;
 	}
 	
@@ -1250,7 +1240,7 @@ void forge_bolt_link( gentity_t *ent )
 	{
 		Com_Printf("forge_bolt_link: unable to find target %s\n", ent->target );
 
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 
 		return;
@@ -1264,7 +1254,7 @@ void forge_bolt_link( gentity_t *ent )
 
 	if ( ent->targetname )
 	{
-		ent->e_UseFunc = useF_forge_bolt_use;
+		ent->use = forge_bolt_use;
 	}
 
 	// This is used as the toggle switch
@@ -1272,16 +1262,16 @@ void forge_bolt_link( gentity_t *ent )
 
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
-		ent->e_ThinkFunc = thinkF_forge_bolt_think;	
+		ent->think = forge_bolt_think;	
 		ent->nextthink = level.time + 1000;
 	}
 	else
 	{
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 	}
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 }
 
 //------------------------------------------
@@ -1289,7 +1279,7 @@ void SP_fx_forge_bolt( gentity_t *ent )
 {
 	G_SpawnInt( "damage", "0", &ent->damage );
 	G_SpawnFloat( "random", "0.4", &ent->random );
-	G_SpawnFloat( "radius", "3.0", &ent->radius );
+	G_SpawnFloat( "radius", "3.0", &ent->distance );
 
 	// See if effect is supposed to be delayed
 	if ( ent->spawnflags & 2 )
@@ -1303,17 +1293,17 @@ void SP_fx_forge_bolt( gentity_t *ent )
 	}
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
-	ent->delay = level.time + 1000;
+	ent->wait = level.time + 1000;
 
 	if (ent->target)
 	{
-		ent->e_ThinkFunc = thinkF_forge_bolt_link;
+		ent->think = forge_bolt_link;
 		ent->nextthink = level.time + 100;
 		return;
 	}
 
-	gi.linkentity( ent );
-}
+	trap_LinkEntity( ent );
+}*/
 
 /*QUAKED fx_plasma (0 0 1) (-8 -8 -8) (8 8 8) START_OFF
 Emits plasma jet directed from the specified point to the specified point. Jet size scales based on length.  
@@ -1331,29 +1321,29 @@ Emits plasma jet directed from the specified point to the specified point. Jet s
 //------------------------------------------
 /*void plasma_think( gentity_t *ent )
 {
-	vec3_t	start, temp;
-	trace_t	trace;
-
 	G_AddEvent( ent, EV_FX_PLASMA, 0 );
 	ent->nextthink = level.time + 100;
 
 	// If a fool gets in the plasma cone, fry 'em
-	if ( ent->damage )
+	if ( ent->damage ) 
 	{
-		VectorSubtract( ent->s.origin2, ent->currentOrigin, temp );
+		vec3_t	start, temp;
+		trace_t	trace;
+
+		VectorSubtract( ent->s.origin2, ent->r.currentOrigin, temp );
 		VectorNormalize( temp );
-		VectorMA( ent->currentOrigin, 1, temp, start );
+		VectorMA( ent->r.currentOrigin, 1, temp, start );
 
-		gi.trace( &trace, start, NULL, NULL, ent->s.origin2, -1, MASK_SHOT);//ignore
+		trap_Trace( &trace, start, NULL, NULL, ent->s.origin2, -1, MASK_SHOT );//ignore
 
-		if(trace.fraction < 1.0)
+		if ( trace.fraction < 1.0 )
 		{
-			if(trace.entityNum < ENTITYNUM_WORLD)
+			if ( trace.entityNum < ENTITYNUM_WORLD )
 			{
 				gentity_t *victim = &g_entities[trace.entityNum];
-				if(victim && victim->takedamage)
+				if ( victim && victim->takedamage )
 				{
-					G_Damage( victim, ent, ent->activator, temp, trace.endpos, ent->damage, 0, MOD_UNKNOWN);
+					G_Damage( victim, ent, ent->activator, temp, trace.endpos, ent->damage, 0, MOD_LAVA );
 				}
 			}
 		}
@@ -1363,21 +1353,18 @@ Emits plasma jet directed from the specified point to the specified point. Jet s
 //------------------------------------------
 void plasma_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
-
-	if (self->behaviorSet[BSET_USE])
+	if ( self->count )
 	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
-
-	if (self->e_ThinkFunc != thinkF_NULL)
-	{
-		self->e_ThinkFunc = thinkF_NULL;
+		self->think = NULL;	
+		self->nextthink = -1;
 	}
 	else
 	{
-		self->e_ThinkFunc = thinkF_plasma_think;	
+		self->think = plasma_think;	
 		self->nextthink = level.time + 200;
 	}
+	
+	self->count = !self->count;
 }
 
 //------------------------------------------
@@ -1390,7 +1377,7 @@ void plasma_link( gentity_t *ent )
 	{
 		Com_Printf("plasma_link: unable to find target %s\n", ent->target );
 
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 
 		return;
@@ -1398,20 +1385,21 @@ void plasma_link( gentity_t *ent )
 
 	if (ent->targetname)
 	{
-		ent->e_UseFunc = useF_plasma_use;
+		ent->use = plasma_use;
 	}
 
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
-		ent->e_ThinkFunc = thinkF_plasma_think;	
+		ent->think = plasma_think;	
 		ent->nextthink = level.time + 200;
 	}
 	else
 	{
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
+		ent->nextthink = -1;
 	}
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 
 	VectorCopy( target->s.origin, ent->s.origin2 );
 }
@@ -1419,24 +1407,39 @@ void plasma_link( gentity_t *ent )
 //------------------------------------------
 void SP_fx_plasma( gentity_t *ent )
 {
-	G_SpawnVector4( "startRGBA", "100 180 255 255", (float *)&ent->startRGBA );
-	G_SpawnVector4( "finalRGBA", "0 0 180 0", (float *)&ent->finalRGBA );
+	if (!ent->startRGBA)
+	{
+		ent->startRGBA[0] = 100;
+		ent->startRGBA[1] = 180;
+		ent->startRGBA[2] = 255;
+		ent->startRGBA[3] = 255;
+	}
+
+	if (!ent->finalRGBA)
+	{
+		ent->finalRGBA[2] = 180;
+	}
+
 	G_SpawnInt( "damage", "0", &ent->damage );
 
 	// Convert from range of 0-255 to 0-1
-	for (int t=0; t < 4; t++)
+	int t;
+	for (t=0; t < 4; t++)
 	{
 		ent->startRGBA[t] = ent->startRGBA[t] / 255;
 		ent->finalRGBA[t] = ent->finalRGBA[t] / 255;
 	}
 	
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
-	
-	gi.linkentity( ent );
 
-	ent->e_ThinkFunc = thinkF_plasma_link;
+	// This is used as the toggle switch
+	ent->count = !(ent->spawnflags & 1);
+	
+	trap_LinkEntity( ent );
+
+	ent->think = plasma_link;
 	ent->nextthink = level.time + 500;
-}
+}*/
 
 /*QUAKED fx_energy_stream (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 Creates streaming particles that travel between two points--for Stasis level. ONLY orients vertically.
@@ -1449,20 +1452,20 @@ Creates streaming particles that travel between two points--for Stasis level. ON
 //------------------------------------------
 /*void stream_think( gentity_t *ent )
 {
-	vec3_t	start, temp;
-	trace_t	trace;
-
 	G_AddEvent( ent, EV_FX_STREAM, 0 );
 	ent->nextthink = level.time + 150;
 
 	// If a fool gets in the bolt path, zap 'em
 	if ( ent->damage ) 
 	{
-		VectorSubtract( ent->s.origin2, ent->currentOrigin, temp );
-		VectorNormalize( temp );
-		VectorMA( ent->currentOrigin, 1, temp, start );
+		vec3_t	start, temp;
+		trace_t	trace;
 
-		gi.trace( &trace, start, NULL, NULL, ent->s.origin2, -1, MASK_SHOT );//ignore
+		VectorSubtract( ent->s.origin2, ent->r.currentOrigin, temp );
+		VectorNormalize( temp );
+		VectorMA( ent->r.currentOrigin, 1, temp, start );
+
+		trap_Trace( &trace, start, NULL, NULL, ent->s.origin2, -1, MASK_SHOT );//ignore
 
 		if ( trace.fraction < 1.0 )
 		{
@@ -1471,7 +1474,7 @@ Creates streaming particles that travel between two points--for Stasis level. ON
 				gentity_t *victim = &g_entities[trace.entityNum];
 				if ( victim && victim->takedamage )
 				{
-					G_Damage( victim, ent, ent->activator, temp, trace.endpos, ent->damage, 0, MOD_UNKNOWN );
+					G_Damage( victim, ent, ent->activator, temp, trace.endpos, ent->damage, 0, MOD_LAVA );
 				}
 			}
 		}
@@ -1481,19 +1484,15 @@ Creates streaming particles that travel between two points--for Stasis level. ON
 //------------------------------------------
 void stream_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
-	if (self->behaviorSet[BSET_USE])
-	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
-
 	if ( self->count )
 	{
-		self->e_ThinkFunc = thinkF_stream_think;
+		self->think = stream_think;
 		self->nextthink = level.time + 200;
 	}
 	else
 	{
-		self->e_ThinkFunc = thinkF_NULL;
+		self->think = NULL;
+		self->nextthink = -1;
 	}
 	
 	self->count = !self->count;
@@ -1509,7 +1508,7 @@ void stream_link( gentity_t *ent )
 	{
 		Com_Printf("stream_link: unable to find target %s\n", ent->target );
 
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 		return;
 	}
@@ -1518,15 +1517,16 @@ void stream_link( gentity_t *ent )
 	
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
-		ent->e_ThinkFunc = thinkF_stream_think;
+		ent->think = stream_think;
 		ent->nextthink = level.time + 200;
 	}
 	else if ( ent->spawnflags & 1 )
 	{
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
+		ent->nextthink = -1;
 	}
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 }
 
 //------------------------------------------
@@ -1536,19 +1536,18 @@ void SP_fx_stream( gentity_t *ent )
 
 	if (ent->targetname)
 	{
-		ent->e_UseFunc = useF_stream_use;
+		ent->use = stream_use;
 	}
 
 	ent->count = !(ent->spawnflags & 1);
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 
-	ent->e_ThinkFunc = thinkF_stream_link;
+	ent->think = stream_link;
 	ent->nextthink = level.time + 1000;
 
-	gi.linkentity( ent );
-}
-
+	trap_LinkEntity( ent );
+}*/
 
 /*QUAKED fx_transporter_stream (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 Creates streaming particles that travel between two points--for forge level.
@@ -1566,22 +1565,20 @@ Creates streaming particles that travel between two points--for forge level.
 }
 
 //------------------------------------------
-void transporter_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+void transporter_stream_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
-	if (self->behaviorSet[BSET_USE])
+	if ( self->count )
 	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
-
-	if (self->e_ThinkFunc != thinkF_NULL)
-	{
-		self->e_ThinkFunc = thinkF_NULL;
+		self->think = transporter_stream_think;
+		self->nextthink = level.time + 200;
 	}
 	else
 	{
-		self->e_ThinkFunc = thinkF_transporter_stream_think;
-		self->nextthink = level.time + 150;
+		self->think = NULL;
+		self->nextthink = -1;
 	}
+	
+	self->count = !self->count;
 }
 
 //------------------------------------------
@@ -1595,7 +1592,7 @@ void transporter_stream_link( gentity_t *ent )
 	{
 		Com_Printf( "transporter_stream_link: unable to find target %s\n", ent->target );
 
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 
 		return;
@@ -1603,23 +1600,25 @@ void transporter_stream_link( gentity_t *ent )
 
 	if (ent->targetname)
 	{
-		ent->e_UseFunc = useF_transporter_use;
+		ent->use = transporter_stream_use;
 	}
+
+	ent->count = !(ent->spawnflags & 1);
 
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
-		ent->e_ThinkFunc = thinkF_transporter_stream_think;
+		ent->think = transporter_stream_think;
 		ent->nextthink = level.time + 200;
 	}
 	else
 	{
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 	}
 
 	VectorCopy( target->s.origin, ent->s.origin2 );
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 
 }
 
@@ -1628,11 +1627,11 @@ void SP_fx_transporter_stream( gentity_t *ent )
 {
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 
-	ent->e_ThinkFunc = thinkF_transporter_stream_link;
+	ent->think = transporter_stream_link;
 	ent->nextthink = 1000;
 
-	gi.linkentity( ent );
-}
+	trap_LinkEntity( ent );
+}*/
 
 /*QUAKED fx_explosion_trail (0 0 1) (-8 -8 -8) (8 8 8)
 Creates a triggerable explosion aimed at a specific point.  Always oriented towards viewer.
@@ -1646,11 +1645,6 @@ Creates a triggerable explosion aimed at a specific point.  Always oriented towa
 //------------------------------------------
 /*void explosion_trail_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
-	if (self->behaviorSet[BSET_USE])
-	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
-
 	G_AddEvent( self, EV_FX_EXPLOSION_TRAIL, 0 );
 }
 
@@ -1659,7 +1653,7 @@ void explosion_trail_link( gentity_t *ent )
 {
 	gentity_t	*target = NULL;
 
-	ent->e_ThinkFunc = thinkF_NULL;
+	ent->think = NULL;
 	ent->nextthink = -1;
 
 	target = G_Find (target, FOFS(targetname), ent->target);
@@ -1672,28 +1666,28 @@ void explosion_trail_link( gentity_t *ent )
 
 	VectorCopy( target->s.origin, ent->s.origin2 );
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 }
 
 //------------------------------------------
 void SP_fx_explosion_trail( gentity_t *ent )
 {
 	G_SpawnInt( "damage", "150", &ent->splashDamage );
-	G_SpawnFloat( "radius", "80", &ent->radius );
+	G_SpawnFloat( "radius", "80", &ent->distance );
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 
-	ent->e_UseFunc = useF_explosion_trail_use;
+	ent->use = explosion_trail_use;
 
-	ent->e_ThinkFunc = thinkF_explosion_trail_link;
+	ent->think = explosion_trail_link;
 	ent->nextthink = 1000;
 
 	ent->splashRadius = 160;
 
-	ent->svFlags |= SVF_BROADCAST;
+	//ent->svFlags |= SVF_BROADCAST;
 
-	gi.linkentity( ent );
-}
+	trap_LinkEntity( ent );
+}*/
 
 /*QUAKED fx_borg_energy_beam (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF CONE
 A borg tracing beam that either carves out a cone or swings like a pendulum, sweeping across an area. 
@@ -1719,20 +1713,18 @@ CONE - Beam traces a cone, default trace shape is a pendulum, sweeping across an
 //------------------------------------------
 void borg_energy_beam_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
-	if (self->behaviorSet[BSET_USE])
+	if ( self->count )
 	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
-
-	if (self->e_ThinkFunc != thinkF_NULL)
-	{
-		self->e_ThinkFunc = thinkF_NULL;
+		self->think = borg_energy_beam_think;
+		self->nextthink = level.time + 200;
 	}
 	else
 	{
-		self->e_ThinkFunc = thinkF_borg_energy_beam_think;
-		self->nextthink = level.time + 150;
+		self->think = NULL;
+		self->nextthink = -1;
 	}
+	
+	self->count = !self->count;
 }
 
 //------------------------------------------
@@ -1746,7 +1738,7 @@ void borg_energy_beam_link( gentity_t *ent )
 	{
 		Com_Printf( "borg_energy_beam_link: unable to find target %s\n", ent->target );
 
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 
 		return;
@@ -1754,17 +1746,19 @@ void borg_energy_beam_link( gentity_t *ent )
 
 	if (ent->targetname)
 	{
-		ent->e_UseFunc = useF_borg_energy_beam_use;
+		ent->use = borg_energy_beam_use;
 	}
+
+	ent->count = !(ent->spawnflags & 1);
 
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
-		ent->e_ThinkFunc = thinkF_borg_energy_beam_think;
+		ent->think = borg_energy_beam_think;
 		ent->nextthink = level.time + 200;
 	}
 	else
 	{
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 	}
 
@@ -1772,19 +1766,24 @@ void borg_energy_beam_link( gentity_t *ent )
 	VectorCopy( target->s.origin, ent->pos1 );
 
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 
 }
 
 //------------------------------------------
 void SP_fx_borg_energy_beam( gentity_t *ent )
 {
-	G_SpawnFloat( "radius", "30", &ent->radius );
+	G_SpawnFloat( "radius", "30", &ent->distance );
 	G_SpawnFloat( "speed", "100", &ent->speed );
-	G_SpawnVector4( "startRGBA", "0 255 0 128", (float *)&ent->startRGBA );
+	if (!ent->startRGBA)
+	{
+		ent->startRGBA[1] = 255;
+		ent->startRGBA[3] = 128;
+	}
 
 	// Convert from range of 0-255 to 0-1
-	for (int t=0; t < 4; t++)
+	int t;
+	for (t=0; t < 4; t++)
 	{
 		ent->startRGBA[t] = ent->startRGBA[t] / 255;
 	}
@@ -1793,14 +1792,14 @@ void SP_fx_borg_energy_beam( gentity_t *ent )
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 
-	ent->e_ThinkFunc = thinkF_borg_energy_beam_link;
+	ent->think = borg_energy_beam_link;
 	ent->nextthink = 1000;
 
-	gi.linkentity( ent );
-}
+	trap_LinkEntity( ent );
+}*/
 
-/*QUAKED fx_shimmery_thing (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF TAPER NO_AUTO_SHUTOFF
-Creates a shimmering cone or cylinder of colored light that stretches between two points.  Looks like a teleporter type thing.  Will also autoshut off
+/*QUAKED fx_shimmery_thing (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF TAPER 
+Creates a shimmering cone or cylinder of colored light that stretches between two points.  Looks like a teleporter type thing. 
 
   STARTOFF - Effect turns on when used.
   TAPER - Cylinder tapers toward the top, creating a conical effect
@@ -1809,7 +1808,7 @@ Creates a shimmering cone or cylinder of colored light that stretches between tw
   "radius" - radius of the cylinder or of the base of the cone. (default 10)
   "target" (required) End point for stream.
   "targetname" - fires only when used
-  "delay" - how long to stay on before turning itself off ( default 2000 - 2 seconds )
+  "wait" - how long to stay on before turning itself off ( default 2 seconds, -1 to disable auto shut off )
 
 */
 
@@ -1817,34 +1816,27 @@ Creates a shimmering cone or cylinder of colored light that stretches between tw
 /*void shimmery_thing_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_SHIMMERY_THING, 0 );
-	ent->nextthink = level.time + FRAMETIME;
-	ent->fx_time -= FRAMETIME;
-
-	if ( ent->fx_time <= 0 && !(ent->spawnflags & 4 )) // NO_AUTO_SHUTOFF
-	{
-		// shut me off
-		shimmery_thing_use( ent, NULL, NULL );
-	}
+	if ( ent->wait >= 0 )
+		ent->nextthink = level.time + ent->wait * 1000;
+	else
+		ent->nextthink = -1;
 }
 
 //------------------------------------------
 void shimmery_thing_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
-	if (self->behaviorSet[BSET_USE])
+	if ( self->count )
 	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
-
-	if (self->e_ThinkFunc != thinkF_NULL)
-	{
-		self->e_ThinkFunc = thinkF_NULL;
+		self->think = borg_energy_beam_think;
+		self->nextthink = level.time + 200;
 	}
 	else
 	{
-		self->e_ThinkFunc = thinkF_shimmery_thing_think;
-		self->nextthink = level.time + 150;
-		self->fx_time = self->delay;
+		self->think = NULL;
+		self->nextthink = -1;
 	}
+	
+	self->count = !self->count;
 }
 
 //------------------------------------------
@@ -1858,7 +1850,7 @@ void shimmery_thing_link( gentity_t *ent )
 	{
 		Com_Printf( "shimmery_thing_link: unable to find target %s\n", ent->target );
 
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 
 		return;
@@ -1866,42 +1858,44 @@ void shimmery_thing_link( gentity_t *ent )
 
 	if (ent->targetname)
 	{
-		ent->e_UseFunc = useF_shimmery_thing_use;
+		ent->use = shimmery_thing_use;
 	}
+
+	ent->count = !(ent->spawnflags & 1);
 
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
-		ent->e_ThinkFunc = thinkF_shimmery_thing_think;
+		ent->think = shimmery_thing_think;
 		ent->nextthink = level.time + 200;
-		ent->fx_time = ent->delay + 200;
 	}
 	else
 	{
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 	}
 
 	VectorCopy( target->s.origin, ent->s.origin2 );
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 
 }
 
 //------------------------------------------
 void SP_fx_shimmery_thing( gentity_t *ent )
 {
-	G_SpawnFloat( "radius", "10", &ent->radius );
-	G_SpawnInt( "delay", "2000", &ent->delay );
+	G_SpawnFloat( "radius", "10", &ent->distance );
+	if ( !ent->wait )
+		ent->wait = 2;
 
 //	ent->svFlags |= SVF_BROADCAST;
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 
-	ent->e_ThinkFunc = thinkF_shimmery_thing_link;
-	ent->nextthink = 1000;
+	ent->think = shimmery_thing_link;
+	ent->nextthink = level.time + 1000;
 
-	gi.linkentity( ent );
-}
+	trap_LinkEntity( ent );
+}*/
 
 /*QUAKED fx_borg_bolt (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 Emits yellow electric bolts from the specified point to the specified point.
@@ -1910,8 +1904,6 @@ Emits showers of sparks if the endpoints are sufficiently close.
   STARTOFF - effect is initially off
 
   "target" (required) end point of the beam.  Can be a func_train, info_notnull, etc.
-  "target2" (optional) starting point of the beam if the start point is moving,
-			otherwise, the start point is the origin of the fx_borg_bolt entity.
   "targetname" - toggles effect on/off each time it's used
 */
 
@@ -1925,18 +1917,15 @@ Emits showers of sparks if the endpoints are sufficiently close.
 //------------------------------------------
 void borg_bolt_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 {
-	if (self->behaviorSet[BSET_USE])
-	{
-		G_ActivateBehavior(self,BSET_USE);
-	}
 
 	if ( self->count )
 	{
-		self->e_ThinkFunc = thinkF_NULL;
+		self->think = NULL;
+		self->nextthink = -1;
 	}
 	else
 	{
-		self->e_ThinkFunc = thinkF_borg_bolt_think;
+		self->think = borg_bolt_think;
 		self->nextthink = level.time + 200;
 	}
 	
@@ -1946,38 +1935,27 @@ void borg_bolt_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 //------------------------------------------
 void borg_bolt_link( gentity_t *ent )
 {
-	gentity_t	*target = NULL, *target2 = NULL;
+	gentity_t	*target = NULL;
 
 	target = G_Find (target, FOFS(targetname), ent->target);
-	target2 = G_Find (target2, FOFS(targetname), ent->target2);
 
 	if (!target)
 	{
 		Com_Printf("borg_bolt_link: unable to find target %s\n", ent->target );
 
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 
 		return;
 	}
 
-	if ( !target2 )
-	{
-		// Since there isn't a second target, stash my origin
-		VectorCopy( ent->s.origin, ent->s.pos.trBase );
-	}
-
 //	ent->svFlags |= SVF_BROADCAST;// Broadcast to all clients
-
-	// Stash the targets in case the end points are moving
-	G_SetEnemy(ent, target);
-	ent->chain = target2;
 
 	VectorCopy( target->s.origin, ent->s.origin2 );
 
 	if ( ent->targetname )
 	{
-		ent->e_UseFunc = useF_borg_bolt_use;
+		ent->use = borg_bolt_use;
 	}
 
 	// This is used as the toggle switch
@@ -1985,24 +1963,24 @@ void borg_bolt_link( gentity_t *ent )
 
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
-		ent->e_ThinkFunc = thinkF_borg_bolt_think;	
+		ent->think = borg_bolt_think;	
 		ent->nextthink = level.time + 1000;
 	}
 	else
 	{
-		ent->e_ThinkFunc = thinkF_NULL;
+		ent->think = NULL;
 		ent->nextthink = -1;
 	}
 
 	G_SoundIndex( "sound/enemies/borg/borgtaser.wav" );
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 }
 
 //------------------------------------------
 void SP_fx_borg_bolt( gentity_t *ent )
 {
-	ent->e_ThinkFunc = thinkF_borg_bolt_link;
+	ent->think = borg_bolt_link;
 	ent->nextthink = level.time + 1000;
 
-	gi.linkentity( ent );
+	trap_LinkEntity( ent );
 }*/

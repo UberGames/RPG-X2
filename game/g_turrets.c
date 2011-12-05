@@ -855,7 +855,7 @@ void laser_arm_fire (gentity_t *ent)
 		ent->s.angles2[0] = ent->nextTrain->startRGBA[0];
 		ent->s.angles2[1] = ent->nextTrain->startRGBA[1];
 		ent->s.angles2[2] = ent->nextTrain->startRGBA[2];
-		ent->s.scale = ent->nextTrain->startRGBA[3];
+		//ent->s.scale = ent->nextTrain->startRGBA[3];
 
 		G_AddEvent( ent, EV_LASERTURRET_FIRE, 0 );
 	}

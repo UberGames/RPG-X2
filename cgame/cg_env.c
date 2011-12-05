@@ -1300,7 +1300,7 @@ void CG_SmallSpark( vec3_t origin, vec3_t normal )
 void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, float alpha )
 {
 	vec3_t	dir, right, up, angles, work, pos,
-			sRGB, ;
+			sRGB;
 	float	scale = 1.0f;
 	int		life = 0;
 
@@ -1398,7 +1398,7 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, flo
 //------------------------------------------------------------------------------
 void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal )
 {
-	vec3_t		lRGB = {1.0,0.0,0.0};
+	//vec3_t		lRGB = {1.0,0.0,0.0};
 
 	// Beam
 	/*FX_AddLine3( start, end, 
@@ -1457,8 +1457,8 @@ Creates a basic cooking steam effect
 	VectorSet( dir, crandom()*2, crandom()*2, crandom() + radius); // always move mostly up
 	VectorScale( dir, random() * 5 + 2, dir );
 
-	FX_AddSprite( origin, dir, NULL, radius, radius * 2, 0.4F, 0.0, 0, 0, 1000, cgs.media.steamShader );
-}
+	FX_AddSprite( origin, dir, qfalse, radius, radius * 2, 0.4F, 0.0, 0, 0, 1000, cgs.media.steamShader );
+}*/
 /*
 ======================
 CG_ElectricFire

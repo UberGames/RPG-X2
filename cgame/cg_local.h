@@ -2040,7 +2040,7 @@ void CG_Bolt( centity_t *cent );
 void CG_TransporterPad(vec3_t origin);
 void CG_Drip(centity_t *cent, int killTime );
 void CG_Chunks( vec3_t origin, vec3_t dir, float size, material_type_t type );
-void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent );
+void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, float alpha );
 void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal );
 
 //TiM
@@ -2053,6 +2053,9 @@ void CG_DisruptorFX(centity_t *cent); //RPG-X | Harry Young | 03.12.2011
 void CG_TorpedoFX(centity_t *cent);
 void CG_ParticleFire(vec3_t origin, int size);
 void CG_ShowTrigger(centity_t *cent);
+
+// Additional ports from SP by Harry Young
+//void CG_CookingSteam( vec3_t origin, float radius );
 
 //
 // cg_weapons.c
