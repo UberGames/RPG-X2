@@ -2034,7 +2034,7 @@ void CG_LoadObjectivesForMap(void)
 	char	fullFileName[MAX_QPATH];
 	char	*objtext;
 
-	objtext = (char *)malloc(sizeof(char)*MAX_OBJ_TEXT_LENGTH));
+	objtext = (char *)malloc(sizeof(char)*MAX_OBJ_TEXT_LENGTH);
 	if(!objtext) {
 		CG_Printf("CG_LoadObjectivesForMap: couldn't allocate %u byte\n", sizeof(char)*MAX_OBJ_TEXT_LENGTH);
 		return;
@@ -2099,7 +2099,7 @@ void CG_LoadObjectivesForMap(void)
 }
 #endif
 
-
+#ifdef QVM
 qboolean CG_LoadClasses( void )
 {
 	fileHandle_t	f;
@@ -2308,7 +2308,229 @@ qboolean CG_LoadClasses( void )
 		return qfalse;
 	}
 }
+#else
+qboolean CG_LoadClasses( void )
+{
+	fileHandle_t	f;
+	int				file_len;
+	char			*buffer;
+	char			*token, *textPtr;
+	char			filePath[MAX_QPATH];
+	int				numClasses=0;
+	int				i;
 
+	buffer = (char *)malloc(sizeof(char)*32000);
+	if(!buffer) {
+		CG_Printf("CG_LoadClasses: could not allocate %u byte\n", sizeof(char)*32000);
+		return qfalse;
+	}
+
+	Com_sprintf( filePath, sizeof( filePath ), "ext_data/classes/%s.classes", cgs.classSet );
+
+	memset( &cgs.classData, 0, sizeof( cg_classData_t ) );
+
+	file_len = trap_FS_FOpenFile( filePath, &f, FS_READ );
+
+	if ( !file_len )
+	{
+		CG_Printf( S_COLOR_RED "Couldn't find class file: %s\n", filePath );
+		free(buffer);
+		return qfalse;
+	}
+	
+	if ( file_len > sizeof( buffer ) )
+	{
+		CG_Printf( S_COLOR_RED "File %s was way too big to be loaded.\n", filePath );
+		return qfalse;
+	}
+
+	trap_FS_Read( buffer, file_len, f );
+	trap_FS_FCloseFile( f );
+
+	buffer[file_len] = '\0';
+
+	COM_BeginParseSession();
+
+	textPtr = buffer;
+
+	token = COM_Parse( &textPtr );
+
+	if ( !token[0] ) {
+		CG_Printf( S_COLOR_RED "ERROR: No data was found when going to parse the file!\n" );
+		free(buffer);
+		return qfalse;
+	}
+
+	if ( Q_stricmpn( token, "{", 1 ) ) {
+		CG_Printf( S_COLOR_RED "ERROR: File did not start with a '{' symbol!\n" );
+		free(buffer);
+		return qfalse;
+	}
+
+	while( 1 )
+	{
+		if ( numClasses >= MAX_CLASSES )
+			break;
+
+
+		if ( !Q_strncmp( token, "{", 1 ) )
+		{
+			while ( 1 )
+			{
+				token = COM_Parse( &textPtr );
+		
+				if (!token[0]) {
+					break;
+				}
+
+				if ( !Q_stricmpn( token, "formalName", 10 ) ) 
+				{
+					if ( COM_ParseString( &textPtr, &token ) ) 
+					{
+						CG_Printf( S_COLOR_RED "ERROR: Invalid class formal name in class index: %i.\n", numClasses );
+						continue;
+					}
+
+					Q_strncpyz( cgs.classData[numClasses].formalName, token, sizeof( cgs.classData[numClasses].formalName ) );
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "radarColor", 5 ) ) 
+				{
+					vec3_t	temp;
+
+					if ( COM_ParseVec3( &textPtr, temp ) ) 
+					{
+						CG_Printf( S_COLOR_RED "ERROR: Invalid color values in class index: %i.\n", numClasses );
+						continue;
+					}
+
+					for ( i = 0; i < 3; i++ ) 
+					{
+						cgs.classData[numClasses].radarColor[i] = (int)Com_Clamp( 0, 255, (int)temp[i] );
+						//G_Printf( S_COLOR_RED "g_classData[numClasses].color[%i] = %i\n", i, g_classData[numClasses].color[i] );
+					}
+
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "iconColor", 9 ) ) 
+				{
+					if ( COM_ParseString( &textPtr, &token ) ) 
+					{
+						CG_Printf( S_COLOR_RED "ERROR: Invalid class icon color in class index: %i.\n", numClasses );
+						continue;
+					}
+
+					//Eh... there are enum values for these,
+					//but they're currently out of scope ;P
+					if ( !Q_stricmp( token, "red" ) ) 
+					{
+						cgs.classData[numClasses].iconColor = 1; //CLR_RED
+					}
+					else if ( !Q_stricmp( token, "gold" ) ) 
+					{
+						cgs.classData[numClasses].iconColor = 2; //CLR_GOLD
+					}
+					else if ( !Q_stricmp( token, "teal" ) ) 
+					{
+						cgs.classData[numClasses].iconColor = 3; //CLR_TEAL
+					}
+					else if ( !Q_stricmp( token, "green" ) ) 
+					{
+						cgs.classData[numClasses].iconColor = 4; //CLR_GREEN
+					}
+					else 
+					{
+						cgs.classData[numClasses].iconColor = 0; //0
+					}
+
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "medical", 7 ) ) 
+				{
+					if ( COM_ParseInt( &textPtr, (int *)&cgs.classData[numClasses].isMedic ) ) 
+					{
+						CG_Printf( S_COLOR_RED "ERROR: Class medic check for class %i was invalid.\n", numClasses );
+						continue;
+					}
+
+					continue;
+				}
+
+				if( !Q_stricmpn( token, "isBorg", 6 ) )
+				{
+					if( COM_ParseInt( &textPtr, (int *)&cgs.classData[numClasses].isBorg ) )
+					{
+						CG_Printf( S_COLOR_RED "ERROR: Class borg check for class %i was invalid.\n", numClasses );
+						continue;
+					}
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "hasRanks", 8 ) ) 
+				{
+					if ( COM_ParseInt( &textPtr, (int *)&cgs.classData[numClasses].showRanks ) ) 
+					{
+						CG_Printf( S_COLOR_RED "ERROR: Class Ranks check for class %i was invalid.\n", numClasses );
+						continue;
+					}
+
+					continue;
+				}
+
+				//I'm a n00b lol. I made a class called 'medical' and a parameter called 'medical'.
+				//I have to double check both parms or else it confuses the parser
+				//better check all of them. I'm still getting errors
+				if ( !Q_stricmpn( token, "consoleName", 10 ) 
+					|| !Q_stricmpn( token, "modelSkin", 9 ) 
+					|| !Q_stricmpn( token, "message", 7 )
+					|| !Q_stricmpn( token, "admin", 5 )
+					|| !Q_stricmpn( token, "marine", 6 )
+					|| !Q_stricmpn( token, "noShow", 6 )
+					) 
+				{
+					SkipRestOfLine(&textPtr);
+					continue;
+				}
+
+				//this one is a pain since it can potentially have multiple lines
+				if ( !Q_stricmpn( token, "weapons", 7 ) )
+				{
+					SkipBracedSection( &textPtr );
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "}", 1 ) ) 
+				{
+					numClasses++;
+					break;
+				}
+			}
+		}
+
+		token = COM_Parse( &textPtr );
+		
+		if (!token[0]) 
+		{
+			break;
+		}
+	}
+
+	if ( numClasses > 0 ) {
+		free(buffer);
+		return qtrue;
+	} else
+	{
+		CG_Printf( S_COLOR_RED "ERROR: No classes were found in the class file!\n" );
+		free(buffer);
+		return qfalse;
+	}
+}
+#endif
+
+#ifdef QVM
 qboolean CG_LoadUsablesStrings( void )
 {
 	char			fileRoute[MAX_QPATH];
@@ -2408,3 +2630,113 @@ qboolean CG_LoadUsablesStrings( void )
 
 	return qtrue;
 }
+#else
+qboolean CG_LoadUsablesStrings( void )
+{
+	char			fileRoute[MAX_QPATH];
+	char			mapRoute[MAX_QPATH];
+	char			*buffer;
+	int				file_len;
+	char			*textPtr, *token;
+	fileHandle_t	f;
+	int				i;
+	int				strLen;
+
+	buffer = (char *)malloc(sizeof(char)*20000);
+	if(!buffer) {
+		CG_Printf("CG_LoadUsablesStrings: could not allocate %u byte\n", sizeof(char)*20000);
+		return qfalse;
+	}
+
+	//setup the file route
+	Com_sprintf( mapRoute, sizeof( mapRoute ), "%s", cgs.mapname );
+
+	strLen = strlen( mapRoute );
+
+	//*sigh* remove the bsp bit
+	if ( strLen > 4 && !Q_stricmp( mapRoute + strLen-4, ".bsp" ) )
+		mapRoute[strLen-4] = '\0';
+
+	//check for language
+	CG_LanguageFilename( mapRoute, "usables", fileRoute );
+
+	file_len = trap_FS_FOpenFile( fileRoute, &f, FS_READ );
+
+	//It's assumed most maps won't have this feature, so just exit 'gracefully'
+	if ( file_len<=1 )
+	{
+		//CG_Printf( S_COLOR_YELLOW "WARNING: No file named %s was found. If the server \n", fileRoute );
+		trap_FS_FCloseFile( f );
+		free(buffer);
+		return qfalse;
+	}
+
+	//fill the buffer with the file data
+	memset( &buffer, 0, sizeof( buffer ) );
+	trap_FS_Read( buffer, file_len, f );
+	buffer[file_len] = '0';
+
+	trap_FS_FCloseFile( f );
+	
+	if ( !buffer[0] )
+	{
+		CG_Printf( S_COLOR_RED "ERROR: Attempted to load %s, but no data was inside!\n", fileRoute );
+		free(buffer);
+		return qfalse;
+	}
+
+	COM_BeginParseSession();
+	textPtr = buffer;
+
+	i = 0;	//used for the main arrays indices
+
+	while( 1 )
+	{
+		token = COM_Parse( &textPtr );
+		if ( !token[0] )
+			break;
+
+		if ( !Q_strncmp( token, "UsableDescriptions", 18 ) )
+		{
+			token = COM_Parse( &textPtr );
+			if ( Q_strncmp( token, "{", 1 ) != 0 )
+			{
+				CG_Printf( S_COLOR_RED "ERROR: UsableDescriptions had no opening brace ( { )!\n", fileRoute );
+				continue;
+			}
+
+			token = COM_Parse( &textPtr );
+
+			//expected format is 'id' <space> 'string'
+			while ( Q_strncmp( token, "}", 1 ) )
+			{
+				if ( !token[0] )
+					break;
+
+				if ( !Q_strncmp( token, "UsableEntities", 14 ) )
+				{
+					SkipBracedSection( &textPtr );
+					continue;
+				}
+				else
+				{
+					//parse past the ID num
+					token = COM_ParseExt( &textPtr, qfalse );
+
+					//copy the line of text
+					if( token[0] )
+					{
+						Q_strncpyz( cgs.scannableStrings[i], token, sizeof( cgs.scannableStrings[i] ) );
+						i++;
+					}
+
+					token = COM_Parse( &textPtr );
+				}
+			}
+		}
+	}
+
+	free(buffer);
+	return qtrue;
+}
+#endif
