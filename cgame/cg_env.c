@@ -1304,10 +1304,6 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, flo
 	float	scale = 1.0f;
 	int		life = 0;
 
-	/* FIXME: FX_DetailLevel defined nowhere */
-	/*if ( !(FX_DetailLevel( start, 16, 1200 ) ))
-		return;*/
-
 	// Orient the laser spray
 	VectorSubtract( end, start, dir );
 	VectorNormalize( dir );
