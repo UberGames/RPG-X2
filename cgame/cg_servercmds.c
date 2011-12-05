@@ -482,6 +482,8 @@ static void CG_EncodeIDFile( void )
 	char			strSubnet[3];
 	int				intSubnet[4];
 	int				i, j;
+	
+	memset(strSubnet, 0, sizeof(strSubnet));
 
 	IP = (char *)CG_Argv( 1 );
 	//IP = "143.163.12.2";
@@ -631,6 +633,8 @@ void CG_ShaderStateChanged(void) {
 	char *n,*t;
 
 	o = CG_ConfigString( CS_SHADERSTATE );
+
+	if(!o) return;
 
 	while (o && *o) {
 		n = strstr(o, "=");
