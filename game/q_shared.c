@@ -1,13 +1,14 @@
-// Copyright (C) 1999-2000 Id Software, Inc.
-//
-// q_shared.c -- stateless support routines that are included in each code dll
+/* Copyright (C) 1999-2000 Id Software, Inc.
+ *
+ * q_shared.c -- stateless support routines that are included in each code dll
+ */
 #include "q_shared.h"
 
-//vmCvar_t	rpg_medicsrevive;			//RPG-X: RedTechie - To let bg_pmovto work
-//vmCvar_t	rpg_noclipspectating;		//RPG-X J2J: Defined here to prevent link errors when compiling cgame
-//qboolean    ClientNCSpec = qtrue;		//RPG-X J2J: Private flag for weather the client chooses to spectate noclip style
+/*vmCvar_t	rpg_medicsrevive;			//RPG-X: RedTechie - To let bg_pmovto work
+vmCvar_t	rpg_noclipspectating;		//RPG-X J2J: Defined here to prevent link errors when compiling cgame
+qboolean    ClientNCSpec = qtrue;		//RPG-X J2J: Private flag for weather the client chooses to spectate noclip style*/
 
-//float Q_powf ( float x, int y );
+/* float Q_powf ( float x, int y ); */
 
 float Com_Clamp( float min, float max, float value ) {
 	if ( value < min ) {
@@ -61,15 +62,15 @@ void COM_DefaultExtension (char *path, int maxSize, const char *extension ) {
 	char	oldPath[MAX_QPATH];
 	char    *src;
 
-//
-// if path doesn't have a .EXT, append extension
-// (extension should include the .)
-//
+/*
+ * if path doesn't have a .EXT, append extension
+ * (extension should include the .)
+ */
 	src = path + strlen(path) - 1;
 
 	while (*src != '/' && src != path) {
 		if ( *src == '.' ) {
-			return;                 // it has an extension
+			return;                 /* it has an extension */
 		}
 		src--;
 	}
@@ -86,8 +87,10 @@ void COM_DefaultExtension (char *path, int maxSize, const char *extension ) {
 ============================================================================
 */
 
-// can't just use function pointers, or dll linkage can
-// mess up when qcommon is included in multiple places
+/* 
+ *can't just use function pointers, or dll linkage can
+ * mess up when qcommon is included in multiple places
+ */
 static short	(*_BigShort) (short l);
 static short	(*_LittleShort) (short l);
 static int		(*_BigLong) (int l);
@@ -97,20 +100,19 @@ static float	(*_LittleFloat) (float l);
 
 
 #ifdef _M_IX86
-//
-// optimised version for intel stuff...
-//
+/*
+ * optimised version for intel stuff...
+ */
 short	BigShort(short l){return _BigShort(l);}
 int		BigLong (int l) {return _BigLong(l);}
 float	BigFloat (float l) {return _BigFloat(l);}
 #define	LittleShort(l) l
 #define LittleLong(l)  l
 #define LittleFloat(l) l
-//
 #else
-//
-// standard smart byte-swap stuff....
-//
+/*
+ * standard smart byte-swap stuff....
+ */
 short	BigShort(short l){return _BigShort(l);}
 short	LittleShort(short l) {return _LittleShort(l);}
 int		BigLong (int l) {return _BigLong(l);}
@@ -184,7 +186,7 @@ void Swap_Init (void)
 {
 	byte	swaptest[2] = {1,0};
 
-// set the byte swapping variables in a portable manner	
+/* set the byte swapping variables in a portable manner	*/
 	if ( *(short *)swaptest == 1)
 	{
 		_BigShort = ShortSwap;
@@ -273,7 +275,7 @@ char *COM_ParseExt( char **data_p, qboolean allowLineBreaks )
 	len = 0;
 	com_token[0] = 0;
 
-	// make sure incoming data is valid
+	/* make sure incoming data is valid */
 	if ( !data )
 	{
 		*data_p = NULL;
@@ -282,7 +284,7 @@ char *COM_ParseExt( char **data_p, qboolean allowLineBreaks )
 
 	while ( 1 )
 	{
-		// skip whitespace
+		/* skip whitespace */
 		data = SkipWhitespace( data, &hasNewLines );
 		if ( !data )
 		{
@@ -297,13 +299,13 @@ char *COM_ParseExt( char **data_p, qboolean allowLineBreaks )
 
 		c = *data;
 
-		// skip double slash comments
+		/* skip double slash comments */
 		if ( c == '/' && data[1] == '/' )
 		{
 			while (*data && *data != '\n')
 				data++;
 		}
-		// skip /* */ comments
+		/* skip comments */
 		else if ( c=='/' && data[1] == '*' ) 
 		{
 			while ( *data && ( *data != '*' || data[1] != '/' ) ) 
@@ -321,7 +323,7 @@ char *COM_ParseExt( char **data_p, qboolean allowLineBreaks )
 		}
 	}
 
-	// handle quoted strings
+	/* handle quoted strings */
 	if (c == '\"')
 	{
 		data++;
@@ -342,7 +344,7 @@ char *COM_ParseExt( char **data_p, qboolean allowLineBreaks )
 		}
 	}
 
-	// parse a regular word
+	/* parse a regular word */
 	do
 	{
 		if (len < MAX_TOKEN_CHARS)
@@ -358,7 +360,7 @@ char *COM_ParseExt( char **data_p, qboolean allowLineBreaks )
 
 	if (len == MAX_TOKEN_CHARS)
 	{
-//		Com_Printf ("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS);
+/*		Com_Printf ("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS); */
 		len = 0;
 	}
 	com_token[len] = 0;
@@ -457,7 +459,7 @@ qboolean COM_ParseVec3( char **data, vec3_t vector )
 		vector[i] = atof( token );
 	}
 
-	//TiM: Not reeeeally necessary
+	/* TiM: Not reeeeally necessary */
 	token = COM_ParseExt( data, qfalse );
 	if ( token[0] == 0 ) 
 	{
@@ -505,7 +507,7 @@ qboolean COM_ParseVec4( char **data, vec4_t vector )
 		vector[i] = atof( token );
 	}
 
-	//TiM: Not reeeeally necessary
+	/* TiM: Not reeeeally necessary */
 	token = COM_ParseExt( data, qfalse );
 	if ( token[0] == 0 ) 
 	{
@@ -522,7 +524,7 @@ qboolean COM_ParseVec4( char **data, vec4_t vector )
 }
 
 #if 0
-// no longer used
+/* no longer used */
 /*
 ===============
 COM_ParseInfos
@@ -604,7 +606,7 @@ void SkipBracedSection (char **program) {
 	char			*token;
 	int				depth=0;
 
-	if (com_token[0]=='{') {	//for tr_shader which just ate the brace
+	if (com_token[0]=='{') {	/* for tr_shader which just ate the brace */
 		depth = 1;
 	}
 	do {
@@ -765,7 +767,7 @@ void Q_strncpyz( char *dest, const char *src, int destsize ) {
 int Q_stricmpn (const char *s1, const char *s2, int n) {
 	int		c1, c2;
 	
-	// bk001129 - moved in 1.17 fix not in id codebase
+	/* bk001129 - moved in 1.17 fix not in id codebase */
         if ( s1 == NULL ) {
            if ( s2 == NULL )
              return 0;
@@ -782,7 +784,7 @@ int Q_stricmpn (const char *s1, const char *s2, int n) {
 		c2 = *s2++;
 
 		if (!n--) {
-			return 0;		// strings are equal until end point
+			return 0;		/* strings are equal until end point */
 		}
 		
 		if (c1 != c2) {
@@ -798,7 +800,7 @@ int Q_stricmpn (const char *s1, const char *s2, int n) {
 		}
 	} while (c1);
 	
-	return 0;		// strings are equal
+	return 0;		/* strings are equal */
 }
 
 int Q_strncmp (const char *s1, const char *s2, int n) {
@@ -809,7 +811,7 @@ int Q_strncmp (const char *s1, const char *s2, int n) {
 		c2 = *s2++;
 
 		if (!n--) {
-			return 0;		// strings are equal until end point
+			return 0;		/* strings are equal until end point */
 		}
 		
 		if (c1 != c2) {
@@ -817,7 +819,7 @@ int Q_strncmp (const char *s1, const char *s2, int n) {
 		}
 	} while (c1);
 	
-	return 0;		// strings are equal
+	return 0;		/* strings are equal */
 }
 
 int Q_stricmp (const char *s1, const char *s2) {
@@ -847,7 +849,7 @@ char *Q_strupr( char *s1 ) {
     return s1;
 }
 
-// never goes past bounds or leaves without a terminating 0
+/* never goes past bounds or leaves without a terminating 0 */
 void Q_strcat( char *dest, int size, const char *src ) {
 	int		l1;
 
@@ -903,11 +905,11 @@ char *Q_CleanStr( char *string ) {
 	return string;
 }
 
-
+#ifdef QVM
 void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	int		len;
 	va_list		argptr;
-	char	bigbuffer[32000];	// big, but small enough to fit in PPC stack
+	char	bigbuffer[32000];	/* big, but small enough to fit in PPC stack */
 
 	va_start (argptr,fmt);
 	len = vsprintf (bigbuffer,fmt,argptr);
@@ -922,7 +924,34 @@ void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	}
 	Q_strncpyz (dest, bigbuffer, size );
 }
+#else
+void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
+	int			len;
+	va_list		argptr;
+	char		*bigbuffer = NULL;
 
+	bigbuffer = (char *)malloc(sizeof(char)*32000);
+	if(!bigbuffer) {
+		Com_Printf("Com_sprintf: could not allocate %u bytes for BigBuffer\n", sizeof(char)*32000);
+		return;
+	}
+	memset(bigbuffer, 0, sizeof(bigbuffer));
+
+	va_start (argptr,fmt);
+	len = vsprintf (bigbuffer,fmt,argptr);
+	va_end (argptr);
+	if ( len >= sizeof( bigbuffer ) ) {
+		free(bigbuffer);
+		Com_Error( ERR_FATAL, "Com_sprintf: overflowed bigbuffer" );
+	}
+	if (len >= size) {
+		Com_Printf ("Com_sprintf: overflow of %i in %i\n", len, size);
+		Com_Printf("Fmt: %s\n", fmt);
+		Com_Printf("BigBuffer: %s\n", bigbuffer);
+	}
+	Q_strncpyz (dest, bigbuffer, size );
+}
+#endif
 
 /*
 ============
@@ -935,7 +964,7 @@ FIXME: make this buffer size safe someday
 */
 char	* QDECL va( char *format, ... ) {
 	va_list		argptr;
-	static char		string[2][32000];	// in case va is called by nested functions
+	static char		string[2][32000];	/* in case va is called by nested functions */
 	static int		index = 0;
 	char	*buf;
 
@@ -969,8 +998,8 @@ FIXME: overflow check?
 */
 char *Info_ValueForKey( const char *s, const char *key ) {
 	char	pkey[BIG_INFO_KEY];
-	static	char value[2][BIG_INFO_VALUE];	// use two buffers so compares
-											// work without stomping on each other
+	static	char value[2][BIG_INFO_VALUE];	/* use two buffers so compares
+											   work without stomping on each other */
 	static	int	valueindex = 0;
 	char	*o;
 	
@@ -1073,6 +1102,9 @@ void Info_RemoveKey( char *s, const char *key ) {
 		Com_Error( ERR_DROP, "Info_RemoveKey: oversize infostring" );
 	}
 
+	memset(pkey, 0, sizeof(pkey));
+	memset(value, 0, sizeof(value));
+
 	if (strchr (key, '\\')) {
 		return;
 	}
@@ -1103,7 +1135,7 @@ void Info_RemoveKey( char *s, const char *key ) {
 
 		if (!strcmp (key, pkey) )
 		{
-			strcpy (start, s);	// remove this part
+			strcpy (start, s);	/* remove this part */
 			return;
 		}
 
@@ -1118,7 +1150,7 @@ void Info_RemoveKey( char *s, const char *key ) {
 Info_RemoveKey_Big
 ===================
 */
-void Info_RemoveKey_Big( char *s, const char *key ) {
+#ifdef QVM
 	char	*start;
 	char	pkey[BIG_INFO_KEY];
 	char	value[BIG_INFO_VALUE];
@@ -1158,7 +1190,7 @@ void Info_RemoveKey_Big( char *s, const char *key ) {
 
 		if (!strcmp (key, pkey) )
 		{
-			strcpy (start, s);	// remove this part
+			strcpy (start, s);	/* remove this part */
 			return;
 		}
 
@@ -1167,7 +1199,82 @@ void Info_RemoveKey_Big( char *s, const char *key ) {
 	}
 
 }
+#else
+void Info_RemoveKey_Big( char *s, const char *key ) {
+	char	*start;
+	char	*pkey;
+	char	*value;
+	char	*o;
 
+	if ( strlen( s ) >= BIG_INFO_STRING ) {
+		Com_Error( ERR_DROP, "Info_RemoveKey_Big: oversize infostring" );
+	}
+
+	pkey = (char *)malloc(sizeof(char)*BIG_INFO_KEY);
+	if(!pkey) {
+		Com_Printf("Info_RemoveKey_Big: could not allocate %u byte\n", sizeof(char)*BIG_INFO_KEY);
+		return;
+	}
+	value = (char *)malloc(sizeof(char)*BIG_INFO_VALUE);
+	if(!value) {
+		Com_Printf("Info_RemoveKey_Big: could not allocate %u byte\n", sizeof(char)*BIG_INFO_VALUE);
+		free(value);
+		return;
+	}
+	if (strchr (key, '\\')) {
+		free(pkey);
+		free(value);
+		return;
+	}
+
+	while (1)
+	{
+		start = s;
+		if (*s == '\\')
+			s++;
+		o = pkey;
+		while (*s != '\\')
+		{
+			if (!*s) {
+				free(value);
+				free(pkey);
+				return;
+			}
+			*o++ = *s++;
+		}
+		*o = 0;
+		s++;
+
+		o = value;
+		while (*s != '\\' && *s)
+		{
+			if (!*s) {
+				free(pkey);
+				free(value);
+				return;
+			}
+			*o++ = *s++;
+		}
+		*o = 0;
+
+		if (!strcmp (key, pkey) )
+		{
+			strcpy (start, s);	/* remove this part */
+			free(value);
+			free(pkey);
+			return;
+		}
+
+		if (!*s) {
+			free(pkey);
+			free(value);
+			return;
+		}
+	}
+	free(value);
+	free(pkey);
+}
+#endif
 
 
 
@@ -1327,7 +1434,7 @@ const char *GetStringForID( stringID_table_t *table, int id )
 	int	index = 0;
 
 	while ( ( table[index].name != NULL ) &&
-			( table[index].name[0] != 0 )/*VALIDSTRING( table[index].name )*/ )//RPG-X: RedTechie - Compile errors Fixed
+			( table[index].name[0] != 0 )/*VALIDSTRING( table[index].name )*/ )/* RPG-X: RedTechie - Compile errors Fixed */
 	{
 		if ( table[index].id == id )
 			return table[index].name;
@@ -1339,6 +1446,6 @@ const char *GetStringForID( stringID_table_t *table, int id )
 }
 
 
-//====================================================================
+/*====================================================================*/
 
 

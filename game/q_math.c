@@ -1,6 +1,8 @@
-// Copyright (C) 1999-2000 Id Software, Inc.
-//
-// q_math.c -- stateless support routines that are included in each code module
+/*
+ * Copyright (C) 1999-2000 Id Software, Inc.
+ *
+ * q_math.c -- stateless support routines that are included in each code module
+ */
 #include "q_shared.h"
 
 int nonansicast = 0;
@@ -11,66 +13,66 @@ vec3_t	axisDefault[3] = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
 
 vec4_t colorTable[CT_MAX] = 
 {
-{0, 0, 0, 0},			// CT_NONE
-{0, 0, 0, 1},			// CT_BLACK
-{1, 0, 0, 1},			// CT_RED
-{0, 1, 0, 1},			// CT_GREEN
-{0, 0, 1, 1},			// CT_BLUE
-{1, 1, 0, 1},			// CT_YELLOW
-{1, 0, 1, 1},			// CT_MAGENTA
-{0, 1, 1, 1},			// CT_CYAN
-{0.071, 0.271, 0.29, 1},// CT_TEAL
-{0.529, 0.373, 0.017, 1},//CT_GOLD
-{1, 1, 1, 1},			// CT_WHITE
-{0.75, 0.75, 0.75, 1},	// CT_LTGREY
-{0.50, 0.50, 0.50, 1},	// CT_MDGREY
-{0.25, 0.25, 0.25, 1},	// CT_DKGREY
-{0.15, 0.15, 0.15, 1},	// CT_DKGREY2
+{0, 0, 0, 0},			 /* CT_NONE */
+{0, 0, 0, 1},			 /* CT_BLACK */
+{1, 0, 0, 1},			 /* CT_RED */
+{0, 1, 0, 1},			 /* CT_GREEN */
+{0, 0, 1, 1},			 /* CT_BLUE */
+{1, 1, 0, 1},			 /* CT_YELLOW */
+{1, 0, 1, 1},			 /* CT_MAGENTA */
+{0, 1, 1, 1},			 /* CT_CYAN */
+{0.071, 0.271, 0.29, 1}, /* CT_TEAL */
+{0.529, 0.373, 0.017, 1},/* CT_GOLD */
+{1, 1, 1, 1},			 /* CT_WHITE */
+{0.75, 0.75, 0.75, 1},	 /* CT_LTGREY */
+{0.50, 0.50, 0.50, 1},	 /* CT_MDGREY */
+{0.25, 0.25, 0.25, 1},	 /* CT_DKGREY */
+{0.15, 0.15, 0.15, 1},	 /* CT_DKGREY2 */
+ 
+{0.688, 0.797, 1, 1},	 /* CT_VLTORANGE -- needs values */
+{0.688, 0.797, 1, 1},	 /* CT_LTORANGE */
+{0.620, 0.710, 0.894, 1},/* CT_DKORANGE */
+{0.463, 0.525, 0.671, 1},/* CT_VDKORANGE */
+ 
+{0.616, 0.718, 0.898, 1},/* CT_VLTBLUE1 */
+{0.286, 0.506, 0.898, 1},/* CT_LTBLUE1 */
+{0.082, 0.388, 0.898, 1},/* CT_DKBLUE1 */
+{0.063, 0.278, 0.514, 1},/* CT_VDKBLUE1 */
 
-{0.688, 0.797, 1, 1},	// CT_VLTORANGE -- needs values
-{0.688, 0.797, 1, 1},	// CT_LTORANGE
-{0.620, 0.710, 0.894, 1},	// CT_DKORANGE
-{0.463, 0.525, 0.671, 1},	// CT_VDKORANGE
+{0.302, 0.380, 0.612, 1},/* CT_VLTBLUE2 -- needs values */
+{0.196, 0.314, 0.612, 1},/* CT_LTBLUE2 */
+{0.060, 0.227, 0.611, 1},/* CT_DKBLUE2 */
+{0.043, 0.161, 0.459, 1},/* CT_VDKBLUE2 */
 
-{0.616, 0.718, 0.898, 1},	// CT_VLTBLUE1
-{0.286, 0.506, 0.898, 1},	// CT_LTBLUE1
-{0.082, 0.388, 0.898, 1},	// CT_DKBLUE1
-{0.063, 0.278, 0.514, 1},	// CT_VDKBLUE1
+{0.082, 0.388, 0.898, 1},/* CT_VLTBROWN1 -- needs values */
+{0.082, 0.388, 0.898, 1},/* CT_LTBROWN1 */
+{0.078, 0.320, 0.813, 1},/* CT_DKBROWN1 */
+{0.060, 0.227, 0.611, 1},/* CT_VDKBROWN1 */
 
-{0.302, 0.380, 0.612, 1},	// CT_VLTBLUE2 -- needs values
-{0.196, 0.314, 0.612, 1},	// CT_LTBLUE2
-{0.060, 0.227, 0.611, 1},	// CT_DKBLUE2
-{0.043, 0.161, 0.459, 1},	// CT_VDKBLUE2
+{1, 0.784, 0.365, 1},	 /* CT_VLTGOLD1 -- needs values */
+{1, 0.706, 0.153, 1},	 /* CT_LTGOLD1 */
+{0.733, 0.514, 0.086, 1},/* CT_DKGOLD1 */
+{0.549, 0.384, 0.063, 1},/* CT_VDKGOLD1 */
 
-{0.082, 0.388, 0.898, 1},	// CT_VLTBROWN1 -- needs values
-{0.082, 0.388, 0.898, 1},	// CT_LTBROWN1
-{0.078, 0.320, 0.813, 1},	// CT_DKBROWN1
-{0.060, 0.227, 0.611, 1},	// CT_VDKBROWN1
+{0.688, 0.797, 1, 1},	 /* CT_VLTPURPLE1 -- needs values */
+{0.688, 0.797, 1, 1},	 /* CT_LTPURPLE1 */
+{0.313, 0.578, 1, 1},	 /* CT_DKPURPLE1 */
+{0.031, 0.110, 0.341, 1},/* CT_VDKPURPLE1 */
 
-{1, 0.784, 0.365, 1},	// CT_VLTGOLD1 -- needs values
-{1, 0.706, 0.153, 1},	// CT_LTGOLD1
-{0.733, 0.514, 0.086, 1},	// CT_DKGOLD1
-{0.549, 0.384, 0.063, 1},	// CT_VDKGOLD1
+{0.688, 0.797, 1, 1},	 /* CT_VLTPURPLE2 -- needs values */
+{0.688, 0.797, 1, 1},	 /* CT_LTPURPLE2 */
+{0.688, 0.797, 1, 1},	 /* CT_DKPURPLE2 */
+{0.031, 0.110, 0.341, 1},/* CT_VDKPURPLE2 */
 
-{0.688, 0.797, 1, 1},	// CT_VLTPURPLE1 -- needs values
-{0.688, 0.797, 1, 1},	// CT_LTPURPLE1
-{0.313, 0.578, 1, 1},	// CT_DKPURPLE1
-{0.031, 0.110, 0.341, 1},	// CT_VDKPURPLE1
+{0.686, 0.808, 0.1, 1},	 /* CT_VLTPURPLE3 */
+{0.188, 0.494, 1, 1},	 /* CT_LTPURPLE3 */
+{0.094, 0.471, 1, 1},	 /* CT_DKPURPLE3 */
+{0.067, 0.325, 0.749, 1},/* CT_VDKPURPLE3 */
 
-{0.688, 0.797, 1, 1},	// CT_VLTPURPLE2 -- needs values
-{0.688, 0.797, 1, 1},	// CT_LTPURPLE2
-{0.688, 0.797, 1, 1},	// CT_DKPURPLE2
-{0.031, 0.110, 0.341, 1},	// CT_VDKPURPLE2
-
-{0.686, 0.808, 0.1, 1},	// CT_VLTPURPLE3
-{0.188, 0.494, 1, 1},	// CT_LTPURPLE3
-{0.094, 0.471, 1, 1},	// CT_DKPURPLE3
-{0.067, 0.325, 0.749, 1},	// CT_VDKPURPLE3
-
-{1, 0.612, 0.325, 1},	// CT_VLTRED1
-{1, 0.478, 0.098, 1},	// CT_LTRED1
-{1, 0.438, 0, 1},	// CT_DKRED1
-{0.784, 0.329, 0, 1},	// CT_VDKRED1
+{1, 0.612, 0.325, 1},	 /* CT_VLTRED1 */
+{1, 0.478, 0.098, 1},	 /* CT_LTRED1 */
+{1, 0.438, 0, 1},		 /* CT_DKRED1 */
+{0.784, 0.329, 0, 1},	 /* CT_VDKRED1 */
 
 };
 
@@ -184,7 +186,7 @@ vec3_t	bytedirs[NUMVERTEXNORMALS] =
 {-0.587785, -0.425325, -0.688191}, {-0.688191, -0.587785, -0.425325}
 };
 
-//==============================================================
+/*==============================================================*/
 
 int		Q_rand( int *seed ) {
 	*seed = (69069 * *seed + 1);
@@ -200,7 +202,7 @@ float	Q_crandom( int *seed ) {
 }
 
 
-//=======================================================
+/*=======================================================*/
 
 signed char ClampChar( int i ) {
 	if ( i < -128 ) {
@@ -223,7 +225,7 @@ signed short ClampShort( int i ) {
 }
 
 
-// this isn't a real cheap function to call!
+/* this isn't a real cheap function to call! */
 /**
 *	Converts a direction vector into a byte
 */
@@ -305,7 +307,7 @@ float NormalizeColor( const vec3_t in, vec3_t out ) {
 }
 
 
-//============================================================================
+/*============================================================================*/
 
 /*
 *	\brief Returns false if the triangle is degenrate.
@@ -396,10 +398,10 @@ RotateAroundDirection
 */
 void RotateAroundDirection( vec3_t axis[3], float yaw ) {
 
-	// create an arbitrary axis[1] 
+	/* create an arbitrary axis[1] */
 	PerpendicularVector( axis[1], axis[0] );
 
-	// rotate it around axis[0] by yaw
+	/* rotate it around axis[0] by yaw */
 	if ( yaw ) {
 		vec3_t	temp;
 
@@ -407,7 +409,7 @@ void RotateAroundDirection( vec3_t axis[3], float yaw ) {
 		RotatePointAroundVector( axis[1], axis[0], temp, yaw );
 	}
 
-	// cross to get axis[2]
+	/* cross to get axis[2] */
 	CrossProduct( axis[0], axis[1], axis[2] );
 }
 
@@ -459,7 +461,7 @@ AnglesToAxis
 void AnglesToAxis( const vec3_t angles, vec3_t axis[3] ) {
 	vec3_t	right;
 
-	// angle vectors returns "right" instead of "y axis"
+	/* angle vectors returns "right" instead of "y axis" */
 	AngleVectors( angles, axis[0], right, axis[2] );
 	VectorSubtract( vec3_origin, right, axis[1] );
 }
@@ -510,8 +512,10 @@ void ProjectPointOnPlane( vec3_t dst, const vec3_t p, const vec3_t normal )
 void MakeNormalVectors( const vec3_t forward, vec3_t right, vec3_t up) {
 	float		d;
 
-	// this rotate and negate guarantees a vector
-	// not colinear with the original
+	/*
+	 * this rotate and negate guarantees a vector
+	 * not colinear with the original
+	 */
 	right[1] = -forward[0];
 	right[2] = forward[1];
 	right[0] = forward[2];
@@ -530,7 +534,7 @@ void VectorRotate( vec3_t in, vec3_t matrix[3], vec3_t out )
 	out[2] = DotProduct( in, matrix[2] );
 }
 
-//============================================================================
+/*============================================================================ */
 
 /*
 * float q_rsqrt( float number )
@@ -549,11 +553,11 @@ float Q_rsqrt( float number )
 
 	x2 = number * 0.5F;
 	y  = number;
-	i  = * ( long * ) &y;						// evil floating point bit level hacking
-	i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
+	i  = * ( long * ) &y;						/* evil floating point bit level hacking */
+	i  = 0x5f3759df - ( i >> 1 );               /* what the fuck? */
 	y  = * ( float * ) &i;
-	y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
-//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+	y  = y * ( threehalfs - ( x2 * y * y ) );   /* 1st iteration */
+//	y  = y * ( threehalfs - ( x2 * y * y ) );   /* 2nd iteration, this can be removed */
 
 	return y;
 }
@@ -664,7 +668,7 @@ float AngleDelta ( float angle1, float angle2 ) {
 }
 
 
-//============================================================
+/*============================================================*/
 
 
 /*
@@ -675,7 +679,7 @@ SetPlaneSignbits
 void SetPlaneSignbits (cplane_t *out) {
 	int	bits, j;
 
-	// for fast box on planeside test
+	/* for fast box on planeside test */
 	bits = 0;
 	for (j=0 ; j<3 ; j++) {
 		if (out->normal[j] < 0) {
@@ -734,7 +738,7 @@ int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
 	float	dist1, dist2;
 	int		sides;
 
-// fast axial cases
+/* fast axial cases */
 	if (p->type < 3)
 	{
 		if (p->dist <= emins[p->type])
@@ -744,7 +748,7 @@ int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
 		return 3;
 	}
 
-// general case
+/* general case */
 	switch (p->signbits)
 	{
 	case 0:
@@ -780,7 +784,7 @@ int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
 		dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
 		break;
 	default:
-		dist1 = dist2 = 0;		// shut up compiler
+		dist1 = dist2 = 0;		/* shut up compiler */
 		break;
 	}
 
@@ -1103,10 +1107,10 @@ vec_t VectorNormalize( vec3_t v ) {
 	return length;
 }
 
-//
-// fast vector normalize routine that does not check to make sure
-// that length != 0, nor does it return length
-//
+/*
+ * fast vector normalize routine that does not check to make sure
+ * that length != 0, nor does it return length
+ */
 void VectorNormalizeFast( vec3_t v )
 {
 	float ilength;
@@ -1276,7 +1280,7 @@ void MatrixMultiply(float in1[3][3], float in2[3][3], float out[3][3]) {
 void AngleVectors( const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up) {
 	float		angle;
 	static float		sr, sp, sy, cr, cp, cy;
-	// static to help MS compiler fp bugs
+	/* static to help MS compiler fp bugs */
 
 	angle = angles[YAW] * (M_PI*2 / 360);
 	sy = sin(angle);
@@ -1322,7 +1326,7 @@ void PerpendicularVector( vec3_t dst, const vec3_t src )
 	** find the smallest magnitude axially aligned vector
 	** bias towards using z instead of x or y
 	*/
-//	for ( pos = 0, i = 0; i < 3; i++ )
+/*	for ( pos = 0, i = 0; i < 3; i++ ) */
 	for ( pos = 0, i = 2; i >= 0; i-- )
 	{
 		if ( fabs( src[i] ) < minelem )
@@ -1360,13 +1364,13 @@ float flrandom(float min, float max)
 */
 int irandom(int min, int max)
 {
-	max++; //so it can round down
+	max++; /* so it can round down */
 	return (((rand() & 0x7FFF) * (max - min)) >> 15) + min;
 }
 
 
-// use for networking - normalizes a vector, then multiplies it by 65535.0, then calls snap vector on it
-// guarantee's a short per vector instead of 4 bytes.
+/* use for networking - normalizes a vector, then multiplies it by 65535.0, then calls snap vector on it
+   guarantee's a short per vector instead of 4 bytes. */
 
 void VectorShort(vec3_t vect)
 {
@@ -1393,7 +1397,7 @@ float Q_powf( float x, int y )
 	return r;
 }
 
-//TiM: Vector-Average.  Good for calculating origins from bounding boxes
+/* TiM: Vector-Average.  Good for calculating origins from bounding boxes */
 void VectorAverage( vec3_t mins, vec3_t maxs, vec3_t result ) {
 	vec3_t temp;
 	/*int i;
@@ -1401,12 +1405,12 @@ void VectorAverage( vec3_t mins, vec3_t maxs, vec3_t result ) {
 		result[i] = ( mins[i] + maxs[i] ) * 0.5;
 	}*/
 
-	//TiM: I 'unno... this way looks l33ter lol
+	/* TiM: I 'unno... this way looks l33ter lol */
 	VectorAdd( mins, maxs, temp );
 	VectorScale( temp, 0.5, result );
 }
 
-// Rounds the argument to the next integer. Used by SnapVector.
+/* Rounds the argument to the next integer. Used by SnapVector. */
 void init_tonextint(qboolean verbose)
 {
 	float decimal = 0.9;
@@ -1459,7 +1463,7 @@ unsigned long atoul( const char *string )
 	unsigned long		value;
 	int					c;
 
-	// skip whitespace
+	/* skip whitespace */
 	while ( *string <= ' ' ) {
 		if ( !*string ) {
 			return 0;
@@ -1467,7 +1471,7 @@ unsigned long atoul( const char *string )
 		string++;
 	}
 
-	// read digits
+	/* read digits */
 	value = 0;
 	do {
 		c = *string++;
@@ -1478,7 +1482,7 @@ unsigned long atoul( const char *string )
 		value = value * 10 + c;
 	} while ( 1 );
 
-	// not handling 10e10 notation...
+	/* not handling 10e10 notation... */
 
 	return value;
 }

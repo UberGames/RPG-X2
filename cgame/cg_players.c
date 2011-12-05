@@ -2663,8 +2663,8 @@ void CG_NewClientInfo( int clientNum ) {
 	clientInfo_t newInfo;
 	const char	*configstring;
 	const char	*v;
-	char		*model;
-	char		*skin;
+	char		*model = NULL;
+	char		*skin = NULL;
 	size_t		len;
 	//int			i;
 
