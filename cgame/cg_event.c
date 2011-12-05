@@ -1754,9 +1754,14 @@ case EV_SHAKE_SOUND:
 		}
 		break;
 
-	case EV_CAMMODE_TOGGLE:
+	case EV_LASERTURRET_AIM:
 		DEBUGNAME("EV_CAMMODE_TOGGLE");
-		cg.cinematicFade = !cg.cinematicFade;
+		CG_AimLaser( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles);
+		break;
+
+	case EV_LASERTURRET_FIRE:
+		DEBUGNAME("EV_CAMMODE_TOGGLE");
+		CG_FireLaser( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles, cent->currentState.angles2, cent->currentState.scale);
 		break;
 
 // Additional ports from SP by Harry Young

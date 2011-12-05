@@ -1297,11 +1297,11 @@ void CG_SmallSpark( vec3_t origin, vec3_t normal )
 }
 
 
-void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent )
+void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, float alpha )
 {
 	vec3_t	dir, right, up, angles, work, pos,
-			sRGB, lRGB;
-	float	scale = 1.0f, alpha;
+			sRGB, ;
+	float	scale = 1.0f;
 	int		life = 0;
 
 	/* FIXME: FX_DetailLevel defined nowhere */
@@ -1311,7 +1311,6 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qbo
 	// Orient the laser spray
 	VectorSubtract( end, start, dir );
 	VectorNormalize( dir );
-	/*alpha = Vector4to3( laserRGB, lRGB );*/ /* FIXME: Vector4to3 defined nowhere */
 
 	VectorMA( end, 0.5f, normal, pos );
 	MakeNormalVectors( normal, right, up );
@@ -1321,7 +1320,7 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qbo
 	FX_AddSprite2( start, NULL, qfalse, 
 					1.75f, 1.0f, 
 					alpha, 0.0f, 
-					lRGB, lRGB, 
+					laserRGB, laserRGB, 
 					0.0f, 
 					0.0f, 
 					200, 
@@ -1331,7 +1330,7 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qbo
 					1.0f, 
 					3.0f, 5.0f, 
 					alpha, 0.0f, 
-					lRGB, lRGB, 
+					laserRGB, laserRGB, 
 					125, 
 					cgs.media.whiteLaserShader );*/ /* FIXME: FX_AddLine3 not defined */
 
@@ -1343,12 +1342,12 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qbo
 					cgs.media.whiteLaserShader );
 
 	// Doing all of this extra stuff would look weird if it hits a player ent.
-	if ( !hit_ent )
-	{
+	//if ( !hit_ent )
+	//{
 		FX_AddQuad2( pos, normal, 
 					3.5f, 1.0f, 
 					alpha, 0.0f, 
-					lRGB, lRGB, 
+					laserRGB, laserRGB, 
 					0.0f, 
 					200, 
 					cgs.media.waterDropShader );
@@ -1380,14 +1379,14 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qbo
 	
 		vectoangles( normal, angles );
 		CG_SmallSpark( end, angles );
-	}
+	/*}
 	else
 	{
 		// However, do add a little smoke puff
 		FX_AddSprite2( pos, NULL, qfalse, 
 						2.0f, 1.0f, 
 						alpha, 0.0f, 
-						lRGB, lRGB, 
+						laserRGB, laserRGB, 
 						0.0f, 
 						0.0f, 
 						200, 
@@ -1397,7 +1396,7 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qbo
 		scale = 1.0f + (random() * 3.0f);
 
 		CG_Smoke( dir, normal, scale, 12.0f );
-	}
+	}*/
 }
 
 //------------------------------------------------------------------------------

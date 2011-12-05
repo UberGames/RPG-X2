@@ -5,10 +5,6 @@
 //extern team_t TranslateTeamName( const char *name );
 //extern	cvar_t	*g_spskill;
 
-//client side shortcut hacks from cg_local.h - nah sorry that won't work as we are MP
-//extern void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent );
-//extern void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal );
-
 
 #define	ARM_ANGLE_RANGE		60
 #define	HEAD_ANGLE_RANGE	90
@@ -848,11 +844,32 @@ void laser_arm_fire (gentity_t *ent)
 	
 	if ( ent->booleanstate )
 	{
-		//CG_FireLaser( start, trace.endpos, trace.plane.normal, ent->nextTrain->startRGBA, qfalse );
+		ent->s.origin2[0] = trace.endpos[0];
+		ent->s.origin2[1] = trace.endpos[1];
+		ent->s.origin2[2] = trace.endpos[2];
+
+		ent->s.angles[0] = trace.plane.normal[0];
+		ent->s.angles[1] = trace.plane.normal[1];
+		ent->s.angles[2] = trace.plane.normal[2];
+
+		ent->s.angles2[0] = ent->nextTrain->startRGBA[0];
+		ent->s.angles2[1] = ent->nextTrain->startRGBA[1];
+		ent->s.angles2[2] = ent->nextTrain->startRGBA[2];
+		ent->s.scale = ent->nextTrain->startRGBA[3];
+
+		G_AddEvent( ent, EV_LASERTURRET_FIRE, 0 );
 	}
 	else
 	{
-		//CG_AimLaser( start, trace.endpos, trace.plane.normal );
+		ent->s.origin2[0] = trace.endpos[0];
+		ent->s.origin2[1] = trace.endpos[1];
+		ent->s.origin2[2] = trace.endpos[2];
+
+		ent->s.angles[0] = trace.plane.normal[0];
+		ent->s.angles[1] = trace.plane.normal[1];
+		ent->s.angles[2] = trace.plane.normal[2];
+
+		G_AddEvent( ent, EV_LASERTURRET_AIM, 0 );
 	}
 }
 
@@ -867,8 +884,8 @@ void laser_arm_use (gentity_t *self, gentity_t *other, gentity_t *activator)
 	default:
 		//Fire
 		//trap_Printf("FIRE!\n");
-//		self->lastEnemy->lastEnemy->e_ThinkFunc = thinkF_laser_arm_fire;
-//		self->lastEnemy->lastEnemy->nextthink = level.time + FRAMETIME;
+		self->lastEnemy->lastEnemy->think = laser_arm_fire;
+		self->lastEnemy->lastEnemy->nextthink = level.time + FRAMETIME;
 		//For 3 seconds
 		self->lastEnemy->lastEnemy->booleanstate = qtrue; // Let 'er rip!
 		self->lastEnemy->lastEnemy->last_move_time = level.time + self->lastEnemy->lastEnemy->wait;
@@ -981,7 +998,13 @@ void laser_arm_start (gentity_t *base)
 	//FIXME: need an actual model
 	base->s.modelindex = G_ModelIndex("models/mapobjects/dn/laser_base.md3");
 	base->s.eType = ET_GENERAL;
-	//G_SpawnVector4( "startRGBA", "1.0 0.85 0.15 0.75", (float *)&base->startRGBA );
+
+	if ( !base->startRGBA )
+	{	base->startRGBA[0] = 1.0;
+		base->startRGBA[1] = 0.85;
+		base->startRGBA[2] = 0.15 ;
+		base->startRGBA[3] = 0.75;
+	}
 	//anglespeed - how fast it can track the player, entered in degrees per second, so we divide by FRAMETIME/1000
 	if ( !base->speed )
 	{
