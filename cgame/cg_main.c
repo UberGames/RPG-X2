@@ -1957,6 +1957,7 @@ void CG_LoadIngameText(void)
 CG_LoadObjectivesForMap
 =================
 */
+#ifdef QVM
 void CG_LoadObjectivesForMap(void)
 {
 	int		len, objnum = 0;
@@ -2022,6 +2023,82 @@ void CG_LoadObjectivesForMap(void)
 		}
 	}
 }
+#else
+void CG_LoadObjectivesForMap(void)
+{
+	int		len, objnum = 0;
+	char	*token;
+	char	*buf;
+	fileHandle_t	f;
+	char	fileName[MAX_QPATH];
+	char	fullFileName[MAX_QPATH];
+	char	*objtext;
+
+	objtext = (char *)malloc(sizeof(char)*MAX_OBJ_TEXT_LENGTH));
+	if(!objtext) {
+		CG_Printf("CG_LoadObjectivesForMap: couldn't allocate %u byte\n", sizeof(char)*MAX_OBJ_TEXT_LENGTH);
+		return;
+	}
+
+	COM_StripExtension( cgs.mapname, fileName );
+	CG_LanguageFilename( fileName, "efo", fullFileName);
+
+	len = trap_FS_FOpenFile( fullFileName, &f, FS_READ );
+
+	if ( len > MAX_OBJ_TEXT_LENGTH )
+	{
+		Com_Printf( S_COLOR_RED "CG_LoadObjectivesForMap : %s file bigger than %d!\n", fileName, MAX_OBJ_TEXT_LENGTH );
+		free(objtext);
+		return;
+	}
+
+	trap_FS_Read( objtext, len, f );
+
+	trap_FS_FCloseFile( f );
+
+	buf = objtext;
+	//Now parse out each objective
+	while ( 1 ) 
+	{
+		token = COM_ParseExt( &buf, qtrue );
+		if ( !token[0] ) {
+			break;
+		}
+
+		// Normal objective text
+		if ( !Q_strncmp( token, "obj", 3 ) ) 
+		{
+			objnum = atoi( &token[3] );
+
+			if ( objnum < 1 || objnum == MAX_OBJECTIVES ) {
+				Com_Printf( "Invalid objective number (%d), valid range is 1 to %d\n", objnum, MAX_OBJECTIVES );
+				break;
+			}
+
+			//Now read the objective text into the current objective
+			token = COM_ParseExt( &buf, qfalse );
+			Q_strncpyz( cgs.objectives[objnum-1].text, token, sizeof(cgs.objectives[objnum-1].text) );
+		}
+
+		else if ( !Q_strncmp( token, "abridged_obj", 12 ) ) 
+		{
+			objnum = atoi( &token[12] );
+
+			if ( objnum < 1 || objnum == MAX_OBJECTIVES ) 
+			{
+				Com_Printf( "Invalid objective number (%d), valid range is 1 to %d\n", objnum, MAX_OBJECTIVES );
+				break;
+			}
+
+			//Now read the objective text into the current objective
+			token = COM_ParseExt( &buf, qfalse );
+			Q_strncpyz( cgs.objectives[objnum-1].abridgedText, token, sizeof(cgs.objectives[objnum-1].abridgedText) );
+		}
+	}
+	free(objtext);
+}
+#endif
+
 
 qboolean CG_LoadClasses( void )
 {

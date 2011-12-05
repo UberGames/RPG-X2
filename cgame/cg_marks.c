@@ -44,6 +44,8 @@ CG_FreeMarkPoly
 ==================
 */
 void CG_FreeMarkPoly( markPoly_t *le ) {
+	if(!le) return;
+
 	if ( !le->prevMark ) {
 		CG_Error( "CG_FreeLocalEntity: not active" );
 	}

@@ -3147,7 +3147,7 @@ static qboolean CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnima
 
 		// get the next frame based on the animation
 		anim = lf->animation;
-		if ( !anim->frameLerp ) {
+		if ( !anim || !anim->frameLerp ) {
 			return qfalse;		// shouldn't happen
 		}
 		//RPG-X Check.  Anims with lengths < 0 are emote stubs.
@@ -3220,6 +3220,8 @@ CG_ClearLerpFrame
 //This function has been rpg-x'ed®! (by RedTechie)
 void CG_ClearLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int animationNumber ) { //RPG-X: RedTechie - Changed type from       static void      to     void
 	
+	if(!lf) return;
+
 	lf->frameTime = lf->oldFrameTime = cg.time; 
 	lf->animation = 0;
 	CG_SetLerpFrameAnimation( ci, lf, animationNumber );
@@ -4952,7 +4954,7 @@ void CG_AddBeamFX( centity_t *cent ) {
 		return;
 	}
 	
-	isDecoy = (cent->currentState.eFlags & EF_ITEMPLACEHOLDER );
+	isDecoy = (qboolean)(cent->currentState.eFlags & EF_ITEMPLACEHOLDER );
 
 	//Get origin to render effect
 	//==============================
