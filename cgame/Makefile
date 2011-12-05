@@ -27,7 +27,7 @@ endif
 OBJ = \
   fx_transporter.o \
   fx_tetrion.o \
-  fx_stasis.o \
+  fx_disruptor.o \
   fx_hypospray.o \
   fx_quantum.o \
   fx_phaser.o \
@@ -103,7 +103,7 @@ fx_misc.o : fx_misc.c; $(DO_CC)
 fx_phaser.o : fx_phaser.c; $(DO_CC)
 fx_quantum.o : fx_quantum.c; $(DO_CC)
 fx_hypospray.o : fx_hypospray.c; $(DO_CC)
-fx_stasis.o : fx_stasis.c; $(DO_CC)
+fx_disruptor.o : fx_disruptor.c; $(DO_CC)
 fx_tetrion.o : fx_tetrion.c; $(DO_CC)
 fx_transporter.o : fx_transporter.c; $(DO_CC)
 

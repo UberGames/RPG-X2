@@ -2194,7 +2194,7 @@ void CG_MissileHitWall( centity_t *cent, int weapon, vec3_t origin, vec3_t dir )
 		return;
 		break;
 	case WP_DISRUPTOR:
-		FX_StasisWeaponHitWall( origin, dir, 2 ); //cent->currentState.time2
+		FX_DisruptorWeaponHitWall( origin, dir, 2 ); //cent->currentState.time2
 		return;
 		break;
 	case WP_NULL_HAND:

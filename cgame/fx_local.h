@@ -1,9 +1,9 @@
 
 #define DEFAULT_DEVIATION	0.5
 
-//
-// fx_*.c
-//
+/*
+ * fx_*.c
+ */
 
 void FXE_Spray (vec3_t direction, float speed, float variation, float cone, vec3_t velocity);
 localEntity_t *FX_AddLine(vec3_t start, vec3_t end, float stScale, float scale, float dscale, 
@@ -53,57 +53,43 @@ localEntity_t *FX_AddParticle(	vec3_t origin, vec3_t velocity, qboolean gravity,
 localEntity_t *FX_AddSpawner( vec3_t origin, vec3_t dir, vec3_t velocity, vec3_t user, qboolean gravity, int delay,
 							 float variance, float killTime, qboolean (*thinkFn)(localEntity_t *le), int radius );
 
-//
-// phaser
-//
-
+/*
+ * phaser
+ */
 void FX_PhaserFire( vec3_t start, vec3_t end, vec3_t normal, qboolean spark, qboolean impact, qboolean empty );
 void FX_PhaserAltFire( vec3_t start, vec3_t end, vec3_t normal, qboolean spark, qboolean impact, qboolean empty );
 
 
-//
-// compression rifle
-//
-
+/*
+ * compression rifle
+ */
 void FX_CompressionShot( vec3_t start, vec3_t end );
 void FX_CompressionAltShot( vec3_t start, vec3_t end );
 void FX_CompressionExplosion( vec3_t start, vec3_t origin, vec3_t normal, qboolean altfire );
 void FX_CompressionHit( vec3_t origin );
-//void FX_CompressionHitWall( vec3_t origin, vec3_t dir );
 void FX_PrifleBeamFire( vec3_t startpos, vec3_t endpos, vec3_t normal, qboolean spark, qboolean impact, qboolean empty );
 
 void FX_ProbeBeam( vec3_t origin, vec3_t dir, int clientNum, qboolean alt_fire );
 void FX_RegenBeam( vec3_t origin, vec3_t dir, int clientNum, qboolean alt_fire );
 
-//
-// imod
-//
-
-//void FX_IMODShot( vec3_t end, vec3_t start, vec3_t dir);
-//void FX_IMODExplosion( vec3_t origin, vec3_t normal );
-//void FX_AltIMODShot( vec3_t end, vec3_t start, vec3_t dir );
-//void FX_AltIMODExplosion( vec3_t origin, vec3_t normal );
-//
-// tetrion disruptor
-//
+/*
+ * tetrion disruptor
+ */
 //void FX_TetrionProjectileThink( centity_t *cent, const struct weaponInfo_s *wi );
 void FX_TetrionShot( vec3_t start, vec3_t forward );
 void FX_TetrionWeaponHitWall( vec3_t origin, vec3_t normal );
 //void FX_TetrionRicochet( vec3_t origin, vec3_t normal );
 //void FX_TetrionAltHitWall( vec3_t origin, vec3_t normal );
 void FX_TetrionAltHitPlayer( vec3_t origin, vec3_t normal );
-//
-// Scavenger Rifle
-//
+
+/*
+ * Scavenger Rifle
+ */
 void FX_HypoSpray( vec3_t origin, vec3_t dir, qboolean red );
-//void FX_ScavengerProjectileThink( centity_t *ent, const weaponInfo_t *wi );
-//void FX_ScavengerAltFireThink( centity_t *ent, const weaponInfo_t *wi );
-//void FX_ScavengerWeaponHitWall( vec3_t origin, vec3_t normal, qboolean fired_by_NPC );
-//void FX_ScavengerWeaponHitPlayer( vec3_t origin, vec3_t normal, qboolean fired_by_NPC );
-//void FX_ScavengerAltExplode( vec3_t origin, vec3_t dir );
-//
-// Grenade launcher
-//
+
+/*
+ * Grenade launcher
+ */
 void FX_GrenadeThink( centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_GrenadeHitWall( vec3_t origin, vec3_t normal );
 void FX_GrenadeHitPlayer( vec3_t origin, vec3_t normal );
@@ -113,39 +99,21 @@ void FX_GrenadeShrapnelBits( vec3_t start);
 void FX_fxfunc_Explosion( vec3_t start, vec3_t origin, vec3_t normal );
 void FX_fxfunc_Shot( vec3_t start, vec3_t dir );
 
-// Borg FX
-//void FX_BorgProjectileThink( centity_t *cent, const struct weaponInfo_s *weapon );
-//void FX_BorgWeaponHitWall( vec3_t origin, vec3_t normal );
-//void FX_BorgTaser( vec3_t start, vec3_t end );
-//void FX_BorgEyeBeam( vec3_t start, vec3_t end, vec3_t normal, qboolean large );
-//void FX_BorgTeleport( vec3_t origin );
-//void FX_BorgTeleportTrails( vec3_t origin );// effect seen by other borg when you are in a mid-teleport
-
-//
-// detpack
-//
-
+/*
+ * detpack
+ */
 void FX_Detpack(vec3_t origin);
 
 
-//
-// Stasis Weapon
-//
-//Disruptor
+/*
+ * Disruptor Weapon
+ */
 void FX_DisruptorBeamFire( vec3_t startpos, vec3_t endpos, vec3_t normal, qboolean spark, qboolean impact, qboolean empty );
+void FX_DisruptorWeaponHitWall( vec3_t origin, vec3_t dir, int size );
 
-
-//void FX_StasisProjectileThink( centity_t *cent, const struct weaponInfo_s *weapon );
-void FX_StasisWeaponHitWall( vec3_t origin, vec3_t dir, int size );
-//void FX_StasisWeaponHitPlayer( vec3_t origin, vec3_t dir, int size );
-//void FX_StasisShot( centity_t *cent, vec3_t end, vec3_t start );
-//void FX_StasisShotImpact( vec3_t end, vec3_t dir );
-//void FX_StasisShotMiss( vec3_t end, vec3_t dir );
-
-//
-// Quantum Burst
-//
-
+/*
+ * Quantum Burst
+ */
 void FX_QuantumThink( centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_QuantumAltThink( centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_QuantumHitWall( vec3_t origin, vec3_t normal );
@@ -153,45 +121,41 @@ void FX_QuantumAltHitWall( vec3_t origin, vec3_t normal );
 void FX_QuantumColumns( vec3_t origin );
 
 
-//
-// Dreadnought
-//
-
+/*
+ * Dreadnought
+ */
 //void FX_DreadnoughtHitWall( vec3_t origin, vec3_t normal, qboolean spark );
 //void FX_DreadnoughtFire( vec3_t origin, vec3_t end, vec3_t normal, qboolean spark, qboolean impact );
 //void FX_DreadnoughtProjectileThink( centity_t *cent, const struct weaponInfo_s *weapon );
 //void FX_DreadnoughtShotMiss( vec3_t end, vec3_t dir );
 
 
-//
-// transporter
-//
-
+/*
+ * transporter
+ */
 void FX_Transporter(vec3_t origin);
 void FX_TransporterPad( vec3_t origin );
 void FX_SPTransporterLensFlares( centity_t* cent, vec3_t headVector, int startTime );
 
 
-// Holdable, portable shield item
+/* Holdable, portable shield item */
 void FX_DrawPortableShield(centity_t *cent);
 
 
 
-// Shield
+/* Shield */
 void FX_PlayerShieldHit( centity_t *cent );
 
 
-//
-// Miscellaneous FX
-//
-
+/*
+ * Miscellaneous FX
+ */
 void FX_Disruptor( vec3_t org, float length );
 void FX_ExplodeBits( vec3_t org);
 
 void FX_qFlash( centity_t* cent, vec3_t org, int timeIndex );
 
-//
-// sin table
-//
-
+/*
+ * sin table
+ */
 void fxRandCircumferencePos(vec3_t center, vec3_t normal, float radius, vec3_t out);
