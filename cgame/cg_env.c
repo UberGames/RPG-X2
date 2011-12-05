@@ -1231,6 +1231,223 @@ void CG_DisruptorFX(centity_t *cent) {
 // Additional ports from SP by Harry Young
 
 /*
+===========================
+Laser
+
+Create directed laser shot
+===========================
+*/
+void CG_SmallSpark( vec3_t origin, vec3_t normal )
+{
+	vec3_t	dir, direction, start, end, velocity;
+	float	scale;
+	int		numSparks;
+
+	AngleVectors( normal, normal, NULL, NULL );
+	
+	int j;
+	for ( j = 0; j < 3; j ++ )
+		normal[j] = normal[j] + (0.1f * crandom());
+
+	VectorNormalize( normal );
+
+	numSparks = 6 + (random() * 4.0f );
+	
+	int i;
+	for ( i = 0; i < numSparks; i++ )
+	{	
+		scale = 0.1f + (random() *0.2f );
+
+		for ( j = 0; j < 3; j ++ )
+			dir[j] = normal[j] + (0.7f * crandom());
+
+		VectorMA( origin, 0.0f + ( random() * 0.5f ), dir, start );
+		VectorMA( start, 1.0f + ( random() * 1.5f ), dir, end );
+
+		FX_AddLine( start,
+					end,
+					1.0f,
+					scale,
+					0.0f,
+					1.0f,
+					0.7f,
+					4.0f,
+					cgs.media.sparkShader );
+	}
+
+	VectorMA( origin, 1, normal, direction );
+
+	scale = 2.0f + (random() * 3.0f );
+	float alpha = 0.6f + (random() * 0.4f );
+
+	VectorSet( velocity, crandom() * 2, crandom() * 2, 8 + random() * 4 );
+	VectorMA( velocity, 5, normal, velocity );
+
+	FX_AddSprite(	direction, 
+					velocity, 
+					qfalse, 
+					scale,
+					scale,
+					alpha,
+					0.0f,
+					random() * 45.0f,
+					0.0f,
+					1000.0f,
+					cgs.media.steamShader );
+}
+
+
+void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent )
+{
+	vec3_t	dir, right, up, angles, work, pos,
+			sRGB, lRGB;
+	float	scale = 1.0f, alpha;
+	int		life = 0;
+
+	if ( !(FX_DetailLevel( start, 16, 1200 ) ))
+		return;
+
+	// Orient the laser spray
+	VectorSubtract( end, start, dir );
+	VectorNormalize( dir );
+	alpha = Vector4to3( laserRGB, lRGB );
+
+	VectorMA( end, 0.5f, normal, pos );
+	MakeNormalVectors( normal, right, up );
+	
+	VectorSet( sRGB, 1.0f, 0.8f, 0.8f );	
+
+	FX_AddSprite2( start, NULL, qfalse, 
+					1.75f, 1.0f, 
+					alpha, 0.0f, 
+					lRGB, lRGB, 
+					0.0f, 
+					0.0f, 
+					200, 
+					cgs.media.waterDropShader );
+
+	FX_AddLine3( start, end, 
+					1.0f, 
+					3.0f, 5.0f, 
+					alpha, 0.0f, 
+					lRGB, lRGB, 
+					125, 
+					cgs.media.whiteLaserShader );
+
+	FX_AddLine( start, end, 
+					1.0f, 
+					0.3f, 5.0f, 
+					random() * 0.4 + 0.4, 0.1f,
+					125,
+					cgs.media.whiteLaserShader );
+
+	// Doing all of this extra stuff would look weird if it hits a player ent.
+	if ( !hit_ent )
+	{
+		FX_AddQuad2( pos, normal, 
+					3.5f, 1.0f, 
+					alpha, 0.0f, 
+					lRGB, lRGB, 
+					0.0f, 
+					200, 
+					cgs.media.waterDropShader );
+		int t;
+		for ( t=0; t < 2; t ++ )
+		{
+			VectorMA( pos, crandom() * 0.5f, right, work );
+			VectorMA( work, crandom() * 0.5f, up, work );
+
+			scale = crandom() * 0.5f + 1.75f;
+			life = crandom() * 300 + 2100;
+
+			VectorSet( sRGB, 1.0f, 0.7f, 0.2f );
+			FX_AddQuad2( work, normal,
+					scale, -0.1f, 
+					1.0f, 0.0f, 
+					sRGB, sRGB, 
+					0,
+					life, 
+					cgs.media.waterDropShader );
+		}
+
+		FX_AddQuad( pos, normal, 
+					scale * 2.5f, 0.0f, 
+					1.0f, 0.0f, 
+					0, 
+					life * 2, 
+					cgs.media.smokeShader );
+	
+		vectoangles( normal, angles );
+		CG_SmallSpark( end, angles );
+	}
+	else
+	{
+		// However, do add a little smoke puff
+		FX_AddSprite2( pos, NULL, qfalse, 
+						2.0f, 1.0f, 
+						alpha, 0.0f, 
+						lRGB, lRGB, 
+						0.0f, 
+						0.0f, 
+						200, 
+						cgs.media.waterDropShader );
+
+		VectorMA( end, 1, normal, dir );
+		scale = 1.0f + (random() * 3.0f);
+
+		CG_Smoke( dir, normal, scale, 12.0f );
+	}
+}
+
+//------------------------------------------------------------------------------
+void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal )
+{
+	vec3_t		lRGB = {1.0,0.0,0.0};
+
+	// Beam
+	FX_AddLine3( start, end, 
+					1.0f, 
+					5.5f, 5.0f, 
+					random() * 0.2 + 0.2, 0.1f,
+					lRGB, lRGB,
+					150,
+					cgs.media.whiteLaserShader );
+
+	FX_AddLine( start, end, 
+					1.0f, 
+					0.3f, 5.0f, 
+					random() * 0.4 + 0.4, 0.1f,
+					125,
+					cgs.media.whiteLaserShader );
+
+	// Flare at the start point
+	FX_AddSprite( start, NULL, qfalse, 
+					1.5 + random() * 4, 0.0,
+					0.1f,0.0, 
+					0.0,
+					0.0,
+					100,
+					cgs.media.borgEyeFlareShader );
+
+	// endpoint flare
+	FX_AddSprite( end, NULL, qfalse, 
+					2.5 + random() * 4, 0.0,
+					0.1f,0.0, 
+					0.0,
+					0.0,
+					100,
+					cgs.media.borgEyeFlareShader );
+
+	// oriented impact flare
+	FX_AddQuad( end, normal, 
+					1.5 + random() * 2, 0.0, 
+					1.0, 0.0, 
+					0.0, 
+					120, 
+					cgs.media.borgEyeFlareShader );
+}
+
+/*
 ======================
 CG_CookingSteam
 

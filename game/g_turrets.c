@@ -6,8 +6,8 @@
 //extern	cvar_t	*g_spskill;
 
 //client side shortcut hacks from cg_local.h
-//extern void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent );
-//extern void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal );
+extern void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent );
+extern void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal );
 
 
 #define	ARM_ANGLE_RANGE		60
@@ -808,7 +808,7 @@ void SP_misc_turret (gentity_t *base)
 }
 
 
-/*void laser_arm_fire (gentity_t *ent)
+void laser_arm_fire (gentity_t *ent)
 {
 	vec3_t	start, end, fwd, rt, up;
 	trace_t	trace;
@@ -919,7 +919,7 @@ void laser_arm_use (gentity_t *self, gentity_t *other, gentity_t *activator)
 		G_Sound( self->lastEnemy->lastEnemy, G_SoundIndex( "sound/enemies/l_arm/move.wav" ) );
 		break;
 	}
-}*/
+}
 
 /*QUAKED misc_laser_arm (1 0 0) (-8 -8 -8) (8 8 8) 
 
@@ -941,12 +941,12 @@ What it does when used depends on it's "count" (can be set by a script)
   "startRGBA" - laser color, Red Green Blue Alpha, range 0 to 1 (default  1.0 0.85 0.15 0.75 = Yellow-Orange)
 */
 
-/*void laser_arm_start (gentity_t *base)
+void laser_arm_start (gentity_t *base)
 {
 	vec3_t	armAngles;
 	vec3_t	headAngles;
 
-	base->e_ThinkFunc = thinkF_NULL;
+	base->think = 0;
 	//We're the base, spawn the arm and head
 	gentity_t *arm = G_Spawn();
 	gentity_t *head = G_Spawn();
@@ -991,7 +991,7 @@ What it does when used depends on it's "count" (can be set by a script)
 	{
 		base->speed *= FRAMETIME/1000.0f;
 	}
-	base->e_UseFunc = useF_laser_arm_use;
+	base->use = laser_arm_use;
 	base->nextthink = level.time + FRAMETIME;
 
 	//Arm
@@ -1021,7 +1021,7 @@ What it does when used depends on it's "count" (can be set by a script)
 	VectorSet( head->r.maxs, 8, 8, 8 );
 	head->r.contents = CONTENTS_BODY;
 	//FIXME: make an index into an external string table for localization
-	head->fullName = "Surgical Laser";
+	head->message = "Surgical Laser";
 	trap_LinkEntity(head);
 
 	//dmg
@@ -1053,11 +1053,11 @@ What it does when used depends on it's "count" (can be set by a script)
 	//Link them up
 	base->lastEnemy = arm;
 	arm->lastEnemy = head;
-	head->owner = arm;
+	head->parent = arm;
 	arm->nextTrain = head->nextTrain = base;
 
 	// The head should always think, since it will be either firing a damage laser or just a target laser
-	head->e_ThinkFunc = thinkF_laser_arm_fire;
+	head->think = laser_arm_fire;
 	head->nextthink = level.time + FRAMETIME;
 	head->booleanstate = qfalse; // Don't do damage until told to
 }
@@ -1067,4 +1067,4 @@ void SP_laser_arm (gentity_t *base)
 	base->think = laser_arm_start;
 	base->nextthink = level.time + FRAMETIME;
 }
-*/
+

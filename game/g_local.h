@@ -387,7 +387,7 @@ struct gentity_s {
 	qboolean	luaEntity;
 #endif
 	vec4_t		startRGBA;
-	vec4_t		endRGBA;
+	vec4_t		finalRGBA;
 };
 
 /** \enum clientConnected_t
@@ -720,6 +720,7 @@ qboolean	G_SpawnString( const char *key, const char *defaultString, char **out )
 qboolean	G_SpawnFloat( const char *key, const char *defaultString, float *out );
 qboolean	G_SpawnInt( const char *key, const char *defaultString, int *out );
 qboolean	G_SpawnVector( const char *key, const char *defaultString, float *out );
+qboolean	G_SpawnVector4( const char *key, const char *defaultString, float *out );
 void		G_SpawnEntitiesFromString( void );
 char *G_NewString( const char *string );
 
