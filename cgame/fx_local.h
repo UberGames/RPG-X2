@@ -75,12 +75,7 @@ void FX_RegenBeam( vec3_t origin, vec3_t dir, int clientNum, qboolean alt_fire )
 /*
  * tetrion disruptor
  */
-//void FX_TetrionProjectileThink( centity_t *cent, const struct weaponInfo_s *wi );
 void FX_TetrionShot( vec3_t start, vec3_t forward );
-void FX_TetrionWeaponHitWall( vec3_t origin, vec3_t normal );
-//void FX_TetrionRicochet( vec3_t origin, vec3_t normal );
-//void FX_TetrionAltHitWall( vec3_t origin, vec3_t normal );
-void FX_TetrionAltHitPlayer( vec3_t origin, vec3_t normal );
 
 /*
  * Scavenger Rifle
@@ -119,16 +114,6 @@ void FX_QuantumAltThink( centity_t *cent, const struct weaponInfo_s *weapon );
 void FX_QuantumHitWall( vec3_t origin, vec3_t normal );
 void FX_QuantumAltHitWall( vec3_t origin, vec3_t normal );
 void FX_QuantumColumns( vec3_t origin );
-
-
-/*
- * Dreadnought
- */
-//void FX_DreadnoughtHitWall( vec3_t origin, vec3_t normal, qboolean spark );
-//void FX_DreadnoughtFire( vec3_t origin, vec3_t end, vec3_t normal, qboolean spark, qboolean impact );
-//void FX_DreadnoughtProjectileThink( centity_t *cent, const struct weaponInfo_s *weapon );
-//void FX_DreadnoughtShotMiss( vec3_t end, vec3_t dir );
-
 
 /*
  * transporter
