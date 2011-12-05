@@ -10,6 +10,8 @@ localEntity_t *FX_AddLine(vec3_t start, vec3_t end, float stScale, float scale, 
 							float startalpha, float endalpha, float killTime, qhandle_t shader);
 localEntity_t *FX_AddLine2(vec3_t start, vec3_t end, float stScale, float width1, float dwidth1, float width2, float dwidth2, 
 							float startalpha, float endalpha, vec3_t startRGB, vec3_t endRGB, float killTime, qhandle_t shader);
+localEntity_t *FX_AddLine3(vec3_t start, vec3_t end, float stScale, float scale, float dscale, 
+							float startalpha, float endalpha, vec3_t startRGB, vec3_t endRGB, float killTime, qhandle_t shader);
 localEntity_t *FX_AddOrientedLine(vec3_t start, vec3_t end, vec3_t normal, float stScale, float scale,
 								  float dscale, float startalpha, float endalpha, float killTime, qhandle_t shader);
 localEntity_t *FX_AddTrail( vec3_t origin, vec3_t velocity, qboolean gravity, float length, float dlength, 
@@ -144,3 +146,8 @@ void FX_qFlash( centity_t* cent, vec3_t org, int timeIndex );
  * sin table
  */
 void fxRandCircumferencePos(vec3_t center, vec3_t normal, float radius, vec3_t out);
+
+/*
+ * fx-public ports
+ */
+float FX_DetailLevel( vec3_t origin, float near_clip, float far_clip );

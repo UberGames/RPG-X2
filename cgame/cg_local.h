@@ -2034,6 +2034,8 @@ void CG_Bolt( centity_t *cent );
 void CG_TransporterPad(vec3_t origin);
 void CG_Drip(centity_t *cent, int killTime );
 void CG_Chunks( vec3_t origin, vec3_t dir, float size, material_type_t type );
+void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec4_t laserRGB, qboolean hit_ent );
+void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal );
 
 //TiM
 void CG_FountainSpurt( vec3_t org, vec3_t end );

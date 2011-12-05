@@ -64,7 +64,7 @@ field_t fields[] = {
 	{"luaEntity", FOFS(luaEntity), F_INT},
 	#endif
 	{"startRGBA", FOFS(startRGBA), F_VECTOR4},
-	{"endRGBA", FOFS(endRGBA), F_VECTOR4},
+	{"finalRGBA", FOFS(finalRGBA), F_VECTOR4},
 	{NULL}
 };
 
