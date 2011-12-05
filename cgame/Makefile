@@ -55,7 +55,9 @@ OBJ = \
   cg_effects.o \
   cg_drawtools.o \
   cg_draw.o \
-  cg_consolecmds.o 
+  cg_consolecmds.o \
+  lua_vector.o \
+  lua_qmath.o \
 
 # depency objects from game
 OBJDEP = \
@@ -68,9 +70,48 @@ OBJDEP = \
  # object for syscalls to the engine
 SOOBJ = \
   cg_syscalls.o 
+  
+# objects for lua  
+LUAOBJ = \
+  lapi.o \
+  lauxlib.o \
+  lbaselib.o \
+  lbitlib.o \
+  lcode.o \
+  lcorolib.o \
+  lctype.o \
+  ldblib.o \
+  ldebug.o \
+  ldo.o \
+  ldump.o \
+  lfunc.o \
+  lgc.o \
+  linit.o \
+  liolib.o \
+  llex.o \
+  lmathlib.o \
+  lmem.o \
+  loadlib.o \
+  lobject.o \
+  lopcodes.o \
+  loslib.o \
+  lparser.o \
+  lstate.o \
+  lstring.o \
+  lstrlib.o \
+  ltable.o \
+  ltablib.o \
+  ltm.o \
+  lua.o \
+  luac.o \
+  lundump.o \
+  lvm.o \
+  lzio.o
 
 # do cc for shared library
 DO_SOCC = $(CC) $(SOCFLAGS) -Wall -o $@ -c $<
+# do cc for lua
+DO_LUACC = $(CC) -O2 -Wall $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
 
 build_so: DO_CC=$(DO_SOCC)
 
@@ -106,6 +147,8 @@ fx_hypospray.o : fx_hypospray.c; $(DO_CC)
 fx_disruptor.o : fx_disruptor.c; $(DO_CC)
 fx_tetrion.o : fx_tetrion.c; $(DO_CC)
 fx_transporter.o : fx_transporter.c; $(DO_CC)
+lua_qmath.o: ../game/lua_qmath.c; $(DO_CC)
+lua_vector.o: ../game/lua_vector.c; $(DO_CC)
 
 # dependencies from game
 q_shared.o: ../game/q_shared.c; $(DO_CC)
@@ -117,11 +160,47 @@ bg_slidemove.o: ../game/bg_slidemove.c; $(DO_CC)
 # cgame syscalls
 cg_syscalls.o : cg_syscalls.c; $(DO_CC)
 
-build_so: $(OBJDEP) $(OBJ) $(SOOBJ)
+# lua
+lapi.o: ../game/lapi.c; $(DO_LUACC)
+lauxlib.o: ../game/lauxlib.c; $(DO_LUACC)
+lbaselib.o: ../game/lbaselib.c; $(DO_LUACC)
+lbitlib.o: ../game/lbitlib.c; $(DO_LUACC)
+lcode.o: ../game/lcode.c; $(DO_LUACC)
+lcorolib.o: ../game/lcorolib.c; $(DO_LUACC)
+lctype.o: ../game/lctype.c; $(DO_LUACC)
+ldblib.o: ../game/ldblib.c; $(DO_LUACC)
+ldebug.o: ../game/ldebug.c; $(DO_LUACC)
+ldo.o: ../game/ldo.c; $(DO_LUACC)
+ldump.o: ../game/ldump.c; $(DO_LUACC)
+lfunc.o: ../game/lfunc.c; $(DO_LUACC)
+lgc.o: ../game/lgc.c; $(DO_LUACC)
+linit.o: ../game/linit.c; $(DO_LUACC)
+liolib.o: ../game/liolib.c; $(DO_LUACC)
+llex.o: ../game/llex.c; $(DO_LUACC)
+lmathlib.o: ../game/lmathlib.c; $(DO_LUACC)
+lmem.o: ../game/lmem.c; $(DO_LUACC)
+loadlib.o: ../game/loadlib.c; $(DO_LUACC)
+lobject.o: ../game/lobject.c; $(DO_LUACC)
+lopcodes.o: ../game/lopcodes.c; $(DO_LUACC)
+loslib.o: ../game/loslib.c; $(DO_LUACC)
+lparser.o: ../game/lparser.c; $(DO_LUACC)
+lstate.o: ../game/lstate.c; $(DO_LUACC)
+lstring.o: ../game/lstring.c; $(DO_LUACC)
+lstrlib.o: ../game/lstrlib.c; $(DO_LUACC)
+ltable.o: ../game/ltable.c; $(DO_LUACC)
+ltablib.o: ../game/ltablib.c; $(DO_LUACC)
+ltm.o: ../game/ltm.c; $(DO_LUACC)
+lua.o: ../game/lua.c; $(DO_LUACC)
+luac.o: ../game/luac.c; $(DO_LUACC)
+lundump.o: ../game/lundump.c; $(DO_LUACC)
+lvm.o: ../game/lvm.c; $(DO_LUACC)
+lzio.o: ../game/lzio.c; $(DO_LUACC)
+
+build_so: $(OBJDEP) $(OBJ) $(SOOBJ) $(LUAOBJ)
 ifeq ($(PLATFORM), mingw32)
-	$(CC) -shared -Wl,--export-all-symbols,-soname,cgame$(ARCH).$(EXT) -o cgame$(ARCH).$(EXT) $(OBJ) $(OBJDEP) $(SOOBJ)
+	$(CC) -shared -Wl,--export-all-symbols,-soname,cgame$(ARCH).$(EXT) -o cgame$(ARCH).$(EXT) $(OBJ) $(OBJDEP) $(SOOBJ) $(LUAOBJ)
 else
-	$(CC) -shared -Wl,--export-dynamic,-soname,cgame$(ARCH).$(EXT) -o cgame$(ARCH).$(EXT) $(OBJ) $(OBJDEP) $(SOOBJ)
+	$(CC) -shared -Wl,--export-dynamic,-soname,cgame$(ARCH).$(EXT) -o cgame$(ARCH).$(EXT) $(OBJ) $(OBJDEP) $(SOOBJ) $(LUAOBJ)
 endif
 	
 clean:
