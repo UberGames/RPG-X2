@@ -716,7 +716,7 @@ static void CG_Missile( centity_t *cent, qboolean altfire ) {
 		}
 
 		// spin as it moves
-		if ( s1->pos.trType != TR_STATIONARY && ( cent->currentState.weapon != WP_DISRUPTOR || cent->currentState.weapon != WP_DISRUPTOR ) ) { //RPG-X-TiM: Stop from spinning O_o  I got dizzy
+		if ( s1->pos.trType != TR_STATIONARY && (cent->currentState.weapon != WP_DISRUPTOR) ) { //RPG-X-TiM: Stop from spinning O_o  I got dizzy
 			//RotateAroundDirection( ent.axis, cg.time / 4 );
 			RotateAroundDirection( ent.axis, cg.time * 0.25);
 		} else {

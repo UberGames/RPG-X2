@@ -1263,6 +1263,7 @@ static char *CG_ParseFontParms(char *buffer,int	propArray[CHARMAX][3])
 CG_LoadFonts
 =================
 */
+#ifdef QVM
 void CG_LoadFonts(void)
 {
 	char buffer[FONT_BUFF_LENGTH];
@@ -1299,6 +1300,52 @@ void CG_LoadFonts(void)
 	holdBuf = CG_ParseFontParms( holdBuf,propMapBig);
 
 }
+#else
+void CG_LoadFonts(void)
+{
+	char *buffer;
+	int len;
+	fileHandle_t	f;
+	char *holdBuf;
+
+	buffer = (char *)malloc(sizeof(char)*FONT_BUFF_LENGTH);
+	if(!buffer) {
+		CG_Printf("CG_LoadFonts: could not allocate %u byte\n", sizeof(char)*FONT_BUFF_LENGTH);
+		return;
+	}
+
+	len = trap_FS_FOpenFile( "ext_data/fonts.dat", &f, FS_READ );
+
+	if ( !f ) 
+	{
+		trap_Print( va( S_COLOR_RED "CG_LoadFonts : FONTS.DAT file not found!\n"));
+		free(buffer);
+		return;
+	}
+
+	if (len > FONT_BUFF_LENGTH)
+	{
+		trap_Print( va( S_COLOR_RED "CG_LoadFonts : FONTS.DAT file bigger than %d!\n",FONT_BUFF_LENGTH));
+		free(buffer);
+		return;
+	}
+
+	// initialise the data area
+	memset(buffer, 0, sizeof(buffer));	
+
+	trap_FS_Read( buffer, len, f );
+
+	trap_FS_FCloseFile( f );
+
+	COM_BeginParseSession();
+
+	holdBuf = (char *) buffer;
+	holdBuf = CG_ParseFontParms( holdBuf,propMapTiny);
+	holdBuf = CG_ParseFontParms( holdBuf,propMap);
+	holdBuf = CG_ParseFontParms( holdBuf,propMapBig);
+
+}
+#endif
 
 /*
 =================
@@ -1463,6 +1510,7 @@ CG_LoadRanks
 By TiM
 =================
 */
+#ifdef QVM
 qboolean CG_LoadRanks( void ) {
 	fileHandle_t	file;
 	int				file_len;
@@ -1710,6 +1758,272 @@ qboolean CG_LoadRanks( void ) {
 	}
 	return qtrue;
 }
+#else
+qboolean CG_LoadRanks( void ) {
+	fileHandle_t	file;
+	int				file_len;
+	char			*charText;
+	char			*textPtr, *prevValue;
+	char			fileName[MAX_QPATH];
+	int				i;
+	int				rankCount=0;
+	char			*token;
+
+	qboolean		DefaultRankLoaded = qfalse;
+
+	charText = (char *)malloc(sizeof(char)*32000);
+	if(!charText) {
+		CG_Printf("CG_LoadRanks: could not allocate %u byte\n", sizeof(char)*32000);
+		return qfalse;
+	}
+
+	if ( cgs.rankSet ) {
+		Com_sprintf( fileName, sizeof( fileName ), "ext_data/ranksets/%s.ranks", cgs.rankSet );
+	}
+	else {
+		free(charText);
+		return qfalse;
+	}
+
+	file_len = trap_FS_FOpenFile( fileName, &file, FS_READ );
+
+	if ( file_len <= 0 ) {
+		return qfalse;
+	}
+
+	if ( file_len >= sizeof( charText ) - 1 ) {
+		Com_Printf( S_COLOR_RED "Size of rankset file %s is too large.\n", fileName );
+		return qfalse;
+	}
+
+	memset( &charText, 0, sizeof( charText ) );
+	memset( &cgs.defaultRankData, 0, sizeof( cgs.defaultRankData ) );
+	memset( &cgs.ranksData, 0, sizeof( cgs.ranksData ) );
+
+	trap_FS_Read( charText, file_len, file );
+
+	charText[file_len] = 0;
+
+	trap_FS_FCloseFile( file );
+
+	COM_BeginParseSession();
+
+	textPtr = charText;
+
+	token = COM_Parse( &textPtr );
+
+	if ( !token[0] ) {
+		Com_Printf( S_COLOR_RED "No data found in rankset: %s\n", fileName );
+		free(charText);
+		return qfalse;
+	}
+
+	if ( Q_stricmp( token, "{" ) ) {
+		Com_Printf( S_COLOR_RED "Missing starting { in rankset file: %s\n", fileName);
+		free(charText);
+		return qfalse;
+	}
+
+	//Parse the first one only... the first one should be the DEFAULT RANK!!!
+	//DEFAULT I SAY!  IT'S SPECIAL!
+	//WE NEED A DEFAULT FOR ERRORS! NO DEFAULT NO RANK FOR YOU!
+	while ( 1 ) {
+		prevValue = textPtr;
+
+		token = COM_Parse( &textPtr );
+		if ( !token[0] ) {
+			break;
+		}
+
+		if ( !Q_stricmpn( token, "MenuTextureDef", 14 ) ) {
+			if ( CG_ParseRankData( &textPtr, &cgs.defaultRankData.rankMenuData ) ) {
+				continue;
+			}
+
+			DefaultRankLoaded = qtrue;
+			continue;
+		}
+		else if ( !Q_stricmpn( token, "BoltModel", 9 ) ) {
+			if ( COM_ParseString( &textPtr, &token ) ) {
+				continue;
+			}
+
+			Q_strncpyz( cgs.defaultRankData.rankModelData.boltModelPath, token,
+						sizeof( cgs.defaultRankData.rankModelData.boltModelPath ) );
+
+			/*if ( !cgs.defaultRankData.boltModel ) {
+				Com_Printf(S_COLOR_RED "Unable to load model file: %s\n", token );
+			}*/
+
+			continue;
+
+		}
+		else if ( !Q_stricmpn( token, "boltShader", 8 ) ) {
+			if ( COM_ParseString( &textPtr, &token ) ) {
+				continue;
+			}
+
+			Q_strncpyz( cgs.defaultRankData.rankModelData.boltShaderPath, token,
+						sizeof( cgs.defaultRankData.rankModelData.boltShaderPath ) );
+
+			/*cgs.defaultRankData.boltShader = trap_R_RegisterSkin( token );
+			if ( !cgs.defaultRankData.boltShader ) {
+				Com_Printf(S_COLOR_RED "Unable to load skin file: %s\n", token );
+			}*/
+
+			continue;
+		}
+		else if ( !Q_stricmpn( token, "AdmiralRank", 11 ) ) {
+			if ( COM_ParseInt( &textPtr, &i ) ) {
+				continue;
+			}
+
+			cgs.defaultRankData.rankModelData.admiralRank = i;
+			continue;
+		}
+		else if ( !Q_stricmp( token, "}" ) ) {
+			break;
+		}
+
+	}
+
+	//if we succeeded in loading a default value (^_^!), then begin parsing the main ranks
+	if ( !DefaultRankLoaded ) {
+		Com_Printf( S_COLOR_RED "No default rank located in %s\n", fileName );
+		free(charText);
+		return qfalse;
+	}
+	else {
+		//Parse.Rank.Data? :) *sigh* if only rofl 
+		while (1) {
+			prevValue = textPtr;
+			token = COM_Parse( &textPtr );
+			if ( !token[0] ) {
+				break;
+			}
+
+			if ( rankCount >= MAX_RANKS ) {
+				break;
+			}
+
+			if ( !Q_stricmpn( token, "{", 1 ) ) {
+	
+				while ( 1 ) {
+					token = COM_Parse( &textPtr );
+					if ( !token[0] ) {
+						break;
+					}
+
+					if ( !Q_stricmpn( token, "ConsoleName", 11 ) ) {
+						if ( COM_ParseString( &textPtr, &token ) ) {
+							Com_Printf( S_COLOR_RED "Could not parse console rank name for rank number: %i\n", rankCount );
+							free(charText);
+							return qfalse;
+						}
+
+						Q_strncpyz( cgs.ranksData[rankCount].consoleName, token, sizeof( cgs.ranksData[rankCount].consoleName ) );
+						continue;
+					}					
+
+					if ( !Q_stricmpn( token, "FormalName", 10 ) ) {
+						if ( COM_ParseString( &textPtr, &token ) ) {
+							Com_Printf( S_COLOR_RED "Could not parse formal rank name for rank number: %i\n", rankCount );
+							free(charText);
+							return qfalse;
+						}
+
+						Q_strncpyz( cgs.ranksData[rankCount].formalName, token, sizeof( cgs.ranksData[rankCount].formalName ) );
+						continue;
+					}
+
+					if ( !Q_stricmpn( token, "MenuTextureRed", 14 ) ) {
+						if ( CG_ParseRankData( &textPtr, &cgs.ranksData[rankCount].rankMenuData[CLR_RED] ) ) {
+							Com_Printf( S_COLOR_RED "Could not parse red rank color for rank number: %i\n", rankCount );
+							free(charText);
+							return qfalse;
+						}
+
+						continue;
+					}
+					else if ( !Q_stricmpn( token, "MenuTextureTeal", 15 ) ) {
+						if ( CG_ParseRankData( &textPtr, &cgs.ranksData[rankCount].rankMenuData[CLR_TEAL] ) ) {
+							Com_Printf( S_COLOR_RED "Could not parse teal rank color for rank number: %i\n", rankCount );
+							free(charText);
+							return qfalse;
+						}
+
+						continue;						
+					}
+					else if ( !Q_stricmpn( token, "MenuTextureGold", 15 ) ) {
+						if ( CG_ParseRankData( &textPtr, &cgs.ranksData[rankCount].rankMenuData[CLR_GOLD] ) ) {
+							Com_Printf( S_COLOR_RED "Could not parse teal rank color for rank number: %i\n", rankCount );
+							free(charText);
+							return qfalse;
+						}
+
+						continue;							
+					}
+					else if ( !Q_stricmpn( token, "MenuTextureGreen", 16 ) ) {
+						if ( CG_ParseRankData( &textPtr, &cgs.ranksData[rankCount].rankMenuData[CLR_GREEN] ) ) {
+							Com_Printf( S_COLOR_RED "Could not parse green rank color for rank number: %i\n", rankCount );
+							free(charText);
+							return qfalse;
+						}
+
+						continue;							
+					}
+					else if ( !Q_stricmpn( token, "BoltModel", 9 ) ) {
+						if ( COM_ParseString( &textPtr, &token ) ) {
+							continue;
+						}
+
+						//cgs.ranksData[rankCount].boltModel = trap_R_RegisterModel( token );
+						
+						Q_strncpyz( cgs.ranksData[rankCount].rankModelData.boltModelPath,
+									token,
+									sizeof( cgs.ranksData[rankCount].rankModelData.boltModelPath) );
+
+						/*if ( !cgs.ranksData[rankCount].boltModel ) {
+							Com_Printf( S_COLOR_RED, "Could not load bolt model: %s\n", token );
+						}*/
+						continue;
+					}
+					else if ( !Q_stricmpn( token, "boltShader", 8 ) ) {
+						if ( COM_ParseString( &textPtr, &token ) ) {
+							continue;
+						}
+
+						Q_strncpyz( cgs.ranksData[rankCount].rankModelData.boltShaderPath,
+									token,
+									sizeof( cgs.ranksData[rankCount].rankModelData.boltShaderPath) );
+
+						
+						/*if ( !cgs.ranksData[rankCount].boltShader ) {
+							Com_Printf( S_COLOR_RED, "Could not load bolt skin: %s\n", token );
+						}*/
+						continue;
+					}
+					else if ( !Q_stricmpn( token, "AdmiralRank", 11 ) ) {
+						if ( COM_ParseInt( &textPtr, &i ) ) {
+							continue;
+						}
+
+						cgs.ranksData[rankCount].rankModelData.admiralRank = i;
+						
+						continue;
+					}
+					else if ( !Q_stricmpn( token, "}", 1 ) ) {
+						break;
+					}
+				}
+				rankCount++;
+			}
+		}
+	}
+	free(charText);
+	return qtrue;
+}
+#endif
 
 /*
 =================
@@ -1721,6 +2035,7 @@ and display multiple
 crosshairs.
 =================
 */
+#ifdef QVM
 qboolean CG_LoadCrosshairs(void) {
 	fileHandle_t	f;
 	int				file_len;
@@ -1876,3 +2191,180 @@ qboolean CG_LoadCrosshairs(void) {
 	}
 	return qtrue;
 }
+#else
+qboolean CG_LoadCrosshairs(void) {
+	fileHandle_t	f;
+	int				file_len;
+	char			*charText;
+	char			*token, *textPtr;
+	char			*fileName = "ext_data/crosshairs.dat";
+	int				cHairCount = 0;
+	//int				i;
+
+	charText = (char *)malloc(sizeof(char)*20000);
+	if(!charText) {
+		CG_Printf("CG_LoadCrosshairs: could not allocate %u byte\n", sizeof(char)*20000);
+		return qfalse;
+	}
+
+	//load file and get file length
+	file_len = trap_FS_FOpenFile( fileName, &f, FS_READ );
+
+	memset( &charText, 0, sizeof( charText ) );
+	memset( &cgs.crosshairsData, 0, sizeof( &cgs.crosshairsData ) );
+
+	//check to see if we got anything
+	if ( file_len <= 0 ) {
+		Com_Printf( S_COLOR_RED "Could not find file: %s\n", fileName );
+		free(charText);
+		return qfalse;
+	}
+
+	//check to see if we got too much
+	if ( file_len > sizeof( charText) - 1 ) {
+		Com_Printf( S_COLOR_RED "File %s waaaaay too big.\n", fileName );
+		free(charText);
+		return qfalse;
+	}
+
+	//read the data into the array
+	trap_FS_Read( charText, file_len, f );
+
+	//EOF?
+	charText[file_len] = 0;
+
+	trap_FS_FCloseFile( f );
+
+	COM_BeginParseSession();
+
+	textPtr = charText;
+
+	token = COM_Parse( &textPtr );
+
+	//wtf? Nothing here??
+	if ( !token[0] ) {
+		Com_Printf( S_COLOR_RED "File: %s terminated rather unexpectantly\n", fileName );
+		free(charText);
+		return qfalse;
+	}
+
+	if ( Q_stricmp( token, "{" ) ) {
+		Com_Printf( S_COLOR_RED "File: %s had no starting {\n", fileName );
+		free(charText);
+		return qfalse;
+	}
+
+	//now for the natural hard-core loop parsing bit
+	while ( 1 ) {
+
+		if ( cHairCount >= MAX_CROSSHAIRS ) {
+			break;
+		}
+
+		if ( !Q_stricmpn( token, "{", 1 ) ) {
+			//Make color default to white
+			VectorCopy( colorTable[CT_WHITE], cgs.crosshairsData[cHairCount].color );
+			cgs.crosshairsData[cHairCount].color[3] = 1.0f;
+
+			while ( 1 ) 
+			{
+				token = COM_Parse( &textPtr );
+				if (!token[0]) {
+					break;
+				}
+
+				if ( !Q_stricmpn( token, "noDraw", 6 ) ) {
+					cgs.crosshairsData[cHairCount].noDraw = qtrue;
+					break;
+				}
+				else if ( !Q_stricmpn( token, "CrosshairColor", 14 ) ) {
+					if ( COM_ParseVec4( &textPtr, cgs.crosshairsData[cHairCount].color ) ) {
+						Com_Printf( S_COLOR_RED "Invalid Color Value in %s\n", fileName );
+						free(charText);
+						return qfalse;
+					}
+
+					VectorScale( cgs.crosshairsData[cHairCount].color, 1.0f/255.0f, cgs.crosshairsData[cHairCount].color );
+					cgs.crosshairsData[cHairCount].color[3] *= 1.0f/255.0f;
+
+					continue;
+				}
+				else if ( !Q_stricmpn( token, "BitmapCoords", 12 ) ) {
+					if ( COM_ParseString( &textPtr, &token ) ) {
+						Com_Printf( S_COLOR_RED "No bitmap co-ords found in %s\n", fileName );
+						free(charText);
+						return qfalse;
+					}
+
+					if ( Q_stricmpn( token, "{", 1 ) ) {
+						Com_Printf( S_COLOR_RED "No { found in bitmap co-ords in %s\n", fileName );
+						free(charText);
+						return qfalse;
+					}
+
+					//parse s1 value
+					if ( COM_ParseString( &textPtr, &token ) ) {
+						Com_Printf( S_COLOR_RED "Bit co-ord value ended prematurely: %s\n", fileName );
+						free(charText);
+						return qfalse;
+					}
+
+					cgs.crosshairsData[cHairCount].s1 = atoi( token );
+
+					//parse t1 value
+					if ( COM_ParseString( &textPtr, &token ) ) {
+						Com_Printf( S_COLOR_RED "Bit co-ord value ended prematurely: %s\n", fileName );
+						free(charText);
+						return qfalse;
+					}
+
+					cgs.crosshairsData[cHairCount].t1 = atoi( token );
+
+					//parse s2 value
+					if ( COM_ParseString( &textPtr, &token ) ) {
+						Com_Printf( S_COLOR_RED "Bit co-ord value ended prematurely: %s\n", fileName );
+						free(charText);
+						return qfalse;
+					}
+
+					cgs.crosshairsData[cHairCount].s2 = atoi( token );
+
+					//parse t2 value
+					if ( COM_ParseString( &textPtr, &token ) ) {
+						Com_Printf( S_COLOR_RED "Bit co-ord value ended prematurely: %s\n", fileName );
+						free(charText);
+						return qfalse;
+					}
+
+					cgs.crosshairsData[cHairCount].t2 = atoi( token );
+
+					//make sure we have } at the end FFS
+					if ( COM_ParseString( &textPtr, &token ) ) {
+						Com_Printf( S_COLOR_RED "Bit co-ord value ended prematurely: %s\n", fileName );
+						free(charText);
+						return qfalse;
+					}
+
+					//This is needed or else we can't tell between this and the main closing }
+					if ( Q_stricmpn( token, "}", 1 ) ) {
+						Com_Printf( S_COLOR_RED "No terminating } in bitmap co-ord: %s\n", fileName );
+						free(charText);
+						return qfalse;						
+					}
+				}
+				else if ( !Q_stricmpn ( token, "}", 1 ) ) {
+					break;
+				}
+			}
+			cHairCount++;
+		}
+
+		token = COM_Parse( &textPtr );
+		if (!token[0]) {
+			break;
+		}
+	}
+	free(charText);
+	return qtrue;
+}
+#endif
