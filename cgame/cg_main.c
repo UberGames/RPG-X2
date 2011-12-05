@@ -195,6 +195,12 @@ vmCvar_t	rpg_forceFieldSet;
 // grp cvars
 vmCvar_t	grp_berp;
 
+// lua
+#ifdef CG_LUA
+vmCvar_t			cg_debugLua;
+vmCvar_t			cg_logLua;
+#endif
+
 
 //RPG-X | Phenix | 05/02/2006
 //Ban System (and it's backup cvars)
@@ -342,7 +348,14 @@ static cvarTable_t	cvarTable[] = {
 	//{ &cg_playerID, "cg_playerID", "0", CVAR_ARCHIVE | CVAR_ROM | CVAR_NORESTART }
 
 	// grp cvars
-	{ &grp_berp, "grp_berp", "0", CVAR_ARCHIVE | CVAR_LATCH }
+	{ &grp_berp, "grp_berp", "0", CVAR_ARCHIVE | CVAR_LATCH },
+
+	// lua
+#ifdef CG_LUA
+	{ &cg_debugLua, "cg_debuglua", "0", CVAR_ARCHIVE | CVAR_LATCH },
+	{ &cg_logLua, "cg_loglua", "0", CVAR_ARCHIVE }
+#endif
+
 };
 
 static int	cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );

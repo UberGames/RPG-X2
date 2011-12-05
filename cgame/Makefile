@@ -56,6 +56,7 @@ OBJ = \
   cg_drawtools.o \
   cg_draw.o \
   cg_consolecmds.o \
+  cg_lua.o \
   lua_vector.o \
   lua_qmath.o \
 
@@ -136,6 +137,7 @@ cg_servercmds.o : cg_servercmds.c; $(DO_CC)
 cg_snapshot.o : cg_snapshot.c; $(DO_CC)
 cg_view.o : cg_view.c; $(DO_CC)
 cg_weapons.o : cg_weapons.c; $(DO_CC)
+cg_lua.o : cg_lua.c; $(DO_CC)
 fx_compression.o : fx_compression.c; $(DO_CC)
 fx_grenade.o : fx_grenade.c; $(DO_CC)
 fx_item.o : fx_item.c; $(DO_CC)

@@ -1821,6 +1821,12 @@ extern vmCvar_t			rpg_forceFieldSet;
 // grp cvars
 extern vmCvar_t			grp_berp;
 
+// lua
+#ifdef CG_LUA
+extern vmCvar_t			cg_debugLua;
+extern vmCvar_t			cg_logLua;
+#endif
+
 
 
 
