@@ -89,19 +89,10 @@
     <ClCompile Include="cg_weapons.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fx_borg.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="fx_compression.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fx_dreadnought.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="fx_grenade.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fx_imod.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="fx_item.c">
@@ -119,12 +110,6 @@
     <ClCompile Include="fx_quantum.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fx_scavenger.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fx_stasis.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="fx_tetrion.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -135,6 +120,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\game\q_shared.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fx_hypospray.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fx_disruptor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
