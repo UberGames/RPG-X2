@@ -1322,13 +1322,13 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, flo
 					200, 
 					cgs.media.waterDropShader );
 
-	/*FX_AddLine3( start, end, 
+	FX_AddLine3( start, end, 
 					1.0f, 
 					3.0f, 5.0f, 
 					alpha, 0.0f, 
 					laserRGB, laserRGB, 
 					125, 
-					cgs.media.whiteLaserShader );*/ /* FIXME: FX_AddLine3 not defined */
+					cgs.media.whiteLaserShader ); /* FIXME: FX_AddLine3 not defined */
 
 	FX_AddLine( start, end, 
 					1.0f, 
@@ -1398,16 +1398,16 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, flo
 //------------------------------------------------------------------------------
 void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal )
 {
-	//vec3_t		lRGB = {1.0,0.0,0.0};
+	vec3_t		lRGB = {1.0,0.0,0.0};
 
 	// Beam
-	/*FX_AddLine3( start, end, 
+	FX_AddLine3( start, end, 
 					1.0f, 
 					5.5f, 5.0f, 
 					random() * 0.2 + 0.2, 0.1f,
 					lRGB, lRGB,
 					150,
-					cgs.media.whiteLaserShader );*/ /* FIXME: FX_AddLine3 not defined */
+					cgs.media.whiteLaserShader ); /* FIXME: FX_AddLine3 not defined */
 
 	FX_AddLine( start, end, 
 					1.0f, 

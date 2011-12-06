@@ -1077,7 +1077,7 @@ Emits slowly moving steam puffs that rise up from the specified point
 */
 
 //------------------------------------------
-/*void cooking_steam_think( gentity_t *ent )
+void cooking_steam_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_COOKING_STEAM, 0 );
 	ent->nextthink = level.time + 100;
@@ -1128,7 +1128,7 @@ void SP_fx_cooking_steam( gentity_t	*ent )
 	}
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
-}*/
+}
 
 /*QUAKED fx_elecfire (0 0 1) (-8 -8 -8) (8 8 8)
 Emits sparks at the specified point in the specified direction
@@ -1179,7 +1179,7 @@ Emits freaky orange bolts, sending pulses down the length of the beam if desired
 */
 
 //------------------------------------------
-/*void forge_bolt_think( gentity_t *ent )
+void forge_bolt_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_FORGE_BOLT, ent->spawnflags & 2 );
 	ent->nextthink = level.time + (ent->wait + crandom() * ent->wait * 0.25) * 1000;
@@ -1303,7 +1303,7 @@ void SP_fx_forge_bolt( gentity_t *ent )
 	}
 
 	trap_LinkEntity( ent );
-}*/
+}
 
 /*QUAKED fx_plasma (0 0 1) (-8 -8 -8) (8 8 8) START_OFF
 Emits plasma jet directed from the specified point to the specified point. Jet size scales based on length.  
@@ -1319,7 +1319,7 @@ Emits plasma jet directed from the specified point to the specified point. Jet s
 */
 
 //------------------------------------------
-/*void plasma_think( gentity_t *ent )
+void plasma_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_PLASMA, 0 );
 	ent->nextthink = level.time + 100;
@@ -1439,7 +1439,7 @@ void SP_fx_plasma( gentity_t *ent )
 
 	ent->think = plasma_link;
 	ent->nextthink = level.time + 500;
-}*/
+}
 
 /*QUAKED fx_energy_stream (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 Creates streaming particles that travel between two points--for Stasis level. ONLY orients vertically.
@@ -1450,7 +1450,7 @@ Creates streaming particles that travel between two points--for Stasis level. ON
 */
 
 //------------------------------------------
-/*void stream_think( gentity_t *ent )
+void stream_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_STREAM, 0 );
 	ent->nextthink = level.time + 150;
@@ -1547,7 +1547,7 @@ void SP_fx_stream( gentity_t *ent )
 	ent->nextthink = level.time + 1000;
 
 	trap_LinkEntity( ent );
-}*/
+}
 
 /*QUAKED fx_transporter_stream (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 Creates streaming particles that travel between two points--for forge level.
@@ -1558,7 +1558,7 @@ Creates streaming particles that travel between two points--for forge level.
 */
 
 //------------------------------------------
-/*void transporter_stream_think( gentity_t *ent )
+void transporter_stream_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_TRANSPORTER_STREAM, 0 );
 	ent->nextthink = level.time + 150;
@@ -1631,7 +1631,7 @@ void SP_fx_transporter_stream( gentity_t *ent )
 	ent->nextthink = 1000;
 
 	trap_LinkEntity( ent );
-}*/
+}
 
 /*QUAKED fx_explosion_trail (0 0 1) (-8 -8 -8) (8 8 8)
 Creates a triggerable explosion aimed at a specific point.  Always oriented towards viewer.
@@ -1643,7 +1643,7 @@ Creates a triggerable explosion aimed at a specific point.  Always oriented towa
 */
 
 //------------------------------------------
-/*void explosion_trail_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+void explosion_trail_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
 	G_AddEvent( self, EV_FX_EXPLOSION_TRAIL, 0 );
 }
@@ -1687,7 +1687,7 @@ void SP_fx_explosion_trail( gentity_t *ent )
 	//ent->svFlags |= SVF_BROADCAST;
 
 	trap_LinkEntity( ent );
-}*/
+}
 
 /*QUAKED fx_borg_energy_beam (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF CONE
 A borg tracing beam that either carves out a cone or swings like a pendulum, sweeping across an area. 
@@ -1704,7 +1704,7 @@ CONE - Beam traces a cone, default trace shape is a pendulum, sweeping across an
 */
 
 //------------------------------------------
-/*void borg_energy_beam_think( gentity_t *ent )
+void borg_energy_beam_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_BORG_ENERGY_BEAM, 0 );
 	ent->nextthink = level.time + 100;
@@ -1796,7 +1796,7 @@ void SP_fx_borg_energy_beam( gentity_t *ent )
 	ent->nextthink = 1000;
 
 	trap_LinkEntity( ent );
-}*/
+}
 
 /*QUAKED fx_shimmery_thing (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF TAPER 
 Creates a shimmering cone or cylinder of colored light that stretches between two points.  Looks like a teleporter type thing. 
@@ -1813,7 +1813,7 @@ Creates a shimmering cone or cylinder of colored light that stretches between tw
 */
 
 //------------------------------------------
-/*void shimmery_thing_think( gentity_t *ent )
+void shimmery_thing_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_SHIMMERY_THING, 0 );
 	if ( ent->wait >= 0 )
@@ -1895,7 +1895,7 @@ void SP_fx_shimmery_thing( gentity_t *ent )
 	ent->nextthink = level.time + 1000;
 
 	trap_LinkEntity( ent );
-}*/
+}
 
 /*QUAKED fx_borg_bolt (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 Emits yellow electric bolts from the specified point to the specified point.
@@ -1908,7 +1908,7 @@ Emits showers of sparks if the endpoints are sufficiently close.
 */
 
 //------------------------------------------
-/*void borg_bolt_think( gentity_t *ent )
+void borg_bolt_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_BORG_BOLT, 0 );
 	ent->nextthink = level.time + 100 + random() * 25;
@@ -1983,4 +1983,4 @@ void SP_fx_borg_bolt( gentity_t *ent )
 	ent->nextthink = level.time + 1000;
 
 	trap_LinkEntity( ent );
-}*/
+}

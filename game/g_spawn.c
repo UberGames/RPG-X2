@@ -199,6 +199,7 @@ void SP_misc_model_breakable(gentity_t *ent);
 void SP_misc_portal_camera(gentity_t *ent);
 void SP_misc_portal_surface(gentity_t *ent);
 void SP_misc_turret(gentity_t *base);
+void SP_laser_arm(gentity_t *base);
 void SP_misc_ammo_station( gentity_t *ent );
 
 void SP_shooter_rocket( gentity_t *ent );
@@ -237,16 +238,16 @@ void SP_fx_particleFire(gentity_t *ent);
 void SP_fx_fire(gentity_t *ent);
 
 // Additional ports from SP by Harry Young
-//void SP_fx_cooking_steam( gentity_t	*ent );
-//void SP_fx_electricfire( gentity_t	*ent );
-//void SP_fx_forge_bolt( gentity_t *ent );
-//void SP_fx_plasma( gentity_t *ent );
-//void SP_fx_stream( gentity_t *ent );
-//void SP_fx_transporter_stream( gentity_t *ent );
-//void SP_fx_explosion_trail( gentity_t *ent );
-//void SP_fx_borg_energy_beam( gentity_t *ent );
-//void SP_fx_shimmery_thing( gentity_t *ent );
-//void SP_fx_borg_bolt( gentity_t *ent );
+void SP_fx_cooking_steam( gentity_t	*ent );
+void SP_fx_electricfire( gentity_t	*ent );
+void SP_fx_forge_bolt( gentity_t *ent );
+void SP_fx_plasma( gentity_t *ent );
+void SP_fx_stream( gentity_t *ent );
+void SP_fx_transporter_stream( gentity_t *ent );
+void SP_fx_explosion_trail( gentity_t *ent );
+void SP_fx_borg_energy_beam( gentity_t *ent );
+void SP_fx_shimmery_thing( gentity_t *ent );
+void SP_fx_borg_bolt( gentity_t *ent );
 
 // new mover
 void SP_func_mover(gentity_t *ent);
@@ -400,6 +401,7 @@ spawn_t	spawns[] = {
 	{"misc_portal_surface",			SP_misc_portal_surface},
 	{"misc_portal_camera",			SP_misc_portal_camera},
 	{"misc_turret",					SP_misc_turret},
+	{"misc_laser",					SP_laser_arm},
 	{"misc_ammo_station",			SP_misc_ammo_station},
 
 	{"shooter_rocket",				SP_shooter_rocket},
@@ -432,16 +434,16 @@ spawn_t	spawns[] = {
 	{"fx_fire",						SP_fx_fire},
 
 // Additional ports from SP by Harry Young
-	//{"fx_cooking_steam",			SP_fx_cooking_steam},
-	//{"fx_elecfire",					SP_fx_electricfire},
-	//{"forge_bolt",					SP_fx_forge_bolt},
-	//{"fx_plasma",					SP_fx_plasma},
-	//{"fx_energy_stream",			SP_fx_stream},
-	//{"fx_transporter_stream",		SP_fx_transporter_stream},
-	//{"fx_explosion_trail",			SP_fx_explosion_trail},
-	//{"fx_borg_energy_beam",			SP_fx_borg_energy_beam},
-	//{"fx_shimmery_thing",			SP_fx_shimmery_thing},
-	//{"fx_borg_bolt",				SP_fx_borg_bolt},
+	{"fx_cooking_steam",			SP_fx_cooking_steam},
+	{"fx_elecfire",					SP_fx_electricfire},
+	{"forge_bolt",					SP_fx_forge_bolt},
+	{"fx_plasma",					SP_fx_plasma},
+	{"fx_energy_stream",			SP_fx_stream},
+	{"fx_transporter_stream",		SP_fx_transporter_stream},
+	{"fx_explosion_trail",			SP_fx_explosion_trail},
+	{"fx_borg_energy_beam",			SP_fx_borg_energy_beam},
+	{"fx_shimmery_thing",			SP_fx_shimmery_thing},
+	{"fx_borg_bolt",				SP_fx_borg_bolt},
 
 	{"func_mover",					SP_func_mover},
 	{"path_point",					SP_path_point},

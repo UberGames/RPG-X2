@@ -121,6 +121,57 @@ localEntity_t *FX_AddLine2(vec3_t start, vec3_t end, float stScale, float width1
 	return(le);
 }
 
+
+
+localEntity_t *FX_AddLine3(vec3_t start, vec3_t end, float stScale, float scale, float dscale,  
+							float startalpha, float endalpha, vec3_t startRGB, vec3_t endRGB, float killTime, qhandle_t shader)
+{
+	localEntity_t	*le;
+	
+#ifdef _DEBUG
+	if (!shader)
+	{
+		Com_Printf("FX_AddLine2: NULL shader\n");
+	}
+#endif
+
+	le = CG_AllocLocalEntity();
+	le->leType = LE_LINE2;
+
+	le->startTime = cg.time;
+	le->endTime = le->startTime + killTime;
+	le->data.line.width = scale;
+	le->data.line.dwidth = dscale;
+
+	le->alpha = startalpha;
+	le->dalpha = endalpha - startalpha;
+	VectorCopy(startRGB, le->data.line2.startRGB);
+	VectorSubtract(endRGB, startRGB, le->data.line2.dRGB);
+
+	le->refEntity.data.line.stscale = stScale;
+	le->refEntity.data.line.width = scale;
+
+	le->refEntity.customShader = shader;
+
+	// set origin
+	VectorCopy ( start, le->refEntity.origin);
+	VectorCopy ( end, le->refEntity.oldorigin );
+
+	AxisClear(le->refEntity.axis);
+	le->refEntity.shaderRGBA[0] = 0xff;
+	le->refEntity.shaderRGBA[1] = 0xff;
+	le->refEntity.shaderRGBA[2] = 0xff;
+	le->refEntity.shaderRGBA[3] = 0xff;
+
+	le->color[0] = startRGB[0];
+	le->color[1] = startRGB[1];
+	le->color[2] = startRGB[2];
+	le->color[3] = startalpha;
+	le->lifeRate = 1.0 / ( le->endTime - le->startTime );
+
+	return(le);
+}
+
 localEntity_t *FX_AddOrientedLine(vec3_t start, vec3_t end, vec3_t normal, float stScale, float scale,
 								  float dscale, float startalpha, float endalpha, float killTime, qhandle_t shader)
 {
