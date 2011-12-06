@@ -59,6 +59,8 @@ OBJ = \
   cg_lua.o \
   lua_vector.o \
   lua_qmath.o \
+  lua_cfx.o \
+  lua_cent.o \
 
 # depency objects from game
 OBJDEP = \
@@ -151,6 +153,8 @@ fx_tetrion.o : fx_tetrion.c; $(DO_CC)
 fx_transporter.o : fx_transporter.c; $(DO_CC)
 lua_qmath.o: ../game/lua_qmath.c; $(DO_CC)
 lua_vector.o: ../game/lua_vector.c; $(DO_CC)
+lua_cfx.o: lua_cfx.c; $(DO_CC)
+lua_cent.o: lua_cent.c; $(DO_CC)
 
 # dependencies from game
 q_shared.o: ../game/q_shared.c; $(DO_CC)

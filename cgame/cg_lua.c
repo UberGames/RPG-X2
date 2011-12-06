@@ -2,13 +2,7 @@
 
 #include "cg_lua.h"
 
-#ifdef G_LUA
-
-#if defined(__linux__) || defined(__WIN32__) || defined(__APPLE__) || 1 /* linux, mingw32, OS X - the 1 is temporary*/
-#include <dirent.h> /* Note the MSVC project assumes mingw is installed at C:\MinGW\include */
-#else // MSVC
-// TODO: I don't care much about MSVC as I user mingw on Windows to compile :P
-#endif
+#ifdef CG_LUA
 
 lvm_t       *lVM[NUM_VMS];
 fileHandle_t lualog;
@@ -105,24 +99,17 @@ qboolean LoadLuaFile(char *path, int num_vm)
 
 qboolean CG_LuaInit()
 {
-	#if defined(__linux__) || defined(__WIN32__) || defined(__APPLE__) || 1 /* linux, mingw32, OS X - the 1 is temporary*/
-	DIR *pdir = NULL;
-	struct dirent *pent = NULL;
-	#else // MSVC
-
-	#endif
-
+	char fxfilename[MAX_QPATH];
+	fileHandle_t fxfile;
+	
 	CG_Printf("------- CG_LuaInit -------\n");
 
-	#if defined(__linux__) || defined(__WIN32__) || defined(__APPLE__) || 1 /* linux, mingw32, OS X - the 1 is temporary*/
+	// read map fx file
 	
-	#else // MSVC
 
-	#endif
-
-	// not much to do for now
+	// open log file
 	if(cg_logLua.integer) {
-		trap_FS_FOpenFile("./cg_lua.log", &lualog, FS_APPEND);
+		trap_FS_FOpenFile("cg_lua.log", &lualog, FS_APPEND);
 	}
 
 	CG_Printf("------- CG_LuaInit Finish -------\n");

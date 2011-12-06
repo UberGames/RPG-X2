@@ -66,4 +66,36 @@ void		Lua_PushVector(lua_State *L, vec3_t v);
 vec_t		*Lua_GetVector(lua_State *L, int argNum);
 int			Lua_IsVector(lua_State *L, int index);
 vec3_t		*Lua_GetVectorMisc(lua_State *L, int *index);
+
+// lua_cfx.c
+typedef struct {
+	char luaFunc[MAX_QPATH];
+} cfx_t;
+
+#ifdef QVM
+#define MAX_CFX_CNT 32
+
+typedef struct {
+	cfx_t *cfx[MAX_CFX_CNT];
+	int	  cnt;
+} cfxList_t;
+#else
+typedef struct {
+	cfx_t **cfx;
+	int	    cnt;
+} cfxList_t;
+#endif
+
+void		Lua_CFX_LoadMapFxFile(void);
+
+// lua_cent.c
+typedef struct {
+	centity_t *e;
+} cent_t;
+
+int			Luaopen_Cent(lua_State *L);
+void		Lua_PushCent(lua_State *L, centity_t *ent);
+cent_t		*Lua_GetCent(lua_State *L, int argNum);
+// lua_refent.c
+
 #endif
