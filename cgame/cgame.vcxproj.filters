@@ -140,6 +140,9 @@
     <ClCompile Include="lua_cent.c">
       <Filter>Source Files\lua</Filter>
     </ClCompile>
+    <ClCompile Include="lua_refent.c">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\bg_local.h">

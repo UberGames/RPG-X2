@@ -459,6 +459,7 @@
     </ClCompile>
     <ClCompile Include="lua_cent.c" />
     <ClCompile Include="lua_cfx.c" />
+    <ClCompile Include="lua_refent.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\bg_local.h" />
