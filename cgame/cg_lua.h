@@ -97,5 +97,12 @@ int			Luaopen_Cent(lua_State *L);
 void		Lua_PushCent(lua_State *L, centity_t *ent);
 cent_t		*Lua_GetCent(lua_State *L, int argNum);
 // lua_refent.c
+typedef struct {
+	refEntity_t *r;
+} rent_t;
+
+int			Luaopen_Rent(lua_State *L);
+void		Lua_PushRent(lua_State *L, refEntity_t *rent);
+rent_t		*Lua_GetRent(lua_State *L, int argNum);
 
 #endif

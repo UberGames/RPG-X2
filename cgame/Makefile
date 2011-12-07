@@ -61,6 +61,7 @@ OBJ = \
   lua_qmath.o \
   lua_cfx.o \
   lua_cent.o \
+  lua_refent.o \
 
 # depency objects from game
 OBJDEP = \
@@ -155,6 +156,8 @@ lua_qmath.o: ../game/lua_qmath.c; $(DO_CC)
 lua_vector.o: ../game/lua_vector.c; $(DO_CC)
 lua_cfx.o: lua_cfx.c; $(DO_CC)
 lua_cent.o: lua_cent.c; $(DO_CC)
+lua_refent.o: lua_refent.c; $(DO_CC);
+
 
 # dependencies from game
 q_shared.o: ../game/q_shared.c; $(DO_CC)
