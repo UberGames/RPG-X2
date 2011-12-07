@@ -457,6 +457,8 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS</PreprocessorDefinitions>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
     </ClCompile>
+    <ClCompile Include="lua_cent.c" />
+    <ClCompile Include="lua_cfx.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\bg_local.h" />
