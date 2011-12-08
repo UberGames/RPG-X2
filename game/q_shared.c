@@ -930,9 +930,9 @@ void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	va_list		argptr;
 	char		*bigbuffer = NULL;
 
-	bigbuffer = (char *)malloc(sizeof(char)*32000);
+	bigbuffer = (char *)malloc(sizeof(char)*64000);
 	if(!bigbuffer) {
-		Com_Printf("Com_sprintf: could not allocate %u bytes for BigBuffer\n", sizeof(char)*32000);
+		Com_Printf("Com_sprintf: could not allocate %u bytes for BigBuffer\n", sizeof(char)*64000);
 		return;
 	}
 	memset(bigbuffer, 0, sizeof(bigbuffer));
