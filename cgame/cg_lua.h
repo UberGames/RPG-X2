@@ -72,7 +72,7 @@ typedef struct {
 	char luaFunc[MAX_QPATH];
 } cfx_t;
 
-#ifdef QVM
+#ifdef Q3_VM
 #define MAX_CFX_CNT 32
 
 typedef struct {

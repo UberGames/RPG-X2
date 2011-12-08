@@ -3633,6 +3633,9 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 
 	if (ent->wait == -1) return;
 
+	// prevent me from thinking again
+	ent->nextthink = -1;
+
 	// find the bounds of everything on the team
 	VectorCopy (ent->r.absmin, mins);
 	VectorCopy (ent->r.absmax, maxs);
@@ -3659,7 +3662,6 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 	other->parent = ent;
 	other->r.contents = CONTENTS_TRIGGER;
 	other->touch = touch_stasis_door;
-	ent->nextthink = -1;
 
 	trap_LinkEntity (other);
 	G_Printf( "^1Spawnage complete\n", 0 );
@@ -3687,7 +3689,7 @@ void SP_func_stasis_door( gentity_t *ent )
 
 	// Stasis doors have a model2, so precache me now
 	G_ModelIndex( "models/mapobjects/stasis/door2.md3" );
-	ent->model2 = "models/mapobjects/stasis/door.md3";
+	ent->model2 = G_NewString("models/mapobjects/stasis/door.md3");
 	InitMover( ent );
 	
 	// Now that we have the model precached, clear this out so it doesn't draw the model
@@ -3704,6 +3706,9 @@ void SP_func_stasis_door( gentity_t *ent )
 
 	// Auto create a door trigger so the designers don't have to
 	ent->think = spawn_trigger_stasis_door;
+
+	InitMover(ent);
+
 	ent->nextthink = level.time + 50 * 5; // give the target a chance to spawn in
 	//ent->trigger_formation = qfalse;
 

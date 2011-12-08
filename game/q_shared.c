@@ -905,7 +905,7 @@ char *Q_CleanStr( char *string ) {
 	return string;
 }
 
-#ifdef QVM
+#ifdef Q3_VM
 void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	int		len;
 	va_list		argptr;
@@ -928,21 +928,23 @@ void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	int			len;
 	va_list		argptr;
-	char		*bigbuffer = NULL;
+	char		*bigbuffer;
 
-	bigbuffer = (char *)malloc(sizeof(char)*64000);
+	bigbuffer = (char *)malloc(sizeof(char)*(size+1));
 	if(!bigbuffer) {
-		Com_Printf("Com_sprintf: could not allocate %u bytes for BigBuffer\n", sizeof(char)*64000);
+		Com_Printf("Com_sprintf: could not allocate %u bytes for BigBuffer\n", sizeof(char)*(size+1));
 		return;
 	}
-	memset(bigbuffer, 0, sizeof(bigbuffer));
+
+	sprintf(bigbuffer, " ");
 
 	va_start (argptr,fmt);
 	len = vsprintf (bigbuffer,fmt,argptr);
 	va_end (argptr);
-	if ( len >= sizeof( bigbuffer ) ) {
+	if ( len >= size + 1 ) {
 		free(bigbuffer);
 		Com_Error( ERR_FATAL, "Com_sprintf: overflowed bigbuffer" );
+		return;
 	}
 	if (len >= size) {
 		Com_Printf ("Com_sprintf: overflow of %i in %i\n", len, size);
@@ -1150,7 +1152,7 @@ void Info_RemoveKey( char *s, const char *key ) {
 Info_RemoveKey_Big
 ===================
 */
-#ifdef QVM
+void Info_RemoveKey_Big( char *s, const char *key ) {
 	char	*start;
 	char	pkey[BIG_INFO_KEY];
 	char	value[BIG_INFO_VALUE];
@@ -1199,82 +1201,6 @@ Info_RemoveKey_Big
 	}
 
 }
-#else
-void Info_RemoveKey_Big( char *s, const char *key ) {
-	char	*start;
-	char	*pkey;
-	char	*value;
-	char	*o;
-
-	if ( strlen( s ) >= BIG_INFO_STRING ) {
-		Com_Error( ERR_DROP, "Info_RemoveKey_Big: oversize infostring" );
-	}
-
-	pkey = (char *)malloc(sizeof(char)*BIG_INFO_KEY);
-	if(!pkey) {
-		Com_Printf("Info_RemoveKey_Big: could not allocate %u byte\n", sizeof(char)*BIG_INFO_KEY);
-		return;
-	}
-	value = (char *)malloc(sizeof(char)*BIG_INFO_VALUE);
-	if(!value) {
-		Com_Printf("Info_RemoveKey_Big: could not allocate %u byte\n", sizeof(char)*BIG_INFO_VALUE);
-		free(value);
-		return;
-	}
-	if (strchr (key, '\\')) {
-		free(pkey);
-		free(value);
-		return;
-	}
-
-	while (1)
-	{
-		start = s;
-		if (*s == '\\')
-			s++;
-		o = pkey;
-		while (*s != '\\')
-		{
-			if (!*s) {
-				free(value);
-				free(pkey);
-				return;
-			}
-			*o++ = *s++;
-		}
-		*o = 0;
-		s++;
-
-		o = value;
-		while (*s != '\\' && *s)
-		{
-			if (!*s) {
-				free(pkey);
-				free(value);
-				return;
-			}
-			*o++ = *s++;
-		}
-		*o = 0;
-
-		if (!strcmp (key, pkey) )
-		{
-			strcpy (start, s);	/* remove this part */
-			free(value);
-			free(pkey);
-			return;
-		}
-
-		if (!*s) {
-			free(pkey);
-			free(value);
-			return;
-		}
-	}
-	free(value);
-	free(pkey);
-}
-#endif
 
 
 

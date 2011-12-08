@@ -1557,7 +1557,6 @@ void BG_LoadItemNames(void)
 *	Read a configuration file to get the sex
 *	models/players_rpgx/munro/animation.cfg
 */
-#ifdef Q3_VM
 static gender_t	G_ParseAnimationFileSex( const char *filename) {
 	char			*text_p;
 	int				len;
@@ -1610,72 +1609,6 @@ static gender_t	G_ParseAnimationFileSex( const char *filename) {
 	}
 	return GENDER_MALE;
 }
-#else
-static gender_t	G_ParseAnimationFileSex( const char *filename) {
-	char			*text_p;
-	int				len;
-	char			*token;
-	char			*text;
-	fileHandle_t	f;
-	char			animfile[MAX_QPATH];
-
-	/* strcpy(animfile, filename); */
-	Q_strncpyz(animfile, filename, sizeof(animfile));
-	len = strlen(animfile);
-	strcpy(&animfile[len-strlen("groups.cfg")], "animation.cfg");
-
-	/* load the file */
-	len = trap_FS_FOpenFile( animfile, &f, FS_READ );
-	if ( len <= 0 ) {
-		return GENDER_NEUTER;
-	}
-
-	text = (char *)malloc(20000 * sizeof(char));
-	if(!text) {
-		trap_FS_FCloseFile(f);
-		Com_Printf( "Was unable to allocate %i bytes.\n", 20000 * sizeof(char) );
-		return GENDER_NEUTER;
-	}
-
-	if ( len >= 20000 - 1 ) {
-		Com_Printf( "File %s too long\n", animfile );
-		trap_FS_FCloseFile( f );
-		return GENDER_NEUTER;
-	}
-	trap_FS_Read( text, len, f );
-	text[len] = 0;
-	trap_FS_FCloseFile( f );
-
-	/* parse the text */
-	text_p = text;
-
-	/* read optional parameters */
-	while ( 1 ) {
-		token = COM_Parse( &text_p );
-		if ( !token[0] ) {
-			break;
-		}
-		if ( !Q_stricmp( token, "sex" ) ) {
-			token = COM_Parse( &text_p );
-			if ( !token[0] ) {
-				break;
-			}
-			if ( token[0] == 'f' || token[0] == 'F' ) {
-				free(text);
-				return GENDER_FEMALE;
-			} else if ( token[0] == 'n' || token[0] == 'N' ) {
-				free(text);
-				return GENDER_NEUTER;
-			} else {
-				free(text);
-				return GENDER_MALE;
-			}
-		}
-	}
-	free(text);
-	return GENDER_MALE;
-}
-#endif
 
 /**
 *	Registers an item.
@@ -1767,7 +1700,6 @@ char* BG_RegisterRace( const char *name ) {
 /**
 *	Parses the rank names.
 */
-#ifdef Q3_VM
 qboolean BG_ParseRankNames( char* fileName, rankNames_t rankNames[] ) {
 	fileHandle_t	f;
 	int				file_len;
@@ -1877,128 +1809,6 @@ qboolean BG_ParseRankNames( char* fileName, rankNames_t rankNames[] ) {
 	}
 	return qtrue;
 }
-#else
-qboolean BG_ParseRankNames( char* fileName, rankNames_t rankNames[] ) {
-	fileHandle_t	f;
-	int				file_len;
-	char			*charText;
-	char*			textPtr;
-	char*			token;
-	int				i = 0;
-
-	file_len = trap_FS_FOpenFile( fileName, &f, FS_READ );
-
-	if ( file_len<= 0 ) {
-		return qfalse;
-	}
-
-	charText = (char *)malloc(20000 * sizeof(char));
-	if(!charText) {
-		Com_Printf( S_COLOR_RED "Was unable to allocate %i bytes.\n", 20000 * sizeof(char) );
-		trap_FS_FCloseFile(f);
-		return qfalse;
-	}
-
-	if ( file_len >= ( 20000 - 1) ) {
-		Com_Printf( S_COLOR_RED "File length of %s is too long.\n", fileName );
-		trap_FS_FCloseFile(f);
-		free(charText);
-		return qfalse;
-	}
-
-	memset( rankNames, 0, sizeof( rankNames ) );
-
-	trap_FS_Read( charText, file_len, f );
-
-	charText[file_len] = 0;
-
-	trap_FS_FCloseFile( f );
-
-	COM_BeginParseSession();
-
-	textPtr = charText;
-
-	token = COM_Parse( &textPtr );
-
-	if ( !token[0] ) {
-		Com_Printf( S_COLOR_RED "No data found in buffer: %s\n", fileName );
-		free(charText);
-		return qfalse;
-	}
-
-	if ( Q_stricmpn( token, "{", 1 ) ) {
-		Com_Printf( S_COLOR_RED "No beginning { found in %s\n", fileName );
-		free(charText);
-		return qfalse;
-	}
-
-	/* Parse out the default cell.  Default has no names anyway,
-	but in case a n00bie modder put names in anyway. */
-	SkipBracedSection( &textPtr );
-
-	while( 1 ) {
-		//lastPtr = textPtr;
-		token = COM_Parse( &textPtr );
-		if( !token[0] ) {
-			break;
-		}
-
-		if ( i >= MAX_RANKS ) {
-			break;
-		}
-
-		/* If we hit an open brace (ie, assuming we hit the start of a new rank cell) */
-		if ( !Q_stricmpn( token, "{", 1 ) ) {
-			while ( 1 ) {
-				token = COM_Parse( &textPtr );
-				if( !token[0] ) {
-					break;
-				}
-
-				/* We hit a MenuTexture entry, since this uses { symbols, we'll skip these to stop errors. */
-				if ( !Q_stricmpn( token, "MenuTexture", 11 ) ) {
-					SkipRestOfLine( &textPtr );
-					continue;
-				}
-
-				if ( !Q_stricmpn( token, "ConsoleName", 11) ) {
-					if ( COM_ParseString( &textPtr, &token ) ) {
-						continue;
-					}
-
-					Q_strncpyz( rankNames[i].consoleName, token, sizeof( rankNames[i].consoleName ) );
-
-					continue;
-				}
-				else if ( !Q_stricmpn( token, "FormalName", 10) ) {
-					if ( COM_ParseString( &textPtr, &token ) ) {
-						continue;
-					}
-
-					Q_strncpyz( rankNames[i].formalName, token, sizeof( rankNames[i].formalName ) );
-
-					continue;
-				}
-				/* We hit the end of the cell. */
-				else if ( !Q_stricmpn( token, "}", 1 ) ) {
-					break;
-				}
-			}
-
-			/* Error check.  If we didn't get both a formal and console name, pwn the caller. ;P */
-			if ( !rankNames[i].consoleName[0] || !rankNames[i].formalName[0] ) {
-				Com_Printf( S_COLOR_RED "One or more rank names were not found in rank#: %i\n", i );
-				return qfalse;
-			}
-			else {
-				i++;
-			}
-		}
-	}
-	free(charText);
-	return qtrue;
-}
-#endif
 
 /*
 ===========
