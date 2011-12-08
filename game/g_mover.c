@@ -3665,8 +3665,6 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 
 	trap_LinkEntity (other);
 	G_Printf( "^1Spawnage complete\n", 0 );
-
-
 }
 
 //-------------------------------------------
@@ -3690,7 +3688,6 @@ void SP_func_stasis_door( gentity_t *ent )
 	// Stasis doors have a model2, so precache me now
 	G_ModelIndex( "models/mapobjects/stasis/door2.md3" );
 	ent->model2 = G_NewString("models/mapobjects/stasis/door.md3");
-	InitMover( ent );
 	
 	// Now that we have the model precached, clear this out so it doesn't draw the model
 	//	until we are ready to do the actual fade.
