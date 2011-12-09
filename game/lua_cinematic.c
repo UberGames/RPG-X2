@@ -5,6 +5,8 @@
 
 #ifdef G_LUA
 
+// cinematic.Activate(entity ent, entity target)
+// Activates Camera on ent and points it at target.
 static int Cinematic_Activate(lua_State *L) {
 	lent_t *ent;
 	lent_t *target;
@@ -20,6 +22,8 @@ static int Cinematic_Activate(lua_State *L) {
 	return 0;
 }
 
+// cinematic.Deactivate(entity ent)
+// Deactivates camera on ent.
 static int Cinematic_Deactivate(lua_State *L) {
 	lent_t *ent;
 
@@ -31,6 +35,8 @@ static int Cinematic_Deactivate(lua_State *L) {
 	return 0;
 }
 
+// cinematic.ActivateGlobal(entity target)
+// Activates broadcasting of target.
 static int Cinematic_ActivateGlobal(lua_State *L) {
 	lent_t *target;
 
@@ -42,6 +48,8 @@ static int Cinematic_ActivateGlobal(lua_State *L) {
 	return 0;
 }
 
+// cinematic.DeactivateGlobal()
+// Deactivates broadcasting.
 static int Cinematic_DeactivateGlobal(lua_State *L) {
 	Cinematic_DeactivateGlobalCameraMode();
 	return 0;

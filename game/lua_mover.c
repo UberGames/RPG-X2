@@ -3,8 +3,8 @@
 #include "g_lua.h"
 
 #ifdef G_LUA
-// mover.Halt(int entnum)
-// Stops a mover immediatly
+// mover.Halt(entity ent)
+// Stops translational movement on ent immediately.
 static int Mover_Halt(lua_State *L) {
 	lent_t		*lent;
 	gentity_t	*ent = NULL;
@@ -34,8 +34,8 @@ static int Mover_Halt(lua_State *L) {
 	return 0;
 }
 
-// mover.HaltAngles(int entnum)
-// Stops angular movement immediatly
+// mover.HaltAngles(entity ent)
+// Stops rotational movement on ent immediately.
 static int Mover_HaltAngles(lua_State * L)
 {
 	lent_t			*lent;
@@ -68,8 +68,12 @@ static int Mover_HaltAngles(lua_State * L)
 extern void Reached_Train(gentity_t *ent);
 extern void Think_SetupTrainTargets(gentity_t *ent);
 extern void SetMoverState(gentity_t *ent, moverState_t moverState, int time);
-// mover.AsTrain(int entnum, int targetnum, float speed)
-// Moves a mover as train
+
+// mover.AsTrain(entity mover, entity target, float speed)
+// Moves an entity like a func_train entity. Targets have to be path_corner entities.
+// * ent the entity to move
+// * target the first path_corner to move to
+// * speed speed to move to first path_corner with
 static int Mover_AsTrain(lua_State * L)
 {
 	lent_t			*lent, *tlent;
@@ -153,9 +157,11 @@ static int Mover_AsTrain(lua_State * L)
 	return 0;
 }
 
-// mover.SetAngles(vector angles)
-// mover.SetAngles(float x, float y, float z)
-// Sets the angles of a mover
+// mover.SetAngles(entity ent, vector angles) or 
+// mover.SetAngles(entity ent, float y, float z, float x)
+// Sets the angles of ent to the specified value(s). 
+// Values are sorted Pitch (around Y-Axis), Yaw (around Z-Axis) and 
+// Roll (around X-Axis). These can also be stowed in a vector angles.
 static int Mover_SetAngles(lua_State * L)
 {
 	vec3_t          newAngles;
@@ -197,9 +203,9 @@ static int Mover_SetAngles(lua_State * L)
 	return 0;
 }
 
-// mover.SetPosition(int entnum, vector pos)
-// mover.SetPosition(int entnum, float x, float y, float z)
-// Sets the position of a mover
+// mover.SetPosition(entity ent, vector pos) or 
+// mover.SetPosition(entity ent, float x, float y, float z)
+// Set the position of ent to the specified value(s). Can also be stowed in a vector pos.
 static int Mover_SetPosition(lua_State * L)
 {
 	vec3_t          newOrigin;
@@ -254,9 +260,11 @@ static void SetTrajectoryLinear(trajectory_t * tr, const float speed, const vec3
 	tr->trType = TR_LINEAR_STOP;
 }
 
-// mover.ToAngles(int entnum, float speed, vector angles)
-// mover.ToAngles(int entnum, float speed, float x, float y, float z)
-// Rotate an entity to specified angles
+// mover.ToAngles(entity ent, float speed, vector angles) or 
+// mover.ToAngles(entity ent, float speed, float y, float z, float x)
+// Rotates ent with speed speed (in degrees per second) to the specified value(s). 
+// Values are sorted Pitch (around Y-Axis), Yaw (around Z-Axis) and 
+// Roll (around X-Axis). These can also be stowed in a vector angles.
 static int Mover_ToAngles(lua_State * L)
 {
 	vec3_t          newAngles;
@@ -303,9 +311,9 @@ static int Mover_ToAngles(lua_State * L)
 	return 0;
 }
 
-// mover.ToPosition(int entnum, float speed, vector pos)
-// mover.ToPosition(int entnum, float speed, float x, float y, float z)
-// Move an entity to the specified position
+// mover.ToPosition(entity ent, vector pos) or 
+// mover.ToPosition(entity ent, float x, float y, float z)
+// Moves ent with speed speed to the specified value(s). Can also be stowed in a vector pos.
 static int Mover_ToPosition(lua_State * L)
 {
 	vec3_t          newOrigin;
