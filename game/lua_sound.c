@@ -4,6 +4,10 @@
 
 #ifdef G_LUA
 
+// sound.PlaySound(entity ent, string sound, integer chan)
+// * ent the entity the sound will be played on
+// * sound the sound file which will be played
+// * chan the sound channel the sound will be played on
 static int Sound_PlaySound(lua_State *L) {
 	char	*sound;
 	int		snd;

@@ -31,6 +31,14 @@ static int Trace_ToString(lua_State * L)
 	return 1;
 }
 
+// trace.DoTrace(vector start, vector mins, vector maxs, vector end, float passEnt, float contents)
+// Does a trace.
+// * start start-point of trace
+// * mins minimal distance of trace (nil if unused)
+// * maxs maximal distance of trace (nil if unused)
+// * end end-point of trace
+// * passEnt Number of ents to pass
+// * contents ????????
 static int Trace_DoTrace(lua_State *L) {
 	trace_t *tr;
 	vec_t *start, *end, *mins = NULL, *maxs = NULL;
@@ -59,6 +67,8 @@ static int Trace_DoTrace(lua_State *L) {
 	return 1;
 }
 
+// trace.FreeTrace(trace tr)
+// Ends trace-process for tr.
 static int Trace_FreeTrace(lua_State *L) {
 	ltrace_t *tr;
 

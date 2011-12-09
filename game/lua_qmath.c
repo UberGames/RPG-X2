@@ -3,8 +3,8 @@
 #include "g_lua.h"
 
 #ifdef G_LUA
-// qmath.abs(float num)
-// Returns the integer part of a floating point number
+// qmath.abs(float f)
+// Returns the integer part of f.
 static int Qmath_Abs(lua_State * L)
 {
 	lua_pushnumber(L, fabs(luaL_checknumber(L, 1)));
@@ -12,7 +12,7 @@ static int Qmath_Abs(lua_State * L)
 }
 
 // qmath.sin(float degree)
-// Sinus implementation, takes degree as input not radian
+// Returns the sine of degree.
 static int Qmath_Sin(lua_State * L)
 {
 	lua_pushnumber(L, sin(DEG2RAD(luaL_checknumber(L, 1))));
@@ -20,7 +20,7 @@ static int Qmath_Sin(lua_State * L)
 }
 
 // qmath.cos(float degree)
-// Cosinus implementation, takes degree as input not radian
+// Returns the cosine of degree.
 static int Qmath_Cos(lua_State * L)
 {
 	lua_pushnumber(L, cos(DEG2RAD(luaL_checknumber(L, 1))));
@@ -28,31 +28,31 @@ static int Qmath_Cos(lua_State * L)
 }
 
 // qmath.tan(float degree)
-// Tan implementation, take degree as input not radian
+// Returns the tangent of degree.
 static int Qmath_Tan(lua_State * L)
 {
 	lua_pushnumber(L, tan(DEG2RAD(luaL_checknumber(L, 1))));
 	return 1;
 }
 
-// qmath.asin(float num)
-// asin implementation
+// qmath.asin(float f)
+// Returns the arcsine of f.
 static int Qmath_Asin(lua_State * L)
 {
 	lua_pushnumber(L, RAD2DEG(asin(luaL_checknumber(L, 1))));
 	return 1;
 }
 
-// qmath.acos(float num)
-// acos implementation
+// qmath.acos(float f)
+// Returns the arccosine of f.
 static int Qmath_Acos(lua_State * L)
 {
 	lua_pushnumber(L, RAD2DEG(acos(luaL_checknumber(L, 1))));
 	return 1;
 }
 
-// qmath.atan(float num)
-// atan implementation
+// qmath.atan(float f)
+// Returns the arctangent of f.
 static int Qmath_Atan(lua_State * L)
 {
 	lua_pushnumber(L, RAD2DEG(atan(luaL_checknumber(L, 1))));
@@ -66,28 +66,33 @@ static int Qmath_Atan2(lua_State * L)
 	return 1;
 }
 
-// qmath.ceil(float number)
+// qmath.ceil(float f)
+// Returns the ceiled value of f.
 static int Qmath_Ceil(lua_State * L)
 {
 	lua_pushnumber(L, ceil(luaL_checknumber(L, 1)));
 	return 1;
 }
 
-// qmath.floor(float number)
+// qmath.floor(float f)
+// Returns the floored value of f.
 static int Qmath_Floor(lua_State * L)
 {
 	lua_pushnumber(L, floor(luaL_checknumber(L, 1)));
 	return 1;
 }
 
-// qmath.fmod(float num, float num2)
+// qmath.fmod(float f, float n)
+// Returns the remainder of f=n.
 static int Qmath_Fmod(lua_State * L)
 {
 	lua_pushnumber(L, fmod(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
 	return 1;
 }
 
-// qmath.modf(float num)
+// qmath.modf(float f)
+// Breaks f apart into its integer part and its fractional part.
+// The fractional part is returned while the integer part is assigned to f.
 static int Qmath_Modf(lua_State * L)
 {
 	double          ip;
@@ -98,30 +103,32 @@ static int Qmath_Modf(lua_State * L)
 	return 2;
 }
 
-// qmath.sqrt(float number)
+// qmath.sqrt(float f)
+// Returns the square root of f.
 static int Qmath_Sqrt(lua_State * L)
 {
 	lua_pushnumber(L, sqrt(luaL_checknumber(L, 1)));
 	return 1;
 }
 
-// qmath.pow(float num, float num2)
+// qmath.pow(float f, float n)
+// What's this??
 static int Qmath_Pow(lua_State * L)
 {
 	lua_pushnumber(L, pow(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
 	return 1;
 }
 
-// qmath.log(float num)
-// Returns logarithm of a number
+// qmath.log(float f)
+// Returns logarithm of f.
 static int Qmath_Log(lua_State * L)
 {
 	lua_pushnumber(L, log(luaL_checknumber(L, 1)));
 	return 1;
 }
 
-// qmath.log10(float num)
-// Returns logarithm to base 10 of a number
+// qmath.log10(float f)
+// Returns logarithm to base 10 of f.
 static int Qmath_Log10(lua_State * L)
 {
 	lua_pushnumber(L, log10(luaL_checknumber(L, 1)));
@@ -129,6 +136,7 @@ static int Qmath_Log10(lua_State * L)
 }
 
 // qmath.exp(float number)
+// What's this??
 static int Qmath_Exp(lua_State * L)
 {
 	lua_pushnumber(L, exp(luaL_checknumber(L, 1)));
@@ -136,7 +144,7 @@ static int Qmath_Exp(lua_State * L)
 }
 
 // qmath.deg(float radian)
-// Converts radian to degree
+// Converts radian to degree.
 static int Qmath_Deg(lua_State * L)
 {
 	lua_pushnumber(L, RAD2DEG(luaL_checknumber(L, 1)));
@@ -144,14 +152,16 @@ static int Qmath_Deg(lua_State * L)
 }
 
 // qmath.rad(float dgree)
-// Converts degree to radian
+// Converts degree to radian.
 static int Qmath_Rad(lua_State * L)
 {
 	lua_pushnumber(L, DEG2RAD(luaL_checknumber(L, 1)));
 	return 1;
 }
 
-// qmath.frexp(float number)
+// qmath.frexp(float f)
+// Breaks f into its binary significant and an integral exponent for 2.
+// x = significant 2exponent
 static int Qmath_Frexp(lua_State * L)
 {
 	int             e;
@@ -162,6 +172,7 @@ static int Qmath_Frexp(lua_State * L)
 }
 
 // qmath.ldexp(float f, float n)
+// Returns the result from multiplying f by 2 raised to the power of n.
 static int Qmath_Ldexp(lua_State * L)
 {
 	lua_pushnumber(L, ldexp(luaL_checknumber(L, 1), luaL_checkint(L, 2)));
@@ -170,7 +181,7 @@ static int Qmath_Ldexp(lua_State * L)
 
 
 // qmath.min(int array[])
-// Returns the minimum of a list of values
+// Return the lowest value in array[].
 static int Qmath_Min(lua_State * L)
 {
 	int             n = lua_gettop(L);	/* number of arguments */
@@ -189,7 +200,7 @@ static int Qmath_Min(lua_State * L)
 }
 
 // qmath.max(int array[])
-// Returns the maximum of a list of numbers
+// Return the highest value in array[].
 static int Qmath_Max(lua_State * L)
 {
 	int             n = lua_gettop(L);	/* number of arguments */
@@ -207,23 +218,24 @@ static int Qmath_Max(lua_State * L)
 	return 1;
 }
 
-// qmath.rand(void)
-// Returns a random integer
+// qmath.rand()
+// Returns a random integer.
 static int Qmath_Rand(lua_State * L)
 {
 	lua_pushinteger(L, rand());
 	return 1;
 }
 
-// qmath.random(void)
-// Returns a random number
+// qmath.random()
+// Returns a random float.
 static int Qmath_Random(lua_State * L)
 {
 	lua_pushnumber(L, random());
 	return 1;
 }
 
-// qmath.crandom(void)
+// qmath.crandom()
+// Returns random floats (crazy random function).
 static int Qmath_Crandom(lua_State * L)
 {
 	lua_pushnumber(L, crandom());

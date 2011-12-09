@@ -436,7 +436,7 @@ spawn_t	spawns[] = {
 // Additional ports from SP by Harry Young
 	{"fx_cooking_steam",			SP_fx_cooking_steam},
 	{"fx_elecfire",					SP_fx_electricfire},
-	{"forge_bolt",					SP_fx_forge_bolt},
+	{"fx_forge_bolt",					SP_fx_forge_bolt},
 	{"fx_plasma",					SP_fx_plasma},
 	{"fx_energy_stream",			SP_fx_stream},
 	{"fx_transporter_stream",		SP_fx_transporter_stream},

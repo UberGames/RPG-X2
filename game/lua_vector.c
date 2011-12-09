@@ -8,8 +8,8 @@
 #include "lauxlib.h"
 #include "lualib.h"
 
-// vector.New(void)
-// Returns a new empty vector
+// vector.New()
+// Allocates and returns a new vector (0|0|0).
 static int Vector_New(lua_State *L) {
 	vec_t *v;
 
@@ -24,7 +24,7 @@ static int Vector_New(lua_State *L) {
 }
 
 // vector.Construct(float x, float y, float z)
-// Creats a new vector with the values x,y, and z
+// Allocates and returns a new vector (x|y|z).
 static int Vector_Construct(lua_State *L) {
 	vec_t *v;
 
@@ -41,7 +41,7 @@ static int Vector_Construct(lua_State *L) {
 }
 
 // vector.Set(vector v, float x, float y, float z)
-// Sets a vector to the values x, y, and z
+// Set the vector v to the specified values.
 static int Vector_Set(lua_State *L) {
 	vec_t *v;
 
@@ -55,7 +55,7 @@ static int Vector_Set(lua_State *L) {
 }
 
 // vector.Clear(vector vec)
-// Clear a vector (sets it to (0 0 0))
+// Clears vector v by setting it to (0|0|0).
 static int Vector_Clear(lua_State * L)
 {
 	vec_t          *a;
@@ -68,7 +68,7 @@ static int Vector_Clear(lua_State * L)
 }
 
 // vector.Vector_Add(vector a, vector b, vector c)
-// Adds a and b together and stores the result in c
+// Adds a and b together and stores the result in c.
 static int Vector_Add(lua_State *L) {
 	vec_t	*a, *b, *c;
 
@@ -82,7 +82,7 @@ static int Vector_Add(lua_State *L) {
 }
 
 // vector.Vector_subtract(vector a, vector b, vector c)
-// Subtracts b from a and stores the result in c
+// Subtracts b from a and stores the result in c.
 static int Vector_Subtract(lua_State *L) {
 	vec_t	*a, *b, *c;
 
@@ -96,7 +96,7 @@ static int Vector_Subtract(lua_State *L) {
 }
 
 // vector.Scale(vector a, float b, vector c)
-// Scales a vector by the value of b and stores the result in c
+// Scales a vector by the value of b and stores the result in c.
 static int Vector_Scale(lua_State *L) {
 	vec_t *a, b, *c;
 
@@ -109,8 +109,8 @@ static int Vector_Scale(lua_State *L) {
 	return 1;
 }
 
-// vector.Length(vector vec)
-// Returns the length of the vector
+// vector.Length(vector a)
+// Returns the length of a.
 static int Vector_Length(lua_State *L) {
 	vec_t	*a;
 	vec_t	len;
@@ -123,8 +123,8 @@ static int Vector_Length(lua_State *L) {
 	return 1;
 }
 
-// vector.Normalize(vector vec)
-// Normalizes the vector
+// vector.Normalize(vector a)
+// Normalizes a
 static int Vector_Normalize(lua_State *L) {
 	vec_t	*a;
 	vec_t	len;
@@ -149,8 +149,12 @@ static int Vector_NormalizeFast(lua_State *L) {
 	return 1;
 }
 
-// vector.RotatePointAround(vector destination, vector direction, vector point, vector degrees)
-// Rotate a vector around a point
+// vector.RotateAroundPoint(vector dest, vector dir, vector point, float degrees)
+// Rotates point around a given vector.
+// * dir vector around which to rotate (must be normalized)
+// * point point to be rotated
+// * degrees how many degrees to rotate the point by
+// * dest point after rotation
 static int Vector_RotatePointAround(lua_State *L) {
 	vec_t	*dst, *dir, *point;
 	vec_t	degrees;
@@ -165,7 +169,10 @@ static int Vector_RotatePointAround(lua_State *L) {
 	return 1;
 }
 
-// vector.Perpendicular(vector destination, vector source)
+// vector.Perpendicular(vector dest, vector src)
+// Finds a vector perpendicular to the source vector. 
+// * src source vector 
+// * dest a vector that is perpendicular to src (the result is stored here)
 static int Vector_Perpendicular(lua_State *L) {
 	vec_t	*dst, *src;
 
@@ -177,6 +184,7 @@ static int Vector_Perpendicular(lua_State *L) {
 	return 1;
 }
 
+//What does this do?
 static int Vector_VecToAngles(lua_State *L) {
 	vec_t *v, *t;
 	
@@ -188,6 +196,7 @@ static int Vector_VecToAngles(lua_State *L) {
 	return 1;
 } 
 
+//What does this do?
 static int Vector_AngleVectors(lua_State *L) {
 	vec_t *v, *fwd, *right, *up; 
 
