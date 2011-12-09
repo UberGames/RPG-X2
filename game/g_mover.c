@@ -3368,6 +3368,7 @@ void close2_stasis_door( gentity_t *ent )
 
 		// Now would be a good time to close the area portal.
 		trap_AdjustAreaPortalState( ent, qfalse );
+		trap_UnlinkEntity(ent);
 		ent->nextthink = -1;
 		return;
 	G_Printf( "^1Entity closed\n", 0 );
@@ -3448,6 +3449,10 @@ void open2_stasis_door( gentity_t *ent )
 		ent->flags |= SVF_NOCLIENT;
 		ent->r.contents = 0;
 		ent->flags |= EF_NODRAW;
+		
+		// Now would be a good time to open up the area portal..heh heh.
+		trap_AdjustAreaPortalState( ent, qtrue );
+		trap_LinkEntity(ent);
 
 		if ( ent->wait >= 0 )
 		{
@@ -3480,9 +3485,6 @@ void open1_stasis_door( gentity_t *ent )
 		ent->s.eFlags |= EF_NODRAW;
 
 		G_AddEvent( ent, EV_GENERAL_SOUND, G_SoundIndex( "sound/movers/doors/stasisdoor.wav" ));
-
-		// Now would be a good time to open up the area portal..heh heh.
-		trap_AdjustAreaPortalState( ent, qtrue );
 
 	ent->think = open2_stasis_door;
 	ent->nextthink = level.time + 1000;
@@ -3680,37 +3682,24 @@ START_LOCKED:	door is locked at spawn
 */
 void SP_func_stasis_door( gentity_t *ent ) 
 {
+	/* set the brush model */
 	trap_SetBrushModel( ent, ent->model );
 
-	G_SoundIndex( "sound/movers/doors/stasisdoor.wav" );
-	G_SoundIndex( "sound/movers/switches/stasisneg.wav" );
+	/* set the orgin */
+	G_SetOrigin(ent, ent->s.origin);
 
-	// Stasis doors have a model2, so precache me now
-	G_ModelIndex( "models/mapobjects/stasis/door2.md3" );
-	ent->model2 = G_NewString("models/mapobjects/stasis/door.md3");
-	
-	// Now that we have the model precached, clear this out so it doesn't draw the model
-	//	until we are ready to do the actual fade.
-	ent->s.modelindex2 = 0;
-
-	// sigh...ent->s.origin seems to be some kind of translational offset for the brush....so don't try and set 
-	//	the "correct" door origin because it should actually be <0 0 0>..hence the stashing of the origin in pos1.
-	VectorAdd( ent->r.absmax, ent->r.absmin, ent->pos1 );
-	VectorScale( ent->pos1, 0.5f, ent->pos1 );
-	VectorCopy( ent->pos1, ent->pos2 );
-	
-	G_SetOrigin( ent, ent->s.origin );
-
-	// Auto create a door trigger so the designers don't have to
-	ent->think = spawn_trigger_stasis_door;
+	VectorCopy(ent->s.origin, ent->pos1);
 
 	InitMover(ent);
 
+	//G_SoundIndex( "sound/movers/doors/stasisdoor.wav" );
+	//G_SoundIndex( "sound/movers/switches/stasisneg.wav" );
+
+	// Auto create a door trigger so the designers don't have to
+	ent->think = spawn_trigger_stasis_door;
 	ent->nextthink = level.time + 50 * 5; // give the target a chance to spawn in
-	//ent->trigger_formation = qfalse;
 
 	ent->use = use_stasis_door;
-	//ent->flags |= SVF_STASIS_DOOR;
 	ent->count = 1;
 	if (!ent->wait)
 	{
@@ -3724,5 +3713,6 @@ void SP_func_stasis_door( gentity_t *ent )
 	}
 
 	trap_LinkEntity (ent);
+
 	G_Printf( "^1Spawnage in progress\n", 0 );
 }

@@ -2630,8 +2630,8 @@ static const luaL_Reg Entity_meta[] = {
 	{"GetNumber",					Entity_GetNumber},
 	{"IsClient",					Entity_IsClient},
 	{"GetClientname",				Entity_GetClientName},
-	{"Print",						Entity_Print},
-	{"CenterPrint",					Entity_CenterPrint},
+	//{"Print",						Entity_Print}, // why are these deleted?
+	//{"CenterPrint",				Entity_CenterPrint},// why are these deleted?
 
 	{"GetClassname",				Entity_GetClassName}, // args: none; return: string
 	{"SetClassname",				Entity_SetClassName}, // args: string; return: nothing
@@ -2639,7 +2639,7 @@ static const luaL_Reg Entity_meta[] = {
 	{"GetTargetname",				Entity_GetTargetName}, // args: none; return: string
 	{"SetTargetname",				Entity_SetTargetName}, // args: string; return: nothing
 
-	{"Rotate",						Entity_Rotate},
+	//{"Rotate",						Entity_Rotate},// why are these deleted?
 
 	{"IsRocket",					Entity_IsRocket},
 	{"IsGrenade",					Entity_IsGrenade},
