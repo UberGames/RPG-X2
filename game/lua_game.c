@@ -4,7 +4,7 @@
 
 #ifdef G_LUA
 // game.Print(string text)
-// Prints a text to the game console
+// Prints text to the server console
 static int Game_Print(lua_State *L) {
 	int		i;
 	char	buf[MAX_STRING_CHARS];
@@ -42,8 +42,9 @@ static int Game_Print(lua_State *L) {
 	return 0;
 }
 
-// game.CenterPrint(string text)
-// Prints a message to the center of the screen of each client
+// game.CenterPrint(integer clientNum, string text)
+// Prints text to the center of the screen of the client with client number clientNum. 
+// If clientNum is -1 the text gets printed for all clients.
 static int Game_CenterPrint(lua_State *L) {
 	int			i;
 	char		buf[MAX_STRING_CHARS];
@@ -83,8 +84,9 @@ static int Game_CenterPrint(lua_State *L) {
 	return 0;
 }
 
-// game.ClientPrint
-// Prints a message to the client console
+// game.ClientPrint(integer clientNum, string text)
+// Prints text to the clients console that has the client number clientNum. 
+// If clientNum is -1 the text gets printed to all clients consoles.
 static int Game_ClientPrint(lua_State *L) {
 	int			i;
 	char		buf[MAX_STRING_CHARS];
@@ -127,8 +129,9 @@ static int Game_ClientPrint(lua_State *L) {
 	return 0;
 }
 
-// game.MessagePrint
-// Prints a message to the lower right corner of all clients screens
+// game.MessagePrint(integer clientNum, string text)
+// Prints text to the lower right corner of the screen of the client with client number clientNum. 
+// If clientNum is -1 the text gets printed for all clients.
 static int Game_MessagePrint(lua_State *L) {
 	int			i;
 	char		buf[MAX_STRING_CHARS];
@@ -167,6 +170,10 @@ static int Game_MessagePrint(lua_State *L) {
 	return 0;
 }
 
+// game.SetGlobal(string name, value)
+// Sets a global Lua variable which is called name to value. 
+// Creates a new global variable if a variable of name does not exist. 
+// value can be of any type.
 static int Game_SetGlobal(lua_State *L) {
 	char *name;
 
@@ -180,6 +187,9 @@ static int Game_SetGlobal(lua_State *L) {
 	return 0;
 }
 
+// game.GetGlobal(string name)
+// Returns the value of the global variable name. 
+// Returns nil if the variable does not exist.
 static int Game_GetGlobal(lua_State *L) {
 	char *name;
 
@@ -192,6 +202,7 @@ static int Game_GetGlobal(lua_State *L) {
 	return 1;
 }
 
+// Alert-Stuff... I don't know. I feel like removing this and stick to the entity spawning and setup.
 // game.AlertSetup(entity ent, string greentarget, string yellowtarget, string redtarget, string bluetarget,
 //					string greensound, string yellowsound, string redsound, string bluesound, integer mode)
 static int Game_AlertSetup(lua_State *L) {
@@ -277,8 +288,8 @@ static int Game_Alert(lua_State *L) {
 	return 0;
 }
 
-// game.LevelTime(void)
-// Returns the current level time in milli seconds
+// game.LevelTime()
+// Returns the current level time in milliseconds.
 static int Game_Leveltime(lua_State * L)
 {
 	lua_pushinteger(L, level.time);

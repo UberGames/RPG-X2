@@ -22,8 +22,10 @@ static int Entity_GetTarget(lua_State * L)
 	return 1;
 }
 
-// entity.FindBModel(int bmodel)
-// finds entity by brush model
+// entity.FindBModel(integer bmodelnum)
+// Returns the entity with the brush model bmodelnumber. 
+// This is the only failsafe way to find brush entities as the 
+// entity number is different when you load a map local or join a server.
 static int Entity_FindBModel(lua_State *L) {
 	gentity_t	*ent;
 	int			bmodel;
@@ -38,8 +40,8 @@ static int Entity_FindBModel(lua_State *L) {
 	return 1;
 }
 
-// entity.FindNumber(int num)
-// finds entity by number
+// entity.FindNumber(integer entnum)
+// Returns the entity with the entity number entnum.
 static int Entity_FindNumber(lua_State * L)
 {
 	int			 entnum;
@@ -56,7 +58,7 @@ static int Entity_FindNumber(lua_State * L)
 }
 
 // entity.Find(string targetname)
-// finds and returns an entity by it's targetname
+// Returns the first entity found that has a targetname of targetname.
 static int Entity_Find(lua_State * L)
 {
 	gentity_t      *t = NULL;
@@ -70,8 +72,8 @@ static int Entity_Find(lua_State * L)
 	return 1;
 }
 
-// entity.Use(entity targetname)
-// Uses an entity.
+// entity.Use(entity ent)
+// Uses ent.
 static int Entity_Use(lua_State * L)
 {
 	lent_t     *lent;
@@ -87,8 +89,8 @@ static int Entity_Use(lua_State * L)
 	return 1;
 }
 
-// entity.Teleport(entity ent, entity target)
-// Teleports a player to another entity
+// entity.Teleport(entity client, entity target)
+// Teleports client to target's position
 static int Entity_Teleport(lua_State * L)
 {
 	lent_t     *lent;
@@ -110,7 +112,7 @@ static int Entity_Teleport(lua_State * L)
 
 
 // entity.IsRocket(entity ent)
-// Checks if an entity is a rocket
+// Checks if an entity is a rocket.
 static int Entity_IsRocket(lua_State * L)
 {
 	lent_t     *lent;
@@ -126,7 +128,7 @@ static int Entity_IsRocket(lua_State * L)
 }
 
 // entity.IsGrenade(entity ent)
-// Checks if an enity is a grenade
+// Checks if an entity is a grenade.
 static int Entity_IsGrenade(lua_State * L)
 {
 	lent_t     *lent;
@@ -141,8 +143,9 @@ static int Entity_IsGrenade(lua_State * L)
 	return 1;
 }
 
-// entity.Spawn(void)
-// Spawn a new entity if possible
+// entity.Spawn()
+// Tries to spawn a new entity and returns it. 
+// If no new entity can be spawned nil is returned.
 static int Entity_Spawn(lua_State * L)
 {
 	gentity_t *ent;
@@ -200,84 +203,6 @@ static int Entity_GetClientName(lua_State * L)
 	}
 
 	lua_pushstring(L, lent->e->client->pers.netname);
-
-	return 1;
-}
-
-static int Entity_Print(lua_State * L)
-{
-	lent_t     *lent;
-	int             i;
-	char            buf[MAX_STRING_CHARS];
-	int             n = lua_gettop(L);
-
-	lent = Lua_GetEntity(L, 1);
-
-	if(!lent|| !lent->e) return 1;
-
-	if(!lent->e->client)
-		return luaL_error(L, "\'Print\' must be used with a client entity");
-
-	memset(buf, 0, sizeof(buf));
-
-	lua_getglobal(L, "tostring");
-	for(i = 2; i <= n; i++)
-	{
-		const char     *s;
-
-		lua_pushvalue(L, -1);
-		lua_pushvalue(L, i);
-		lua_call(L, 1, 1);
-		s = lua_tostring(L, -1);
-
-		if(s == NULL)
-			return luaL_error(L, "\'tostring\' must return a string to \'print\'");
-
-		Q_strcat(buf, sizeof(buf), s);
-
-		lua_pop(L, 1);
-	}
-
-	trap_SendServerCommand(lent->e - g_entities, va("print \"%s\n\"", buf));
-
-	return 1;
-}
-
-static int Entity_CenterPrint(lua_State * L)
-{
-	lent_t     *lent;
-	int             i;
-	char            buf[MAX_STRING_CHARS];
-	int             n = lua_gettop(L);
-
-	lent = Lua_GetEntity(L, 1);
-	
-	if(!lent || !lent->e) return 1;
-
-	if(!lent->e->client)
-		return luaL_error(L, "\'CenterPrint\' must be used with a client entity");
-
-	memset(buf, 0, sizeof(buf));
-
-	lua_getglobal(L, "tostring");
-	for(i = 2; i <= n; i++)
-	{
-		const char     *s;
-
-		lua_pushvalue(L, -1);
-		lua_pushvalue(L, i);
-		lua_call(L, 1, 1);
-		s = lua_tostring(L, -1);
-
-		if(s == NULL)
-			return luaL_error(L, "\'tostring\' must return a string to \'print\'");
-
-		Q_strcat(buf, sizeof(buf), s);
-
-		lua_pop(L, 1);
-	}
-
-	trap_SendServerCommand(lent->e - g_entities, va("cp \"" S_COLOR_WHITE "%s\n\"", buf));
 
 	return 1;
 }
@@ -346,24 +271,6 @@ static int Entity_GetTargetName(lua_State * L)
 	return 1;
 }
 
-// entity.Rotate(entity ent, vector dir)
-// Rotates an entity in the specified directions
-static int Entity_Rotate(lua_State * L)
-{
-	lent_t     *lent;
-	vec_t          *vec;
-
-	lent = Lua_GetEntity(L, 1);
-	vec = Lua_GetVector(L, 2);
-
-	lent->e->s.apos.trType = TR_LINEAR;
-	lent->e->s.apos.trDelta[0] = vec[0];
-	lent->e->s.apos.trDelta[1] = vec[1];
-	lent->e->s.apos.trDelta[2] = vec[2];
-
-	return 1;
-}
-
 static int Entity_GC(lua_State * L)
 {
 
@@ -395,8 +302,8 @@ static void ent_delay(gentity_t *ent) {
 	G_CallSpawn(ent);
 }
 
-// entity.DelayedCallSpawn(entity ent, int ms)
-// Calls the entities spawn function delayed
+// entity.DelayedCallSpawn(entity ent, integer delay)
+// Calls the game logic spawn function for the class of ent after a delay 	of delay milliseconds.
 static int Entity_DelayedCallSpawn(lua_State *L) {
 	lent_t *lent;
 	int		delay;
@@ -418,7 +325,7 @@ static int Entity_DelayedCallSpawn(lua_State *L) {
 }
 
 // entity.CallSpawn(entity ent)
-// Calls the entities spawn function
+// Calls the game logic spawn function for the class of ent.
 static int Entity_CallSpawn(lua_State *L) {
 	lent_t *lent;
 	qboolean r = qfalse;
@@ -445,6 +352,8 @@ static int Entity_CallSpawn(lua_State *L) {
 	return 1;
 }
 
+// entity.RemoveUnnamedSpawns()
+// Removes all spawn points from the map, that don't have a targetname.
 extern field_t fields[];
 static int Entity_RemoveUnnamedSpawns(lua_State *L) {
 	gentity_t *ent;
@@ -465,6 +374,8 @@ static int Entity_RemoveUnnamedSpawns(lua_State *L) {
 	return 1;
 }
 
+// entity.RemoveSpawns()
+// Removes all spawn points from the map.
 static int Entity_RemoveSpawns(lua_State *L) {
 	gentity_t *ent;
 	int cnt = 0, i;
@@ -483,6 +394,8 @@ static int Entity_RemoveSpawns(lua_State *L) {
 	return 1;
 }
 
+// entity.RemoveType(string classname)
+// Removes all entities of type classname from the map.
 static int Entity_RemoveType(lua_State *L) {
 	int i, cnt = 0;
 	char *classname;
@@ -527,9 +440,14 @@ static int Entity_Remove(lua_State *L) {
 	return 1;
 }
 
-// entity.SetupTrigger(entity ent, int sizex, int sizey, int sizez)
+// entity.SetupTrigger(entity ent, float x, float y, float z) or 
 // entity.SetupTrigger(entity ent, vector size)
-// Sets up some basic trigger things
+// Does some setup for entities spawned by script that are to be used as trigger.
+// * ent the entity
+// * x length along the X-Axis
+// * y length along the Y-Axis
+// * z length along the Z-axis
+// * Can also be stowed in a vector size
 static int Entity_SetupTrigger(lua_State *L) {
 	lent_t *lent;
 	gentity_t *e;
@@ -588,6 +506,8 @@ static int Entity_GetOrigin(lua_State *L) {
 	return 1;
 }
 
+// ent.Lock(entity ent)
+// Looks the entity ent. Works with anything that can be locked (doors, turbolifts, usables, ...).
 static int Entity_Lock(lua_State *L) {
 	lent_t *lent;
 	gentity_t *ent;
@@ -614,6 +534,8 @@ static int Entity_Lock(lua_State *L) {
 	return 1;
 }
 
+// ent.Unlock(entity ent)
+// Unlooks the entity ent. Works with anything that can be locked (doors, turbolifts, usables, ...).
 static int Entity_Unlock(lua_State *L) {
 	lent_t *lent;
 	gentity_t *ent;
