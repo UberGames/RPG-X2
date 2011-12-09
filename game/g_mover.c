@@ -3337,66 +3337,24 @@ based upon SP-code
 */
 
 /*
-
 Presets
 ent->count state of the door where
-1 = closed
-2 = open
+1 = closing
+2 = closed
+3 = opening
+4 = opened
 
 ent->n00bCount locked indicator
 1 = locked
 2 = unlocked
-
 */
+#define STASIS_DOOR_CLOSING 1
+#define STASIS_DOOR_CLOSED	2
+#define STASIS_DOOR_OPENING 3
+#define STASIS_DOOR_OPENED	4
 
-/*
--------------------------------------------
+void toggle_stasis_door( gentity_t *ent );
 
-close2_stasis_door 
-will finish up the closing at level.time + 1000
-
--------------------------------------------
-*/
-
-void close2_stasis_door( gentity_t *ent )
-{
-
-		// The door is fully closed (and faded) so don't draw the door model anymore
-		ent->s.modelindex2 = 0;
-		ent->flags &= ~EF_NODRAW; // let the bmodel draw
-		ent->flags &= ~SVF_NOCLIENT;
-
-		// Now would be a good time to close the area portal.
-		trap_AdjustAreaPortalState( ent, qfalse );
-		trap_UnlinkEntity(ent);
-		ent->nextthink = -1;
-		return;
-	G_Printf( "^1Entity closed\n", 0 );
-
-}
-/*
--------------------------------------------
-
-close1_stasis_door 
-will begin the closing of the door
-
--------------------------------------------
-*/
-
-void close1_stasis_door( gentity_t *ent )
-{
-
-		// Door isn't there, so make it come back
-		ent->count = 1;//closing
-		ent->flags &= ~SVF_NOCLIENT;
-		ent->r.contents = CONTENTS_SOLID;
-
-		G_AddEvent( ent, EV_GENERAL_SOUND, G_SoundIndex( "sound/movers/doors/stasisdoor.wav" ));
-	
-		ent->think = close2_stasis_door;
-		ent->nextthink = level.time + 1000;
-	G_Printf( "^1Entity closing\n", 0 );
-}
 /*
 -------------------------------------------
 
@@ -3428,68 +3386,13 @@ void block_stasis_door( gentity_t *ent )
 	}
 	else
 	{
-		ent->think = close1_stasis_door;
+		ent->think = toggle_stasis_door;
 		ent->nextthink = level.time + 50;
 	}
 	G_Printf( "^1Entity blockcheck\n", 0 );
 
 }
-/*
--------------------------------------------
 
-open2_stasis_door 
-will finish up the opening at level.time + 1000
-
--------------------------------------------
-*/
-
-void open2_stasis_door( gentity_t *ent )
-{
-
-		ent->flags |= SVF_NOCLIENT;
-		ent->r.contents = 0;
-		ent->flags |= EF_NODRAW;
-		
-		// Now would be a good time to open up the area portal..heh heh.
-		trap_AdjustAreaPortalState( ent, qtrue );
-		trap_LinkEntity(ent);
-
-		if ( ent->wait >= 0 )
-		{
-			ent->think = block_stasis_door ;
-			ent->nextthink = level.time + ( ent->wait * 1000 );
-		}
-		else
-		{
-			return;
-		}
-	G_Printf( "^1Entity open\n", 0 );
-
-}
-/*
--------------------------------------------
-
-open1_stasis_door 
-will begin theopening of the door
-
--------------------------------------------
-*/
-
-void open1_stasis_door( gentity_t *ent )
-{
-		// make it go away
-		ent->count = 2; //opening
-
-		// Now we add the model back in since we need to be able to fade something out...and bmodels can't do that.
-		ent->s.modelindex2 = G_ModelIndex( ent->model2 );
-		ent->s.eFlags |= EF_NODRAW;
-
-		G_AddEvent( ent, EV_GENERAL_SOUND, G_SoundIndex( "sound/movers/doors/stasisdoor.wav" ));
-
-	ent->think = open2_stasis_door;
-	ent->nextthink = level.time + 1000;
-	G_Printf( "^1Entity opening\n", 0 );
-}
 /*
 -------------------------------------------
 
@@ -3501,9 +3404,10 @@ checks if the door is locked and aborts if needed
 
 void locked_stasis_door( gentity_t *ent )
 {
+	return; // do nothing for now
 	if ( ent->n00bCount == 2)
 	{
-		ent->think = open1_stasis_door;
+		ent->think = toggle_stasis_door;
 		ent->nextthink = level.time + 50;
 	}
 	else
@@ -3512,6 +3416,7 @@ void locked_stasis_door( gentity_t *ent )
 	}
 	G_Printf( "^1Entity lockcheck\n", 0 );
 }
+
 /*
 -------------------------------------------
 
@@ -3523,7 +3428,7 @@ locks the door off
 
 void lockup_stasis_door( gentity_t *ent )
 {
-
+	return; // do nothing for now
 	if ( ent->n00bCount == 2 )
 	{
 		ent->n00bCount = 1;
@@ -3543,6 +3448,7 @@ void lockup_stasis_door( gentity_t *ent )
 	}
 	G_Printf( "^1Entity lock-toggle\n", 0 );
 }
+
 /*
 -------------------------------------------
 
@@ -3554,7 +3460,7 @@ will manage the door-toggeling
 
 void toggle_stasis_door( gentity_t *ent )
 {
-
+	ent->nextthink = -1; // prevent thinking again until this think is finished
 	if ( ent->wait >= 0 )
 	{
 		ent->think = locked_stasis_door;
@@ -3562,15 +3468,30 @@ void toggle_stasis_door( gentity_t *ent )
 	}
 	else 
 	{
-		if ( ent->count == 2 ) 
-		{
-			ent->think = block_stasis_door;
-			ent->nextthink = level.time + 50;
-		}
-		else if ( ent->count == 1 ) 
-		{
-			ent->think = locked_stasis_door;
-			ent->nextthink = level.time + 50;
+		ent->think = toggle_stasis_door;
+		switch(ent->count) {
+			case STASIS_DOOR_CLOSED: // then go to opening state
+				G_AddEvent(ent, EV_STASIS_DOOR_OPENING, 0); // send event to client
+				ent->count = STASIS_DOOR_OPENING;
+				ent->nextthink = level.time + 1000;
+				break;
+			case STASIS_DOOR_CLOSING: // then go to closed state
+				G_AddEvent(ent, EV_STASIS_DOOR_CLOSED, 0); // send event to client
+				trap_LinkEntity(ent); // link entity again
+				trap_AdjustAreaPortalState(ent, qfalse); // close AP
+				ent->count = STASIS_DOOR_CLOSED;
+				break;
+			case STASIS_DOOR_OPENED: // then go to closing state
+				G_AddEvent(ent, EV_STASIS_DOOR_CLOSING, 0); // send event to client
+				trap_UnlinkEntity(ent); // unlink entity
+				ent->count = STASIS_DOOR_CLOSING;
+				ent->nextthink = level.time + 1000;
+				break;
+			case STASIS_DOOR_OPENING: // then go to opened state
+				G_AddEvent(ent, EV_STASIS_DOOR_OPEN, 0); // send event to client
+				trap_AdjustAreaPortalState(ent, qtrue); // open AP
+				ent->count = STASIS_DOOR_OPENED;
+				break;
 		}
 	}
 	G_Printf( "^1Entity toggeling\n", 0 );
@@ -3711,6 +3632,12 @@ void SP_func_stasis_door( gentity_t *ent )
 		ent->n00bCount = 1;
 		//show darker model
 	}
+
+	// copy mins and max for client side model
+	VectorCopy(ent->r.maxs, ent->s.origin2);
+	VectorCopy(ent->r.mins, ent->s.angles2);
+	// setup event
+	G_AddEvent(ent, EV_STASIS_DOOR_SETUP, 0);
 
 	trap_LinkEntity (ent);
 

@@ -1764,6 +1764,31 @@ case EV_SHAKE_SOUND:
 		//CG_FireLaser( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles, cent->currentState.angles2, cent->currentState.scale);
 		break;
 
+	case EV_STASIS_DOOR_SETUP:
+		DEBUGNAME("EV_STASIS_DOOR_SETUP");
+		// setup model ....
+		break;
+
+	case EV_STASIS_DOOR_CLOSED:
+		DEBUGNAME("EV_STASIS_DOOR_CLOSED");
+		// set alpha and shader of model
+		break;
+
+	case EV_STASIS_DOOR_CLOSING:
+		DEBUGNAME("EV_STASIS_DOOR_CLOSING");
+		// do alpha fade, play sound
+		break;
+
+	case EV_STASIS_DOOR_OPEN:
+		DEBUGNAME("EV_STASIS_DOOR_OPEN");
+		// make invisible
+		break;
+
+	case EV_STASIS_DOOR_OPENING:
+		DEBUGNAME("EV_STASIS_DOOR_OPENING");
+		// do inverse alpha fade, play sound
+		break;
+
 // Additional ports from SP by Harry Young
 
 	/*case EV_FX_COOKING_STEAM:
