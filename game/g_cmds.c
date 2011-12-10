@@ -3611,6 +3611,7 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 	if ( !Q_stricmp( arg1, "map_restart" ) ) {
 	} else if ( !Q_stricmp( arg1, "map" ) ) {
 	} else if ( !Q_stricmp( arg1, "kick" ) && rpg_allowvote.integer > 0 ) {
+	/* we don't need these do we?
 	} else if ( !Q_stricmp( arg1, "g_gametype" ) && rpg_allowvote.integer > 1 ) {
 	} else if ( !Q_stricmp( arg1, "g_pModAssimilation" ) && rpg_allowvote.integer > 1 ) {
 	} else if ( !Q_stricmp( arg1, "g_pModSpecialties" ) && rpg_allowvote.integer > 1 ) {
@@ -3619,7 +3620,7 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 	} else if ( !Q_stricmp( arg1, "g_pModDisintegration" ) && rpg_allowvote.integer > 1 ) {
 	} else if ( !Q_stricmp( arg1, "capturelimit" ) && rpg_allowvote.integer > 1 ) {
 	} else if ( !Q_stricmp( arg1, "timelimit" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "fraglimit" ) && rpg_allowvote.integer > 1 ) {
+	} else if ( !Q_stricmp( arg1, "fraglimit" ) && rpg_allowvote.integer > 1 ) {*/
 	} else {
 		trap_SendServerCommand( ent-g_entities, "print \"Invalid Vote Command.\n\"" );
 		return;
@@ -3672,6 +3673,12 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 		{
 			Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %s", arg1, arg2 );
 		}
+	}
+	else if ( Q_stricmp( arg1, "map_restart" ) ) 
+	{
+		char	serverInfo[MAX_TOKEN_CHARS];
+		trap_GetServerinfo( serverInfo, sizeof( serverInfo ) );		
+		Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %s", "map", Info_ValueForKey( serverInfo, "mapname" ) );
 	}
 	else
 	{
