@@ -207,6 +207,84 @@ static int Entity_GetClientName(lua_State * L)
 	return 1;
 }
 
+static int Entity_Print(lua_State * L)
+{
+	lent_t     *lent;
+	int             i;
+	char            buf[MAX_STRING_CHARS];
+	int             n = lua_gettop(L);
+
+	lent = Lua_GetEntity(L, 1);
+
+	if(!lent|| !lent->e) return 1;
+
+	if(!lent->e->client)
+		return luaL_error(L, "\'Print\' must be used with a client entity");
+
+	memset(buf, 0, sizeof(buf));
+
+	lua_getglobal(L, "tostring");
+	for(i = 2; i <= n; i++)
+	{
+		const char     *s;
+
+		lua_pushvalue(L, -1);
+		lua_pushvalue(L, i);
+		lua_call(L, 1, 1);
+		s = lua_tostring(L, -1);
+
+		if(s == NULL)
+			return luaL_error(L, "\'tostring\' must return a string to \'print\'");
+
+		Q_strcat(buf, sizeof(buf), s);
+
+		lua_pop(L, 1);
+	}
+
+	trap_SendServerCommand(lent->e - g_entities, va("print \"%s\n\"", buf));
+
+	return 1;
+}
+
+static int Entity_CenterPrint(lua_State * L)
+{
+	lent_t     *lent;
+	int             i;
+	char            buf[MAX_STRING_CHARS];
+	int             n = lua_gettop(L);
+
+	lent = Lua_GetEntity(L, 1);
+
+	if(!lent || !lent->e) return 1;
+
+	if(!lent->e->client)
+		return luaL_error(L, "\'CenterPrint\' must be used with a client entity");
+
+	memset(buf, 0, sizeof(buf));
+
+	lua_getglobal(L, "tostring");
+	for(i = 2; i <= n; i++)
+	{
+		const char     *s;
+
+		lua_pushvalue(L, -1);
+		lua_pushvalue(L, i);
+		lua_call(L, 1, 1);
+		s = lua_tostring(L, -1);
+
+		if(s == NULL)
+			return luaL_error(L, "\'tostring\' must return a string to \'print\'");
+
+		Q_strcat(buf, sizeof(buf), s);
+
+		lua_pop(L, 1);
+	}
+
+	trap_SendServerCommand(lent->e - g_entities, va("cp \"" S_COLOR_WHITE "%s\n\"", buf));
+
+	return 1;
+}
+
 extern qboolean G_ParseField(const char *key, const char *value, gentity_t *ent);
 // entity.SetKeyValue(entity ent, string key, string value)
 // Sets a key of an entity to a value
@@ -267,6 +345,24 @@ static int Entity_GetTargetName(lua_State * L)
 		lua_pushnil(L);
 	else
 		lua_pushstring(L, lent->e->targetname);
+
+	return 1;
+}
+
+// entity.Rotate(entity ent, vector dir)
+// Rotates an entity in the specified directions
+static int Entity_Rotate(lua_State * L)
+{
+	lent_t     *lent;
+	vec_t          *vec;
+
+	lent = Lua_GetEntity(L, 1);
+	vec = Lua_GetVector(L, 2);
+
+	lent->e->s.apos.trType = TR_LINEAR;
+	lent->e->s.apos.trDelta[0] = vec[0];
+	lent->e->s.apos.trDelta[1] = vec[1];
+	lent->e->s.apos.trDelta[2] = vec[2];
 
 	return 1;
 }
@@ -2630,8 +2726,8 @@ static const luaL_Reg Entity_meta[] = {
 	{"GetNumber",					Entity_GetNumber},
 	{"IsClient",					Entity_IsClient},
 	{"GetClientname",				Entity_GetClientName},
-	//{"Print",						Entity_Print}, // why are these deleted?
-	//{"CenterPrint",				Entity_CenterPrint},// why are these deleted?
+	{"Print",						Entity_Print},
+	{"CenterPrint",				Entity_CenterPrint},
 
 	{"GetClassname",				Entity_GetClassName}, // args: none; return: string
 	{"SetClassname",				Entity_SetClassName}, // args: string; return: nothing
@@ -2639,7 +2735,7 @@ static const luaL_Reg Entity_meta[] = {
 	{"GetTargetname",				Entity_GetTargetName}, // args: none; return: string
 	{"SetTargetname",				Entity_SetTargetName}, // args: string; return: nothing
 
-	//{"Rotate",						Entity_Rotate},// why are these deleted?
+	{"Rotate",						Entity_Rotate},
 
 	{"IsRocket",					Entity_IsRocket},
 	{"IsGrenade",					Entity_IsGrenade},
