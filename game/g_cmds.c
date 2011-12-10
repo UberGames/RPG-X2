@@ -3674,7 +3674,7 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 			Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %s", arg1, arg2 );
 		}
 	}
-	else if ( Q_stricmp( arg1, "map_restart" ) ) 
+	else if ( !Q_stricmp( arg1, "map_restart" ) ) 
 	{
 		char	serverInfo[MAX_TOKEN_CHARS];
 		trap_GetServerinfo( serverInfo, sizeof( serverInfo ) );		
