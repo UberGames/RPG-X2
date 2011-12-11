@@ -1458,7 +1458,7 @@ Creates a basic cooking steam effect
 	VectorScale( dir, random() * 5 + 2, dir );
 
 	FX_AddSprite( origin, dir, qfalse, radius, radius * 2, 0.4F, 0.0, 0, 0, 1000, cgs.media.steamShader );
-}*/
+}
 /*
 ======================
 CG_ElectricFire
@@ -1612,7 +1612,7 @@ bool ForgeBoltPulse( FXPrimitive *fx, centity_t *ent )
 }
 
 //-----------------------------
-void CG_ForgeBolt( centity_t *cent )
+/*void CG_ForgeBolt( centity_t *cent )
 {
 	qboolean	pulse;
 	int			effects;
@@ -1799,12 +1799,12 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 {
 	vec3_t	vel, accel, dir, pos, right, up;
 	float	len, time, acceleration, scale, dis, vf;
-
+	int		t;
 	VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, dir );
 	len = VectorNormalize( dir );
 	MakeNormalVectors( dir, right, up );
 
-	for ( int t=0; t < 3; t++ )
+	for ( t=0; t < 3; t++ )
 	{
 		// Create start offset within a circular radius
 		VectorMA( cent->lerpOrigin, 8 * crandom(), right, pos );
@@ -1824,7 +1824,7 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 		// These will spawn at the base and accelerate towards the middle
 		if ( rand() & 1 )
 		{
-			FX_AddSprite( pos, vel, accel, 
+			FX_AddSprite3( pos, vel, accel, 
 						scale, 0.0f, 
 						1.0f, 0.0f, 
 						0.0f, 
@@ -1834,7 +1834,7 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 		}
 		else
 		{
-			FX_AddSprite( pos, vel, accel, 
+			FX_AddSprite3( pos, vel, accel, 
 						scale, 0.0f, 
 						1.0f, 0.0f, 
 						0.0f, 
@@ -1852,7 +1852,7 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 
 		if ( rand() & 1 )
 		{
-			FX_AddSprite( pos, vel, accel, 
+			FX_AddSprite3( pos, vel, accel, 
 						scale, 0.0f, 
 						0.0f, 1.0f, 
 						0.0f, 
@@ -1862,7 +1862,7 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 		}
 		else
 		{
-			FX_AddSprite( pos, vel, accel, 
+			FX_AddSprite3( pos, vel, accel, 
 						scale, 0.0f, 
 						0.0f, 1.0f, 
 						0.0f, 
@@ -1879,7 +1879,7 @@ CG_ExplosionTrail
 -------------------------
 */
 
-/*bool explosionTrailThink( FXPrimitive *fx, centity_t *ent )
+/*qboolean explosionTrailThink( localEntity_t	*fx )
 {
 	localEntity_t	*le=0;
 	vec3_t			direction, origin, new_org, angles, dir;
@@ -1901,7 +1901,7 @@ CG_ExplosionTrail
 		// Maybe something else should be done as well...
 		remove = qtrue;
 		//FIXME: FX_RemoveEffect( fx );
-		return false;
+		return qfalse;
 	}
 
 	scale = 80 * 0.03f;
@@ -1931,7 +1931,7 @@ CG_ExplosionTrail
 	CG_ExplosionEffects( origin, 3.0f, 600 );
 	G_RadiusDamage( origin, ent->gent, 150, 80, NULL, MOD_UNKNOWN );
 
-	return true;
+	return qtrue;
 }
 
 //------------------------------------------------------------------------------
@@ -1940,12 +1940,12 @@ void CG_ExplosionTrail( centity_t *cent )
 	vec3_t			dir;
 	float			len;
 
-	VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, dir );
+	VectorSubtract( cent->currentState.origin2, cent->currentState.origin, dir );
 	len = VectorNormalize( dir );
 	VectorScale( dir, 325, dir );
 
-	FX_AddParticle( cent, cent->lerpOrigin, dir, NULL, 16, 0.0, 1.0, 1.0,
-						0.0, 0.0, 6000, cgs.media.ltblueParticleShader, FXF_NODRAW, explosionTrailThink );
+	FX_AddParticle( cent->currentState.origin, dir, qfalse, 16, 0.0, 1.0, 1.0,
+						0.0, 0.0, 6000, cgs.media.ltblueParticleShader, explosionTrailThink );
 }
 
 /*
@@ -1966,7 +1966,7 @@ A scanning type beam
 	vectoangles( normal, angles );
 	alpha = Vector4to3( cent->gent->startRGBA, rgb );
 
-/*	// Code to make the thing "snap" when it's doing the beam slices
+	// Code to make the thing "snap" when it's doing the beam slices
 	if ( abs( cent->gent->pos2[0] ) >= cent->gent->radius )
 	{
 		// Snap back to start and move to the next slice
@@ -1982,9 +1982,9 @@ A scanning type beam
 
 	// Always move across the slice
 	cent->gent->pos2[0] -= ( cg.frametime * 0.001 * cent->gent->speed );
-*/
 
-	/*if ( cent->gent->spawnflags & 2 )
+
+	if ( cent->gent->spawnflags & 2 )
 	{
 		// Trace a cone
 		angles[2] = cent->gent->angle;
@@ -2029,32 +2029,34 @@ Kind of looks like a teleporter effect
 ----------------------
 */
 
-/*void CG_ShimmeryThing( vec3_t start, vec3_t end, float radius, qboolean taper )
+void CG_ShimmeryThing( vec3_t start, vec3_t end, vec3_t content )
 {
 	vec3_t	normal, angles, base, top, dir;
 	float	len;
+	int		i;
+	int		taper = content[2];
 
 	VectorSubtract( end, start, normal );
 	len = VectorNormalize( normal );
 	vectoangles( normal, angles );
 
-	for ( int i=0; i < 2; i++)
+	for ( i=0; i < 2; i++)
 	{
 		// Spawn the shards of light around a cylinder
 		angles[2] = crandom() * 360;
 		AngleVectors( angles, NULL, dir, NULL );
 
 		// See if the effect should be tapered at the top
-		if ( taper )
+		if ( taper = 2 )
 		{
-			VectorMA( start, radius * 0.25f, dir, top );
+			VectorMA( start, content[1] * 0.25f, dir, top );
 		}
 		else
 		{
-			VectorMA( start, radius, dir, top );
+			VectorMA( start, content[1], dir, top );
 		}
 
-		VectorMA( end, radius, dir, base );
+		VectorMA( end, content[1], dir, base );
 
 		// Use a couple of different kinds to break up the monotony..
 		if ( rand() & 1 )
@@ -2069,36 +2071,19 @@ Kind of looks like a teleporter effect
 }
 
 /*
--------------------------
-CG_ShimmeryThing_Spawner
--------------------------
-*/
-
-/*void CG_Shimmer( vec3_t position, vec3_t dest, vec3_t dir, vec3_t other )
-{
-	CG_ShimmeryThing( position, dest, other[0], (qboolean) other[1] );
-}
-
-void CG_ShimmeryThing_Spawner( vec3_t start, vec3_t end, float radius, qboolean taper, int duration )
-{
-	vec3_t	packed = { radius, (float) taper, 0 };
-
-	FX_AddSpawner( start, end, NULL, packed, 100, 0, duration, (void *) CG_Shimmer, NULL, 512 );
-}
-
-/*
 ----------------------
 CG_Borg_Bolt
 
 Yellow bolts that spark when the endpoints get close together
 ----------------------
 */
+
 /*void CG_Borg_Bolt( centity_t *cent )
 {
 	vec3_t	diff, neworg, start, end;
 	float	len;
 
-	if (!cent->gent->enemy){
+	if (!cent->gent->enemy){ // need sth to trace target
 		return;//we lost him
 	}
 	VectorCopy( cent->gent->enemy->currentOrigin, end );

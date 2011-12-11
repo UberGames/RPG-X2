@@ -1803,12 +1803,11 @@ Creates a shimmering cone or cylinder of colored light that stretches between tw
 
   STARTOFF - Effect turns on when used.
   TAPER - Cylinder tapers toward the top, creating a conical effect
-  NO_AUTO_SHUTOFF - Tells the effect that it should never try to shut itself off.
 
   "radius" - radius of the cylinder or of the base of the cone. (default 10)
   "target" (required) End point for stream.
   "targetname" - fires only when used
-  "wait" - how long to stay on before turning itself off ( default 2 seconds, -1 to disable auto shut off )
+  "wait" - how long in ms to stay on before turning itself off ( default 2 seconds (200 ms), -1 to disable auto shut off )
 
 */
 
@@ -1817,7 +1816,7 @@ void shimmery_thing_think( gentity_t *ent )
 {
 	G_AddEvent( ent, EV_FX_SHIMMERY_THING, 0 );
 	if ( ent->wait >= 0 )
-		ent->nextthink = level.time + ent->wait * 1000;
+		ent->nextthink = level.time + ent->wait;
 	else
 		ent->nextthink = -1;
 }
@@ -1827,7 +1826,7 @@ void shimmery_thing_use( gentity_t *self, gentity_t *other, gentity_t *activator
 {
 	if ( self->count )
 	{
-		self->think = borg_energy_beam_think;
+		self->think = shimmery_thing_think;
 		self->nextthink = level.time + 200;
 	}
 	else
@@ -1862,6 +1861,7 @@ void shimmery_thing_link( gentity_t *ent )
 	}
 
 	ent->count = !(ent->spawnflags & 1);
+	if (ent->spawnflags & 2) ent->s.angles[2] = 2;
 
 	if (!ent->targetname || !(ent->spawnflags & 1) )
 	{
@@ -1883,13 +1883,11 @@ void shimmery_thing_link( gentity_t *ent )
 //------------------------------------------
 void SP_fx_shimmery_thing( gentity_t *ent )
 {
-	G_SpawnFloat( "radius", "10", &ent->distance );
+	G_SpawnFloat( "radius", "10", &ent->s.angles[1] );
 	if ( !ent->wait )
-		ent->wait = 2;
+		ent->wait = 2000;
 
 //	ent->svFlags |= SVF_BROADCAST;
-
-	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 
 	ent->think = shimmery_thing_link;
 	ent->nextthink = level.time + 1000;

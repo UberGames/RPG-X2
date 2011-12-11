@@ -536,6 +536,80 @@ localEntity_t *FX_AddSprite2(vec3_t origin, vec3_t velocity, qboolean gravity, f
 	return(le);
 }
 
+
+/*
+===============
+FX_AddSprite3
+
+Adds a view oriented sprite to the FX wrapper render list
+===============
+*/
+
+localEntity_t *FX_AddSprite3(vec3_t origin, vec3_t velocity, vec3_t acceleration, float scale, float dscale, 
+							float startalpha, float endalpha, float roll, float elasticity, 
+							float killTime, qhandle_t shader)
+{
+	localEntity_t *le;
+
+#ifdef _DEBUG
+	if (!shader)
+	{
+		Com_Printf("FX_AddSprite: NULL shader\n");
+	}
+#endif
+
+	// Glow mark
+
+	le = CG_AllocLocalEntity();
+	le->leType = LE_VIEWSPRITE;
+	le->refEntity.data.sprite.rotation = roll;
+
+	le->startTime = cg.time;
+	le->endTime = le->startTime + killTime;
+
+	le->data.sprite.radius = scale;
+	le->data.sprite.dradius = dscale;
+
+	le->alpha = startalpha;
+	le->dalpha = endalpha - startalpha;
+	VectorSet(le->data.sprite.startRGB, 1, 1, 1);
+	VectorSet(le->data.sprite.dRGB, 0, 0, 0);
+
+//	le->refEntity.hModel = 0;
+	le->refEntity.customShader = shader;
+
+	// set origin
+	VectorCopy ( origin, le->refEntity.origin);
+	VectorCopy ( origin, le->refEntity.oldorigin );
+
+	le->color[0] = 1.0;
+	le->color[1] = 1.0;
+	le->color[2] = 1.0;
+	le->color[3] = startalpha;
+	le->lifeRate = 1.0 / ( le->endTime - le->startTime );
+
+	if (velocity)
+	{
+		le->leFlags |= LEF_MOVE;
+		VectorCopy (origin, le->pos.trBase);
+		VectorCopy (velocity, le->pos.trDelta);
+		if (acceleration) //how do i make this accellerate in the given direction?... lol, bee-fountain on forge3 now ^^
+			le->pos.trType = TR_GRAVITY;
+		else
+			le->pos.trType = TR_LINEAR;
+		le->pos.trTime = cg.time;
+		le->pos.trDuration = killTime;
+
+		if (elasticity > 0)
+		{
+			le->leFlags |= LEF_USE_COLLISION;
+			le->bounceFactor = elasticity;
+		}
+	}
+
+	return(le);
+}
+
 /*
 ===============
 FX_AddBezier

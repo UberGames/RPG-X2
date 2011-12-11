@@ -2042,6 +2042,11 @@ void CG_Drip(centity_t *cent, int killTime );
 void CG_Chunks( vec3_t origin, vec3_t dir, float size, material_type_t type );
 void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, float alpha );
 void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal );
+// Stasis_door-stuff
+// Stasis_door-stuff
+// Stasis_door-stuff
+// Stasis_door-stuff
+// Stasis_door-stuff
 
 //TiM
 void CG_FountainSpurt( vec3_t org, vec3_t end );
@@ -2055,7 +2060,19 @@ void CG_ParticleFire(vec3_t origin, int size);
 void CG_ShowTrigger(centity_t *cent);
 
 // Additional ports from SP by Harry Young
-//void CG_CookingSteam( vec3_t origin, float radius );
+void CG_CookingSteam( vec3_t origin, float radius );
+void CG_ElectricFire( vec3_t origin, vec3_t normal );
+void ForgeBoltFireback( vec3_t start, vec3_t end, vec3_t velocity, vec3_t user );
+void CG_ForgeBolt( centity_t *cent );
+void CG_Plasma( vec3_t start, vec3_t end, vec4_t startRGBA, vec4_t endRGBA );
+void CG_ParticleStream( centity_t *cent );
+void CG_TransporterStream( centity_t *cent );
+void CG_ExplosionTrail( centity_t *cent );
+void CG_BorgEnergyBeam( centity_t *cent );
+void CG_ShimmeryThing( vec3_t start, vec3_t end, vec3_t content );
+void CG_Shimmer( vec3_t position, vec3_t dest, vec3_t dir, vec3_t other );
+void CG_ShimmeryThing_Spawner( vec3_t start, vec3_t end, float radius, qboolean taper, int duration );
+void CG_Borg_Bolt( centity_t *cent );
 
 //
 // cg_weapons.c

@@ -26,6 +26,9 @@ localEntity_t *FX_AddSprite(vec3_t origin, vec3_t velocity, qboolean gravity, fl
 localEntity_t *FX_AddSprite2(vec3_t origin, vec3_t velocity, qboolean gravity, float scale, float dscale, 
 							float startalpha, float endalpha, vec3_t startRGB, vec3_t endRGB, float roll, float elasticity, 
 							float killTime, qhandle_t shader);
+localEntity_t *FX_AddSprite3(vec3_t origin, vec3_t velocity, vec3_t acceleration, float scale, float dscale, 
+							float startalpha, float endalpha, float roll, float elasticity, 
+							float killTime, qhandle_t shader);
 localEntity_t *FX_AddBezier(vec3_t start, vec3_t end, vec3_t cpoint1, vec3_t cpoint2, vec3_t cpointvel1,
 							vec3_t cpointvel2,vec3_t cpointacc1, vec3_t cpointacc2, float width,
 							float killTime, qhandle_t shader);
