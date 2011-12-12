@@ -120,7 +120,7 @@ LUAOBJ = \
   lzio.o
 
 # do cc for shared library
-DO_SOCC = $(CC) $(SOCFLAGS) -Wall -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) -Wall -g3 -o $@ -c $<
 # do cc for lua
 DO_LUACC = $(CC) -O2 -Wall $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
 

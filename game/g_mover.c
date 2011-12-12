@@ -3353,101 +3353,6 @@ ent->n00bCount locked indicator
 #define STASIS_DOOR_OPENING 3
 #define STASIS_DOOR_OPENED	4
 
-void toggle_stasis_door( gentity_t *ent );
-
-/*
--------------------------------------------
-
-block_stasis_door 
-checks if someone is near the door
-
--------------------------------------------
-*/
-
-void block_stasis_door( gentity_t *ent ) 
-{
-	int			ct = 0;
-	int			i;
-	gentity_t	*entity_list[MAX_GENTITIES];
-
-	// Do a quick check to see if someone is close to the door...pos1 is actually the door origin
-	ct = G_RadiusList( ent->pos1, 128, ent, qtrue, entity_list );
-
-	if ( ct )
-	{
-		for ( i = 0; i < ct; i++ )
-		{
-			if ( entity_list[i]->client )
-			{
-				ent->nextthink = level.time + 500; //blocked, check back in .5 secs
-				break;
-			}
-		}
-	}
-	else
-	{
-		ent->think = toggle_stasis_door;
-		ent->nextthink = level.time + 50;
-	}
-	G_Printf( "^1Entity blockcheck\n", 0 );
-
-}
-
-/*
--------------------------------------------
-
-locked_stasis_door 
-checks if the door is locked and aborts if needed
-
--------------------------------------------
-*/
-
-void locked_stasis_door( gentity_t *ent )
-{
-	return; // do nothing for now
-	if ( ent->n00bCount == 2)
-	{
-		ent->think = toggle_stasis_door;
-		ent->nextthink = level.time + 50;
-	}
-	else
-	{
-		return;
-	}
-	G_Printf( "^1Entity lockcheck\n", 0 );
-}
-
-/*
--------------------------------------------
-
-lockup_stasis_door 
-locks the door off
-
--------------------------------------------
-*/
-
-void lockup_stasis_door( gentity_t *ent )
-{
-	return; // do nothing for now
-	if ( ent->n00bCount == 2 )
-	{
-		ent->n00bCount = 1;
-		//show darker model
-		if ( ent->count == 2 ) //close door
-		{
-			ent->think = block_stasis_door;
-			ent->nextthink = level.time + 50;
-		}
-		// posibly message
-	}
-	else if ( ent->n00bCount == 1 )
-	{
-		ent->n00bCount = 2;
-		//show lighter model
-		// posibly message
-	}
-	G_Printf( "^1Entity lock-toggle\n", 0 );
-}
 
 /*
 -------------------------------------------
@@ -3460,41 +3365,41 @@ will manage the door-toggeling
 
 void toggle_stasis_door( gentity_t *ent )
 {
+	gentity_t *parent = ent->parent;
 	ent->nextthink = -1; // prevent thinking again until this think is finished
-	if ( ent->wait >= 0 )
-	{
-		ent->think = locked_stasis_door;
-		ent->nextthink = level.time + 50;
-	}
-	else 
-	{
-		ent->think = toggle_stasis_door;
-		switch(ent->count) {
-			case STASIS_DOOR_CLOSED: // then go to opening state
-				G_AddEvent(ent, EV_STASIS_DOOR_OPENING, 0); // send event to client
-				ent->count = STASIS_DOOR_OPENING;
-				ent->nextthink = level.time + 1000;
-				break;
-			case STASIS_DOOR_CLOSING: // then go to closed state
-				G_AddEvent(ent, EV_STASIS_DOOR_CLOSED, 0); // send event to client
-				trap_LinkEntity(ent); // link entity again
-				trap_AdjustAreaPortalState(ent, qfalse); // close AP
-				ent->count = STASIS_DOOR_CLOSED;
-				break;
-			case STASIS_DOOR_OPENED: // then go to closing state
-				G_AddEvent(ent, EV_STASIS_DOOR_CLOSING, 0); // send event to client
-				trap_UnlinkEntity(ent); // unlink entity
-				ent->count = STASIS_DOOR_CLOSING;
-				ent->nextthink = level.time + 1000;
-				break;
-			case STASIS_DOOR_OPENING: // then go to opened state
-				G_AddEvent(ent, EV_STASIS_DOOR_OPEN, 0); // send event to client
-				trap_AdjustAreaPortalState(ent, qtrue); // open AP
-				ent->count = STASIS_DOOR_OPENED;
-				break;
-		}
-	}
-	G_Printf( "^1Entity toggeling\n", 0 );
+	parent->nextthink = -1;
+	G_Printf(S_COLOR_MAGENTA"toggle_stasis_door\n");
+	parent->r.contents = CONTENTS_NONE;
+	parent->r.svFlags ^= SVF_NOCLIENT;
+	trap_LinkEntity(parent);
+	/*switch(parent->count) {
+		case STASIS_DOOR_CLOSED: // then go to opening state
+			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_CLOSED\n");
+			G_AddEvent(parent, EV_STASIS_DOOR_OPENING, 0); // send event to client
+			parent->count = STASIS_DOOR_OPENING;
+			parent->nextthink = level.time + 1000;
+			break;
+		case STASIS_DOOR_CLOSING: // then go to closed state
+			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_CLOSING\n");
+			G_AddEvent(parent, EV_STASIS_DOOR_CLOSED, 0); // send event to client
+			trap_LinkEntity(parent); // link entity again
+			trap_AdjustAreaPortalState(parent, qfalse); // close AP
+			parent->count = STASIS_DOOR_CLOSED;
+			break;
+		case STASIS_DOOR_OPENED: // then go to closing state
+			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_OPENED\n");
+			G_AddEvent(parent, EV_STASIS_DOOR_CLOSING, 0); // send event to client
+			trap_UnlinkEntity(parent); // unlink entity
+			parent->count = STASIS_DOOR_CLOSING;
+			parent->nextthink = level.time + 1000;
+			break;
+		case STASIS_DOOR_OPENING: // then go to opened state
+			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_OPENING\n");
+			G_AddEvent(parent, EV_STASIS_DOOR_OPEN, 0); // send event to client
+			trap_AdjustAreaPortalState(parent, qtrue); // open AP
+			parent->count = STASIS_DOOR_OPENED;
+			break;
+	}*/
 }
 /*
 -------------------------------------------
@@ -3507,6 +3412,7 @@ will be called when the entity is used
 
 void use_stasis_door(gentity_t *ent, gentity_t *other, gentity_t *activator)
 {
+	return;
 	if(!Q_stricmp(activator->target, ent->targetname))
 	{
 		ent->think = toggle_stasis_door;
@@ -3514,10 +3420,9 @@ void use_stasis_door(gentity_t *ent, gentity_t *other, gentity_t *activator)
 	}
 	else if(!Q_stricmp(activator->target, ent->swapname))
 	{
-		ent->think = locked_stasis_door;
-		ent->nextthink = level.time + 50;
+		//ent->think = locked_stasis_door;
+		ent->nextthink = level.time + 100;
 	}
-	G_Printf( "^1Entity used\n", 0 );
 }
 /*
 -------------------------------------------
@@ -3530,14 +3435,14 @@ triggers the door on touch
 
 void touch_stasis_door( gentity_t *ent, gentity_t *other, trace_t *trace )
 {
+
 	// The door is solid so it's ok to open it, otherwise,
 	//	the door is already open and we don't need to bother with the state change
-	if ( other->parent->count == 1 )
+	if ( other->client && ent->parent->count == STASIS_DOOR_CLOSED )
 	{
 		ent->think = toggle_stasis_door;
 		ent->nextthink	 = level.time + 50;
 	}
-	G_Printf( "^1Entity touched\n", 0 );
 }
 
 /*
@@ -3554,10 +3459,12 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 	vec3_t		mins, maxs;
 	int			i, best;
 
-	if (ent->wait == -1) return;
+	if(!ent) return;
 
-	// prevent me from thinking again
-	ent->nextthink = -1;
+	// set all of the slaves as shootable
+	for ( other = ent ; other ; other = other->teamchain ) {
+		other->takedamage = qtrue;
+	}
 
 	// find the bounds of everything on the team
 	VectorCopy (ent->r.absmin, mins);
@@ -3575,11 +3482,12 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 		}
 	}
 
-		maxs[best] += 128;
-		mins[best] -= 128;
+	maxs[best] += 128;
+	mins[best] -= 128;
 
 	// create a trigger with this size
 	other = G_Spawn ();
+	G_SetOrigin(other, ent->s.origin);
 	VectorCopy (mins, other->r.mins);
 	VectorCopy (maxs, other->r.maxs);
 	other->parent = ent;
@@ -3587,7 +3495,8 @@ void spawn_trigger_stasis_door( gentity_t *ent ) {
 	other->touch = touch_stasis_door;
 
 	trap_LinkEntity (other);
-	G_Printf( "^1Spawnage complete\n", 0 );
+
+	ent->count = STASIS_DOOR_CLOSED;
 }
 
 //-------------------------------------------
@@ -3621,7 +3530,7 @@ void SP_func_stasis_door( gentity_t *ent )
 	ent->nextthink = level.time + 50 * 5; // give the target a chance to spawn in
 
 	ent->use = use_stasis_door;
-	ent->count = 1;
+	ent->count = -1;
 	if (!ent->wait)
 	{
 		ent->wait = 5;
@@ -3640,6 +3549,4 @@ void SP_func_stasis_door( gentity_t *ent )
 	G_AddEvent(ent, EV_STASIS_DOOR_SETUP, 0);
 
 	trap_LinkEntity (ent);
-
-	G_Printf( "^1Spawnage in progress\n", 0 );
 }
