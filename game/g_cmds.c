@@ -3626,7 +3626,7 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 		return;
 	}
 
-	  if ( rpg_allowspmaps.integer != 1 )
+	if ( rpg_allowspmaps.integer != 1 )
 	{
 		if ( !Q_stricmp( arg1, "map" ) &&
 			( !Q_stricmp( arg2, "_brig" )
@@ -3646,15 +3646,21 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 		}
 	}
 
-	//TiM - if we're callvoting to kick an admin, deny it
 	if ( !Q_stricmp( arg1, "kick" ) ) {
-		int id;
+		//TiM - if we're callvoting to kick an admin, deny it
+		int id = ClientNumberFromString( ent, arg2 );
 
-		id = ClientNumberFromString( ent, arg2 );
-		//TiM - only publicly broadcasted admins are checked
+		//Harry Young - Check if clientnum is valid, else we get a crash
+		if ( id == -1 ) {
+			trap_SendServerCommand( ent-g_entities, "print \"Error: no such client.\n\"" );
+			return;
+		}
+
+		//TiM - if we're callvoting to kick an admin, deny it
+		//only publicly broadcasted admins are checked
 		//the hidden admin login people are not to protect their nature
 		if ( g_classData[g_entities[id].client->ps.persistant[PERS_CLASS]].isAdmin ) {
-			trap_SendServerCommand( ent-g_entities, "print \"Error: You are not allowed to kick admins.\"" );
+			trap_SendServerCommand( ent-g_entities, "print \"Error: You are not allowed to kick admins.\n\"" );
 			return;
 		}
 	}
@@ -3667,7 +3673,7 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 		trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof(s) );
 		if (*s)
 		{
-			Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %s; set nextmap \"%s\"", arg1, arg2, s );
+			Com_sprintf( level.voteString, sizeof( level.voteString ), "%s %s; set nextmap \"%s\n\"", arg1, arg2, s );
 		}
 		else
 		{

@@ -1729,7 +1729,7 @@ case EV_SHAKE_SOUND:
 
 	case EV_FX_PARTICLEFIRE:
 		DEBUGNAME("EV_FX_PARTICLEFIRE");
-		CG_ParticleFire(cent->currentState.origin, cent->currentState.eventParm);
+		CG_ParticleFire(cent->currentState.origin, cent->currentState.time2, cent->currentState.eventParm);
 		break;
 
 	case EV_SHOOTER_SOUND:
@@ -1791,60 +1791,60 @@ case EV_SHAKE_SOUND:
 
 // Additional ports from SP by Harry Young
 
-	/*case EV_FX_COOKING_STEAM:
+	case EV_FX_COOKING_STEAM:
 		DEBUGNAME("EV_FX_COOKING_STEAM");
-		CG_CookingSteam( cent->lerpOrigin, cent->currentState.angles[0] );
+		CG_CookingSteam( cent->currentState.origin, cent->currentState.angles[0] );
 		break;
 
-	/*case EV_FX_ELECFIRE:
+	case EV_FX_ELECFIRE:
 		DEBUGNAME("EV_FX_ELECFIRE");
 		// Don't play this sound quite so much...
 		if ( rand() & 1 )
 		{
-			cgi_S_StartSound (NULL, es->number, CHAN_BODY, cgi_S_RegisterSound ( va("sound/ambience/spark%d.wav", Q_irand(1,6)) ));
+			//cgi_S_StartSound (NULL, es->number, CHAN_BODY, cgi_S_RegisterSound ( va("sound/ambience/spark%d.wav", Q_irand(1,6)) ));
 		}
-		CG_ElectricFire( cent->lerpOrigin, cent->currentState.angles );
+		CG_ElectricFire( cent->currentState.origin, cent->currentState.angles );
 		break;
 
 	case EV_FX_FORGE_BOLT:
 		DEBUGNAME("EV_FX_FORGE_BOLT");
-		CG_ForgeBolt( cent );
+		//CG_ForgeBolt( cent );
 		break;
 
 	case EV_FX_PLASMA:
 		DEBUGNAME("EV_FX_PLASMA");
-		CG_Plasma( cent->lerpOrigin, cent->currentState.origin2, cent->gent->startRGBA, cent->gent->finalRGBA );		
+		//CG_Plasma( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles, cent->currentState.angles2 ); // RGBA's	
 		break;
 
 	case EV_FX_STREAM:
 		DEBUGNAME("EV_FX_STREAM");
-		CG_ParticleStream( cent );
+		//CG_ParticleStream( cent );
 		break;
 
 	case EV_FX_TRANSPORTER_STREAM:
 		DEBUGNAME("EV_FX_TRANSPORTER_STREAM");
-		CG_TransporterStream( cent );
+		//CG_TransporterStream( cent );
 		break;
 
 	case EV_FX_EXPLOSION_TRAIL:
 		DEBUGNAME("EV_FX_EXPLOSION_TRAIL");
-		CG_ExplosionTrail( cent );
+		//CG_ExplosionTrail( cent );
 		break;
 
 	case EV_FX_BORG_ENERGY_BEAM:
 		DEBUGNAME("EV_FX_BORG_ENERGY_BEAM");
-		CG_BorgEnergyBeam( cent );
+		//CG_BorgEnergyBeam( cent );
 		break;
 
 	case EV_FX_SHIMMERY_THING:
 		DEBUGNAME("EV_FX_SHIMMERY_THING");
-		CG_ShimmeryThing( cent->lerpOrigin, cent->currentState.origin2, cent->gent->radius, cent->gent->spawnflags & 2 );
+		CG_ShimmeryThing( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles ); // Radius and spawnflags
 		break;
 
 	case EV_FX_BORG_BOLT:
 		DEBUGNAME("EV_FX_BORG_BOLT");
-		CG_Borg_Bolt( cent );
-		break;*/
+		//CG_Borg_Bolt( cent );
+		break;
 
 // Default
 

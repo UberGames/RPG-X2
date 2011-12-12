@@ -1086,9 +1086,9 @@ qboolean ParticleFire_Think(localEntity_t *le) {
 	return qtrue;
 }
 
-void CG_ParticleFire(vec3_t origin, int size) {
+void CG_ParticleFire(vec3_t origin, int killtime, int size) {
 	localEntity_t *le;
-	le = FX_AddSpawner(origin, NULL, NULL, NULL, qfalse, 0, 0, 10000, ParticleFire_Think, 10);
+	le = FX_AddSpawner(origin, NULL, NULL, NULL, qfalse, 0, 0, killtime, ParticleFire_Think, 10);
 	//le->data.spawner.data1 = size;
 }
 
@@ -1328,7 +1328,7 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, flo
 					alpha, 0.0f, 
 					laserRGB, laserRGB, 
 					125, 
-					cgs.media.whiteLaserShader ); /* FIXME: FX_AddLine3 not defined */
+					cgs.media.whiteLaserShader ); 
 
 	FX_AddLine( start, end, 
 					1.0f, 
@@ -1407,7 +1407,7 @@ void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal )
 					random() * 0.2 + 0.2, 0.1f,
 					lRGB, lRGB,
 					150,
-					cgs.media.whiteLaserShader ); /* FIXME: FX_AddLine3 not defined */
+					cgs.media.whiteLaserShader );
 
 	FX_AddLine( start, end, 
 					1.0f, 
@@ -1450,7 +1450,7 @@ CG_CookingSteam
 Creates a basic cooking steam effect
 ======================
 */
-/*void CG_CookingSteam( vec3_t origin, float radius )
+void CG_CookingSteam( vec3_t origin, float radius )
 {
 	vec3_t dir;
 
@@ -1458,7 +1458,8 @@ Creates a basic cooking steam effect
 	VectorScale( dir, random() * 5 + 2, dir );
 
 	FX_AddSprite( origin, dir, qfalse, radius, radius * 2, 0.4F, 0.0, 0, 0, 1000, cgs.media.steamShader );
-}*/
+}
+
 /*
 ======================
 CG_ElectricFire
@@ -1467,23 +1468,23 @@ Creates an electric fire effect
 ======================
 */
 
-/*void CG_ElectricFire( vec3_t origin, vec3_t normal )
+void CG_ElectricFire( vec3_t origin, vec3_t normal )
 {
-	FXTrail	*particle;
+	void	*particle;
 	vec3_t	dir, direction, start, end;
-	vec3_t	velocity, accel;
+	vec3_t	velocity;
 	float	scale, alpha;
-	int		numSparks;
+	int		numSparks, i, j;
 
 	AngleVectors( normal, normal, NULL, NULL);
 
 	numSparks = 4 + (random() * 8.0f);
 	
-	for ( int i = 0; i < numSparks; i++ )
+	for ( i = 0; i < numSparks; i++ )
 	{	
 		scale = 0.3f + (random() *0.4);
 
-		for ( int j = 0; j < 3; j ++ )
+		for ( j = 0; j < 3; j ++ )
 			dir[j] = normal[j] + (0.4f * crandom());
 		
 		VectorNormalize(dir);
@@ -1505,11 +1506,10 @@ Creates an electric fire effect
 	scale = 0.5f + (random() * 0.5f);
 
 	VectorScale( normal, 300, velocity );
-	VectorSet( accel, 0, 0, -600 );
 
 	particle = FX_AddTrail( start,
 							velocity,
-							accel,
+							qtrue,
 							6.0f,
 							-24.0f,
 							scale,
@@ -1518,13 +1518,15 @@ Creates an electric fire effect
 							0.5f,
 							0.0f,
 							200.0f,
-							cgs.media.sparkShader,
-							FXF_BOUNCE );
+							cgs.media.sparkShader);
 
 	if ( particle == NULL )
 		return;
 
-	FXE_Spray( dir, 200, 200, 0.2f, 300, (FXPrimitive *) particle );
+	VectorMA( origin, 1, normal, direction );
+	VectorSet( velocity, 0, 0, 8 );
+
+	FXE_Spray( dir, 200, 200, 0.2f, velocity);
 
 	VectorMA( origin, 1, normal, direction );
 	VectorSet( velocity, 0, 0, 8 );
@@ -1536,7 +1538,7 @@ Creates an electric fire effect
 
 		FX_AddSprite( direction, 
 					velocity, 
-					NULL, 
+					qfalse, 
 					scale,
 					scale,
 					alpha,
@@ -1612,7 +1614,7 @@ bool ForgeBoltPulse( FXPrimitive *fx, centity_t *ent )
 }
 
 //-----------------------------
-void CG_ForgeBolt( centity_t *cent )
+/*void CG_ForgeBolt( centity_t *cent )
 {
 	qboolean	pulse;
 	int			effects;
@@ -1799,12 +1801,12 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 {
 	vec3_t	vel, accel, dir, pos, right, up;
 	float	len, time, acceleration, scale, dis, vf;
-
+	int		t;
 	VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, dir );
 	len = VectorNormalize( dir );
 	MakeNormalVectors( dir, right, up );
 
-	for ( int t=0; t < 3; t++ )
+	for ( t=0; t < 3; t++ )
 	{
 		// Create start offset within a circular radius
 		VectorMA( cent->lerpOrigin, 8 * crandom(), right, pos );
@@ -1824,7 +1826,7 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 		// These will spawn at the base and accelerate towards the middle
 		if ( rand() & 1 )
 		{
-			FX_AddSprite( pos, vel, accel, 
+			FX_AddSprite3( pos, vel, accel, 
 						scale, 0.0f, 
 						1.0f, 0.0f, 
 						0.0f, 
@@ -1834,7 +1836,7 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 		}
 		else
 		{
-			FX_AddSprite( pos, vel, accel, 
+			FX_AddSprite3( pos, vel, accel, 
 						scale, 0.0f, 
 						1.0f, 0.0f, 
 						0.0f, 
@@ -1852,7 +1854,7 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 
 		if ( rand() & 1 )
 		{
-			FX_AddSprite( pos, vel, accel, 
+			FX_AddSprite3( pos, vel, accel, 
 						scale, 0.0f, 
 						0.0f, 1.0f, 
 						0.0f, 
@@ -1862,7 +1864,7 @@ The particles will accelerate up to the half-way point of the cylinder, then dec
 		}
 		else
 		{
-			FX_AddSprite( pos, vel, accel, 
+			FX_AddSprite3( pos, vel, accel, 
 						scale, 0.0f, 
 						0.0f, 1.0f, 
 						0.0f, 
@@ -1879,7 +1881,7 @@ CG_ExplosionTrail
 -------------------------
 */
 
-/*bool explosionTrailThink( FXPrimitive *fx, centity_t *ent )
+/*qboolean explosionTrailThink( localEntity_t	*fx )
 {
 	localEntity_t	*le=0;
 	vec3_t			direction, origin, new_org, angles, dir;
@@ -1901,7 +1903,7 @@ CG_ExplosionTrail
 		// Maybe something else should be done as well...
 		remove = qtrue;
 		//FIXME: FX_RemoveEffect( fx );
-		return false;
+		return qfalse;
 	}
 
 	scale = 80 * 0.03f;
@@ -1931,7 +1933,7 @@ CG_ExplosionTrail
 	CG_ExplosionEffects( origin, 3.0f, 600 );
 	G_RadiusDamage( origin, ent->gent, 150, 80, NULL, MOD_UNKNOWN );
 
-	return true;
+	return qtrue;
 }
 
 //------------------------------------------------------------------------------
@@ -1940,12 +1942,12 @@ void CG_ExplosionTrail( centity_t *cent )
 	vec3_t			dir;
 	float			len;
 
-	VectorSubtract( cent->currentState.origin2, cent->lerpOrigin, dir );
+	VectorSubtract( cent->currentState.origin2, cent->currentState.origin, dir );
 	len = VectorNormalize( dir );
 	VectorScale( dir, 325, dir );
 
-	FX_AddParticle( cent, cent->lerpOrigin, dir, NULL, 16, 0.0, 1.0, 1.0,
-						0.0, 0.0, 6000, cgs.media.ltblueParticleShader, FXF_NODRAW, explosionTrailThink );
+	FX_AddParticle( cent->currentState.origin, dir, qfalse, 16, 0.0, 1.0, 1.0,
+						0.0, 0.0, 6000, cgs.media.ltblueParticleShader, explosionTrailThink );
 }
 
 /*
@@ -1966,7 +1968,7 @@ A scanning type beam
 	vectoangles( normal, angles );
 	alpha = Vector4to3( cent->gent->startRGBA, rgb );
 
-/*	// Code to make the thing "snap" when it's doing the beam slices
+	// Code to make the thing "snap" when it's doing the beam slices
 	if ( abs( cent->gent->pos2[0] ) >= cent->gent->radius )
 	{
 		// Snap back to start and move to the next slice
@@ -1982,9 +1984,9 @@ A scanning type beam
 
 	// Always move across the slice
 	cent->gent->pos2[0] -= ( cg.frametime * 0.001 * cent->gent->speed );
-*/
 
-	/*if ( cent->gent->spawnflags & 2 )
+
+	if ( cent->gent->spawnflags & 2 )
 	{
 		// Trace a cone
 		angles[2] = cent->gent->angle;
@@ -2029,32 +2031,34 @@ Kind of looks like a teleporter effect
 ----------------------
 */
 
-/*void CG_ShimmeryThing( vec3_t start, vec3_t end, float radius, qboolean taper )
+void CG_ShimmeryThing( vec3_t start, vec3_t end, vec3_t content )
 {
 	vec3_t	normal, angles, base, top, dir;
 	float	len;
+	int		i;
+	int		taper = content[2];
 
 	VectorSubtract( end, start, normal );
 	len = VectorNormalize( normal );
 	vectoangles( normal, angles );
 
-	for ( int i=0; i < 2; i++)
+	for ( i=0; i < 2; i++)
 	{
 		// Spawn the shards of light around a cylinder
 		angles[2] = crandom() * 360;
 		AngleVectors( angles, NULL, dir, NULL );
 
 		// See if the effect should be tapered at the top
-		if ( taper )
+		if ( taper = 2 )
 		{
-			VectorMA( start, radius * 0.25f, dir, top );
+			VectorMA( start, content[1] * 0.25f, dir, top );
 		}
 		else
 		{
-			VectorMA( start, radius, dir, top );
+			VectorMA( start, content[1], dir, top );
 		}
 
-		VectorMA( end, radius, dir, base );
+		VectorMA( end, content[1], dir, base );
 
 		// Use a couple of different kinds to break up the monotony..
 		if ( rand() & 1 )
@@ -2069,36 +2073,19 @@ Kind of looks like a teleporter effect
 }
 
 /*
--------------------------
-CG_ShimmeryThing_Spawner
--------------------------
-*/
-
-/*void CG_Shimmer( vec3_t position, vec3_t dest, vec3_t dir, vec3_t other )
-{
-	CG_ShimmeryThing( position, dest, other[0], (qboolean) other[1] );
-}
-
-void CG_ShimmeryThing_Spawner( vec3_t start, vec3_t end, float radius, qboolean taper, int duration )
-{
-	vec3_t	packed = { radius, (float) taper, 0 };
-
-	FX_AddSpawner( start, end, NULL, packed, 100, 0, duration, (void *) CG_Shimmer, NULL, 512 );
-}
-
-/*
 ----------------------
 CG_Borg_Bolt
 
 Yellow bolts that spark when the endpoints get close together
 ----------------------
 */
+
 /*void CG_Borg_Bolt( centity_t *cent )
 {
 	vec3_t	diff, neworg, start, end;
 	float	len;
 
-	if (!cent->gent->enemy){
+	if (!cent->gent->enemy){ // need sth to trace target
 		return;//we lost him
 	}
 	VectorCopy( cent->gent->enemy->currentOrigin, end );
