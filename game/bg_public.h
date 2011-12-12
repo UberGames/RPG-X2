@@ -10,7 +10,11 @@
 
 // because games can change separately from the main system version, we need a
 // second version that must match between game and cgame
+<<<<<<< HEAD
 #define RPGX_VERSION		"2.2 Beta wc12122011a"
+=======
+#define RPGX_VERSION		"2.2 Beta wc121211a"
+>>>>>>> origin/master
 #define RPGX_COMPILEDATE	"20/05/11"
 #define RPGX_COMPILEDBY		"GSIO01"
 //const char	GAME_VERSION[] =	strcat("RPG-X v",RPGX_VERSION);
