@@ -1086,9 +1086,9 @@ qboolean ParticleFire_Think(localEntity_t *le) {
 	return qtrue;
 }
 
-void CG_ParticleFire(vec3_t origin, int size) {
+void CG_ParticleFire(vec3_t origin, int killtime, int size) {
 	localEntity_t *le;
-	le = FX_AddSpawner(origin, NULL, NULL, NULL, qfalse, 0, 0, 10000, ParticleFire_Think, 10);
+	le = FX_AddSpawner(origin, NULL, NULL, NULL, qfalse, 0, 0, killtime, ParticleFire_Think, 10);
 	//le->data.spawner.data1 = size;
 }
 
@@ -1328,7 +1328,7 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, flo
 					alpha, 0.0f, 
 					laserRGB, laserRGB, 
 					125, 
-					cgs.media.whiteLaserShader ); /* FIXME: FX_AddLine3 not defined */
+					cgs.media.whiteLaserShader ); 
 
 	FX_AddLine( start, end, 
 					1.0f, 
@@ -1407,7 +1407,7 @@ void CG_AimLaser( vec3_t start, vec3_t end, vec3_t normal )
 					random() * 0.2 + 0.2, 0.1f,
 					lRGB, lRGB,
 					150,
-					cgs.media.whiteLaserShader ); /* FIXME: FX_AddLine3 not defined */
+					cgs.media.whiteLaserShader );
 
 	FX_AddLine( start, end, 
 					1.0f, 
@@ -1450,7 +1450,7 @@ CG_CookingSteam
 Creates a basic cooking steam effect
 ======================
 */
-/*void CG_CookingSteam( vec3_t origin, float radius )
+void CG_CookingSteam( vec3_t origin, float radius )
 {
 	vec3_t dir;
 
@@ -1459,6 +1459,7 @@ Creates a basic cooking steam effect
 
 	FX_AddSprite( origin, dir, qfalse, radius, radius * 2, 0.4F, 0.0, 0, 0, 1000, cgs.media.steamShader );
 }
+
 /*
 ======================
 CG_ElectricFire
@@ -1467,23 +1468,23 @@ Creates an electric fire effect
 ======================
 */
 
-/*void CG_ElectricFire( vec3_t origin, vec3_t normal )
+void CG_ElectricFire( vec3_t origin, vec3_t normal )
 {
-	FXTrail	*particle;
+	void	*particle;
 	vec3_t	dir, direction, start, end;
-	vec3_t	velocity, accel;
+	vec3_t	velocity;
 	float	scale, alpha;
-	int		numSparks;
+	int		numSparks, i, j;
 
 	AngleVectors( normal, normal, NULL, NULL);
 
 	numSparks = 4 + (random() * 8.0f);
 	
-	for ( int i = 0; i < numSparks; i++ )
+	for ( i = 0; i < numSparks; i++ )
 	{	
 		scale = 0.3f + (random() *0.4);
 
-		for ( int j = 0; j < 3; j ++ )
+		for ( j = 0; j < 3; j ++ )
 			dir[j] = normal[j] + (0.4f * crandom());
 		
 		VectorNormalize(dir);
@@ -1505,11 +1506,10 @@ Creates an electric fire effect
 	scale = 0.5f + (random() * 0.5f);
 
 	VectorScale( normal, 300, velocity );
-	VectorSet( accel, 0, 0, -600 );
 
 	particle = FX_AddTrail( start,
 							velocity,
-							accel,
+							qtrue,
 							6.0f,
 							-24.0f,
 							scale,
@@ -1518,13 +1518,15 @@ Creates an electric fire effect
 							0.5f,
 							0.0f,
 							200.0f,
-							cgs.media.sparkShader,
-							FXF_BOUNCE );
+							cgs.media.sparkShader);
 
 	if ( particle == NULL )
 		return;
 
-	FXE_Spray( dir, 200, 200, 0.2f, 300, (FXPrimitive *) particle );
+	VectorMA( origin, 1, normal, direction );
+	VectorSet( velocity, 0, 0, 8 );
+
+	FXE_Spray( dir, 200, 200, 0.2f, velocity);
 
 	VectorMA( origin, 1, normal, direction );
 	VectorSet( velocity, 0, 0, 8 );
@@ -1536,7 +1538,7 @@ Creates an electric fire effect
 
 		FX_AddSprite( direction, 
 					velocity, 
-					NULL, 
+					qfalse, 
 					scale,
 					scale,
 					alpha,

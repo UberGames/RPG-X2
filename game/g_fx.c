@@ -1018,15 +1018,35 @@ void SP_fx_torpedo(gentity_t *ent) {
 	ent->nextthink = level.time + 1000;
 }
 
-/*QUAKED fx_particle_fire (0 0 1) (-8 -8 -8) (8 8 8) 
+/*QUAKED fx_particle_fire (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 A particle based fire effect. Use this sparingly as it is an fps killer.
 If you want to use a bunch of fires use fx_fire.
 
+"targetname" - toggles effect on/off whenver used, requires 10x mor thinks
 "size"	how big the fire shoud be (default: 10)
 */
 void particleFire_think(gentity_t *ent) {
 	G_AddEvent(ent, EV_FX_PARTICLEFIRE, ent->count);
-	ent->nextthink = level.time + 10000; //refresh every 10 seconds
+	if (ent->targetname)
+	ent->nextthink = level.time + 1000; 
+	else
+	ent->nextthink = level.time + 10000;
+}
+
+void particleFire_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+{
+	if ( self->count )
+	{
+		self->think = NULL;
+		self->nextthink = -1;
+	}
+	else
+	{
+		self->think = particleFire_think;
+		self->nextthink = level.time + 200;
+	}
+	
+	self->count = !self->count;
 }
 
 void SP_fx_particleFire(gentity_t *ent) {
@@ -1036,21 +1056,63 @@ void SP_fx_particleFire(gentity_t *ent) {
 		ent->count = 10;
 	else
 		ent->count = size;
+
+	if (ent->targetname)
+		ent->s.time2 = 1000; 
+	else
+		ent->s.time2 = 10000;
+
 	trap_LinkEntity(ent);
-	ent->nextthink = level.time + 1000;
-	ent->think = particleFire_think;
+	
+	if (ent->targetname)
+	{
+		ent->use = particleFire_use;
+	}
+
+	ent->count = !(ent->spawnflags & 1);
+
+	if (!ent->targetname || !(ent->spawnflags & 1) )
+	{
+		ent->think = particleFire_think;
+		ent->nextthink = level.time + 2000;
+	}
+	else
+	{
+		ent->think = NULL;
+		ent->nextthink = -1;
+	}
 
 }
 
-/*QUAKED fx_fire (0 0 1) (-8 -8 -8) (8 8 8) 
+/*QUAKED fx_fire (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 A fire affect based on the adminguns fire effect.
 
+"targetname" - toggles effect on/off whenver used, requires 10x mor thinks
 "size"	 how big the fire shoud be (default: 64)
 "angles" fires angles (default: 0 0 0 = UP)
 */
 void fire_think(gentity_t *ent) {
 	G_AddEvent(ent, EV_FX_FIRE, 1);
+	if (ent->targetname)
+	ent->nextthink = level.time + 1000; 
+	else
 	ent->nextthink = level.time + 10000;
+}
+
+void fire_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+{
+	if ( self->count )
+	{
+		self->think = NULL;
+		self->nextthink = -1;
+	}
+	else
+	{
+		self->think = fire_think;
+		self->nextthink = level.time + 200;
+	}
+	
+	self->count = !self->count;
 }
 
 void SP_fx_fire(gentity_t *ent) {
@@ -1061,10 +1123,31 @@ void SP_fx_fire(gentity_t *ent) {
 	else
 		ent->s.time = size;
 	ent->s.angles2[2] = 1;
-	ent->s.time2 = 10000;
+
+	if (ent->targetname)
+		ent->s.time2 = 1000; 
+	else
+		ent->s.time2 = 10000;
+
 	trap_LinkEntity(ent);
-	ent->think = fire_think;
-	ent->nextthink = level.time + 1000;
+
+	if (ent->targetname)
+	{
+		ent->use = fire_use;
+	}
+
+	ent->count = !(ent->spawnflags & 1);
+
+	if (!ent->targetname || !(ent->spawnflags & 1) )
+	{
+		ent->think = fire_think;
+		ent->nextthink = level.time + 2000;
+	}
+	else
+	{
+		ent->think = NULL;
+		ent->nextthink = -1;
+	}
 }
 
 // Additional ports from SP by Harry Young
@@ -1130,9 +1213,11 @@ void SP_fx_cooking_steam( gentity_t	*ent )
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 }
 
-/*QUAKED fx_elecfire (0 0 1) (-8 -8 -8) (8 8 8)
+/*QUAKED fx_elecfire (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
 Emits sparks at the specified point in the specified direction
 Spawns smoke puffs.
+
+  "targetname" - toggles effect on/off whenver used
 */
 
 //------------------------------------------
@@ -1143,10 +1228,42 @@ void electric_fire_think( gentity_t *ent )
 }
 
 //------------------------------------------
+void electric_fire_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+{
+	if ( self->count )
+	{
+		self->think = NULL;
+		self->nextthink = -1;
+	}
+	else
+	{
+		self->think = electric_fire_think;
+		self->nextthink = level.time + 200;
+	}
+	
+	self->count = !self->count;
+}
+
+
+//------------------------------------------
 void SP_fx_electricfire( gentity_t	*ent )
 {
-	ent->think = electric_fire_think;
+	if (ent->targetname)
+	{
+		ent->use = electric_fire_use;
+	}
+
+	ent->count = !(ent->spawnflags & 1);
+
+	if (!ent->targetname || !(ent->spawnflags & 1) )
+	{ent->think = electric_fire_think;
 	ent->nextthink = level.time + 500;
+	}
+	else
+	{
+		ent->think = NULL;
+		ent->nextthink = -1;
+	}
 
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 	
@@ -1886,6 +2003,8 @@ void SP_fx_shimmery_thing( gentity_t *ent )
 	G_SpawnFloat( "radius", "10", &ent->s.angles[1] );
 	if ( !ent->wait )
 		ent->wait = 2000;
+	if ( ent->spawnflags & 4 ) // backwards capability for sp, keep -1 in definitions for unity
+		ent->wait = -1;
 
 //	ent->svFlags |= SVF_BROADCAST;
 

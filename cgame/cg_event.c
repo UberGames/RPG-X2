@@ -1729,7 +1729,7 @@ case EV_SHAKE_SOUND:
 
 	case EV_FX_PARTICLEFIRE:
 		DEBUGNAME("EV_FX_PARTICLEFIRE");
-		CG_ParticleFire(cent->currentState.origin, cent->currentState.eventParm);
+		CG_ParticleFire(cent->currentState.origin, cent->currentState.time2, cent->currentState.eventParm);
 		break;
 
 	case EV_SHOOTER_SOUND:
@@ -1793,7 +1793,7 @@ case EV_SHAKE_SOUND:
 
 	case EV_FX_COOKING_STEAM:
 		DEBUGNAME("EV_FX_COOKING_STEAM");
-		//CG_CookingSteam( cent->lerpOrigin, cent->currentState.angles[0] );
+		CG_CookingSteam( cent->currentState.origin, cent->currentState.angles[0] );
 		break;
 
 	case EV_FX_ELECFIRE:
@@ -1803,7 +1803,7 @@ case EV_SHAKE_SOUND:
 		{
 			//cgi_S_StartSound (NULL, es->number, CHAN_BODY, cgi_S_RegisterSound ( va("sound/ambience/spark%d.wav", Q_irand(1,6)) ));
 		}
-		//CG_ElectricFire( cent->lerpOrigin, cent->currentState.angles );
+		CG_ElectricFire( cent->currentState.origin, cent->currentState.angles );
 		break;
 
 	case EV_FX_FORGE_BOLT:
