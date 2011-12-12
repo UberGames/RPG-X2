@@ -1241,13 +1241,11 @@ void CG_SmallSpark( vec3_t origin, vec3_t normal )
 {
 	vec3_t	dir, direction, start, end, velocity;
 	float	scale;
-	float	alpha;
 	int		numSparks;
-	int		j;
-	int		i;
 
 	AngleVectors( normal, normal, NULL, NULL );
 	
+	int j;
 	for ( j = 0; j < 3; j ++ )
 		normal[j] = normal[j] + (0.1f * crandom());
 
@@ -1255,6 +1253,7 @@ void CG_SmallSpark( vec3_t origin, vec3_t normal )
 
 	numSparks = 6 + (random() * 4.0f );
 	
+	int i;
 	for ( i = 0; i < numSparks; i++ )
 	{	
 		scale = 0.1f + (random() *0.2f );
@@ -1279,7 +1278,7 @@ void CG_SmallSpark( vec3_t origin, vec3_t normal )
 	VectorMA( origin, 1, normal, direction );
 
 	scale = 2.0f + (random() * 3.0f );
-	alpha = 0.6f + (random() * 0.4f );
+	float alpha = 0.6f + (random() * 0.4f );
 
 	VectorSet( velocity, crandom() * 2, crandom() * 2, 8 + random() * 4 );
 	VectorMA( velocity, 5, normal, velocity );
@@ -1304,7 +1303,6 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, flo
 			sRGB;
 	float	scale = 1.0f;
 	int		life = 0;
-	int		t;
 
 	// Orient the laser spray
 	VectorSubtract( end, start, dir );
@@ -1349,6 +1347,7 @@ void CG_FireLaser( vec3_t start, vec3_t end, vec3_t normal, vec3_t laserRGB, flo
 					0.0f, 
 					200, 
 					cgs.media.waterDropShader );
+		int t;
 		for ( t=0; t < 2; t ++ )
 		{
 			VectorMA( pos, crandom() * 0.5f, right, work );
@@ -2050,7 +2049,7 @@ void CG_ShimmeryThing( vec3_t start, vec3_t end, vec3_t content )
 		AngleVectors( angles, NULL, dir, NULL );
 
 		// See if the effect should be tapered at the top
-		if ( taper == 2 )
+		if ( taper = 2 )
 		{
 			VectorMA( start, content[1] * 0.25f, dir, top );
 		}

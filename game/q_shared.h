@@ -1167,6 +1167,10 @@ typedef struct entityState_s {
 	int		generic1;
 	int		generic2;
 #endif
+
+#ifdef XTRA
+	int		healthPercent;	// XTRA
+#endif
 } entityState_t;
 
 typedef enum {

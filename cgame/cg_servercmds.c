@@ -637,8 +637,8 @@ void CG_ShaderStateChanged(void) {
 	if(!o) return;
 
 	while (o && *o) {
-		n = (char *)strstr(o, "=");
-		if (n && n[0] && *n) {
+		n = strstr(o, "=");
+		if (n && *n) {
 			strncpy(originalShader, o, n-o);
 			originalShader[n-o] = 0;
 			n++;
