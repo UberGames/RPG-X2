@@ -3463,31 +3463,36 @@ void toggle_stasis_door( gentity_t *ent )
 	ent->nextthink = -1; // prevent thinking again until this think is finished
 	if ( ent->wait >= 0 )
 	{
+		G_Printf(S_COLOR_MAGENTA "toggle_stasis_door: ent->wait >= 0\n");
 		ent->think = locked_stasis_door;
 		ent->nextthink = level.time + 50;
 	}
 	else 
 	{
-		ent->think = toggle_stasis_door;
+		G_Printf(S_COLOR_MAGENTA "toggle_stasis_door: switch(ent->count)\n");
 		switch(ent->count) {
 			case STASIS_DOOR_CLOSED: // then go to opening state
+				G_Printf(S_COLOR_MAGENTA "toggle_stasis_door: STASIS_DOOR_CLOSED\n");
 				G_AddEvent(ent, EV_STASIS_DOOR_OPENING, 0); // send event to client
 				ent->count = STASIS_DOOR_OPENING;
 				ent->nextthink = level.time + 1000;
 				break;
 			case STASIS_DOOR_CLOSING: // then go to closed state
+				G_Printf(S_COLOR_MAGENTA "toggle_stasis_door: STASIS_DOOR_CLOSING\n");
 				G_AddEvent(ent, EV_STASIS_DOOR_CLOSED, 0); // send event to client
 				trap_LinkEntity(ent); // link entity again
 				trap_AdjustAreaPortalState(ent, qfalse); // close AP
 				ent->count = STASIS_DOOR_CLOSED;
 				break;
 			case STASIS_DOOR_OPENED: // then go to closing state
+				G_Printf(S_COLOR_MAGENTA "toggle_stasis_door: STASIS_DOOR_OPENED\n");
 				G_AddEvent(ent, EV_STASIS_DOOR_CLOSING, 0); // send event to client
 				trap_UnlinkEntity(ent); // unlink entity
 				ent->count = STASIS_DOOR_CLOSING;
 				ent->nextthink = level.time + 1000;
 				break;
 			case STASIS_DOOR_OPENING: // then go to opened state
+				G_Printf(S_COLOR_MAGENTA "toggle_stasis_door: STASIS_DOOR_OPENING\n");
 				G_AddEvent(ent, EV_STASIS_DOOR_OPEN, 0); // send event to client
 				trap_AdjustAreaPortalState(ent, qtrue); // open AP
 				ent->count = STASIS_DOOR_OPENED;
