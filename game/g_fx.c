@@ -1524,6 +1524,8 @@ void plasma_link( gentity_t *ent )
 //------------------------------------------
 void SP_fx_plasma( gentity_t *ent )
 {
+	int t;
+
 	if (!ent->startRGBA)
 	{
 		ent->startRGBA[0] = 100;
@@ -1540,7 +1542,6 @@ void SP_fx_plasma( gentity_t *ent )
 	G_SpawnInt( "damage", "0", &ent->damage );
 
 	// Convert from range of 0-255 to 0-1
-	int t;
 	for (t=0; t < 4; t++)
 	{
 		ent->startRGBA[t] = ent->startRGBA[t] / 255;
@@ -1890,6 +1891,8 @@ void borg_energy_beam_link( gentity_t *ent )
 //------------------------------------------
 void SP_fx_borg_energy_beam( gentity_t *ent )
 {
+	int t;
+
 	G_SpawnFloat( "radius", "30", &ent->distance );
 	G_SpawnFloat( "speed", "100", &ent->speed );
 	if (!ent->startRGBA)
@@ -1899,7 +1902,6 @@ void SP_fx_borg_energy_beam( gentity_t *ent )
 	}
 
 	// Convert from range of 0-255 to 0-1
-	int t;
 	for (t=0; t < 4; t++)
 	{
 		ent->startRGBA[t] = ent->startRGBA[t] / 255;

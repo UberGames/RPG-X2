@@ -598,10 +598,10 @@ qboolean G_ParseField( const char *key, const char *value, gentity_t *ent ) {
 				break;
 			case F_VECTOR4:
 				i  = sscanf (value, "%f %f %f %f", &vec4[0], &vec[1], &vec[2], &vec[3]);
-				((float *)(b+f->ofs))[0] = vec[0];
-				((float *)(b+f->ofs))[0] = vec[1];
-				((float *)(b+f->ofs))[0] = vec[2];
-				((float *)(b+f->ofs))[0] = vec[3];
+				((float *)(b+f->ofs))[0] = vec4[0];
+				((float *)(b+f->ofs))[0] = vec4[1];
+				((float *)(b+f->ofs))[0] = vec4[2];
+				((float *)(b+f->ofs))[0] = vec4[3];
 				break;
 			case F_INT:
 				*(int *)(b+f->ofs) = atoi(value);
