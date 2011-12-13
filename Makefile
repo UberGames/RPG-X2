@@ -1,5 +1,6 @@
 # option
-RPGXDIR="/c/Program Files/Raven/Star Trek Voyager Elite Force/RPG-X2"
+RPGXDIRDEFAULT="/c/Program Files/Raven/Star Trek Voyager Elite Force/RPG-X2"
+RPGXDIRYOUNG="/d/games/eliteforce/build-engine/RPG-X2"
 
 # determine arch and platform
 ARCH=$(shell uname -m | sed -e s/i.86/i386/)
@@ -33,8 +34,13 @@ allclean:
 	clean
 	all
 	
-# install shared libs (NOTE: $(RPGXDIR) has to be exported in the shell as variable)
+# install shared libs (NOTE: $(RPGXDIRXXX) has to be exported in the shell as variable)
 install:
-	mv game/qagame$(ARCH).$(EXT) $(RPGXDIR)
-	mv cgame/cgame$(ARCH).$(EXT) $(RPGXDIR)
-	mv ui/ui$(ARCH).$(EXT) $(RPGXDIR)
+	mv game/qagame$(ARCH).$(EXT) $(RPGXDIRDEFAULT)
+	mv cgame/cgame$(ARCH).$(EXT) $(RPGXDIRDEFAULT)
+	mv ui/ui$(ARCH).$(EXT) $(RPGXDIRDEFAULT)
+	
+installyoung:
+	mv game/qagame$(ARCH).$(EXT) $(RPGXDIRYOUNG)
+	mv cgame/cgame$(ARCH).$(EXT) $(RPGXDIRYOUNG)
+	mv ui/ui$(ARCH).$(EXT) $(RPGXDIRYOUNG)
