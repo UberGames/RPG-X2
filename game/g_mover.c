@@ -3368,38 +3368,42 @@ void toggle_stasis_door( gentity_t *ent )
 	gentity_t *parent = ent->parent;
 	ent->nextthink = -1; // prevent thinking again until this think is finished
 	parent->nextthink = -1;
-	G_Printf(S_COLOR_MAGENTA"toggle_stasis_door\n");
-	parent->r.contents = CONTENTS_NONE;
-	parent->r.svFlags ^= SVF_NOCLIENT;
-	trap_LinkEntity(parent);
-	/*switch(parent->count) {
+	switch(parent->count) {
 		case STASIS_DOOR_CLOSED: // then go to opening state
 			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_CLOSED\n");
 			G_AddEvent(parent, EV_STASIS_DOOR_OPENING, 0); // send event to client
+			parent->r.svFlags |= SVF_NOCLIENT;
+			parent->s.eFlags |= EF_NODRAW;
 			parent->count = STASIS_DOOR_OPENING;
 			parent->nextthink = level.time + 1000;
+			trap_LinkEntity(parent);
 			break;
 		case STASIS_DOOR_CLOSING: // then go to closed state
 			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_CLOSING\n");
-			G_AddEvent(parent, EV_STASIS_DOOR_CLOSED, 0); // send event to client
-			trap_LinkEntity(parent); // link entity again
+			G_AddEvent(parent, EV_STASIS_DOOR_CLOSED, 0); // setnd event to client
+			parent->r.contents = CONTENTS_SOLID;
+			parent->r.contents &= ~SVF_NOCLIENT;
+			parent->s.eFlags &= ~EF_NODRAW;
 			trap_AdjustAreaPortalState(parent, qfalse); // close AP
+			trap_LinkEntity(parent);
 			parent->count = STASIS_DOOR_CLOSED;
 			break;
 		case STASIS_DOOR_OPENED: // then go to closing state
 			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_OPENED\n");
 			G_AddEvent(parent, EV_STASIS_DOOR_CLOSING, 0); // send event to client
-			trap_UnlinkEntity(parent); // unlink entity
 			parent->count = STASIS_DOOR_CLOSING;
 			parent->nextthink = level.time + 1000;
 			break;
 		case STASIS_DOOR_OPENING: // then go to opened state
 			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_OPENING\n");
 			G_AddEvent(parent, EV_STASIS_DOOR_OPEN, 0); // send event to client
+			parent->r.contents = CONTENTS_NONE;
 			trap_AdjustAreaPortalState(parent, qtrue); // open AP
+			trap_LinkEntity(parent);
 			parent->count = STASIS_DOOR_OPENED;
+			parent->nextthink = level.time + 3000;
 			break;
-	}*/
+	}
 }
 /*
 -------------------------------------------
@@ -3438,10 +3442,10 @@ void touch_stasis_door( gentity_t *ent, gentity_t *other, trace_t *trace )
 
 	// The door is solid so it's ok to open it, otherwise,
 	//	the door is already open and we don't need to bother with the state change
-	if ( other->client && ent->parent->count == STASIS_DOOR_CLOSED )
+	if (other->client && ent->parent->count == STASIS_DOOR_CLOSED)
 	{
 		ent->think = toggle_stasis_door;
-		ent->nextthink	 = level.time + 50;
+		ent->nextthink	 = level.time + FRAMETIME;
 	}
 }
 
