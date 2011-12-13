@@ -3362,6 +3362,7 @@ will manage the door-toggeling
 
 -------------------------------------------
 */
+void touch_stasis_door( gentity_t *ent, gentity_t *other, trace_t *trace );
 
 void toggle_stasis_door( gentity_t *ent )
 {
@@ -3389,6 +3390,7 @@ void toggle_stasis_door( gentity_t *ent )
 			trap_AdjustAreaPortalState(parent, qfalse); // close AP
 			trap_LinkEntity(parent);
 			parent->count = STASIS_DOOR_CLOSED;
+			ent->touch = touch_stasis_door;
 			break;
 		case STASIS_DOOR_OPENED: // then go to closing state
 			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_OPENED\n");
@@ -3443,11 +3445,13 @@ triggers the door on touch
 
 void touch_stasis_door( gentity_t *ent, gentity_t *other, trace_t *trace )
 {
+	G_Printf("touch_stasis_door\n");
 
 	// The door is solid so it's ok to open it, otherwise,
 	//	the door is already open and we don't need to bother with the state change
-	if (other->client && ent->parent->count == STASIS_DOOR_CLOSED)
+	if (ent->parent->count == STASIS_DOOR_CLOSED)
 	{
+		ent->touch = 0;
 		ent->think = toggle_stasis_door;
 		ent->nextthink	 = level.time + FRAMETIME;
 	}
