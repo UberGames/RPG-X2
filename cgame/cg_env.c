@@ -316,8 +316,8 @@ qboolean BorgBoltFirebackSparks( localEntity_t *le)
 void CG_Bolt( centity_t *cent )
 {
 	localEntity_t *le = NULL;
-	qboolean	bSparks = cent->currentState.eventParm & BOLT_SPARKS;
-	qboolean	bBorg = cent->currentState.eventParm & BOLT_BORG;
+	qboolean	bSparks = (qboolean)(cent->currentState.eventParm & BOLT_SPARKS);
+	qboolean	bBorg = (qboolean)(cent->currentState.eventParm & BOLT_BORG);
 	float		radius = cent->currentState.angles2[0], chaos = cent->currentState.angles2[1];
 	float		delay = cent->currentState.time2 * 1000; // the value given by the designer is in seconds
 	qboolean	bRandom = qfalse;
@@ -2049,7 +2049,7 @@ void CG_ShimmeryThing( vec3_t start, vec3_t end, vec3_t content )
 		AngleVectors( angles, NULL, dir, NULL );
 
 		// See if the effect should be tapered at the top
-		if ( taper = 2 )
+		if ( taper == 2 )
 		{
 			VectorMA( start, content[1] * 0.25f, dir, top );
 		}
@@ -2154,3 +2154,28 @@ Yellow bolts that spark when the endpoints get close together
 	}
 }*/
 
+void CG_StasisDoor(centity_t *cent, qboolean close) {
+	localEntity_t *le;
+
+	memset(&le->refEntity, 0, sizeof(le->refEntity));
+
+	CG_Printf("%f %f %f\n", cent->currentState.origin[0],
+							cent->currentState.origin[1],
+							cent->currentState.origin[2]);
+
+	FX_AddQuad(cent->currentState.origin, NULL, 10, 100, 1, 1, 0, 1000, cgs.media.photonGlow);
+
+	le = CG_AllocLocalEntity();
+	le->leType = LE_STASISDOOR;
+
+	VectorCopy(cent->lerpOrigin, le->refEntity.origin);
+	VectorCopy(cent->lerpOrigin, le->refEntity.oldorigin);
+	AnglesToAxis( cent->lerpAngles, le->refEntity.axis );
+
+	le->refEntity.renderfx = RF_NOSHADOW | RF_FORCE_ENT_ALPHA;
+	le->refEntity.skinNum = 0;
+
+	le->refEntity.hModel = cgs.media.stasisDoorModel;
+
+	trap_R_AddRefEntityToScene(&le->refEntity);
+}

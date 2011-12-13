@@ -1300,6 +1300,15 @@ void CG_AddLocalEntities( void ) {
 		case LE_FRAGMENT:
 			CG_AddFragment(le);
 			break;
+
+		case LE_STASISDOOR:
+			if(le->refEntity.data.cylinder.wrap) {
+				le->refEntity.shaderRGBA[3] = (1 - (le->endTime - cg.time)/1000) * 255;
+			} else {
+				le->refEntity.shaderRGBA[3] = ((le->endTime - cg.time)/1000) * 255;
+			}
+			trap_R_AddRefEntityToScene(&le->refEntity);
+			break;
 		}
 	}
 }

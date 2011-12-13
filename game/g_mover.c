@@ -3370,22 +3370,19 @@ void toggle_stasis_door( gentity_t *ent )
 	ent->nextthink = -1; // prevent thinking again until this think is finished
 	switch(parent->count) {
 		case STASIS_DOOR_CLOSED: // then go to opening state
-			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_CLOSED\n");
 			G_AddEvent(parent, EV_STASIS_DOOR_OPENING, 0); // send event to client
-			parent->r.svFlags |= SVF_NOCLIENT;
+			//parent->r.svFlags |= SVF_NOCLIENT;
 			parent->s.eFlags |= EF_NODRAW;
 			parent->count = STASIS_DOOR_OPENING;
 			ent->nextthink = level.time + 1000;
 			trap_LinkEntity(parent);
 			break;
 		case STASIS_DOOR_CLOSING: // then go to closed state
-			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_CLOSING\n");
-			G_AddEvent(parent, EV_STASIS_DOOR_CLOSED, 0); // setnd event to client
 			trap_SetBrushModel(parent, parent->model);
 			InitMover( parent );
 			VectorCopy( parent->s.origin, parent->s.pos.trBase );
 			VectorCopy( parent->s.origin, parent->r.currentOrigin );
-			parent->r.contents &= ~SVF_NOCLIENT;
+			//parent->r.contents &= ~SVF_NOCLIENT;
 			parent->s.eFlags &= ~EF_NODRAW;
 			trap_AdjustAreaPortalState(parent, qfalse); // close AP
 			trap_LinkEntity(parent);
@@ -3393,7 +3390,6 @@ void toggle_stasis_door( gentity_t *ent )
 			ent->touch = touch_stasis_door;
 			break;
 		case STASIS_DOOR_OPENED: // then go to closing state
-			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_OPENED\n");
 			G_AddEvent(parent, EV_STASIS_DOOR_CLOSING, 0); // send event to client
 			parent->r.contents = CONTENTS_SOLID;
 			parent->count = STASIS_DOOR_CLOSING;
@@ -3401,8 +3397,6 @@ void toggle_stasis_door( gentity_t *ent )
 			trap_LinkEntity(parent);
 			break;
 		case STASIS_DOOR_OPENING: // then go to opened state
-			G_Printf(S_COLOR_MAGENTA"STASIS_DOOR_OPENING\n");
-			G_AddEvent(parent, EV_STASIS_DOOR_OPEN, 0); // send event to client
 			parent->r.contents = CONTENTS_NONE;
 			trap_AdjustAreaPortalState(parent, qtrue); // open AP
 			trap_LinkEntity(parent);
@@ -3445,8 +3439,6 @@ triggers the door on touch
 
 void touch_stasis_door( gentity_t *ent, gentity_t *other, trace_t *trace )
 {
-	G_Printf("touch_stasis_door\n");
-
 	// The door is solid so it's ok to open it, otherwise,
 	//	the door is already open and we don't need to bother with the state change
 	if (ent->parent->count == STASIS_DOOR_CLOSED)
@@ -3557,8 +3549,6 @@ void SP_func_stasis_door( gentity_t *ent )
 	// copy mins and max for client side model
 	VectorCopy(ent->r.maxs, ent->s.origin2);
 	VectorCopy(ent->r.mins, ent->s.angles2);
-	// setup event
-	G_AddEvent(ent, EV_STASIS_DOOR_SETUP, 0);
 
 	trap_LinkEntity (ent);
 }

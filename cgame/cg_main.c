@@ -1156,6 +1156,9 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.medicalScanner = trap_R_RegisterModel( "models/weapons2/tricorder/tricorder_scanner.md3" );
 	cgs.media.hazardHelmet	= trap_R_RegisterModel( "models/boltOns/helmet.md3" );
 
+	//Stasis Door
+	cgs.media.stasisDoorModel = trap_R_RegisterModel( "models/mapobjects/stasis/door.md3" );
+
 	//RPG-X START | GSIO01 | 09/05/2009 | START
 	switch(rpg_forceFieldSet.integer) {
 		case 2:
