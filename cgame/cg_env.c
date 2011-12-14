@@ -2156,12 +2156,8 @@ Yellow bolts that spark when the endpoints get close together
 
 void CG_StasisDoor(centity_t *cent, qboolean close) {
 	localEntity_t *le;
-
-	memset(&le->refEntity, 0, sizeof(le->refEntity));
-
-	CG_Printf("%f %f %f\n", cent->currentState.origin[0],
-							cent->currentState.origin[1],
-							cent->currentState.origin[2]);
+	
+	return;
 
 	FX_AddQuad(cent->currentState.origin, NULL, 10, 100, 1, 1, 0, 1000, cgs.media.photonGlow);
 

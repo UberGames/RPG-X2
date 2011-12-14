@@ -3348,10 +3348,12 @@ ent->n00bCount locked indicator
 1 = locked
 2 = unlocked
 */
-#define STASIS_DOOR_CLOSING 1
-#define STASIS_DOOR_CLOSED	2
-#define STASIS_DOOR_OPENING 3
-#define STASIS_DOOR_OPENED	4
+#define STASIS_DOOR_CLOSING_PHASE1 1
+#define STASIS_DOOR_CLOSING_PHASE2 2
+#define STASIS_DOOR_CLOSED	3
+#define STASIS_DOOR_OPENING_PHASE1 4
+#define STASIS_DOOR_OPENING_PHASE2 5
+#define STASIS_DOOR_OPENED	6
 
 
 /*
@@ -3371,32 +3373,42 @@ void toggle_stasis_door( gentity_t *ent )
 	switch(parent->count) {
 		case STASIS_DOOR_CLOSED: // then go to opening state
 			G_AddEvent(parent, EV_STASIS_DOOR_OPENING, 0); // send event to client
-			//parent->r.svFlags |= SVF_NOCLIENT;
+			parent->count = STASIS_DOOR_OPENING_PHASE1;
+			ent->nextthink = level.time + FRAMETIME;
+			break;
+		case STASIS_DOOR_OPENING_PHASE1:
+			parent->r.svFlags |= SVF_NOCLIENT;
 			parent->s.eFlags |= EF_NODRAW;
-			parent->count = STASIS_DOOR_OPENING;
+			parent->count = STASIS_DOOR_OPENING_PHASE2;
 			ent->nextthink = level.time + 1000;
 			trap_LinkEntity(parent);
 			break;
-		case STASIS_DOOR_CLOSING: // then go to closed state
+		case STASIS_DOOR_CLOSING_PHASE2: // then go to closed state
 			trap_SetBrushModel(parent, parent->model);
 			InitMover( parent );
 			VectorCopy( parent->s.origin, parent->s.pos.trBase );
 			VectorCopy( parent->s.origin, parent->r.currentOrigin );
-			//parent->r.contents &= ~SVF_NOCLIENT;
+			parent->r.contents &= ~SVF_NOCLIENT;
 			parent->s.eFlags &= ~EF_NODRAW;
 			trap_AdjustAreaPortalState(parent, qfalse); // close AP
 			trap_LinkEntity(parent);
 			parent->count = STASIS_DOOR_CLOSED;
 			ent->touch = touch_stasis_door;
 			break;
-		case STASIS_DOOR_OPENED: // then go to closing state
-			G_AddEvent(parent, EV_STASIS_DOOR_CLOSING, 0); // send event to client
+		case STASIS_DOOR_OPENED: // then go to closing 
+			parent->r.contents &= ~SVF_NOCLIENT;
+			trap_LinkEntity(parent);
+			parent->count = STASIS_DOOR_CLOSING_PHASE1;
+			ent->nextthink = level.time + FRAMETIME;
+			break;
+		case STASIS_DOOR_CLOSING_PHASE1:
+			G_AddEvent(ent, EV_STASIS_DOOR_CLOSING, parent-g_entities); // send event to client
 			parent->r.contents = CONTENTS_SOLID;
-			parent->count = STASIS_DOOR_CLOSING;
+			parent->count = STASIS_DOOR_CLOSING_PHASE2;
 			ent->nextthink = level.time + 1000;
 			trap_LinkEntity(parent);
 			break;
-		case STASIS_DOOR_OPENING: // then go to opened state
+		case STASIS_DOOR_OPENING_PHASE2: // then go to opened state
 			parent->r.contents = CONTENTS_NONE;
 			trap_AdjustAreaPortalState(parent, qtrue); // open AP
 			trap_LinkEntity(parent);
