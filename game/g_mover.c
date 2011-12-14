@@ -3378,6 +3378,7 @@ void toggle_stasis_door( gentity_t *ent )
 			break;
 		case STASIS_DOOR_OPENING_PHASE1:
 			parent->r.svFlags |= SVF_NOCLIENT;
+			trap_AdjustAreaPortalState(parent, qtrue); // open AP
 			parent->s.eFlags |= EF_NODRAW;
 			parent->count = STASIS_DOOR_OPENING_PHASE2;
 			ent->nextthink = level.time + 1000;
@@ -3410,7 +3411,6 @@ void toggle_stasis_door( gentity_t *ent )
 			break;
 		case STASIS_DOOR_OPENING_PHASE2: // then go to opened state
 			parent->r.contents = CONTENTS_NONE;
-			trap_AdjustAreaPortalState(parent, qtrue); // open AP
 			trap_LinkEntity(parent);
 			parent->count = STASIS_DOOR_OPENED;
 			ent->nextthink = level.time + 3000;
