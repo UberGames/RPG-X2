@@ -133,7 +133,11 @@ SQLITE= \
   sqlite3.o
 
 # do cc for shared library
+ifeq ($(DEBUG), 1)
+DO_SOCC = $(CC) $(SOCFLAGS) -Wall -g3 $(DEFINES) -o $@ -c $<
+else
 DO_SOCC = $(CC) $(SOCFLAGS) -Wall $(DEFINES) -o $@ -c $<
+endif
 # do cc for lua
 DO_LUACC = $(CC) -O2 -Wall $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
 

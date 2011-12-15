@@ -25,8 +25,8 @@ extern void QDECL G_PrintfClient( gentity_t *ent, const char *fmt, ...);
 G_SqlInit
 ===============
 */
-qboolean G_SqlInit(void) {
-
+qboolean G_Sql_Init(void) {
+	return qfalse;
 }
 
 /*
@@ -34,7 +34,7 @@ qboolean G_SqlInit(void) {
 Do_Mysql_Hash
 ===============
 */
-static const char *Do_Mysql_Hash(const char *str) {
+static const char *Do_Sql_Hash(const char *str) {
 	switch(sql_hash.integer) {
 		default:
 		case 0:
@@ -134,7 +134,7 @@ qboolean Do_Sql_CreateTables(const char *dbName) {
 		G_Printf(S_COLOR_RED "SQLITE ERROR: Was unable to create user table\n");
 		return qfalse;
 	}
-	res = sqlite3_prepare_v2(handle, SQL_CREATERIGHTSTABLE, -1 &stmt, 0);
+	res = sqlite3_prepare_v2(handle, SQL_CREATERIGHTSTABLE, -1, &stmt, 0);
 	if(res) {
 		G_Printf(S_COLOR_RED "SQLITE ERROR: Was uanable to create rights table\n");
 		return qfalse;

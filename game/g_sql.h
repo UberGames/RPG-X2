@@ -1,4 +1,7 @@
 
+#ifndef _G_SQL_H_
+#define _G_SQL_H_
+
 #define MAX_SQL_RESULT	4096
 #define SQL_ENABLE_FOREIGN_KEY_CONTRAINTS "PRAGMA foreign_keys = ON;"
 #define SQL_GET_UID(UNAME) va("SELECT id FROM rpgx_users WHERE username = %s", UNAME)
@@ -49,4 +52,4 @@ typedef enum {
 	SQLF_SHAKE			= 1073741824
 } sql_userflags;
 
-qboolean G_SqlInit(void);
+#endif // _G_SQL_H_

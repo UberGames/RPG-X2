@@ -988,6 +988,7 @@ void QDECL G_PrintfClientAll(const char *fmt, ...);
 //
 // g_sql.c
 //
+qboolean G_Sql_Init(void);
 qboolean G_Sql_CreateTables(const char *dbName);
 void G_Sql_Query(const char *query, const char *dbName, char *res);
 qboolean G_Sql_UserAdd(const char *dbName, const char *uName, const char *password);
