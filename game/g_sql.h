@@ -1,56 +1,53 @@
 
 #define MAX_SQL_RESULT	4096
-#define SQL_GET_UID(UNAME) va("SELECT `id` FROM `rpgxEF_users` WHERE `username` = \'%s\'", UNAME)
-#define SQL_DELETE(TNAME, COND) va("DELETE FROM `%s` WHERE %s", TNAME, COND)
-#define SQL_INSERT(TNAME, L1, L2) va("INSERT INTO `%s` (%s) VALUES (%s)", TNAME, L1, L2)
-#define SQL_INSERT_DELAYED(TNAME, L1, L2) va("INSERT DELAYED INTO `%s` (%s) VALUES (%s)", TNAME, L1, L2)
-#define SQL_UPDATE(TNAME, CHANGE, CONDITION) va("UPDATE `%s` SET %s WHERE %s", TNAME, CHANGE, CONDITION)
-#define SQL_CREATEUSERTABLE "CREATE TABLE `rpgxEF_users` ( \
-							`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY , \
-							`username` LONGTEXT NOT NULL , \
-							`password` LONGTEXT NOT NULL, \
-							`mail` LONGTEXT \
-							) ENGINE = MYISAM"
-#define SQL_CREATERIGHTSTABLE "CREATE TABLE `rpgxEF_rights` ( \
-									`id` INT NOT NULL, \
-									`admin` INT, \
-									`give` INT, \
-									`god` INT, \
-									`noclip` INT, \
-									`cloak` INT, \
-									`evosuit` INT, \
-									`flight` INT, \
-									`forcename` INT, \
-									`forcekill` INT, \
-									`forcekillradius` INT, \
-									`targetkick` INT, \
-									`drag` INT, \
-									`disarm` INT, \
-									`forceRank` INT, \
-									`revive` INT, \
-									`n00b` INT, \
-									`msg` INT, \
-									`msg2` INT, \
-									`forcemodel` INT, \
-									`play` INT, \
-									`stopmusic` INT, \
-									`sound` INT, \
-									`useEnt` INT, \
-									`beam` INT, \
-									`forceplayer` INT, \
-									`fx` INT, \
-									`flushfx` INT, \
-									`spawnchar` INT, \
-									`flushchars` INT, \
-									`kick2` INT, \
-									`clamp` INT, \
-									`lock` INT, \
-									`unlockall` INT, \
-									`ffcolor` INT,  \
-									`alert` INT, \
-									`lockall` INT, \
-									`tess` INT, \
-									`forceclass` INT, \
-									`forcevote` INT, \
-									`shake` INT \
-									) ENGINE = MYISAM"
+#define SQL_GET_UID(UNAME) va("SELECT id FROM rpgxEF_users WHERE username = %s", UNAME)
+#define SQL_DELETE(TNAME, COND) va("DELETE FROM %s WHERE %s", TNAME, COND)
+#define SQL_INSERT(TNAME, L1, L2) va("INSERT INTO %s (%s) VALUES (%s)", TNAME, L1, L2)
+#define SQL_INSERT_DELAYED(TNAME, L1, L2) va("INSERT DELAYED INTO %s (%s) VALUES (%s)", TNAME, L1, L2)
+#define SQL_UPDATE(TNAME, CHANGE, CONDITION) va("UPDATE %s SET %s WHERE %s", TNAME, CHANGE, CONDITION)
+#define SQL_CREATEUSERTABLE "CREATE TABLE rpgxEF_users ( \
+							id INT PRIMARY KEY AUTOINCREMENT, \
+							username TEXT NOT NULL , \
+							password TEXT NOT NULL, \
+							mail TEXT \
+							)"
+
+typedef enum {
+	SQLF_GIVE			= 1,
+	SQLF_GOD			= 2,
+	SQLF_NOCLIP			= 4,
+	SQLF_CLOAK			= 8,
+	SQLF_EVOSUIT		= 16,
+	SQLF_FLIGHT			= 32,
+	SQLF_FORCENAME		= 64,
+	SQLF_FORCEKILL		= 128,
+	SQLF_KICK			= 256,
+	SQLF_DRAG			= 512,
+	SQLF_DISARM			= 1024,
+	SQLF_FORCERANK		= 2048,
+	SQLF_REVIVE			= 4096,
+	SQLF_NOOB			= 8096,
+	SQLF_MESSAGE		= 16384,
+	SQLF_FORCEMODEL		= 32768,
+	SQLF_MUSIC			= 65536,
+	SQLF_SOUND			= 131072,
+	SQLF_USEENT			= 262144,
+	SQLF_BEAM			= 524288,
+	SQLF_FORCEPLAYER	= 1048576,
+	SQLF_FX				= 2097152,
+	SQLF_CHARS			= 4194304,
+	SQLF_CLAMP			= 8388608,
+	SQLF_LOCK			= 16777216,
+	SQLF_FFCOLOR		= 33554432,
+	SQLF_ALERT			= 67108864,
+	SQLF_TESS			= 134217728,
+	SQLF_FORCECLASS		= 268435456,
+	SQLF_FORCEVOTE		= 536870912,
+	SQLF_SHAKE			= 1073741824
+} sql_userflags;
+
+#define SQL_CREATERIGHTSTABLE "CREATE TABLE rpgxEF_rights ( \
+									id INT NOT NULL, \
+									admin BIT NOT NULL, \
+									rights LONG NOT NULL, \
+									)"

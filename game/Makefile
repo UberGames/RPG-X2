@@ -25,6 +25,13 @@ else
 EXT=so
 endif
 
+#defines
+DEFINES=
+
+ifeq ($(SQL), 1)
+DEFINES+=-DSQL
+endif
+
 # game objects
 OBJ = \
   g_ui.o \
@@ -57,6 +64,7 @@ OBJ = \
   g_arenas.o \
   g_active.o \
   g_cinematic.o \
+  g_sql.o \
   bg_slidemove.o \
   bg_pmove.o \
   bg_oums.o \
@@ -76,7 +84,8 @@ OBJ = \
   lua_sound.o \
   lua_weapons.o \
   lua_trace.o \
-  lua_cvar.o
+  lua_cvar.o \
+  sqlite3.o
  
 # game object  for syscalls to the engine
 SOOBJ = \
@@ -118,9 +127,13 @@ LUAOBJ = \
   lundump.o \
   lvm.o \
   lzio.o
+  
+# sqlite
+SQLITE= \
+  sqlite3.o
 
 # do cc for shared library
-DO_SOCC = $(CC) $(SOCFLAGS) -Wall -g3 -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) -Wall $(DEFINES) -o $@ -c $<
 # do cc for lua
 DO_LUACC = $(CC) -O2 -Wall $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
 
@@ -178,6 +191,7 @@ lua_sound.o: lua_sound.c; $(DO_CC)
 lua_weapons.o: lua_weapons.c; $(DO_CC)
 lua_trace.o: lua_trace.c; $(DO_CC)
 lua_cvar.o: lua_cvar.c; $(DO_CC)
+sqlite3.o: sqlite3.c; $(DO_CC)
  
 # game syscalls 
 g_syscalls.o : g_syscalls.c; $(DO_CC)
