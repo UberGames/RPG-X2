@@ -1,16 +1,19 @@
 
 #define MAX_SQL_RESULT	4096
-#define SQL_GET_UID(UNAME) va("SELECT id FROM rpgxEF_users WHERE username = %s", UNAME)
-#define SQL_DELETE(TNAME, COND) va("DELETE FROM %s WHERE %s", TNAME, COND)
-#define SQL_INSERT(TNAME, L1, L2) va("INSERT INTO %s (%s) VALUES (%s)", TNAME, L1, L2)
-#define SQL_INSERT_DELAYED(TNAME, L1, L2) va("INSERT DELAYED INTO %s (%s) VALUES (%s)", TNAME, L1, L2)
-#define SQL_UPDATE(TNAME, CHANGE, CONDITION) va("UPDATE %s SET %s WHERE %s", TNAME, CHANGE, CONDITION)
-#define SQL_CREATEUSERTABLE "CREATE TABLE rpgxEF_users ( \
-							id INT PRIMARY KEY AUTOINCREMENT, \
+#define SQL_ENABLE_FOREIGN_KEY_CONTRAINTS "PRAGMA foreign_keys = ON;"
+#define SQL_GET_UID(UNAME) va("SELECT id FROM rpgx_users WHERE username = %s", UNAME)
+#define SQL_CREATEUSERTABLE "CREATE TABLE rpgx_users ( \
+							id INTEGER PRIMARY KEY AUTOINCREMENT, \
 							username TEXT NOT NULL , \
 							password TEXT NOT NULL, \
 							mail TEXT \
 							)"
+#define SQL_CREATERIGHTSTABLE "CREATE TABLE rpgx_userRights ( \
+									id INT NOT NULL PRIMARY KEY, \
+									admin BIT NOT NULL, \
+									rights LONG NOT NULL, \
+									FOREIGN KEY(id) REFERENCES rpgx_users(id) \
+									)"
 
 typedef enum {
 	SQLF_GIVE			= 1,
@@ -46,8 +49,4 @@ typedef enum {
 	SQLF_SHAKE			= 1073741824
 } sql_userflags;
 
-#define SQL_CREATERIGHTSTABLE "CREATE TABLE rpgxEF_rights ( \
-									id INT NOT NULL, \
-									admin BIT NOT NULL, \
-									rights LONG NOT NULL, \
-									)"
+qboolean G_SqlInit(void);

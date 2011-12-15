@@ -22,6 +22,15 @@ extern void QDECL G_PrintfClient( gentity_t *ent, const char *fmt, ...);
 
 /*
 ===============
+G_SqlInit
+===============
+*/
+qboolean G_SqlInit(void) {
+
+}
+
+/*
+===============
 Do_Mysql_Hash
 ===============
 */
