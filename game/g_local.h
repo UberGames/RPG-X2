@@ -988,15 +988,15 @@ void QDECL G_PrintfClientAll(const char *fmt, ...);
 //
 // g_sql.c
 //
+extern		qboolean sql_ready;
 qboolean	G_Sql_Init(void);
 void		G_Sql_Shutdown(void);
-qboolean G_Sql_CreateTables(const char *dbName);
-void G_Sql_Query(const char *query, const char *dbName, char *res);
-qboolean G_Sql_UserAdd(const char *dbName, const char *uName, const char *password);
-qboolean G_Sql_UserCheckRight(const char *dbName, int uid, const char *right);
-qboolean G_Sql_UserDel(const char *dbName, const char *uName);
-qboolean G_Sql_UserLogin(const char *dbName, const char *uName, const char *pwd, int clientnum);
-qboolean G_Sql_UserMod(const char *dbName, const char *uName, const char *right, int value);
+qboolean	G_Sql_UserDB_CreateTables(const char *dbName);
+qboolean	G_Sql_UserDB_Add(const char *dbName, const char *uName, const char *password);
+qboolean	G_Sql_UserDB_CheckRight(const char *dbName, int uid, int right);
+qboolean	G_Sql_UserDB_Del(const char *dbName, const char *uName);
+qboolean	G_Sql_UserDB_Login(const char *dbName, const char *uName, const char *pwd, int clientnum);
+qboolean	G_Sql_UserDB_Mod(const char *dbName, const char *uName, const char *right, int value);
 
 //RPG-X: J2J - Nice neat struct to hold info for admin tricorder transport..//////
 //TiM: I may be a complete nutter here, but I'm gonna try and mod this to see if we can mosey SP transportery FX in here

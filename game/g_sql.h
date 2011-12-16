@@ -3,7 +3,7 @@
 #define _G_SQL_H_
 
 #define MAX_SQL_RESULT	4096
-#define SQL_ENABLE_FOREIGN_KEY_CONTRAINTS "PRAGMA foreign_keys = ON;"
+#define SQL_ENABLE_FOREIGN_KEY_CONSTRAINTS "PRAGMA foreign_keys = ON;"
 #define SQL_GET_UID(UNAME) va("SELECT id FROM rpgx_users WHERE username = %s", UNAME)
 #define SQL_CREATEUSERTABLE "CREATE TABLE rpgx_users ( \
 							id INTEGER PRIMARY KEY AUTOINCREMENT, \
@@ -17,6 +17,8 @@
 									rights LONG NOT NULL, \
 									FOREIGN KEY(id) REFERENCES rpgx_users(id) \
 									)"
+#define SQL_USER_DELETE(UNAME) va("DELETE FROM rpgx_users WHERE username = %s", UNAME)
+#define SQL_USER_DELTE_RIGHTS(ID) va("DELETE FROM rpgx_userRights WHERE id = %d", ID)
 
 typedef enum {
 	SQLF_GIVE			= 1,
