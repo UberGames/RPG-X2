@@ -119,7 +119,7 @@ G_Sql_UserDB_Del
 */
 qboolean G_Sql_UserDB_Del(const char *uName) {
 	sqlite3_stmt *stmt;
-	int res, cols, i, id = -1;
+	int res, i, id = -1;
 
 	res = sqlite3_prepare_v2(user_db, SQL_USER_GETUID(uName), -1, &stmt, 0);
 	if(res) {
@@ -127,19 +127,16 @@ qboolean G_Sql_UserDB_Del(const char *uName) {
 		return qfalse;
 	}
 
-	cols = sqlite3_column_count(stmt);
-	for(i = 0; i < cols; i++) {
-		res = sqlite3_step(stmt);
-
-		if(res == SQLITE_ROW) {
-			id = sqlite3_column_int(stmt, 0);
-		} else if(res == SQLITE_DONE) {
-			break;
-		} else {
-			G_Printf(S_COLOR_RED "SQL ERROR: An error occured getting results from a row\n");
-			return qfalse;
-		}
-	}
+	res = sqlite3_step(stmt);
+	if(res == SQLITE_ROW) {
+		id = sqlite3_column_int(stmt, 0);
+	} else if(res == SQLITE_DONE) {
+		G_Printf("SQL: User \'%s\' not found\n", uName);
+		return qfalse;
+	} else {
+		G_Printf(S_COLOR_RED "SQL ERROR: An error occured getting results from a row\n");
+		return qfalse;
+	}	
 	sqlite3_free(stmt);
 
 	if(id == -1) {
@@ -179,6 +176,77 @@ G_Sql_UserAdd
 ===============
 */
 qboolean Do_Sql_UserAdd(const char *uName, const char *password) {
+	sqlite3_stmt *stmt;
+	int res, id;
+	char *hashedpw;
+
+	res = sqlite3_prepare_v2(user_db, SQL_USER_GETUID(uName), -1, &stmt, 0);
+	if(res) {
+		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+		return qfalse;
+	}
+
+	res = sqlite3_step(stmt);
+	if(res == SQLITE_ROW) {
+		G_Printf("SQL: There already exists a user with username \'%s\'\n", uName);
+		G_Printf("SQL: If you lost your password please contact an admin with access to the database.\n");
+		sqlite3_free(stmt);
+		return qfalse;
+	}
+	sqlite3_free(stmt);
+
+	res = sqlite3_prepare_v2(user_db, SQL_BEGIN_TRANSACTION, -1, &stmt, 0);
+	if(res) {
+		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+		return qfalse;
+	}
+	sqlite3_free(stmt);
+
+	hashedpw = G_Sql_Md5((const char*)password);
+	res = sqlite3_prepare_v2(user_db, SQL_USER_ADD(uName, hashedpw), -1, &stmt, 0);
+	free(hashedpw);
+	if(res) {
+		G_Printf("SQL ERROR: User add query failed\n");
+		return qfalse;
+	}
+
+	res = sqlite3_prepare_v2(user_db, SQL_USER_GETUID(uName), -1, &stmt, 0);
+	if(res) {
+		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+
+		return qfalse;
+	}
+
+	res = sqlite3_step(stmt);
+	if(res == SQLITE_ROW) {
+		id = sqlite3_column_int(stmt, 0);
+	} else {
+ 		G_Printf("SQL: There already exists a user with username \'%s\'\n", uName);
+		G_Printf("SQL: If you lost your password please contact an admin with access to the database.\n");
+		sqlite3_free(stmt);
+		return qfalse;
+	}
+	sqlite3_free(stmt);
+
+	res = sqlite3_prepare_v2(user_db, SQL_USER_ADD_RIGHTS(id), -1, &stmt, 0);
+	if(res) {
+		G_Printf("SQL ERROR: Add user rights query failed\n");
+		res = sqlite3_prepare_v2(user_db, SQL_ROLLBACK_TRANSACTION, -1, &stmt, 0);
+		if(res) {
+			G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+			return qfalse;
+		}
+		return qfalse;
+	}
+	sqlite3_free(stmt);
+
+	res = sqlite3_prepare_v2(user_db, SQL_COMMIT_TRANSACTION, -1, &stmt, 0);
+	if(res) {
+		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+		return qfalse;
+	}
+	sqlite3_free(stmt);
+
 	return qfalse;
 }
 

@@ -4,12 +4,14 @@
 
 #define MAX_SQL_RESULT	4096
 #define SQL_ENABLE_FOREIGN_KEY_CONSTRAINTS "PRAGMA foreign_keys = ON;"
+#define SQL_BEGIN_TRANSACTION "BEGIN TRANSACTION"
+#define SQL_ROLLBACK_TRANSACTION "ROLLBACK TRANSACTION"
+#define SQL_COMMIT_TRANSACTION "COMMIT TRANSACTION"
 #define SQL_USER_GETUID(UNAME) va("SELECT id FROM rpgx_users WHERE username = %s", UNAME)
 #define SQL_USER_CREATEUSERTABLE "CREATE TABLE IF NOT EXISTS rpgx_users ( \
 							id INTEGER PRIMARY KEY AUTOINCREMENT, \
 							username TEXT NOT NULL , \
-							password TEXT NOT NULL, \
-							mail TEXT \
+							password TEXT NOT NULL \
 							)"
 #define SQL_USER_CREATERIGHTSTABLE "CREATE TABLE IF NOT EXISTS rpgx_userRights ( \
 									id INT NOT NULL PRIMARY KEY, \
@@ -19,6 +21,8 @@
 									)"
 #define SQL_USER_DELETE(UNAME) va("DELETE FROM rpgx_users WHERE username = %s", UNAME)
 #define SQL_USER_DELTE_RIGHTS(ID) va("DELETE FROM rpgx_userRights WHERE id = %d", ID)
+#define SQL_USER_ADD(USERNAME,PASSWORD) va("INSERT INTO rpgx_users VALUES(NULL,%s,%s)", USERNAME, PASSWORD)
+#define SQL_USER_ADD_RIGHTS(ID) va("INSERT INTO rpgx_userRights VALUES(NULL, 0, 0, %d)", ID)
 
 typedef enum {
 	SQLF_GIVE			= 1,
