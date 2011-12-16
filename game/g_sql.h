@@ -4,14 +4,14 @@
 
 #define MAX_SQL_RESULT	4096
 #define SQL_ENABLE_FOREIGN_KEY_CONSTRAINTS "PRAGMA foreign_keys = ON;"
-#define SQL_GET_UID(UNAME) va("SELECT id FROM rpgx_users WHERE username = %s", UNAME)
-#define SQL_CREATEUSERTABLE "CREATE TABLE rpgx_users ( \
+#define SQL_USER_GETUID(UNAME) va("SELECT id FROM rpgx_users WHERE username = %s", UNAME)
+#define SQL_USER_CREATEUSERTABLE "CREATE TABLE IF NOT EXISTS rpgx_users ( \
 							id INTEGER PRIMARY KEY AUTOINCREMENT, \
 							username TEXT NOT NULL , \
 							password TEXT NOT NULL, \
 							mail TEXT \
 							)"
-#define SQL_CREATERIGHTSTABLE "CREATE TABLE rpgx_userRights ( \
+#define SQL_USER_CREATERIGHTSTABLE "CREATE TABLE IF NOT EXISTS rpgx_userRights ( \
 									id INT NOT NULL PRIMARY KEY, \
 									admin BIT NOT NULL, \
 									rights LONG NOT NULL, \

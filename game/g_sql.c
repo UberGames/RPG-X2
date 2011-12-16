@@ -75,6 +75,25 @@ qboolean G_Sql_Init(void) {
 		sql_ready = qfalse;
 		return qfalse;
 	}
+	sqlite3_free(stmt);
+
+	res = sqlite3_prepare_v2(user_db, SQL_USER_CREATEUSERTABLE, -1, &stmt, 0);
+	if(res) {
+		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+		sqlite3_close(user_db);
+		sql_ready = qfalse;
+		return qfalse;
+	}
+	sqlite3_free(stmt);
+
+	res = sqlite3_prepare_v2(user_db, SQL_USER_CREATERIGHTSTABLE, -1, &stmt, 0);
+	if(res) {
+		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+		sqlite3_close(user_db);
+		sql_ready = qfalse;
+		return qfalse;
+	}
+	sqlite3_free(stmt);
 
 	sql_ready = qtrue;
 	return qtrue;
@@ -95,101 +114,14 @@ void G_Sql_Shutdown(void) {
 
 /*
 ===============
-G_Sql_Query
-
-Does a SQL Query and returns it's result (max 4096 chars)
-===============
-*/
-/*
-void Do_Sql_Query(const char *query, const char *dbName, char *res) {
-	char			*query2;
-	sqlite3_stmt	*stmt;
-	sqlite3			*handle;
-	int				res2, cols, i;
-
-	query2 = (char *)malloc(MAX_STRING_CHARS * sizeof(char));
-	if(!query2) {
-		G_Printf(S_COLOR_RED "ERROR: Was unable to allocate %i byte.\n", MAX_STRING_CHARS * sizeof(char) );
-		return;
-	}
-
-	if(!dbName) {
-		res2 = sqlite3_open("/db/rpgx.sqlite3", &handle);
-	} else {
-		res2 = sqlite3_open(va("/db/%s.sqlite3", dbName), &handle);
-	}
-
-	if(res2) {
-		G_Printf(S_COLOR_RED "SQLITE ERROR: Database connection failed\n");
-		return;
-	}
-
-	res2 =  sqlite3_prepare_v2(handle, query, -1, &stmt, 0);
-	if(res2) {
-		G_Printf(S_COLOR_RED "SQLITE ERROR: Query failed\n");
-		return;
-	}
-
-	cols = sqlite3_column_count(stmt);
-	while(1) {
-		res2 = sqlite3_step(stmt);
-		
-		if(res2 == SQLITE_ROW) {
-			const char *val;
-			for(i = 0; i < cols; i++) {
-				val = (const char*)sqlite3_column_text(stmt, i);
-				G_Printf("%s = %s\t", sqlite3_column_name(stmt, i), val);
-			}
-			G_Printf("\n");
-		} else if(res2 == SQLITE_DONE) {
-			G_Printf("Thats all...\n");
-			break;
-		} else {
-			G_Printf(S_COLOR_RED "SQLITE ERROR: An error occured while printing the result\n");
-			break;
-		}
-	}
-
-	sqlite3_close(handle);
-	return;
-}*/
-
-/*
-===============
-G_Sql_UserDB_CreateTables
-===============
-*/
-qboolean G_Sql_UserDB_CreateTables(const char *dbName) {
-	sqlite3_stmt *stmt;
-	int res;
-
-	if(!sql_use.integer || !sql_ready) return qtrue;
-
-	res = sqlite3_prepare_v2(user_db, SQL_CREATEUSERTABLE, -1, &stmt, 0);  
-	if(res) {
-		G_Printf(S_COLOR_RED "SQLITE ERROR: Was unable to create user table\n");
-		return qfalse;
-	}
-	res = sqlite3_prepare_v2(user_db, SQL_CREATERIGHTSTABLE, -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQLITE ERROR: Was uanable to create rights table\n");
-		return qfalse;
-	}
-
-	sqlite3_free(stmt);
-	return qtrue;
-}
-
-/*
-===============
 G_Sql_UserDB_Del
 ===============
 */
-qboolean G_Sql_UserDB_Del(const char *dbName, const char *uName) {
+qboolean G_Sql_UserDB_Del(const char *uName) {
 	sqlite3_stmt *stmt;
 	int res, cols, i, id = -1;
 
-	res = sqlite3_prepare_v2(user_db, SQL_GET_UID(uName), -1, &stmt, 0);
+	res = sqlite3_prepare_v2(user_db, SQL_USER_GETUID(uName), -1, &stmt, 0);
 	if(res) {
 		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
 		return qfalse;
@@ -237,7 +169,7 @@ qboolean G_Sql_UserDB_Del(const char *dbName, const char *uName) {
 G_Sql_UserDB_Mod
 ===============
 */
-qboolean  G_Sql_UserDB_Mod(const char *dbName, const char *uName, const char *right, int value) {
+qboolean  G_Sql_UserDB_Mod(const char *uName, const char *right, int value) {
 	return qfalse;
 }
 
@@ -246,7 +178,7 @@ qboolean  G_Sql_UserDB_Mod(const char *dbName, const char *uName, const char *ri
 G_Sql_UserAdd
 ===============
 */
-qboolean Do_Sql_UserAdd(const char *dbName, const char *uName, const char *password) {
+qboolean Do_Sql_UserAdd(const char *uName, const char *password) {
 	return qfalse;
 }
 
@@ -255,7 +187,7 @@ qboolean Do_Sql_UserAdd(const char *dbName, const char *uName, const char *passw
 G_Sql_UserDB_login
 ===============
 */
-qboolean G_Sql_UserDB_login(const char *dbName, const char *uName, const char *pwd, int clientnum) {
+qboolean G_Sql_UserDB_login(const char *uName, const char *pwd, int clientnum) {
 	return qfalse;
 }
 
@@ -264,7 +196,7 @@ qboolean G_Sql_UserDB_login(const char *dbName, const char *uName, const char *p
 G_Sql_UserDB_CheckRight
 ===============
 */
-qboolean G_Sql_UserDB_CheckRight(const char *dbName, int uid, int right) {
+qboolean G_Sql_UserDB_CheckRight(int uid, int right) {
 	return qfalse;
 }
 
