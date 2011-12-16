@@ -4538,13 +4538,7 @@ void Cmd_UnDrag_f( gentity_t *ent)
 		return;												
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "drag"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	clientNum = ent->client->ps.clientNum;
@@ -4742,13 +4736,7 @@ void Cmd_disarm_f( gentity_t *ent)
 		return;												
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "disarm"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_Argv( 1, arg, sizeof( arg ) );
@@ -5282,13 +5270,7 @@ void Cmd_ForceRank_f( gentity_t *ent)
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "forceRank"))) {
-		if(!IsAdmin(ent))	
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if(!ent || !ent->client)
@@ -5772,13 +5754,7 @@ void Cmd_Revive_f( gentity_t *ent)
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "revive"))) {
-		if(!IsAdmin( ent ) || !rpg_medicsrevive.integer)
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if(!ent || !ent->client)
@@ -5939,13 +5915,7 @@ void Cmd_n00b_f( gentity_t *ent)
 		return;												
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "n00b"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if ( !ent || !ent->client ) {
@@ -6005,13 +5975,7 @@ static void Cmd_admin_message( gentity_t *ent)
 		return;												
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "msg"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if ( !ent || !ent->client ) {
@@ -6072,13 +6036,7 @@ static void Cmd_ForceModel_f( gentity_t *ent ) {
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "forcemodel"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	//get the first arg
@@ -6147,13 +6105,7 @@ static void Cmd_PlayMusic_f( gentity_t *ent )
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "play"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if(!ent || !ent->client)
@@ -6187,13 +6139,7 @@ static void Cmd_StopMusic_f( gentity_t *ent )
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "stopmusic"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if(!ent || !ent->client)
@@ -6218,13 +6164,7 @@ static void Cmd_PlaySound_f( gentity_t *ent )
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "sound"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if(!ent || !ent->client)
@@ -6323,13 +6263,7 @@ static void Cmd_UseEnt_f ( gentity_t *ent ) {
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "useEnt"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_Argv( 1, entArg, sizeof( entArg ) );
@@ -6411,13 +6345,7 @@ void Cmd_EntList_f ( gentity_t *ent ) {
 		return;
 	}
 	#else
-	if(sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "admin")) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	//initialise the data holders
@@ -6674,13 +6602,7 @@ void Cmd_BeamToLoc_f( gentity_t *ent ) {
 		return;
 		}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "beam"))) {
-		if(!IsAdmin(ent))	
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_Argv( 1, argStr, sizeof( argStr ) );
@@ -6851,13 +6773,7 @@ void Cmd_ForcePlayer_f ( gentity_t *ent ) {
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "forceplayer"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	// find the player
@@ -6960,13 +6876,7 @@ void Cmd_BeamToPlayer_f( gentity_t	*ent ) {
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "beam"))) {
-		if(!IsAdmin(ent))	
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_Argv( 1, argStr, sizeof( argStr ) );
@@ -7433,13 +7343,7 @@ void Cmd_fxGun_f ( gentity_t *ent ) {
 	if ( !IsAdmin( ent ) )
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "fx"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_Argv( 1, arg, sizeof( arg ) );
@@ -7672,13 +7576,7 @@ void Cmd_flushFX_f( gentity_t	*ent ) {
 	if ( !IsAdmin( ent ) )
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "flushfx"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_SendServerCommand( -1, "cg_flushFX" );
@@ -7697,13 +7595,7 @@ void Cmd_spawnChar_f( gentity_t	*ent ) {
 	if ( !IsAdmin( ent ) )
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "spawnchar"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if ( !PlaceDecoy(ent) )
@@ -7733,13 +7625,7 @@ void Cmd_fluchChars_f( gentity_t *ent ) //GSIO01: fluch Chars ehhh? you know flu
 	if ( !IsAdmin( ent ) )
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "flushchars"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_Argv( 1, arg, sizeof(arg) );
@@ -7815,13 +7701,7 @@ static void Cmd_Kick2_f( gentity_t *ent ) {
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "kick2"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if(!ent || !ent->client)
@@ -7918,13 +7798,7 @@ static void Cmd_ClampInfo_f( gentity_t* ent ) {
 	if ( !IsAdmin( ent ) )
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "clamp"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if ( !ent->client )
@@ -8280,13 +8154,7 @@ static void Cmd_lockDoor_f(gentity_t *ent) {
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "lock"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_Argv( 1, entArg, sizeof( entArg ) );
@@ -8367,13 +8235,7 @@ static void Cmd_ffColor_f(gentity_t *ent) {
 	if(!IsAdmin(ent))
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "ffcolor"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	trap_Argv(1, arg, sizeof(arg));
@@ -8451,13 +8313,7 @@ static void Cmd_unlockAll_f(gentity_t *ent) {
 	if(!IsAdmin(ent))
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "unlockall"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 	
 	for(i = g_maxclients.integer; i < MAX_GENTITIES ; i++) {
@@ -8505,13 +8361,7 @@ static void Cmd_lockAll_f(gentity_t *ent) {
 	if(!IsAdmin(ent))
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "lockall"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	for(i = g_maxclients.integer; i < MAX_GENTITIES; i++) {
@@ -8576,13 +8426,7 @@ static void Cmd_alert_f(gentity_t *ent) {
 	if(!IsAdmin(ent))
 		return;
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "alert"))) {
-		if(!IsAdmin(ent));
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	alertEnt = G_Find(NULL, FOFS(classname), "target_alert");
@@ -8660,13 +8504,7 @@ static void Cmd_admin_centerprint_f(gentity_t *ent) {
 		return;												
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "msg2"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if ( !ent || !ent->client ) {
@@ -8915,15 +8753,7 @@ static void Cmd_flushTentities_f(gentity_t *ent) {
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "tess"))) {
-		if(!IsAdmin(ent)) {
-			G_PrintfClient(ent, "You're not logged in as admin or/and don't have the needed rights to use TESS.\n");
-			return;
-		}
-	}  else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 		
 	if(!trap_Argc()) {
@@ -8986,13 +8816,7 @@ static void Cmd_spawnTentity_f(gentity_t *ent) {
 		return;
 	}
 	#else
-	if((sql_use.integer && !trap_SQL_UserCheckRight(sql_dbName.string, ent->client->uid, "tess"))) {
-		if(!IsAdmin(ent))
-			return;
-	} else {
-		if(!IsAdmin(ent))
-			return;
-	}
+	// ToDo
 	#endif
 
 	if(!numArgs) {
@@ -9700,7 +9524,7 @@ static void UI_DEBUG(gentity_t *ent) {
 	G_Printf(S_COLOR_GREEN "%s\n", arg);
 }
 
-#ifdef SQL
+#ifdef OLDSQL // SQL
 /*
 =================
 Cmd_SqlLogin_f
@@ -10197,7 +10021,7 @@ void ClientCommand( int clientNum )
 		Cmd_UiHolodeck_f(ent);
 	else if (Q_stricmp(cmd, "ui_debug") == 0)
 		UI_DEBUG(ent);
-	#ifdef SQL
+	#ifdef OLDSQL // SQL
 	else if (Q_stricmp(cmd, "userlogin") == 0)
 		Cmd_SqlLogin_f(ent);
 	else if (Q_stricmp(cmd, "sql_setup") == 0)

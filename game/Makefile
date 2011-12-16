@@ -85,7 +85,8 @@ OBJ = \
   lua_weapons.o \
   lua_trace.o \
   lua_cvar.o \
-  sqlite3.o
+  sqlite3.o \
+  md5.o
  
 # game object  for syscalls to the engine
 SOOBJ = \
@@ -196,6 +197,7 @@ lua_weapons.o: lua_weapons.c; $(DO_CC)
 lua_trace.o: lua_trace.c; $(DO_CC)
 lua_cvar.o: lua_cvar.c; $(DO_CC)
 sqlite3.o: sqlite3.c; $(DO_CC)
+md5.o: md5.c; $(DO_CC)
  
 # game syscalls 
 g_syscalls.o : g_syscalls.c; $(DO_CC)

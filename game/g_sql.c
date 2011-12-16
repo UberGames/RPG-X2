@@ -9,6 +9,7 @@
 //#include "q_shared.h"
 #include "g_sql.h"
 #include "g_local.h"
+#include "md5.h"
 
 extern vmCvar_t sql_dbName;
 extern vmCvar_t sql_use;
@@ -21,6 +22,28 @@ extern void QDECL G_Printf( const char *fmt, ... );
 extern void QDECL G_PrintfClient( gentity_t *ent, const char *fmt, ...);
 
 sqlite3	*user_db;
+
+char *G_Sql_Md5(char *s) {
+	char *res;
+	unsigned char sig[16];
+	struct MD5Context md5c;
+
+	MD5Init(&md5c);
+	MD5Update(&md5c, s, strlen(s));
+	MD5Final(sig, &md5c);
+
+	res = (char *)malloc(sizeof(char)*MAX_QPATH);
+	if(!res) {
+		G_Printf(S_COLOR_RED "SQL ERROR: was unable to allocate %u byte\n", sizeof(char)*(strlen(s)+1));
+		return NULL;
+	}
+
+	sprintf(res, "%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+					sig[0], sig[1], sig[2], sig[3], sig[4], sig[5], sig[6], sig[7],
+					sig[8], sig[9], sig[10], sig[11], sig[12], sig[13], sig[14], sig[15] );
+	
+	return res;
+}
 
 /*
 ===============
