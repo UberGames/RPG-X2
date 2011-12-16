@@ -20,30 +20,37 @@ extern vmCvar_t sql_port;
 extern void QDECL G_Printf( const char *fmt, ... );
 extern void QDECL G_PrintfClient( gentity_t *ent, const char *fmt, ...);
 
+sqlite3	*user_db;
+
 /*
 ===============
 G_SqlInit
 ===============
 */
 qboolean G_Sql_Init(void) {
-	return qfalse;
+	int res;
+
+	if(!sql_use.integer) return qtrue;
+
+	res = sqlite3_open("db/users.db", &user_db);
+	if(res) {
+		G_Printf(S_COLOR_RED "SQL ERROR: Could not open user database\n");
+		return qfalse;
+	}
+
+	return qtrue;
 }
 
 /*
 ===============
-Do_Mysql_Hash
+G_Sql_Shutdown
 ===============
 */
-static const char *Do_Sql_Hash(const char *str) {
-	switch(sql_hash.integer) {
-		default:
-		case 0:
-			return va("MD5(\'%s\')", str);
-		case 1:
-			return va("SHA1(\'%s)\'", str);
-		case 2:
-			return va("SHA512(\'%s\')", str);
-	}
+void G_Sql_Shutdown(void) {
+
+	if(!sql_use.integer) return;
+
+	sqlite3_close(user_db);
 }
 
 /*

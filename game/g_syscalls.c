@@ -725,29 +725,3 @@ int trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *parent
 	return syscall( BOTLIB_AI_GENETIC_PARENTS_AND_CHILD_SELECTION, numranks, ranks, parent1, parent2, child );
 }
 
-#ifdef SQL
-int	trap_SQL_UserCheckRight(const char *dbName, int uid, const char *right) {
-	return syscall( SQL_USERCHECKRIGHT, dbName, uid, right );
-}
-
-int trap_SQL_UserLogin(const char *dbName, const char *uName, const char *pwd) {
-	return syscall( SQL_USERLOGIN, dbName, uName, pwd);
-}
-
-
-int	trap_SQL_CreateTables(const char *dbName) {
-	return syscall( SQL_CREATETABLES, dbName );
-}
-
-int	trap_SQL_UserAdd(const char *dbName, const char *uName, const char *password) {
-	return syscall( SQL_USERADD, dbName, uName, password );
-}
-
-int	trap_SQL_UserMod(const char *dbName, const char *uName, const char *right, int value) {
-	return syscall( SQL_USERMOD, dbName, uName, right, value );
-}
-
-int	trap_SQL_UserDel(const char *dbName, const char *uName) {
-	return syscall( SQL_USERDEL, dbName, uName );
-}
-#endif
