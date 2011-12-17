@@ -2080,38 +2080,41 @@ Yellow bolts that spark when the endpoints get close together
 ----------------------
 */
 
-/*void CG_Borg_Bolt( centity_t *cent )
+void CG_Borg_Bolt_static( centity_t *cent )
 {
-	vec3_t	diff, neworg, start, end;
+	vec3_t	diff;
 	float	len;
 
-	if (!cent->gent->enemy){ // need sth to trace target
-		return;//we lost him
-	}
-	VectorCopy( cent->gent->enemy->currentOrigin, end );
-	
-	if ( cent->gent->target2 )
-	{
-		VectorCopy( cent->gent->chain->currentOrigin, start );
-	}
-	else
-	{
-		VectorCopy( cent->lerpOrigin, start );
-	}
+	// Get the midpoint of the seg
+	VectorSubtract( cent->currentState.origin2, cent->currentState.origin, diff );
+	len = VectorNormalize( diff );
+
+	// Use this to scale down the width of the bolts.  Otherwise, they will look pretty fairly nasty when they
+	//	get too short.
+	len = len / 32;
+
+	FX_AddElectricity( cent->currentState.origin, cent->currentState.origin2, 1.0, len, 5.0, 1.0, 0.0, 200, cgs.media.phaserShader, 0 );
+}
+
+void CG_Borg_Bolt_dynamic( centity_t *cent )
+{
+	vec3_t	diff, neworg;
+	float	len;
+
 
 	// Get the midpoint of the seg
-	VectorSubtract( end, start, diff );
+	VectorSubtract( cent->currentState.origin2, cent->currentState.origin, diff );
 	len = VectorNormalize( diff );
-	VectorMA( start, len * 0.5, diff, neworg );
+	VectorMA( cent->currentState.origin, len * 0.5, diff, neworg );
 
 	// If the length is pretty short, then spawn a glow spark
 	if ( len > 0 && len < 12 )
 	{
-		int		ct;
-		vec3_t	angles, dir;
-		FXTrail	*particle;
+		int		ct, t;
+		vec3_t	angles, dir, vel;
+		localEntity_t	*particle;
 
-		FX_AddSprite( neworg, NULL, NULL, random() * (128 / len) + 12, 16.0, 0.6f, 0.0, 0.0, 0.0, 300, 
+		FX_AddSprite( neworg, NULL, qfalse, random() * (128 / len) + 12, 16.0, 0.6f, 0.0, 0.0, 0.0, 50, 
 					cgs.media.yellowParticleShader );
 
 		vectoangles( dir, angles );
@@ -2119,26 +2122,27 @@ Yellow bolts that spark when the endpoints get close together
 		ct = 12 - len;
 
 		// fun sparks
-		for ( int t=0; t < ct; t++ )
+		for ( t=0; t < ct; t++ )
 		{
 			angles[1] = random() * 360;
 			AngleVectors( angles, dir, NULL, NULL );
 			dir[2] = random() * 0.3f;
+			VectorScale( dir, 300, vel );
 
-			particle = FX_AddTrail( neworg, NULL, NULL, 8.0f + random() * 6, -16.0f, 1, -1,
-							1.0f, 0.0f, 0.25f, 700.0f, cgs.media.yellowParticleShader );
+			particle = FX_AddTrail( neworg, NULL, qfalse, 8.0f + random() * 6, -16.0f, 1, -1,
+							1.0f, 0.0f, 0.25f, 50, cgs.media.yellowParticleShader );
 
 			if ( particle == NULL )
 				return;
 
-			FXE_Spray( dir, 100, 150, 0.5f, 300 + (rand() & 300), (FXPrimitive *) particle );
+			FXE_Spray( dir, 100, 150, 0.5f, vel );
 		}
 
 		// If it's really short, spark and make a noise.  Tried this without the if (len>0... and it was way
 		//	too obnoxious
 		if ( len <= 5 )
 		{
-			cgi_S_StartSound( neworg, 0, 0, cgi_S_RegisterSound( "sound/enemies/borg/borgtaser.wav") );
+			trap_S_StartSound( neworg, 0, 0, trap_S_RegisterSound( "sound/enemies/borg/borgtaser.wav") );
 		}
 	}
 
@@ -2146,13 +2150,16 @@ Yellow bolts that spark when the endpoints get close together
 	//	get too short.
 	len = len / 32;
 
-	FX_AddElectricity( start, end, 1.0, len, 5.0, 1.0, 0.0, 200, cgs.media.yellowBoltShader );
+	FX_AddElectricity( cent->currentState.origin, cent->currentState.origin2, 1.0, len, 5.0, 1.0, 0.0, 50, cgs.media.phaserShader, 0 );
+}
 
-	if ( rand() & 1 )
-	{
-		FX_AddElectricity( end, start, 1.0, len, 5.0, 1.0, 0.0, 200, cgs.media.yellowBoltShader );
-	}
-}*/
+/*
+----------------------
+CG_StasisDoor
+
+Does Fade-Effect for func_stasis_door
+----------------------
+*/
 
 void CG_StasisDoor(centity_t *cent, qboolean close) {
 	localEntity_t *le;

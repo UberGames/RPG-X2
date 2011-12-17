@@ -1832,7 +1832,10 @@ case EV_SHAKE_SOUND:
 
 	case EV_FX_BORG_BOLT:
 		DEBUGNAME("EV_FX_BORG_BOLT");
-		//CG_Borg_Bolt( cent );
+		if ( cent->currentState.eventParm != 2 ) //we don't want the extra stuff?
+			CG_Borg_Bolt_dynamic( cent );
+		else
+			CG_Borg_Bolt_static( cent );
 		break;
 
 // Default

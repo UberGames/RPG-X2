@@ -2014,21 +2014,32 @@ void SP_fx_shimmery_thing( gentity_t *ent )
 	trap_LinkEntity( ent );
 }
 
-/*QUAKED fx_borg_bolt (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF
+/*QUAKED fx_borg_bolt (0 0 1) (-8 -8 -8) (8 8 8) STARTOFF NO_PROXIMITY_FX
 Emits yellow electric bolts from the specified point to the specified point.
 Emits showers of sparks if the endpoints are sufficiently close.
+Has an Ugly FT-Think, so don't use unless needed
 
   STARTOFF - effect is initially off
+  NO_PROXIMITY_FX - Will deactivate proximity-fx associated with this. Check it if you don't use movers as else the entity thinks EVERY frame (like on borg2)
 
-  "target" (required) end point of the beam.  Can be a func_train, info_notnull, etc.
+  "target" (required) end point of the beam. Can be a func_train, info_notnull, etc.
+  "message" - moves start point of the beam to this ent's origin. Only useful if the beam connects 2 movers.
   "targetname" - toggles effect on/off each time it's used
 */
 
 //------------------------------------------
 void borg_bolt_think( gentity_t *ent )
 {
-	G_AddEvent( ent, EV_FX_BORG_BOLT, 0 );
-	ent->nextthink = level.time + 100 + random() * 25;
+	if (ent->spawnflags & 2)
+	{
+		G_AddEvent( ent, EV_FX_BORG_BOLT, 0 );
+		ent->nextthink = level.time + 100 + random() * 25;
+	}
+	else
+	{
+		G_AddEvent( ent, EV_FX_BORG_BOLT, 1 );
+		ent->nextthink = level.time + 50;
+	}
 }
 
 //------------------------------------------
@@ -2053,6 +2064,7 @@ void borg_bolt_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 void borg_bolt_link( gentity_t *ent )
 {
 	gentity_t	*target = NULL;
+	gentity_t	*target2 = NULL;
 
 	target = G_Find (target, FOFS(targetname), ent->target);
 
@@ -2065,10 +2077,23 @@ void borg_bolt_link( gentity_t *ent )
 
 		return;
 	}
+	VectorCopy( target->s.origin, ent->s.origin2 );
+
+	if (ent->message)
+	{
+	target2 = G_Find (target2, FOFS(targetname), ent->message);
+
+	if (!target2)
+	{
+		Com_Printf("borg_bolt_link: unable to find target2 %s falling back to using ent's origin\n", ent->parent );
+	}
+	else
+	{
+		VectorCopy( target2->s.origin, ent->s.origin );
+	}
+	}
 
 //	ent->svFlags |= SVF_BROADCAST;// Broadcast to all clients
-
-	VectorCopy( target->s.origin, ent->s.origin2 );
 
 	if ( ent->targetname )
 	{

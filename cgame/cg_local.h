@@ -2072,7 +2072,8 @@ void CG_BorgEnergyBeam( centity_t *cent );
 void CG_ShimmeryThing( vec3_t start, vec3_t end, vec3_t content );
 void CG_Shimmer( vec3_t position, vec3_t dest, vec3_t dir, vec3_t other );
 void CG_ShimmeryThing_Spawner( vec3_t start, vec3_t end, float radius, qboolean taper, int duration );
-void CG_Borg_Bolt( centity_t *cent );
+void CG_Borg_Bolt_static( centity_t *cent );
+void CG_Borg_Bolt_dynamic( centity_t *cent );
 
 //
 // cg_weapons.c
