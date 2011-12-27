@@ -26,10 +26,59 @@ qboolean sql_ready = qfalse;
 
 /*
 ===============
+G_Sql_Check_StepReturn
+===============
+*/
+static qboolean G_Sql_Check_StepReturn(int r) {
+	switch(r) {
+		case SQLITE_ROW:
+		case SQLITE_DONE:
+			return qfalse;
+		default:
+			G_Printf(S_COLOR_RED "SQL ERROR: %s\n", sqlite3_errmsg(user_db));
+			break;
+	}
+	return qtrue;
+}
+
+/*
+===============
+G_Sql_Check_PrepareReturn
+===============
+*/
+static qboolean G_Sql_Check_PrepareReturn(int r) {
+	switch(r) {
+		case SQLITE_OK:
+			return qfalse;
+		default:
+			G_Printf(S_COLOR_RED "SQL ERROR: %s\n", sqlite3_errmsg(user_db));
+			break;
+	}
+	return qtrue;
+}
+
+/*
+===============
+G_Sql_Check_BindReturn
+===============
+*/
+static qboolean G_Sql_Check_BindReturn(int r) {
+	switch(r) {
+		case SQLITE_OK:
+			return qfalse;
+		default:
+			G_Printf(S_COLOR_RED "SQL ERROR: %s\n", sqlite3_errmsg(user_db));
+			break;
+	}
+	return qtrue;
+}
+
+/*
+===============
 G_Sql_Md5
 ===============
 */
-char *G_Sql_Md5(char *s) {
+static char *G_Sql_Md5(const char *s) {
 	char *res;
 	unsigned char sig[16];
 	struct MD5Context md5c;
@@ -63,37 +112,52 @@ qboolean G_Sql_Init(void) {
 	if(!sql_use.integer) return qtrue;
 
 	res = sqlite3_open("db/users.db", &user_db);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Could not open user database\n");
+	if(res != SQLITE_OK) {
+		G_Printf(S_COLOR_RED "SQL ERROR: %s\n", sqlite3_errmsg(user_db));
 		return qfalse;
 	}
 
 	res = sqlite3_prepare_v2(user_db, SQL_ENABLE_FOREIGN_KEY_CONSTRAINTS, -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Enabling foreign key constraints failed\n");
+	if(G_Sql_Check_PrepareReturn(res)) {
 		sqlite3_close(user_db);
 		sql_ready = qfalse;
 		return qfalse;
 	}
-	sqlite3_free(stmt);
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		sqlite3_close(user_db);
+		sql_ready = qfalse;
+		return qfalse;
+	}
+	sqlite3_finalize(stmt);
 
 	res = sqlite3_prepare_v2(user_db, SQL_USER_CREATEUSERTABLE, -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+	if(G_Sql_Check_PrepareReturn(res)) {
 		sqlite3_close(user_db);
 		sql_ready = qfalse;
 		return qfalse;
 	}
-	sqlite3_free(stmt);
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		sqlite3_close(user_db);
+		sql_ready = qfalse;
+		return qfalse;
+	}
+	sqlite3_finalize(stmt);
 
 	res = sqlite3_prepare_v2(user_db, SQL_USER_CREATERIGHTSTABLE, -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+	if(G_Sql_Check_PrepareReturn(res)) {
 		sqlite3_close(user_db);
 		sql_ready = qfalse;
 		return qfalse;
 	}
-	sqlite3_free(stmt);
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		sqlite3_close(user_db);
+		sql_ready = qfalse;
+		return qfalse;
+	}
+	sqlite3_finalize(stmt);
 
 	sql_ready = qtrue;
 	return qtrue;
@@ -119,55 +183,67 @@ G_Sql_UserDB_Del
 */
 qboolean G_Sql_UserDB_Del(const char *uName) {
 	sqlite3_stmt *stmt;
-	int res, i, id = -1;
+	int res, id = -1;
 
-	res = sqlite3_prepare_v2(user_db, SQL_USER_GETUID(uName), -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+	res = sqlite3_prepare_v2(user_db, "SELECT id FROM rpgx_users WHERE username = :UNAME", -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
+		return qfalse;
+	}
+	res = sqlite3_bind_text(stmt, 1, uName, sizeof(uName), SQLITE_STATIC);
+	if(G_Sql_Check_BindReturn(res)) {
+		return qfalse;
+	}
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
 		return qfalse;
 	}
 
 	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		return qfalse;
+	}
 	if(res == SQLITE_ROW) {
 		id = sqlite3_column_int(stmt, 0);
 	} else if(res == SQLITE_DONE) {
 		G_Printf("SQL: User \'%s\' not found\n", uName);
 		return qfalse;
-	} else {
-		G_Printf(S_COLOR_RED "SQL ERROR: An error occured getting results from a row\n");
-		return qfalse;
-	}	
-	sqlite3_free(stmt);
+	} 
+	sqlite3_finalize(stmt);
 
 	if(id == -1) {
 		G_Printf(S_COLOR_RED "SQL ERROR: no user %s found\n", uName);
 		return qfalse;
 	}
 
-	res = sqlite3_prepare_v2(user_db, SQL_USER_DELTE_RIGHTS(id), -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+	res = sqlite3_prepare_v2(user_db, SQL_USER_DELTE_RIGHTS, -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
 		return qfalse;
 	}
-	sqlite3_free(stmt);
+	res = sqlite3_bind_int(stmt, 1, id);
+	if(G_Sql_Check_BindReturn(res)) {
+		return qfalse;
+	}
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		return qfalse;
+	}
+	sqlite3_finalize(stmt);
 
-	res = sqlite3_prepare_v2(user_db, SQL_USER_DELETE(uName), -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+	res = sqlite3_prepare_v2(user_db, SQL_USER_DELETE, -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
 		return qfalse;
 	}
-	sqlite3_free(stmt);
+	res = sqlite3_bind_text(stmt, 1, uName, sizeof(uName), SQLITE_STATIC);
+	if(G_Sql_Check_BindReturn(res)) {
+		return qfalse;
+	}
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		return qfalse;
+	}
+	sqlite3_finalize(stmt);
 
 	return qtrue;
-}
-
-/*
-===============
-G_Sql_UserDB_Mod
-===============
-*/
-qboolean  G_Sql_UserDB_Mod(const char *uName, const char *right, int value) {
-	return qfalse;
 }
 
 /*
@@ -180,74 +256,82 @@ qboolean Do_Sql_UserAdd(const char *uName, const char *password) {
 	int res, id;
 	char *hashedpw;
 
-	res = sqlite3_prepare_v2(user_db, SQL_USER_GETUID(uName), -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+	res = sqlite3_prepare_v2(user_db, SQL_USER_GET_UID, -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
+		return qfalse;
+	}
+	res = sqlite3_bind_text(stmt, 1, uName, sizeof(uName), SQLITE_STATIC);
+	if(G_Sql_Check_BindReturn(res)) {
 		return qfalse;
 	}
 
 	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		return qfalse;
+	}
 	if(res == SQLITE_ROW) {
 		G_Printf("SQL: There already exists a user with username \'%s\'\n", uName);
 		G_Printf("SQL: If you lost your password please contact an admin with access to the database.\n");
-		sqlite3_free(stmt);
+		sqlite3_finalize(stmt);
 		return qfalse;
 	}
-	sqlite3_free(stmt);
+	sqlite3_finalize(stmt);
 
-	res = sqlite3_prepare_v2(user_db, SQL_BEGIN_TRANSACTION, -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+	hashedpw = G_Sql_Md5(password);
+	res = sqlite3_prepare_v2(user_db, SQL_USER_ADD, -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
 		return qfalse;
 	}
-	sqlite3_free(stmt);
-
-	hashedpw = G_Sql_Md5((const char*)password);
-	res = sqlite3_prepare_v2(user_db, SQL_USER_ADD(uName, hashedpw), -1, &stmt, 0);
-	free(hashedpw);
-	if(res) {
-		G_Printf("SQL ERROR: User add query failed\n");
+	res = sqlite3_bind_text(stmt, 1, uName, sizeof(uName), SQLITE_STATIC);
+	if(G_Sql_Check_BindReturn(res)) {
+		return qfalse;
+	}
+	res = sqlite3_bind_text(stmt, 2, hashedpw, sizeof(hashedpw), free);
+	if(G_Sql_Check_BindReturn(res)) {
+		return qfalse;
+	}
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
 		return qfalse;
 	}
 
-	res = sqlite3_prepare_v2(user_db, SQL_USER_GETUID(uName), -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
-
+	res = sqlite3_prepare_v2(user_db, SQL_USER_GET_UID, -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
+		return qfalse;
+	}
+	res = sqlite3_bind_text(stmt, 1, uName, sizeof(uName), SQLITE_STATIC);
+	if(G_Sql_Check_BindReturn(res)) {
 		return qfalse;
 	}
 
 	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		return qfalse;
+	}
 	if(res == SQLITE_ROW) {
 		id = sqlite3_column_int(stmt, 0);
 	} else {
  		G_Printf("SQL: There already exists a user with username \'%s\'\n", uName);
-		G_Printf("SQL: If you lost your password please contact an admin with access to the database.\n");
-		sqlite3_free(stmt);
+		sqlite3_finalize(stmt);
 		return qfalse;
 	}
-	sqlite3_free(stmt);
+	sqlite3_finalize(stmt);
 
-	res = sqlite3_prepare_v2(user_db, SQL_USER_ADD_RIGHTS(id), -1, &stmt, 0);
-	if(res) {
-		G_Printf("SQL ERROR: Add user rights query failed\n");
-		res = sqlite3_prepare_v2(user_db, SQL_ROLLBACK_TRANSACTION, -1, &stmt, 0);
-		if(res) {
-			G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
-			return qfalse;
-		}
+	res = sqlite3_prepare_v2(user_db, SQL_USER_ADD_RIGHTS, -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
 		return qfalse;
 	}
-	sqlite3_free(stmt);
-
-	res = sqlite3_prepare_v2(user_db, SQL_COMMIT_TRANSACTION, -1, &stmt, 0);
-	if(res) {
-		G_Printf(S_COLOR_RED "SQL ERROR: Query failed\n");
+	res = sqlite3_bind_int(stmt, 1, id);
+	if(G_Sql_Check_BindReturn(res)) {
 		return qfalse;
 	}
-	sqlite3_free(stmt);
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		return qfalse;
+	}
+	sqlite3_finalize(stmt);
 
-	return qfalse;
+	return qtrue;
 }
 
 /*
@@ -256,6 +340,7 @@ G_Sql_UserDB_login
 ===============
 */
 qboolean G_Sql_UserDB_login(const char *uName, const char *pwd, int clientnum) {
+
 	return qfalse;
 }
 
@@ -266,6 +351,24 @@ G_Sql_UserDB_CheckRight
 */
 qboolean G_Sql_UserDB_CheckRight(int uid, int right) {
 	return qfalse;
+}
+
+/*
+===============
+G_Sql_UserDB_AddRight
+===============
+*/
+qboolean G_Sql_UserDB_AddRight(int uid, int right) {
+
+}
+
+/*
+===============
+G_Sql_UserDB_RemoveRight
+===============
+*/
+qboolean G_Sql_UserDB_RemoveRight(int uid, int right) {
+
 }
 
 #endif //SQL
