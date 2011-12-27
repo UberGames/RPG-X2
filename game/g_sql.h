@@ -7,7 +7,6 @@
 #define SQL_BEGIN_TRANSACTION "BEGIN TRANSACTION"
 #define SQL_ROLLBACK_TRANSACTION "ROLLBACK TRANSACTION"
 #define SQL_COMMIT_TRANSACTION "COMMIT TRANSACTION"
-#define SQL_USER_GETUID(UNAME) va("SELECT id FROM rpgx_users WHERE username = %s", UNAME)
 #define SQL_USER_CREATEUSERTABLE "CREATE TABLE IF NOT EXISTS rpgx_users ( \
 							id INTEGER PRIMARY KEY AUTOINCREMENT, \
 							username TEXT NOT NULL , \
@@ -19,10 +18,15 @@
 									rights LONG NOT NULL, \
 									FOREIGN KEY(id) REFERENCES rpgx_users(id) \
 									)"
-#define SQL_USER_DELETE(UNAME) va("DELETE FROM rpgx_users WHERE username = %s", UNAME)
-#define SQL_USER_DELTE_RIGHTS(ID) va("DELETE FROM rpgx_userRights WHERE id = %d", ID)
-#define SQL_USER_ADD(USERNAME,PASSWORD) va("INSERT INTO rpgx_users VALUES(NULL,%s,%s)", USERNAME, PASSWORD)
-#define SQL_USER_ADD_RIGHTS(ID) va("INSERT INTO rpgx_userRights VALUES(NULL, 0, 0, %d)", ID)
+#define SQL_USER_DELETE "DELETE FROM rpgx_users WHERE username = :UNAME"
+#define SQL_USER_DELTE_RIGHTS "DELETE FROM rpgx_userRights WHERE id = :ID"
+#define SQL_USER_ADD "INSERT INTO rpgx_users VALUES(NULL,:USERNAME,:PASSWORD)"
+#define SQL_USER_ADD_RIGHTS "INSERT INTO rpgx_userRights VALUES(NULL, 0, 0, :ID)"
+#define SQL_USER_MOD_RIGHTS "UPDATE rpgx_userRights SET rights = :RIGHTS WHERE id = :ID"
+#define SQL_USER_GET_RIGHTS "SELECT rights FROM rpgx_userRights WHERE id = :ID"
+#define SQL_USER_GET_PASSWORD "SELECT password FROM rpgx_users WHERE id = :ID"
+#define SQL_USER_SET_PASSWORD "UPDATE rpgx_users SET password = :PASSWORD WHERE id = :ID"
+#define SQL_USER_GET_UID "SELECT id FROM rpgx_users WHERE username = :UNAME"
 
 typedef enum {
 	SQLF_GIVE			= 1,

@@ -993,9 +993,10 @@ qboolean	G_Sql_Init(void);
 void		G_Sql_Shutdown(void);
 qboolean	G_Sql_UserDB_Add(const char *uName, const char *password);
 qboolean	G_Sql_UserDB_CheckRight(int uid, int right);
+qboolean	G_Sql_UserDB_AddRight(int uid, int right);
+qboolean	G_Sql_UserDB_RemoveRight(int uid, int right);
 qboolean	G_Sql_UserDB_Del(const char *uName);
 qboolean	G_Sql_UserDB_Login(const char *uName, const char *pwd, int clientnum);
-qboolean	G_Sql_UserDB_Mod(const char *uName, const char *right, int value);
 
 //RPG-X: J2J - Nice neat struct to hold info for admin tricorder transport..//////
 //TiM: I may be a complete nutter here, but I'm gonna try and mod this to see if we can mosey SP transportery FX in here
