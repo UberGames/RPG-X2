@@ -801,7 +801,6 @@ localEntity_t *FX_AddQuad2( vec3_t origin, vec3_t normal, float scale, float dsc
 FX_AddCylinder
 
 Adds a cylinder to the FX wrapper render list
-Overloaded for RGB
 ===============
 */
 
@@ -865,6 +864,82 @@ localEntity_t *FX_AddCylinder(	vec3_t start,
 	le->color[0] = 1.0;
 	le->color[1] = 1.0;
 	le->color[2] = 1.0;
+	le->color[3] = startalpha;
+	le->lifeRate = 1.0 / ( le->endTime - le->startTime );
+
+	return(le);
+}
+/*
+===============
+FX_AddCylinder2
+
+Adds a cylinder to the FX wrapper render list
+Overloaded for RGB
+===============
+*/
+
+//NOTENOTE: The reigning king of parameters!
+#define DEFAULT_ST_SCALE	1.0f
+
+localEntity_t *FX_AddCylinder2(	vec3_t start, 
+									vec3_t normal,
+									float height,
+									float dheight,
+									float scale,
+									float dscale,
+									float scale2,
+									float dscale2,
+									float startalpha, 
+									float endalpha,
+									vec3_t startRGB,
+									vec3_t endRGB, 
+									float killTime, 
+									qhandle_t shader,
+									float bias )
+{
+	localEntity_t	*le = CG_AllocLocalEntity();
+
+#ifdef _DEBUG
+	if (!shader)
+	{
+		Com_Printf("FX_AddCylinder: NULL shader\n");
+	}
+#endif
+
+	le->leType = LE_CYLINDER;
+	le->refEntity.data.cylinder.height = height;
+	le->refEntity.data.cylinder.width = scale;
+	le->refEntity.data.cylinder.width2 = scale2;
+
+	le->startTime = cg.time;
+	le->endTime = le->startTime + killTime;
+
+	le->data.cylinder.height = height;
+	le->data.cylinder.dheight = dheight;
+	le->data.cylinder.width = scale;
+	le->data.cylinder.dwidth = dscale;
+	le->data.cylinder.width2 = scale2;
+	le->data.cylinder.dwidth2 = dscale2;
+
+	le->alpha = startalpha;
+	le->dalpha = endalpha - startalpha;
+
+	le->refEntity.customShader = shader;
+
+	le->refEntity.data.cylinder.bias = bias;
+	le->refEntity.data.cylinder.stscale = 1.0;
+	le->refEntity.data.cylinder.wrap = qtrue;
+
+	// set origin
+	VectorCopy ( start, le->refEntity.origin);
+	VectorCopy ( start, le->refEntity.oldorigin );
+
+	VectorCopy( normal, le->refEntity.axis[0] );
+	RotateAroundDirection( le->refEntity.axis, 0);
+
+	le->color[0] = startRGB[0];
+	le->color[1] = startRGB[1];
+	le->color[2] = startRGB[2];
 	le->color[3] = startalpha;
 	le->lifeRate = 1.0 / ( le->endTime - le->startTime );
 

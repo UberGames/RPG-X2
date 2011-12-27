@@ -1178,6 +1178,7 @@ typedef struct {
 	qhandle_t	redRingShader;
 	qhandle_t	redRing2Shader;
 	qhandle_t	bigShockShader;
+	qhandle_t	plasmaShader;
 	qhandle_t	bolt2Shader;
 	qhandle_t	quantumRingShader;
 
@@ -2064,7 +2065,7 @@ void CG_CookingSteam( vec3_t origin, float radius );
 void CG_ElectricFire( vec3_t origin, vec3_t normal );
 void ForgeBoltFireback( vec3_t start, vec3_t end, vec3_t velocity, vec3_t user );
 void CG_ForgeBolt( centity_t *cent );
-void CG_Plasma( vec3_t start, vec3_t end, vec4_t startRGBA, vec4_t endRGBA );
+void CG_Plasma( vec3_t start, vec3_t end, vec3_t sRGB, vec3_t eRGB, int startalpha, int endalpha );
 void CG_ParticleStream( centity_t *cent );
 void CG_TransporterStream( centity_t *cent );
 void CG_ExplosionTrail( centity_t *cent );

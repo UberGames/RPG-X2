@@ -1541,11 +1541,13 @@ void SP_fx_plasma( gentity_t *ent )
 
 	// Convert from range of 0-255 to 0-1
 	int t;
-	for (t=0; t < 4; t++)
+	for (t=0; t < 3; t++)
 	{
 		ent->startRGBA[t] = ent->startRGBA[t] / 255;
 		ent->finalRGBA[t] = ent->finalRGBA[t] / 255;
 	}
+		ent->startRGBA[3] = ent->s.weapon;
+		ent->finalRGBA[3] = ent->s.powerups;
 	
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 

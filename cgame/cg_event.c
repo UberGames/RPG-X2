@@ -1802,7 +1802,7 @@ case EV_SHAKE_SOUND:
 
 	case EV_FX_PLASMA:
 		DEBUGNAME("EV_FX_PLASMA");
-		//CG_Plasma( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles, cent->currentState.angles2 ); // RGBA's	
+		CG_Plasma( cent->currentState.origin, cent->currentState.origin2, cent->currentState.angles, cent->currentState.angles2, cent->currentState.weapon, cent->currentState.powerups );
 		break;
 
 	case EV_FX_STREAM:

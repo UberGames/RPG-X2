@@ -1374,6 +1374,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.nukeModel					= trap_R_RegisterModel ( "models/weaphits/nuke.md3" );
 	cgs.media.bigShockShader			= trap_R_RegisterShader( "gfx/misc/bigshock" );
 	//cgs.media.IMODMarkShader			= trap_R_RegisterShader( "gfx/damage/burnmark2" );
+	cgs.media.plasmaShader				= trap_R_RegisterShader( "gfx/misc/plasmanew" );
 	cgs.media.bolt2Shader				= trap_R_RegisterShader( "gfx/effects/electrica" );
 	//cgs.media.holoOuchShader			= trap_R_RegisterShader( "powerups/holoOuch" );
 	cgs.media.painBlobShader			= trap_R_RegisterShader( "gfx/misc/painblob" );

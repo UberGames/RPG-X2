@@ -1685,17 +1685,14 @@ Create directed and scaled plasma jet
 ===========================
 */
 
-/*void CG_Plasma( vec3_t start, vec3_t end, vec4_t startRGBA, vec4_t endRGBA )
+void CG_Plasma( vec3_t start, vec3_t end, vec3_t sRGB, vec3_t eRGB, int startalpha, int endalpha )
 {
-	vec3_t	v, sp, sRGB, eRGB;
-	float	detail, len, salpha, ealpha;
+	vec3_t	v, sp;
+	float	detail, len, salpha = (startalpha / 255) , ealpha = (endalpha / 255);
 
-	detail = FX_DetailLevel( start, 16, 1200 );
-	if ( detail == 0 )
-		return;
-
-	salpha = Vector4to3( startRGBA, sRGB );
-	ealpha = Vector4to3( endRGBA, eRGB );
+	//detail = FX_DetailLevel( start, 16, 1200 );
+	//if ( detail == 0 )
+	//	return;
 
 	// Orient the plasma
 	VectorSubtract( end, start, v );
@@ -1703,7 +1700,7 @@ Create directed and scaled plasma jet
 	VectorMA( start, 0.5f, v, sp );
 
 	// Stash a quad at the base to make the effect look a bit more solid
-	FX_AddQuad( sp, v, NULL, NULL, len * 0.36f, 0.0f, salpha, salpha, sRGB, sRGB, 0.0f, 45.0f, 0.0f, 200, cgs.media.prifleImpactShader );
+	//FX_AddQuad( sp, v, NULL, NULL, len * 0.36f, 0.0f, salpha, salpha, sRGB, sRGB, 0.0f, 45.0f, 0.0f, 200, cgs.media.prifleImpactShader );
 	
 	// Add a subtle, random flutter to the cone direction
 	v[0] += crandom() * 0.04;
@@ -1711,11 +1708,11 @@ Create directed and scaled plasma jet
 	v[2] += crandom() * 0.04;
 	
 	// Wanted the effect to be scalable based on the length of the jet. 
-	FX_AddCylinder( start, v, len * 0.05, len * 2.0f, len * 0.16f, len * 0.32f, len * 0.40f, len * 0.64f, 
+	FX_AddCylinder2( start, v, len * 0.05, len * 2.0f, len * 0.16f, len * 0.32f, len * 0.40f, len * 0.64f, 
 					salpha, ealpha, sRGB, eRGB, 200, cgs.media.plasmaShader, 0.3f );
-	FX_AddCylinder( start, v, len * 0.05, len * 4.0f, len * 0.16f, len * 0.32f, len * 0.28f, len * 0.64f, 
+	FX_AddCylinder2( start, v, len * 0.05, len * 4.0f, len * 0.16f, len * 0.32f, len * 0.28f, len * 0.64f, 
 					salpha, ealpha, sRGB, eRGB, 200, cgs.media.plasmaShader, 0.2f );
-	FX_AddCylinder( start, v, len * 0.25, len * 8.0f, len * 0.20f, len * 0.32f, len * 0.02f, len * 0.32f, 
+	FX_AddCylinder2( start, v, len * 0.25, len * 8.0f, len * 0.20f, len * 0.32f, len * 0.02f, len * 0.32f, 
 					salpha, ealpha, sRGB, eRGB, 200, cgs.media.plasmaShader, 0.1f );
 }
 
