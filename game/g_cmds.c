@@ -5869,7 +5869,7 @@ void Cmd_AdminLogin_f( gentity_t *ent)
 	}*/
 	
 	//Admin class login thingy
-	//if( (Q_stricmp(arg, rpg_adminpass.string) == 0) && rpg_adminpass.string[0] ){
+	//if( (Q_stricmp(arg, rpg_adminpass.string) == 0) && rpg_adminpass.string[0] )
 	for ( j=0; g_classData[j].consoleName[0] && j < MAX_CLASSES; j++ ) 
 	{
 		trap_Cvar_VariableStringBuffer( va( "rpg_%sPass", g_classData[j].consoleName ), classPass, sizeof(classPass) );

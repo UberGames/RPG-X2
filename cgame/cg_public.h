@@ -112,11 +112,9 @@ typedef enum {
 	CG_GETUSERCMD,
 	CG_SETUSERCMDVALUE,
 	CG_R_REGISTERSHADERNOMIP,
-	CG_MEMORY_REMAINING, //58
-	CG_R_REGISTERSHADER3D,	//59
-	CG_CVAR_SET_NO_MODIFY,  // 60
-//these must match up with cg_syscalls.asm - add more traps HERE!
-
+	CG_MEMORY_REMAINING,
+    CG_R_REGISTERSHADER3D,  //59
+    CG_CVAR_SET_NO_MODIFY,  // 60
 	CG_MEMSET = 100,
 	CG_MEMCPY,
 	CG_STRNCPY,
@@ -126,17 +124,16 @@ typedef enum {
 	CG_SQRT,
 	CG_FLOOR,
 	CG_CEIL,
-
 	CG_TESTPRINTINT,
-	CG_TESTPRINTFLOAT
-	
-	#ifdef XTRA
-	,
+	CG_TESTPRINTFLOAT,
+
+#ifdef XTRA
 	CG_R_REMAP_SHADER = 200,
 	CG_R_ADDPOLYSTOSCENE
-	#endif
+#endif
 } cgameImport_t;
 //these must match up with cg_syscalls.asm
+
 
 
 /*

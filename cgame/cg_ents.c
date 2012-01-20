@@ -111,7 +111,7 @@ static void CG_EntityEffects( centity_t *cent ) {
 	CG_SetEntitySoundPosition( cent );
 
 	// add loop sound
-	if ( cent->currentState.loopSound ) {
+	if ( cent->currentState.loopSound && cent->currentState.loopSound < 256 ) {
 		trap_S_AddLoopingSound( cent->currentState.number, cent->lerpOrigin, vec3_origin, 
 			cgs.gameSounds[ cent->currentState.loopSound ] );
 	}

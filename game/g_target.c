@@ -84,6 +84,10 @@ void SP_target_give( gentity_t *ent )
 	//Com_Printf( S_COLOR_RED "Final flags: %u\n", (ent->s.time) );
 
 	ent->use = Use_Target_Give;
+
+	// don't need to send this to clients
+	ent->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(ent);
 }
 
 
@@ -154,6 +158,10 @@ void SP_target_delay( gentity_t *ent ) {
 	}
         ent->count = (int)ent->wait;
 	ent->use = Use_Target_Delay;
+
+	// don't need to send this to clients
+	ent->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(ent);
 }
 
 
@@ -556,6 +564,10 @@ void target_kill_use( gentity_t *self, gentity_t *other, gentity_t *activator ) 
 
 void SP_target_kill( gentity_t *self ) {
 	self->use = target_kill_use;
+
+	// don't need to send this to clients
+	self->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(self);
 }
 
 /*QUAKED target_position (0 0.5 0) (-4 -4 -4) (4 4 4)
@@ -651,6 +663,10 @@ void SP_target_counter (gentity_t *self)
 	}
 
 	self->use = target_counter_use;
+
+	// don't need to send this to clients
+	self->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(self);
 }
 
 /*QUAKED target_objective (1.0 0 0) (-4 -4 -4) (4 4 4)
@@ -782,6 +798,10 @@ void SP_target_boolean (gentity_t *self) {
 	}
 	
 	self->use = target_boolean_use;
+
+	// don't need to send this to clients
+	self->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(self);
 }
 
 /*QUAKED target_gravity (.5 .5 .5) (-8 -8 -8) (8 8 8) PLAYER_ONLY MAP_GRAV
@@ -822,6 +842,10 @@ void SP_target_gravity (gentity_t *self) {
 	if(self->count) // support for SP
 		self->targetname2 = G_NewString(va("%i", self->count));
 	self->use = target_gravity_use;
+
+	// don't need to send this to clients
+	self->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(self);
 }
 
 /*QUAKED target_shake (.5 .5 .5) (-8 -8 -8) (8 8 8)
@@ -872,6 +896,10 @@ void target_evosuit_use (gentity_t *self, gentity_t *other, gentity_t *activator
 
 void SP_target_evosuit (gentity_t *self) {
 	self->use = target_evosuit_use;
+
+	// don't need to send this to clients
+	self->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(self);
 }
 
 //==================================================================================
@@ -1731,6 +1759,10 @@ void SP_target_doorLock(gentity_t *ent) {
 	G_SpawnString("unlockMsg", "", &temp);
 	ent->truename = G_NewString(temp);
 	ent->use = target_doorLock_use;
+
+	// don't need to send this to clients
+	ent->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(ent);
 }
 
 //RPG-X | GSIO01 | 11/05/2009 | MOD START
@@ -2514,6 +2546,10 @@ void SP_target_alert(gentity_t *ent) {
 	ent->damage = 0;
 
 	ent->health = !(ent->spawnflags & 2);
+
+	// don't need to send this to clients
+	ent->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(ent);
 }
 //RPG-X | GSIO01 | 11/05/2009 | MOD END
 
@@ -2680,7 +2716,10 @@ void SP_target_warp(gentity_t *ent) {
 	ent->n00bCount = (ent->spawnflags & 4);
 
 	ent->use = target_warp_use;
-	
+
+	// don't need to send this to clients
+	ent->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(ent);
 }
 
 //RPG-X | GSIO01 | 19/05/2009 | MOD END
@@ -2706,6 +2745,10 @@ void SP_target_deactivate(gentity_t *ent) {
 	}
 
 	ent->use = target_deactivate_use;
+
+	// don't need to send this to clients
+	ent->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(ent);
 }
 
 /*QUAKED target_serverchange (1 0 0) (-8 -8 -8) (8 8 8) START_ON
@@ -2826,7 +2869,12 @@ void SP_target_levelchange(gentity_t *ent) {
 */
 
 void SP_target_holodeck(gentity_t *ent) {
+	G_FreeEntity(ent);
+	return;
 
+	// don't need to send this to clients
+	ent->r.svFlags &= SVF_NOCLIENT;
+	trap_LinkEntity(ent);
 }
 
 //RPG-X | Harry Young | 15/10/2011 | MOD START

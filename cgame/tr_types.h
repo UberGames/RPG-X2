@@ -6,8 +6,7 @@
 
 #define	MAX_DLIGHTS		32			// can't be increased, because bit flags are used on surfaces
 
-#define	MAX_ENTITIES	1023		// can't be increased without changing drawsurf bit packing
-
+#define MAX_ENTITIES	2047
 
 // renderfx flags
 #define	RF_LOWLIGHT			0x0001	// subtract ambient to keep it in the dark

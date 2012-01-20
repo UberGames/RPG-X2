@@ -96,7 +96,6 @@ static void CG_ParseHealthInfo( void ) {
 		cgs.clientinfo[ client ].health = atoi( CG_Argv( i * 2 + 3 ) );
 	}
 }
-
 /*
 ================
 CG_ParseServerinfo
