@@ -1153,12 +1153,6 @@ typedef struct {
 	qhandle_t	photonRay;
 	qhandle_t	fireParticle;
 
-	#ifdef XTRA
-	//RPG-X | GSIO01 | 08/03/2010:
-	qhandle_t	snowShader;
-	qhandle_t	waterShader;
-	#endif
-
 	qhandle_t	explosionModel;
 	qhandle_t	nukeModel;
 	//qhandle_t	electricalExplosionFastShader;// These are used to have a bit of variation in the explosions
@@ -1974,10 +1968,6 @@ extern	int sortedTeamPlayers[TEAM_MAXOVERLAY];
 extern	int	numSortedTeamPlayers;
 extern	int drawTeamOverlayModificationCount;
 
-#ifdef XTRA
-void CG_MotionBlur( void );
-#endif
-
 void CG_AddLagometerFrameInfo( void );
 void CG_AddLagometerSnapshotInfo( snapshot_t *snap );
 void CG_CenterPrint( const char *str, int y, int charWidth );
@@ -2404,10 +2394,6 @@ void		trap_R_DrawStretchPic( float x, float y, float w, float h,
 void		trap_R_ModelBounds( clipHandle_t model, vec3_t mins, vec3_t maxs );
 void		trap_R_LerpTag( orientation_t *tag, clipHandle_t mod, int startFrame, int endFrame, 
 					   float frac, const char *tagName );
-
-#ifdef XTRA
-void		trap_R_AddPolysToScene( qhandle_t hShader , int numVerts, const polyVert_t *verts, int numPolys );
-#endif
 
 // The glconfig_t will not change during the life of a cgame.
 // If it needs to change, the entire cgame will be restarted, because

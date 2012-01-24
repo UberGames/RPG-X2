@@ -129,7 +129,6 @@ typedef enum {
 
 #ifdef XTRA
 	CG_R_REMAP_SHADER = 200,
-	CG_R_ADDPOLYSTOSCENE
 #endif
 } cgameImport_t;
 //these must match up with cg_syscalls.asm

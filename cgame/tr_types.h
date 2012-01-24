@@ -6,7 +6,12 @@
 
 #define	MAX_DLIGHTS		32			// can't be increased, because bit flags are used on surfaces
 
-#define MAX_ENTITIES	2047
+#ifndef XTRA
+#define	ENTITYNUM_BITS		10		// can't be increased without changing drawsurf bit packing
+#else
+#define	ENTITYNUM_BITS		11		// can't be increased without changing drawsurf bit packing
+#endif
+#define	MAX_ENTITIES		((1<<ENTITYNUM_BITS) - 1)
 
 // renderfx flags
 #define	RF_LOWLIGHT			0x0001	// subtract ambient to keep it in the dark
@@ -30,10 +35,6 @@
 // refdef flags
 #define RDF_NOWORLDMODEL	1		// used for player configuration screen
 #define RDF_HYPERSPACE		4		// teleportation effect
-
-#ifdef XTRA
-#define RDF_MOTIONBLUR		8
-#endif
 
 typedef struct {
 	vec3_t		xyz;
