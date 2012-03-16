@@ -121,43 +121,43 @@ int	G_WeaponLogItems[MAX_CLIENTS][PW_NUM_POWERUPS];
 // MOD-weapon mapping array.
 int weaponFromMOD[MOD_MAX] =
 {
-	WP_NONE,				// MOD_UNKNOWN,
+	WP_0,				// MOD_UNKNOWN,
 
-	WP_NONE,				// MOD_WATER,
-	WP_NONE,				// MOD_SLIME,
-	WP_NONE,				// MOD_LAVA,
-	WP_NONE,				// MOD_CRUSH,
-	WP_NONE,				// MOD_TELEFRAG,
-	WP_NONE,				// MOD_FALLING,
-	WP_NONE,				// MOD_SUICIDE,
-	WP_NONE,				// MOD_TARGET_LASER,
-	WP_NONE,				// MOD_TRIGGER_HURT,
+	WP_0,				// MOD_WATER,
+	WP_0,				// MOD_SLIME,
+	WP_0,				// MOD_LAVA,
+	WP_0,				// MOD_CRUSH,
+	WP_0,				// MOD_TELEFRAG,
+	WP_0,				// MOD_FALLING,
+	WP_0,				// MOD_SUICIDE,
+	WP_0,				// MOD_TARGET_LASER,
+	WP_0,				// MOD_TRIGGER_HURT,
 
-	WP_PHASER,				// MOD_PHASER,
-	WP_PHASER,				// MOD_PHASER_ALT,
-	WP_COMPRESSION_RIFLE,	// MOD_CRIFLE,
-	WP_COMPRESSION_RIFLE,	// MOD_CRIFLE_SPLASH,
-	WP_COMPRESSION_RIFLE,	// MOD_CRIFLE_ALT,
-	WP_COMPRESSION_RIFLE,	// MOD_CRIFLE_ALT_SPLASH,
-	WP_NULL_HAND,				// MOD_IMOD,
-	WP_NULL_HAND,				// MOD_IMOD_ALT,
-	WP_COFFEE,		// MOD_SCAVENGER,
-	WP_COFFEE,		// MOD_SCAVENGER_ALT,
-	WP_COFFEE,		// MOD_SCAVENGER_ALT_SPLASH,
-	WP_DISRUPTOR,				// MOD_STASIS,
-	WP_DISRUPTOR,				// MOD_STASIS_ALT,
-	WP_GRENADE_LAUNCHER,	// MOD_GRENADE,
-	WP_GRENADE_LAUNCHER,	// MOD_GRENADE_ALT,
-	WP_GRENADE_LAUNCHER,	// MOD_GRENADE_SPLASH,
-	WP_GRENADE_LAUNCHER,	// MOD_GRENADE_ALT_SPLASH,
-	WP_TR116,	// MOD_TETRION,
-	WP_TR116,	// MOD_TETRION_ALT,
-	WP_DERMAL_REGEN,			// MOD_DREADNOUGHT,
-	WP_DERMAL_REGEN,			// MOD_DREADNOUGHT_ALT,
-	WP_QUANTUM_BURST,		// MOD_QUANTUM,
-	WP_QUANTUM_BURST,		// MOD_QUANTUM_SPLASH,
-	WP_QUANTUM_BURST,		// MOD_QUANTUM_ALT,
-	WP_QUANTUM_BURST,		// MOD_QUANTUM_ALT_SPLASH,
+	WP_5,				// MOD_PHASER,
+	WP_5,				// MOD_PHASER_ALT,
+	WP_6,	// MOD_CRIFLE,
+	WP_6,	// MOD_CRIFLE_SPLASH,
+	WP_6,	// MOD_CRIFLE_ALT,
+	WP_6,	// MOD_CRIFLE_ALT_SPLASH,
+	WP_1,				// MOD_IMOD,
+	WP_1,				// MOD_IMOD_ALT,
+	WP_4,		// MOD_SCAVENGER,
+	WP_4,		// MOD_SCAVENGER_ALT,
+	WP_4,		// MOD_SCAVENGER_ALT_SPLASH,
+	WP_10,				// MOD_STASIS,
+	WP_10,				// MOD_STASIS_ALT,
+	WP_8,	// MOD_GRENADE,
+	WP_8,	// MOD_GRENADE_ALT,
+	WP_8,	// MOD_GRENADE_SPLASH,
+	WP_8,	// MOD_GRENADE_ALT_SPLASH,
+	WP_7,	// MOD_TETRION,
+	WP_7,	// MOD_TETRION_ALT,
+	WP_13,			// MOD_DREADNOUGHT,
+	WP_13,			// MOD_DREADNOUGHT_ALT,
+	WP_9,		// MOD_QUANTUM,
+	WP_9,		// MOD_QUANTUM_SPLASH,
+	WP_9,		// MOD_QUANTUM_ALT,
+	WP_9,		// MOD_QUANTUM_ALT_SPLASH,
 
 	// careful!! don't assume that any given map entry refers to a weapon index. see
 	//GetFavoriteWeaponForClient() as an example of what can go wrong.
@@ -166,15 +166,15 @@ int weaponFromMOD[MOD_MAX] =
 	PW_FLASHLIGHT,				// MOD_SEEKER
 	
 	//expansion pack
-	WP_VOYAGER_HYPO,		// MOD_KNOCKOUT,
-	WP_TOOLKIT,	// MOD_ASSIMILATE,
-	WP_MEDKIT,			// MOD_BORG,
-	WP_MEDKIT,			// MOD_BORG_ALT
+	WP_12,		// MOD_KNOCKOUT,
+	WP_14,	// MOD_ASSIMILATE,
+	WP_11,			// MOD_BORG,
+	WP_11,			// MOD_BORG_ALT
 
-	WP_NONE,				// MOD_RESPAWN,
-	WP_NONE,				// MOD_EXPLOSION,
-	WP_NONE,				// MOD_FORCEFIELD
-	WP_NONE,				// MOD_FORCEDSUICIDE
+	WP_0,				// MOD_RESPAWN,
+	WP_0,				// MOD_EXPLOSION,
+	WP_0,				// MOD_FORCEFIELD
+	WP_0,				// MOD_FORCEDSUICIDE
 };
 
 char *weaponNameFromIndex[WP_NUM_WEAPONS] = 
@@ -1170,7 +1170,7 @@ qboolean CalculateTactician(gentity_t *ent, int *kills)
 			killsWithWeapon[weapon] += G_WeaponLogKills[person][i];		// Store Num Kills With Weapon
 		}
 
-		weapon=WP_PHASER;		// Start At Phaser
+		weapon=WP_5;		// Start At Phaser
 		//   keep looking through weapons if weapon is not on map, or if it is and we used it
 		while( weapon<WP_NUM_WEAPONS && (!wasPickedUpBySomeone[weapon] || killsWithWeapon[weapon]>0) )
 		{
@@ -1746,7 +1746,7 @@ int GetWorstEnemyForClient(int nClient)
 
 int GetFavoriteWeaponForClient(int nClient)
 {
-	int i = 0, nMostKills = 0, fav=0, weapon=WP_PHASER;
+	int i = 0, nMostKills = 0, fav=0, weapon=WP_5;
 	int	killsWithWeapon[WP_NUM_WEAPONS];
 
 
@@ -1765,7 +1765,7 @@ int GetFavoriteWeaponForClient(int nClient)
 	// now look through our list of kills per weapon and pick the biggest
 	//----------------------------------------------------------------
 	nMostKills=0;
-	for (weapon=WP_PHASER; weapon<WP_NUM_WEAPONS; weapon++)
+	for (weapon=WP_5; weapon<WP_NUM_WEAPONS; weapon++)
 	{
 		if (killsWithWeapon[weapon]>nMostKills)
 		{

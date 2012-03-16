@@ -521,31 +521,31 @@ int UI_GetAnim ( int anim, int weapon, qboolean upper )
 		case ANIM_CROUCH:
 			//2 handed weapon - "heavy"
 			switch (weapon) {
-				case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
+				case WP_7:
+				case WP_8:
+				case WP_9:
 					if (upper)
 						return BOTH_STAND2;
 					else
 						return LEGS_KNEEL1;
 					break;
 				//2 handed weapon - "light"
-				case WP_COMPRESSION_RIFLE:
-				//case WP_TR116:
+				case WP_6:
+				//case WP_7:
 					if (upper)
 						return TORSO_WEAPONREADY2;
 					else
 						return LEGS_KNEEL1;
 					break;
 				//1 handed weapon - "phaser"
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if ( upper )
 						return TORSO_WEAPONPOSE1;
 					else 
 						return BOTH_CROUCH1IDLE;
 					break;
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
@@ -560,26 +560,26 @@ int UI_GetAnim ( int anim, int weapon, qboolean upper )
 		case ANIM_IDLE:
 			//2 handed weapon - "heavy"
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_7:
 					return BOTH_STAND4;
 					break;
 				//2 handed weapon - "light"
-				case WP_COMPRESSION_RIFLE:
+				case WP_6:
 					return BOTH_STAND4;
 					break;
 				//1 handed weapon - "phaser"
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if (upper)
 						return BOTH_STAND1; //TORSO_WEAPONIDLE1
 					else
 						return BOTH_STAND1;
 					break;
 				//Generic tools - "everything else"
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					else
@@ -595,61 +595,61 @@ int UI_GetAnim ( int anim, int weapon, qboolean upper )
 		case ANIM_ATTACK:
 			//2 handed weapon - "heavy"
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_7:
 					return BOTH_ATTACK3;
 					break;
 				//2 handed weapon - "light"
-				case WP_COMPRESSION_RIFLE:
+				case WP_6:
 					if (upper)
 						return BOTH_ATTACK2;
 					else
 						return BOTH_ATTACK3;
 					break;
 				//1 handed weapon - "phaser"
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if (upper)
 						return TORSO_WEAPONREADY1; 
 					else
 						return BOTH_STAND1;
 					break;
 			//Other Tools "padd"
-			case WP_PADD:
+			case WP_3:
 				if (upper)
 					return TORSO_PADD1;
 				else
 					return BOTH_STAND1;
 				break;
 			//Other Tools "tricorder"
-			case WP_TRICORDER:
+			case WP_2:
 				if (upper)
 					return TORSO_TRICORDER1;
 				else
 					return BOTH_STAND1;
 				break;
 			//Other: "Medkit"
-			case WP_MEDKIT:
+			case WP_11:
 				if (upper)
 					return TORSO_ACTIVATEMEDKIT1;
 				else
 					return BOTH_STAND1;
 				break;
 			//Other: "Hypo
-			case WP_VOYAGER_HYPO:
+			case WP_12:
 				if (upper)
 					return TORSO_HYPOSPRAY1;
 				else
 					return BOTH_STAND1;
 			//Other: "Toolkit"
-			/*case WP_TOOLKIT:
+			/*case WP_14:
 				//Return nothing.  
 				//A bit hacky, but the engine accepts it :P
 				break;*/
 			//Other Tools "everything else"
-			/*case WP_NULL_HAND:
+			/*case WP_1:
 				switch(rand()%13)
 				{
 					case 0: return TORSO_HANDGESTURE1;
@@ -667,7 +667,7 @@ int UI_GetAnim ( int anim, int weapon, qboolean upper )
 					case 12: return TORSO_HANDGESTURE13;
 				}
 				break;*/
-			case WP_COFFEE:
+			case WP_4:
 				if (upper)
 					return TORSO_COFFEE;
 				//break;
@@ -688,17 +688,17 @@ int UI_GetAnim ( int anim, int weapon, qboolean upper )
 		case ANIM_RUN:
 			//2 handed weapons
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_6:
+				case WP_7:
 					if (upper)
 						return BOTH_RUN2;
 					else
 						return BOTH_RUN1;
 					break;
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
@@ -712,15 +712,15 @@ int UI_GetAnim ( int anim, int weapon, qboolean upper )
 		case ANIM_WALK:
 			//2 handed weapons
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_6:
+				case WP_7:
 					return BOTH_WALK4;
 					break;
 				//Other Tools "everything else"
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
@@ -735,17 +735,17 @@ int UI_GetAnim ( int anim, int weapon, qboolean upper )
 			//2 handed weapons
 			switch (weapon) 
 			{
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_6:
+				case WP_7:
 					if ( upper )
 						return BOTH_WALK4;
 					else
 						return LEGS_WALKBACK1;
 					break;
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;

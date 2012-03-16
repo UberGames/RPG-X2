@@ -520,7 +520,7 @@ static void Cmd_Give_f( gentity_t *ent ) {
 		case TYPE_ALL:
 			targEnt->health = ps->stats[STAT_MAX_HEALTH];
 
-			ps->stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_NONE );
+			ps->stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_0 );
 			
 			//RPG-X: J2J - Added so you dont just get empty weapons
 			for ( i = MAX_WEAPONS - 1; i > -1; i-- ) { /* RPG-X | Marcin | 30/12/2008 */ // GSIO: Changed from i++ to i--
@@ -534,7 +534,7 @@ static void Cmd_Give_f( gentity_t *ent ) {
 			targEnt->health = ps->stats[STAT_MAX_HEALTH];
 			break;
 		case TYPE_WEAPONS:
-			ps->stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_NONE );
+			ps->stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_0 );
 			
 			//RPG-X: J2J - Added so you dont just get empty weapons
 			for ( i = MAX_WEAPONS -1; i > -1 ; i-- ) { // GSIO: changed from i++ to i--
@@ -680,7 +680,7 @@ static void Cmd_Give_f( gentity_t *ent ) {
 //
 //	if (give_all || Q_stricmp(name, "weapons") == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_NONE );
+//		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_0 );
 //		//RPG-X: J2J - Added so you dont just get empty weapons
 //		for ( i = 0 ; i < MAX_WEAPONS ; i++ ) {
 //			ent->client->ps.ammo[i] = 999;
@@ -731,96 +731,96 @@ static void Cmd_Give_f( gentity_t *ent ) {
 //
 //	if ( Q_stricmp(name, ItemNames[2]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PHASER);
-//		ent->client->ps.ammo[WP_PHASER] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5);
+//		ent->client->ps.ammo[WP_5] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[3]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COMPRESSION_RIFLE);
-//		ent->client->ps.ammo[WP_COMPRESSION_RIFLE] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6);
+//		ent->client->ps.ammo[WP_6] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[4]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NULL_HAND);
-//		ent->client->ps.ammo[WP_NULL_HAND] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1);
+//		ent->client->ps.ammo[WP_1] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[5]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COFFEE);
-//		ent->client->ps.ammo[WP_COFFEE] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_4);
+//		ent->client->ps.ammo[WP_4] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[6]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DISRUPTOR);
-//		ent->client->ps.ammo[WP_DISRUPTOR] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10);
+//		ent->client->ps.ammo[WP_10] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[7]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER);
-//		ent->client->ps.ammo[WP_GRENADE_LAUNCHER] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_8);
+//		ent->client->ps.ammo[WP_8] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[8]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TR116);
-//		ent->client->ps.ammo[WP_TR116] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7);
+//		ent->client->ps.ammo[WP_7] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[9]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_QUANTUM_BURST);
-//		ent->client->ps.ammo[WP_QUANTUM_BURST] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_9);
+//		ent->client->ps.ammo[WP_9] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[10]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DERMAL_REGEN);
-//		ent->client->ps.ammo[WP_DERMAL_REGEN] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13);
+//		ent->client->ps.ammo[WP_13] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[11]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_VOYAGER_HYPO);
-//		ent->client->ps.ammo[WP_VOYAGER_HYPO] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12);
+//		ent->client->ps.ammo[WP_12] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[12]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TOOLKIT);
-//		ent->client->ps.ammo[WP_TOOLKIT] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_14);
+//		ent->client->ps.ammo[WP_14] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[13]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_MEDKIT);
-//		ent->client->ps.ammo[WP_MEDKIT] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11);
+//		ent->client->ps.ammo[WP_11] = 999;
 //
 //		if (!give_all)
 //
@@ -828,16 +828,16 @@ static void Cmd_Give_f( gentity_t *ent ) {
 //	}
 //	if (Q_stricmp(name, ItemNames[14]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER);
-//		ent->client->ps.ammo[WP_TRICORDER] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2);
+//		ent->client->ps.ammo[WP_2] = 999;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (Q_stricmp(name, ItemNames[15]) == 0)
 //	{
-//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PADD);
-//		ent->client->ps.ammo[WP_PADD] = 999;
+//		ent->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_3);
+//		ent->client->ps.ammo[WP_3] = 999;
 //
 //		if (!give_all)
 //			return;
@@ -923,7 +923,7 @@ void Cmd_Give_f (gentity_t *ent)
 
 	if (give_all || Q_stricmp(name, "weapons") == 0)
 	{
-		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_NONE );
+		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_0 );
 		if (!give_all)
 			return;
 	}
@@ -1174,7 +1174,7 @@ static void Cmd_Kill_f( gentity_t *ent )
 	
 	//RPG-X: Medics revive Support for suiciding
 	if(rpg_medicsrevive.integer != 0 ){
-		ps->stats[STAT_WEAPONS] = ( 1 << WP_NONE );
+		ps->stats[STAT_WEAPONS] = ( 1 << WP_0 );
 		ps->stats[STAT_HOLDABLE_ITEM] = HI_NONE;
 		ps->stats[STAT_HEALTH] = ent->health = 1;
 		player_die (ent, ent, ent, 1, meansOfDeath ); //MOD_SUICIDE
@@ -1235,7 +1235,7 @@ in the RPG-X forum lol.
 	
 	//RPG-X: Medics revive Support for suiciding
 	if(rpg_medicsrevive.integer == 1){
-		ent->client->ps.stats[STAT_WEAPONS] = ( 1 << WP_NONE );
+		ent->client->ps.stats[STAT_WEAPONS] = ( 1 << WP_0 );
 		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = HI_NONE;
 		ent->client->ps.stats[STAT_HEALTH] = ent->health = 1;
 		player_die (ent, ent, ent, 1, MOD_CUSTOM_DIE );
@@ -2014,7 +2014,7 @@ qboolean SetClass( gentity_t *ent, char *s, char *teamName, qboolean SaveToCvar 
 			if(g_classData[pclass].isn00b/*pclass == PC_N00B*/){
 				
 				ClientSpawn(ent, 1, qfalse);
-				ps->stats[STAT_WEAPONS] = ( 1 << WP_NONE );
+				ps->stats[STAT_WEAPONS] = ( 1 << WP_0 );
 				ps->stats[STAT_HOLDABLE_ITEM] = HI_NONE;
 				
 				//Take some admin powerups away and give some n00b powerps ;)
@@ -3385,7 +3385,7 @@ Give an item to any player on the sevrer using ID
 //
 //	if (give_all || Q_stricmp(name, "weapons") == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_NONE );
+//		target->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_0 );
 //		if (!give_all)
 //			return;
 //	}
@@ -3416,96 +3416,96 @@ Give an item to any player on the sevrer using ID
 //
 //	if (give_all || Q_stricmp(name, ItemNames[2]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PHASER);
-//		target->client->ps.ammo[WP_PHASER] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5);
+//		target->client->ps.ammo[WP_5] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[3]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COMPRESSION_RIFLE);
-//		target->client->ps.ammo[WP_COMPRESSION_RIFLE] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6);
+//		target->client->ps.ammo[WP_6] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[4]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NULL_HAND);
-//		target->client->ps.ammo[WP_NULL_HAND] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1);
+//		target->client->ps.ammo[WP_1] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[5]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COFFEE);
-//		target->client->ps.ammo[WP_COFFEE] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_4);
+//		target->client->ps.ammo[WP_4] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[6]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DISRUPTOR);
-//		target->client->ps.ammo[WP_DISRUPTOR] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10);
+//		target->client->ps.ammo[WP_10] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[7]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER);
-//		target->client->ps.ammo[WP_GRENADE_LAUNCHER] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_8);
+//		target->client->ps.ammo[WP_8] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[8]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TR116);
-//		target->client->ps.ammo[WP_TR116] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7);
+//		target->client->ps.ammo[WP_7] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[9]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_QUANTUM_BURST);
-//		target->client->ps.ammo[WP_QUANTUM_BURST] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_9);
+//		target->client->ps.ammo[WP_9] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[10]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DERMAL_REGEN);
-//		target->client->ps.ammo[WP_DERMAL_REGEN] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13);
+//		target->client->ps.ammo[WP_13] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[11]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_VOYAGER_HYPO);
-//		target->client->ps.ammo[WP_VOYAGER_HYPO] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12);
+//		target->client->ps.ammo[WP_12] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[12]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TOOLKIT);
-//		target->client->ps.ammo[WP_TOOLKIT] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_14);
+//		target->client->ps.ammo[WP_14] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[13]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_MEDKIT);
-//		target->client->ps.ammo[WP_MEDKIT] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11);
+//		target->client->ps.ammo[WP_11] = -1;
 //
 //		if (!give_all)
 //
@@ -3513,16 +3513,16 @@ Give an item to any player on the sevrer using ID
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[14]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER);
-//		target->client->ps.ammo[WP_TRICORDER] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2);
+//		target->client->ps.ammo[WP_2] = -1;
 //
 //		if (!give_all)
 //			return;
 //	}
 //	if (give_all || Q_stricmp(name, ItemNames[15]) == 0)
 //	{
-//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PADD);
-//		target->client->ps.ammo[WP_PADD] = -1;
+//		target->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_3);
+//		target->client->ps.ammo[WP_3] = -1;
 //
 //		if (!give_all)
 //			return;
@@ -4288,7 +4288,7 @@ void Cmd_ForceKill_f( gentity_t *ent ) {
 	
 	//RPG-X: Medics revive Support for suiciding
 	if(rpg_medicsrevive.integer == 1){
-		ps->stats[STAT_WEAPONS] = ( 1 << WP_NONE );
+		ps->stats[STAT_WEAPONS] = ( 1 << WP_0 );
 		ps->stats[STAT_HOLDABLE_ITEM] = HI_NONE;
 		ps->stats[STAT_HEALTH] = target->health = 1;
 		player_die (target, target, target, 100000, MOD_FORCEDSUICIDE);
@@ -4325,7 +4325,7 @@ void Cmd_ForceKill_f( gentity_t *ent ) {
 	
 	//RPG-X: Medics revive Support for suiciding
 	if(rpg_medicsrevive.integer == 1){
-		ps->stats[STAT_WEAPONS] = ( 1 << WP_NONE );
+		ps->stats[STAT_WEAPONS] = ( 1 << WP_0 );
 		ps->stats[STAT_HOLDABLE_ITEM] = HI_NONE;
 		ps->stats[STAT_HEALTH] = target->health = 1;
 		player_die (target, target, target, 100000, MOD_FORCEDSUICIDE);
@@ -4459,7 +4459,7 @@ for(i = 0; i < level.numConnectedClients; i++)
 		OtherPlayer->flags &= ~FL_GODMODE;							//Bypass godmode (?)
 		//RPG-X: Medics revive Support for suiciding
 		if(rpg_medicsrevive.integer == 1){
-			oPs->stats[STAT_WEAPONS] = ( 1 << WP_NONE );
+			oPs->stats[STAT_WEAPONS] = ( 1 << WP_0 );
 			oPs->stats[STAT_HOLDABLE_ITEM] = HI_NONE;
 			oPs->stats[STAT_HEALTH] = OtherPlayer->health = 1;
 			player_die(OtherPlayer,OtherPlayer,OtherPlayer,100000, MOD_FORCEDSUICIDE);
@@ -4479,7 +4479,7 @@ for(i = 0; i < level.numConnectedClients; i++)
 		ent->flags &= ~FL_GODMODE;							//Bypass godmode (?)
 		//RPG-X: Medics revive Support for suiciding
 		if(rpg_medicsrevive.integer == 1){
-			ePs->stats[STAT_WEAPONS] = ( 1 << WP_NONE );
+			ePs->stats[STAT_WEAPONS] = ( 1 << WP_0 );
 			ePs->stats[STAT_HOLDABLE_ITEM] = HI_NONE;
 			ePs->stats[STAT_HEALTH] = ent->health = 1;
 			player_die(ent,ent,ent,100000, MOD_FORCEDSUICIDE);
@@ -8550,15 +8550,15 @@ static void Cmd_remodulate_f(gentity_t *ent) {
 
 	switch(i) {
 		case 1:
-			level.borgAdaptHits[WP_PHASER] = 0;
+			level.borgAdaptHits[WP_5] = 0;
 			trap_SendServerCommand(-1, va("print \"Phasers have been remodulated.\n\""));
 			break;
 		case 2:
-			level.borgAdaptHits[WP_COMPRESSION_RIFLE] = 0;
+			level.borgAdaptHits[WP_6] = 0;
 			trap_SendServerCommand(-1, va("print \"Compression Rifles have been remodulated.\n\""));
 			break;
 		case 3:
-			level.borgAdaptHits[WP_DISRUPTOR] = 0;
+			level.borgAdaptHits[WP_10] = 0;
 			trap_SendServerCommand(-1, va("print \"Disruptors have been remodulated.\n\""));
 			break;
 		default:
@@ -9545,7 +9545,7 @@ static void Cmd_spawnTentity_f(gentity_t *ent) {
 			if(numArgs < 3) {
 				G_FreeEntity(newEnt);
 				trap_SendServerCommand(clientNum, "print \"Insufficent number of arguments for target_give!\n\"");
-				trap_SendServerCommand(clientNum, "print \"Usage: spawnTEnt target_give targetname items (example for items: WP_PHASER | WP_TOOLKIT)\n\"");
+				trap_SendServerCommand(clientNum, "print \"Usage: spawnTEnt target_give targetname items (example for items: WP_5 | WP_14)\n\"");
 				return;
 			}
 			trap_Argv(2, arg, sizeof(arg));

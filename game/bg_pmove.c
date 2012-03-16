@@ -108,10 +108,10 @@ extern vmCvar_t				rpg_altTricorderDelay;
 */
 qboolean PM_Holding2HandedWeapon ( void ) {
 	switch (pm->ps->weapon) {
-		case WP_TR116:
-		case WP_GRENADE_LAUNCHER:
-		case WP_QUANTUM_BURST:
-		case WP_COMPRESSION_RIFLE:
+		case WP_7:
+		case WP_8:
+		case WP_9:
+		case WP_6:
 			return qtrue;
 	}
 	return qfalse;
@@ -178,11 +178,11 @@ qboolean PM_PlayerIdling ( int torsoAnim, int legsAnim ) {
 */
 qboolean PM_HoldingLoopableWeapon ( void ) {
 	switch (pm->ps->weapon) {
-		case WP_DERMAL_REGEN:
-		case WP_TRICORDER:
-		case WP_PADD:
-		case WP_MEDKIT:
-		case WP_COFFEE:
+		case WP_13:
+		case WP_2:
+		case WP_3:
+		case WP_11:
+		case WP_4:
 			return qtrue;
 	}
 	return qfalse;
@@ -197,11 +197,11 @@ qboolean PM_HoldingLoopableWeapon ( void ) {
 */
 qboolean PM_HoldingSpillableWeapon( void ) {
 	switch ( pm->ps->weapon ) {
-		case WP_COFFEE:
-		case WP_COMPRESSION_RIFLE:
-		case WP_QUANTUM_BURST:
-		case WP_GRENADE_LAUNCHER:
-		case WP_TR116:
+		case WP_4:
+		case WP_6:
+		case WP_9:
+		case WP_8:
+		case WP_7:
 			return qtrue;
 	}
 	return qfalse;
@@ -274,9 +274,9 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 		case ANIM_CROUCH:
 			//2 handed weapon - "heavy"
 			switch (weapon) {
-				case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
+				case WP_7:
+				case WP_8:
+				case WP_9:
 					if ( ps->pm_flags & ANIM_ALERT2 && upper )
 						return TORSO_WEAPONREADY2;
 					else if (upper)
@@ -285,8 +285,8 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 						return LEGS_KNEEL1;
 					break;
 				//2 handed weapon - "light"
-				case WP_COMPRESSION_RIFLE:
-				//case WP_TR116:
+				case WP_6:
+				//case WP_7:
 					if ( ps->pm_flags & ANIM_ALERT && upper )
 						return BOTH_STAND2;
 					else if (upper)
@@ -295,14 +295,14 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 						return LEGS_KNEEL1;
 					break;
 				//1 handed weapon - "phaser"
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if ( upper )
 						return TORSO_WEAPONPOSE1;
 					else 
 						return BOTH_CROUCH1IDLE;
 					break;
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
@@ -317,10 +317,10 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 		case ANIM_IDLE:
 			//2 handed weapon - "heavy"
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_7:
 					if (injured)
 						return BOTH_INJURED4;
 					else 
@@ -339,7 +339,7 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 					}
 					break;
 				//2 handed weapon - "light"
-				case WP_COMPRESSION_RIFLE:
+				case WP_6:
 					if (injured)
 						return BOTH_INJURED4;
 					else 
@@ -358,8 +358,8 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 					}
 					break;
 				//1 handed weapon - "phaser"
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if (injured)
 						return BOTH_INJURED4;
 					else {
@@ -372,7 +372,7 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 					}
 					break;
 				//Generic tools - "everything else"
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					else
@@ -391,17 +391,17 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 		case ANIM_ATTACK:
 			//2 handed weapon - "heavy"
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_7:
 					if ( ps->pm_flags & ANIM_ALERT2 )
 						return BOTH_ATTACK2;
 					else
 						return BOTH_ATTACK3;
 					break;
 				//2 handed weapon - "light"
-				case WP_COMPRESSION_RIFLE:
+				case WP_6:
 					if ( ps->pm_flags & ANIM_ALERT2 )
 						return BOTH_ATTACK2;
 					else
@@ -413,24 +413,24 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 					}
 					break;
 				//1 handed weapon - "phaser"
-				case WP_PHASER:
-				case WP_DISRUPTOR:
-				case WP_HYPERSPANNER:
-				case WP_DERMAL_REGEN:
+				case WP_5:
+				case WP_10:
+				case WP_15:
+				case WP_13:
 					if (upper)
 						return TORSO_WEAPONREADY1; 
 					else
 						return BOTH_STAND1;
 					break;
 			//Other Tools "padd"
-			case WP_PADD:
+			case WP_3:
 				if (upper)
 					return TORSO_PADD1;
 				else
 					return BOTH_STAND1;
 				break;
 			//Other Tools "tricorder"
-			case WP_TRICORDER:
+			case WP_2:
 				if (upper)
 				{
 					if ( !pm->medic )				
@@ -442,26 +442,26 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 					return BOTH_STAND1;
 				break;
 			//Other: "Medkit"
-			case WP_MEDKIT:
+			case WP_11:
 				if (upper)
 					return TORSO_ACTIVATEMEDKIT1;
 				else
 					return BOTH_STAND1;
 				break;
 			//Other: "Hypo
-			case WP_VOYAGER_HYPO:
+			case WP_12:
 				if (upper)
 					//return TORSO_HYPOSPRAY1;
 					return TORSO_HYPO1;
 				else
 					return BOTH_STAND1;
 			//Other: "Toolkit"
-			/*case WP_TOOLKIT:
+			/*case WP_14:
 				//Return nothing.  
 				//A bit hacky, but the engine accepts it :P
 				break;*/
 			//Other Tools "everything else"
-			/*case WP_NULL_HAND:
+			/*case WP_1:
 				switch(rand()%13)
 				{
 					case 0: return TORSO_HANDGESTURE1;
@@ -479,7 +479,7 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 					case 12: return TORSO_HANDGESTURE13;
 				}
 				break;*/
-			case WP_COFFEE:
+			case WP_4:
 				if (upper)
 					return TORSO_COFFEE;
 				//break;
@@ -507,17 +507,17 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 
 			//2 handed weapons
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_6:
+				case WP_7:
 					if (upper)
 						return BOTH_RUN2;
 					else
 						return BOTH_RUN1;
 					break;
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
@@ -531,11 +531,11 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 		case ANIM_RUNB:
 			//2 handed weapons
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_6:
+				case WP_7:
 					if (upper)
 						return BOTH_WALK2;
 					else
@@ -545,7 +545,7 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 							return LEGS_RUNBACK2;
 					break;
 				//EVERYTHING ELSE
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
@@ -568,11 +568,11 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 
 			//2 handed weapons
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_6:
+				case WP_7:
 					if ( ps->pm_flags & ANIM_ALERT )
 						return BOTH_WALK2;
 					else if ( ps->pm_flags & ANIM_ALERT2 )
@@ -586,11 +586,11 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 						return BOTH_WALK4;
 					break;
 				//Other Tools "everything else"
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if ( ps->pm_flags & ANIM_ALERT )
 					{
 						if ( upper )
@@ -612,11 +612,11 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 		case ANIM_WALKB:
 			//2 handed weapons
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_6:
+				case WP_7:
 					if ( ps->pm_flags & ANIM_ALERT )
 					{
 						if ( upper )
@@ -639,12 +639,12 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 							return LEGS_WALKBACK1;
 					}
 					break;
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if ( ps->pm_flags & ANIM_ALERT && upper)
 						return TORSO_WEAPONIDLE1;
 					else if ( ps->pm_flags & ANIM_ALERT2 && upper )
@@ -664,16 +664,16 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 		case ANIM_CROUCHWALK:
 			//2 handed weapons
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_6:
+				case WP_7:
 					if ( upper )
 						return TORSO_WEAPONREADY2;
 					else
 						return BOTH_CROUCH1WALK;
 					break;
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
+				case WP_8:
+				case WP_9:
 					if ( ps->pm_flags & ANIM_ALERT2 && upper )
 						return TORSO_WEAPONREADY2;
 					else if ( upper )
@@ -681,12 +681,12 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 					else
 						return BOTH_CROUCH1WALK;
 					break;
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if ( ps->pm_flags & ANIM_ALERT && upper )
 						return TORSO_WEAPONIDLE1;
 					else if ( ps->pm_flags & ANIM_ALERT2 && upper )
@@ -702,11 +702,11 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 		case ANIM_CROUCHWALKB:
 			//2 handed weapons
 			switch (weapon) {
-				//case WP_TR116:
-				case WP_GRENADE_LAUNCHER:
-				case WP_QUANTUM_BURST:
-				case WP_COMPRESSION_RIFLE:
-				case WP_TR116:
+				//case WP_7:
+				case WP_8:
+				case WP_9:
+				case WP_6:
+				case WP_7:
 					if ( ps->pm_flags & ANIM_ALERT2 )
 						return TORSO_WEAPONREADY2;
 					else if ( upper )
@@ -714,12 +714,12 @@ int PM_GetAnim ( int anim, int weapon, qboolean injured, qboolean upper )
 					else
 						return BOTH_CROUCH1WALK;
 					break;
-				case WP_COFFEE:
+				case WP_4:
 					if (upper)
 						return TORSO_COFFEE;
 					//break;
-				case WP_PHASER:
-				case WP_DISRUPTOR:
+				case WP_5:
+				case WP_10:
 					if ( ps->pm_flags & ANIM_ALERT && upper )
 						return TORSO_WEAPONIDLE1;
 					else if ( ps->pm_flags & ANIM_ALERT2 && upper )
@@ -2816,7 +2816,7 @@ PM_BeginWeaponChange
 static void PM_BeginWeaponChange( int weapon ) {
 	playerState_t *ps = pm->ps;
 
-	if ( weapon <= WP_NONE || weapon >= WP_NUM_WEAPONS ) {
+	if ( weapon <= WP_0 || weapon >= WP_NUM_WEAPONS ) {
 		return;
 	}
 
@@ -2848,12 +2848,12 @@ static void PM_FinishWeaponChange( void ) {
 	playerState_t *ps = pm->ps;
 
 	weapon = pm->cmd.weapon;
-	if ( weapon < WP_NONE || weapon >= WP_NUM_WEAPONS ) {
-		weapon = WP_NONE;
+	if ( weapon < WP_0 || weapon >= WP_NUM_WEAPONS ) {
+		weapon = WP_0;
 	}
 
 	if ( !( ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
-		weapon = WP_NONE;
+		weapon = WP_0;
 	}
 
 	ps->weapon = weapon;
@@ -2877,8 +2877,8 @@ static void PM_TorsoAnimation( void )
 	
 	if ( pm->ps->weaponstate == WEAPON_READY )
 	{
-		/*if ( pm->ps->weapon == WP_PHASER || //RPG-X - TiM: Making the default pose anim better
-		pm->ps->weapon == WP_DISRUPTOR ) 
+		/*if ( pm->ps->weapon == WP_5 || //RPG-X - TiM: Making the default pose anim better
+		pm->ps->weapon == WP_10 ) 
 		{
 			PM_ContinueTorsoAnim( TORSO_WEAPONIDLE1 );
 		} 
@@ -2905,16 +2905,16 @@ static void PM_TorsoAnimation( void )
 //! alt ammo usage
 int		altAmmoUsage[WP_NUM_WEAPONS] =
 {
-	0,				//!<WP_NONE,
-	1,				//!<WP_PHASER,				
-	8,				//!<WP_COMPRESSION_RIFLE,	
-	3,				//!<WP_NULL_HAND,				
-	5,				//!<WP_COFFEE,		
-	1,				//!<WP_DISRUPTOR,				
-	1,				//!<WP_GRENADE_LAUNCHER,	
-	2,				//!<WP_TR116,	
-	2,				//!<WP_QUANTUM_BURST,		
-	5				//!<WP_DERMAL_REGEN,			
+	0,				//!<WP_0,
+	1,				//!<WP_5,				
+	8,				//!<WP_6,	
+	3,				//!<WP_1,				
+	5,				//!<WP_4,		
+	1,				//!<WP_10,				
+	1,				//!<WP_8,	
+	2,				//!<WP_7,	
+	2,				//!<WP_9,		
+	5				//!<WP_13,			
 };
 
 /*
@@ -2942,10 +2942,10 @@ static void PM_Weapon( void ) {
 
 	//Check for phaser ammo recharge
 	//RPG-X: Marcin: don't! - 30/12/2008
-	if ( 0 ) //( (ps->rechargeTime <= 0) && ( ps->ammo[WP_PHASER] < PHASER_AMMO_MAX) ) 
+	if ( 0 ) //( (ps->rechargeTime <= 0) && ( ps->ammo[WP_5] < PHASER_AMMO_MAX) ) 
 	{
 		ps->rechargeTime = PHASER_RECHARGE_TIME;
-		ps->ammo[WP_PHASER]++;
+		ps->ammo[WP_5]++;
 	} 
 	else 
 	{
@@ -2954,7 +2954,7 @@ static void PM_Weapon( void ) {
 
 	// check for dead player
 	if ( ps->stats[STAT_HEALTH] <= 0 ) {
-		ps->weapon = WP_NONE;
+		ps->weapon = WP_0;
 		return;
 	}
 
@@ -3032,8 +3032,8 @@ static void PM_Weapon( void ) {
 	if ( ps->weaponstate == WEAPON_RAISING ) 
 	{
 		ps->weaponstate = WEAPON_READY;
-		/*if ( ps->weapon == WP_PHASER || //RPG-X - TiM: Making the default pose anim better
-		ps->weapon == WP_DISRUPTOR )
+		/*if ( ps->weapon == WP_5 || //RPG-X - TiM: Making the default pose anim better
+		ps->weapon == WP_10 )
 		{
 			PM_StartTorsoAnim( TORSO_WEAPONREADY2 ); 
 		} 
@@ -3074,7 +3074,7 @@ static void PM_Weapon( void ) {
 
 				/*
 				RPG-X | Phenix | 27/02/2005
-				  if ( ps->weapon == WP_PHASER ) // phaser out of ammo is special case
+				  if ( ps->weapon == WP_5 ) // phaser out of ammo is special case
 				{
 					ps->ammo[ps->weapon] = 0;
 				}
@@ -3101,7 +3101,7 @@ static void PM_Weapon( void ) {
 			// check for out of ammo
 			 if ( ! ps->ammo[ ps->weapon ] ) 
 			{
-				if ( ps->weapon == WP_PHASER ) // phaser out of ammo is special case
+				if ( ps->weapon == WP_5 ) // phaser out of ammo is special case
 				{
 					ps->ammo[ps->weapon] = 0;
 				}
@@ -3122,8 +3122,8 @@ static void PM_Weapon( void ) {
 	}
 
 	// *don't* start the animation if out of ammo
-	/*if ( ps->weapon == WP_PHASER || //RPG-X - TiM: Making the default pose anim better
-		ps->weapon == WP_DISRUPTOR )  
+	/*if ( ps->weapon == WP_5 || //RPG-X - TiM: Making the default pose anim better
+		ps->weapon == WP_10 )  
 	{
 		PM_StartTorsoAnim( TORSO_ATTACK2 );
 	} 
@@ -3132,13 +3132,13 @@ static void PM_Weapon( void ) {
 		PM_StartTorsoAnim( BOTH_ATTACK1 );
 	}*/
 
-	if ( ps->weapon != WP_TOOLKIT && ps->weapon != WP_COFFEE && ps->weapon != WP_NULL_HAND ) 
+	if ( ps->weapon != WP_14 && ps->weapon != WP_4 && ps->weapon != WP_1 ) 
 	{
 		//Little hack.  I like the idle poses for these when it crouches :)
-		if ( ( ( ps->weapon == WP_PHASER ) 
-			|| ( ps->weapon == WP_COMPRESSION_RIFLE )
-			|| ( ps->weapon == WP_DISRUPTOR ) 
-			|| ( ps->weapon == WP_TR116 ) )
+		if ( ( ( ps->weapon == WP_5 ) 
+			|| ( ps->weapon == WP_6 )
+			|| ( ps->weapon == WP_10 ) 
+			|| ( ps->weapon == WP_7 ) )
 			&& ( ps->pm_flags & PMF_DUCKED /*&& !pm->xyspeed*/ ) ) 
 		{
 			PM_ForceTorsoAnim( PM_GetAnim( ANIM_CROUCH, ps->weapon, ( ps->stats[STAT_HEALTH] <= INJURED_MODE_HEALTH), qtrue ), qfalse );
@@ -3183,36 +3183,36 @@ static void PM_Weapon( void ) {
 		}
 		switch( ps->weapon ) {
 		default:
-		case WP_PHASER:
+		case WP_5:
 			addTime = 100;
 			//If the phaser has been fired, delay the next recharge time
 			ps->rechargeTime = PHASER_RECHARGE_TIME;
 			break;
-		case WP_DERMAL_REGEN:
+		case WP_13:
 			addTime = 0; //500
 			break;
-		case WP_GRENADE_LAUNCHER:
+		case WP_8:
 			addTime = 600;//RPG-X: RedTechie use to be 700
 			break;
-		case WP_DISRUPTOR:
+		case WP_10:
 			addTime = DISRUPTOR_DELAY;
 			break;
-		case WP_COFFEE:
+		case WP_4:
 			addTime = 0; //700
 			break;
-		case WP_QUANTUM_BURST:
+		case WP_9:
 			addTime = ALT_PHOTON_DELAY;
 			break;
-		case WP_NULL_HAND:
+		case WP_1:
 			addTime = 460; //700
 			break;
-		case WP_COMPRESSION_RIFLE: 
+		case WP_6: 
 			addTime = 100;
 			break;
-		case WP_TR116: 
+		case WP_7: 
 			addTime = 500; //RPG-X: RedTechie - Use to be 1200
 			break;
-		case WP_VOYAGER_HYPO:
+		case WP_12:
 			//RPG-X: RedTechie - Admins get faster alt fire for steam effects
 			if(/*ps->persistant[PERS_CLASS] == PC_ADMIN*/ pm->admin){
 				addTime = 80;
@@ -3220,26 +3220,26 @@ static void PM_Weapon( void ) {
 				addTime = 1000;
 			}
 			break;
-		case WP_TOOLKIT:
+		case WP_14:
 			addTime = 2000;
 			break;
-		case WP_MEDKIT:
+		case WP_11:
 			addTime = 0; //1000
 			break;
-		case WP_TRICORDER: 
+		case WP_2: 
 			if(pm->admin /*ps->persistant[PERS_CLASS] == PC_ADMIN*/){
 				addTime = ALT_TRICORDER_DELAY;
 			}else{
 				addTime = 0;
 			}
 			break;
-		case WP_PADD: 
+		case WP_3: 
 			addTime = 0; //500
 			break;
-		case WP_HYPERSPANNER: 
+		case WP_15: 
 			addTime = 0; //1000
 			break;
-/*		case WP_TR116:
+/*		case WP_7:
 			addTime = 500; //RPG-X: RedTechie - Use to be 1200
 			break;*/
 		}
@@ -3256,54 +3256,54 @@ static void PM_Weapon( void ) {
 		}
 		switch( ps->weapon ) {
 		default:
-		case WP_PHASER:
+		case WP_5:
 			addTime = 100;
 			//If the phaser has been fired, delay the next recharge time
 			ps->rechargeTime = PHASER_RECHARGE_TIME;
 			break;
-		case WP_DERMAL_REGEN:
+		case WP_13:
 			addTime = 1000; //1000
 			break;
-		case WP_GRENADE_LAUNCHER:
+		case WP_8:
 			addTime = 460;//RPG-X: RedTechie use to be 700
 			break;
-		case WP_NULL_HAND:
+		case WP_1:
 			addTime = 460;
 			break;
-		case WP_DISRUPTOR:
+		case WP_10:
 			addTime = 100;
 			break;
-		case WP_COFFEE:
+		case WP_4:
 			addTime = 0; //100
 			break;
-		case WP_QUANTUM_BURST:
+		case WP_9:
 			addTime = PHOTON_DELAY;
 			break;
-		case WP_COMPRESSION_RIFLE: 
+		case WP_6: 
 			addTime = RIFLE_DELAY;
 			break;
-		case WP_TR116: 
+		case WP_7: 
 			addTime = TR116_DELAY; //RPG-X: RedTechie - Use to be 1200
 			break;
-		case WP_VOYAGER_HYPO:
+		case WP_12:
 			addTime = 1000;
 			break;
-		case WP_TOOLKIT:
+		case WP_14:
 			addTime = 2000; //1000
 			break;
-		case WP_MEDKIT:
+		case WP_11:
 			addTime = 0; //1000
 			break;
-		case WP_TRICORDER: 
+		case WP_2: 
 			addTime = ALT_TRICORDER_DELAY; //1000
 			break;
-		case WP_PADD: 
+		case WP_3: 
 			addTime = 0; //500
 			break;
-		case WP_HYPERSPANNER: 
+		case WP_15: 
 			addTime = 0; //1000
 			break;
-/*		case WP_TR116:
+/*		case WP_7:
 			addTime = 500; //RPG-X: RedTechie - Use to be 1200
 			break;*/
 		}
@@ -3560,9 +3560,9 @@ void PmoveSingle (pmove_t *pmove) {
 			ps->pm_type != PM_INTERMISSION && 
 			ps->pm_type != PM_CCAM &&
 			( (pm->cmd.buttons & BUTTON_ATTACK) || (pm->cmd.buttons & BUTTON_ALT_ATTACK) ) &&
-			(ps->ammo[ ps->weapon ] || ps->weapon == WP_PHASER))
+			(ps->ammo[ ps->weapon ] || ps->weapon == WP_5))
 	{
-		if (((ps->weapon == WP_PHASER) && (!ps->ammo[ ps->weapon ])) || (!(pm->cmd.buttons & BUTTON_ALT_ATTACK)))
+		if (((ps->weapon == WP_5) && (!ps->ammo[ ps->weapon ])) || (!(pm->cmd.buttons & BUTTON_ALT_ATTACK)))
 		{
 			ps->eFlags &= ~EF_ALT_FIRING;
 		}
@@ -3571,7 +3571,7 @@ void PmoveSingle (pmove_t *pmove) {
 			ps->eFlags |= EF_ALT_FIRING;
 		} 
 
-		/*if ( ps->weapon == WP_DISRUPTOR )
+		/*if ( ps->weapon == WP_10 )
 		{//tech can't use alt attack
 			pm->cmd.buttons &=~BUTTON_ALT_ATTACK;
 			pm->cmd.buttons |= BUTTON_ATTACK;

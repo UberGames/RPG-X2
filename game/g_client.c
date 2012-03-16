@@ -2675,13 +2675,13 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	int		i;
 	int		Bits;
 
-	Bits = ( 1 << WP_NULL_HAND);
+	Bits = ( 1 << WP_1);
 	Bits |= g_classData[pclass].weaponsFlags;
 
-	for ( i = WP_NULL_HAND; i < MAX_WEAPONS; i++ ) {
+	for ( i = WP_1; i < MAX_WEAPONS; i++ ) {
 		//if we want no weapons and aren't an admin, skip this particular weapon
 		if ( rpg_noweapons.integer != 0 && !g_classData[pclass].isAdmin/*pclass != PC_ADMIN*/ ) {
-			if ( i >= WP_PHASER && i <= WP_DISRUPTOR ) {
+			if ( i >= WP_5 && i <= WP_10 ) {
 				continue;
 			}
 		}
@@ -2700,8 +2700,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//case PC_DEMO:
 	//case PC_MEDIC:
 	//case PC_TECH:
-	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_PHASER );
-	//	client->ps.ammo[WP_PHASER] = PHASER_AMMO_MAX;
+	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_5 );
+	//	client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
 	//	break;*/
 	//case PC_ADMIN:
 	//case PC_SECURITY:
@@ -2712,7 +2712,7 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//case PC_SCIENCE:
 	//case PC_ALIEN:
 	//	//TiM: Hardcoded, regardless, no way out of this, all players get the null hand
-	//	Bits = ( 1 << WP_NULL_HAND);  //Null Hand
+	//	Bits = ( 1 << WP_1);  //Null Hand
 
 	//	switch ( pclass )
 	//	{
@@ -2746,10 +2746,10 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//	}
 	//	
 	//	//TiM - Totally re-uberhancified using programming's modern convieniences like for loops and bit shifts. :)
-	//	for ( i = WP_NULL_HAND; i < MAX_WEAPONS; i++ ) {
+	//	for ( i = WP_1; i < MAX_WEAPONS; i++ ) {
 	//		//if we want no weapons and aren't an admin, skip this particular weapon
 	//		if ( rpg_noweapons.integer != 0 && pclass != PC_ADMIN ) {
-	//			if ( i >= WP_PHASER && i <= WP_DISRUPTOR ) {
+	//			if ( i >= WP_5 && i <= WP_10 ) {
 	//				continue;
 	//			}
 	//		}
@@ -2767,57 +2767,57 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//		//Tricorder
 	//		if ( Bits & 1 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER );
-	//			client->ps.ammo[WP_TRICORDER] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
+	//			client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
 	//		}
 	//		
 	//		//PADD
 	//		if ( Bits & 2 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PADD );
-	//			client->ps.ammo[WP_PADD] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_3 );
+	//			client->ps.ammo[WP_3] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Phaser
 	//		if ( Bits & 4 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PHASER );
-	//			client->ps.ammo[WP_PHASER] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
+	//			client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Phaser Rifle
 	//		if ( Bits & 8 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COMPRESSION_RIFLE );
-	//			client->ps.ammo[WP_COMPRESSION_RIFLE] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
+	//			client->ps.ammo[WP_6] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Alien Disruptor
 	//		if ( Bits & 16 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DISRUPTOR );
-	//			client->ps.ammo[WP_DISRUPTOR] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10 );
+	//			client->ps.ammo[WP_10] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Hypospray
 	//		if ( Bits & 32 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_VOYAGER_HYPO );
-	//			client->ps.ammo[WP_VOYAGER_HYPO] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
+	//			client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Dermal Regenerator
 	//		if ( Bits & 64 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DERMAL_REGEN );
-	//			client->ps.ammo[WP_DERMAL_REGEN] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13 );
+	//			client->ps.ammo[WP_13] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Med Kit
 	//		if ( Bits & 128 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_MEDKIT );
-	//			client->ps.ammo[WP_MEDKIT] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11 );
+	//			client->ps.ammo[WP_11] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Neutrino Probe
@@ -2830,43 +2830,43 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//		//Engineering Tool Kit
 	//		if ( Bits & 512 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TOOLKIT );
-	//			client->ps.ammo[WP_TOOLKIT] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_14 );
+	//			client->ps.ammo[WP_14] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//IMOD
 	//		if ( Bits & 1024 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NULL_HAND );
-	//			client->ps.ammo[WP_NULL_HAND] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1 );
+	//			client->ps.ammo[WP_1] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Scavenger Rifle
 	//		if ( Bits & 2048 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COFFEE );
-	//			client->ps.ammo[WP_COFFEE] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_4 );
+	//			client->ps.ammo[WP_4] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Photon Torpedo Launcher
 	//		if ( Bits & 4096 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_QUANTUM_BURST );
-	//			client->ps.ammo[WP_QUANTUM_BURST] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_9 );
+	//			client->ps.ammo[WP_9] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//TR-116
 	//		if ( Bits & 8192 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TR116 );
-	//			client->ps.ammo[WP_TR116] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7 );
+	//			client->ps.ammo[WP_7] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Admin Gun
 	//		if ( Bits & 16384 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER );
-	//			client->ps.ammo[WP_GRENADE_LAUNCHER] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_8 );
+	//			client->ps.ammo[WP_8] = PHASER_AMMO_MAX;
 	//		}
 	//		
 	//		
@@ -2881,8 +2881,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 8 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 8 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PHASER );
-	//			client->ps.ammo[WP_PHASER] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
+	//			client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 16 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 16 && pclass == PC_SECURITY
@@ -2893,8 +2893,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 16 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 16 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COMPRESSION_RIFLE );
-	//			client->ps.ammo[WP_COMPRESSION_RIFLE] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
+	//			client->ps.ammo[WP_6] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 32 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 32 && pclass == PC_SECURITY
@@ -2905,8 +2905,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 32 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 32 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NULL_HAND );
-	//			client->ps.ammo[WP_NULL_HAND] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1 );
+	//			client->ps.ammo[WP_1] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 64 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 64 && pclass == PC_SECURITY
@@ -2917,8 +2917,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 64 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 64 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DISRUPTOR ); //STASIS
-	//			client->ps.ammo[WP_DISRUPTOR] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10 ); //STASIS
+	//			client->ps.ammo[WP_10] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 128 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 128 && pclass == PC_SECURITY
@@ -2929,8 +2929,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 128 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 128 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DERMAL_REGEN );
-	//			client->ps.ammo[WP_DERMAL_REGEN] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13 );
+	//			client->ps.ammo[WP_13] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 256 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 256 && pclass == PC_SECURITY
@@ -2941,8 +2941,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 256 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 256 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_VOYAGER_HYPO );
-	//			client->ps.ammo[WP_VOYAGER_HYPO] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
+	//			client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 512 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 512 && pclass == PC_SECURITY
@@ -2953,8 +2953,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 512 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 512 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TOOLKIT );
-	//			client->ps.ammo[WP_TOOLKIT] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_14 );
+	//			client->ps.ammo[WP_14] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 1024 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 1024 && pclass == PC_SECURITY
@@ -2965,8 +2965,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 1024 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 1024 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_MEDKIT );
-	//			client->ps.ammo[WP_MEDKIT] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11 );
+	//			client->ps.ammo[WP_11] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 2048 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 2048 && pclass == PC_SECURITY
@@ -2977,8 +2977,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 2048 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 2048 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER );
-	//			client->ps.ammo[WP_TRICORDER] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
+	//			client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
 	//		}
 	//		if ( rpg_alienflags.integer & 4096 && pclass == PC_ALIEN
 	//			|| rpg_securityflags.integer & 4096 && pclass == PC_SECURITY
@@ -3001,8 +3001,8 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//			|| rpg_adminflags.integer & 8192 && pclass == PC_ADMIN
 	//			|| rpg_scienceflags.integer & 8192 && pclass == PC_SCIENCE )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TR116 );
-	//			client->ps.ammo[WP_TR116] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7 );
+	//			client->ps.ammo[WP_7] = PHASER_AMMO_MAX;
 	//		}
 
 	//		
@@ -3012,57 +3012,57 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//		//Tricorder
 	//		if ( Bits & 1 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER );
-	//			client->ps.ammo[WP_TRICORDER] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
+	//			client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
 	//		}
 	//		
 	//		//PADD
 	//		if ( Bits & 2 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PADD );
-	//			client->ps.ammo[WP_PADD] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_3 );
+	//			client->ps.ammo[WP_3] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Phaser
 	//		if ( Bits & 4 && pclass == PC_ADMIN)
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PHASER );
-	//			client->ps.ammo[WP_PHASER] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
+	//			client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Phaser Rifle
 	//		if ( Bits & 8 && pclass == PC_ADMIN)
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COMPRESSION_RIFLE );
-	//			client->ps.ammo[WP_COMPRESSION_RIFLE] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
+	//			client->ps.ammo[WP_6] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Alien Disruptor
 	//		if ( Bits & 16 && pclass == PC_ADMIN)
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DISRUPTOR );
-	//			client->ps.ammo[WP_DISRUPTOR] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10 );
+	//			client->ps.ammo[WP_10] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Hypospray
 	//		if ( Bits & 32 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_VOYAGER_HYPO );
-	//			client->ps.ammo[WP_VOYAGER_HYPO] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
+	//			client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Dermal Regenerator
 	//		if ( Bits & 64 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DERMAL_REGEN );
-	//			client->ps.ammo[WP_DERMAL_REGEN] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13 );
+	//			client->ps.ammo[WP_13] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Med Kit
 	//		if ( Bits & 128 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_MEDKIT );
-	//			client->ps.ammo[WP_MEDKIT] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11 );
+	//			client->ps.ammo[WP_11] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Neutrino Probe
@@ -3075,128 +3075,128 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 	//		//Engineering Tool Kit
 	//		if ( Bits & 512 )
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TOOLKIT );
-	//			client->ps.ammo[WP_TOOLKIT] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_14 );
+	//			client->ps.ammo[WP_14] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//IMOD
 	//		if ( Bits & 1024 && pclass == PC_ADMIN)
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NULL_HAND );
-	//			client->ps.ammo[WP_NULL_HAND] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1 );
+	//			client->ps.ammo[WP_1] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Scavenger Rifle
 	//		if ( Bits & 2048 && pclass == PC_ADMIN)
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COFFEE );
-	//			client->ps.ammo[WP_COFFEE] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_4 );
+	//			client->ps.ammo[WP_4] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Photon Torpedo Launcher
 	//		if ( Bits & 4096 && pclass == PC_ADMIN)
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_QUANTUM_BURST );
-	//			client->ps.ammo[WP_QUANTUM_BURST] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_9 );
+	//			client->ps.ammo[WP_9] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//TR-116
 	//		if ( Bits & 8192 && pclass == PC_ADMIN)
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TR116 );
-	//			client->ps.ammo[WP_TR116] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7 );
+	//			client->ps.ammo[WP_7] = PHASER_AMMO_MAX;
 	//		}
 
 	//		//Admin Gun
 	//		if ( Bits & 16384 && pclass == PC_ADMIN)
 	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER );
-	//			client->ps.ammo[WP_GRENADE_LAUNCHER] = PHASER_AMMO_MAX;
+	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_8 );
+	//			client->ps.ammo[WP_8] = PHASER_AMMO_MAX;
 	//		}
 	//	}
 	//	break;
 	///*case PC_ACTIONHERO:
-	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_PHASER );
-	//	client->ps.ammo[WP_PHASER] = PHASER_AMMO_MAX;
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COMPRESSION_RIFLE );
-	//	client->ps.ammo[WP_COMPRESSION_RIFLE] = Max_Ammo[WP_COMPRESSION_RIFLE];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NULL_HAND );
-	//	client->ps.ammo[WP_NULL_HAND] = Max_Ammo[WP_NULL_HAND];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COFFEE );
-	//	client->ps.ammo[WP_COFFEE] = Max_Ammo[WP_COFFEE];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DISRUPTOR );
-	//	client->ps.ammo[WP_DISRUPTOR] = Max_Ammo[WP_DISRUPTOR];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER );
-	//	client->ps.ammo[WP_GRENADE_LAUNCHER] = Max_Ammo[WP_GRENADE_LAUNCHER];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TR116 );
-	//	client->ps.ammo[WP_TR116] = Max_Ammo[WP_TR116];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_QUANTUM_BURST );
-	//	client->ps.ammo[WP_QUANTUM_BURST] = Max_Ammo[WP_QUANTUM_BURST];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DERMAL_REGEN );
-	//	client->ps.ammo[WP_DERMAL_REGEN] = Max_Ammo[WP_DERMAL_REGEN];
+	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_5 );
+	//	client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
+	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
+	//	client->ps.ammo[WP_6] = Max_Ammo[WP_6];
+	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1 );
+	//	client->ps.ammo[WP_1] = Max_Ammo[WP_1];
+	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_4 );
+	//	client->ps.ammo[WP_4] = Max_Ammo[WP_4];
+	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10 );
+	//	client->ps.ammo[WP_10] = Max_Ammo[WP_10];
+	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_8 );
+	//	client->ps.ammo[WP_8] = Max_Ammo[WP_8];
+	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7 );
+	//	client->ps.ammo[WP_7] = Max_Ammo[WP_7];
+	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_9 );
+	//	client->ps.ammo[WP_9] = Max_Ammo[WP_9];
+	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13 );
+	//	client->ps.ammo[WP_13] = Max_Ammo[WP_13];
 	//	break;
 	//case PC_BORG:
 	//	// assimilator
-	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_TOOLKIT );
-	//	client->ps.ammo[WP_TOOLKIT] = Max_Ammo[WP_TOOLKIT];
+	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_14 );
+	//	client->ps.ammo[WP_14] = Max_Ammo[WP_14];
 	//	if ( client->ps.clientNum != borgQueenClientNum )
 	//	{
 	//		// projectile/shock weapon
-	//	 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_MEDKIT );
-	//		client->ps.ammo[WP_MEDKIT] = Max_Ammo[WP_MEDKIT];
+	//	 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11 );
+	//		client->ps.ammo[WP_11] = Max_Ammo[WP_11];
 	//	}
 	//	break;*/
 	//case PC_NOCLASS:
 	//default:
 	//	if ( rpg_rpg.integer != 0 )
 	//	{
-	//		//client->ps.stats[STAT_WEAPONS] = ( 1 << WP_PADD );
-	//		//client->ps.ammo[WP_PADD] = PHASER_AMMO_MAX;
+	//		//client->ps.stats[STAT_WEAPONS] = ( 1 << WP_3 );
+	//		//client->ps.ammo[WP_3] = PHASER_AMMO_MAX;
 
-	//		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_NULL_HAND );
-	//		client->ps.ammo[WP_NULL_HAND] = PHASER_AMMO_MAX;
+	//		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_1 );
+	//		client->ps.ammo[WP_1] = PHASER_AMMO_MAX;
 	//		if ( rpg_noweapons.integer == 0 )
 	//		{
 	//			if ( rpg_rpg.integer == 2 )
 	//			{
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PHASER );
-	//				client->ps.ammo[WP_PHASER] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER );
-	//				client->ps.ammo[WP_TRICORDER] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
+	//				client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
+	//				client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
 	//			}
 	//			if ( rpg_rpg.integer == 3 )
 	//			{
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_VOYAGER_HYPO );
-	//				client->ps.ammo[WP_VOYAGER_HYPO] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER );
-	//				client->ps.ammo[WP_TRICORDER] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
+	//				client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
+	//				client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
 	//			}
 	//			if ( rpg_rpg.integer == 4 )
 	//			{
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PHASER );
-	//				client->ps.ammo[WP_PHASER] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_VOYAGER_HYPO );
-	//				client->ps.ammo[WP_VOYAGER_HYPO] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER );
-	//				client->ps.ammo[WP_TRICORDER] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
+	//				client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
+	//				client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
+	//				client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
 	//			}
 	//			if ( rpg_rpg.integer == 5 )
 	//			{
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_PHASER );
-	//				client->ps.ammo[WP_PHASER] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_COMPRESSION_RIFLE );
-	//				client->ps.ammo[WP_COMPRESSION_RIFLE] = 200;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_VOYAGER_HYPO );
-	//				client->ps.ammo[WP_VOYAGER_HYPO] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_TRICORDER );
-	//				client->ps.ammo[WP_TRICORDER] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
+	//				client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
+	//				client->ps.ammo[WP_6] = 200;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
+	//				client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
+	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
+	//				client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
 	//			}
 	//		}
 	//	}
 	//	else
 	//	{	//TiM: Tricorder... I think
-	//		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_TRICORDER );
-	//		client->ps.ammo[WP_TRICORDER] = PHASER_AMMO_MAX; //13
+	//		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_2 );
+	//		client->ps.ammo[WP_2] = PHASER_AMMO_MAX; //13
 	//	}
 	//	break;
 	//}
@@ -3617,8 +3617,8 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 
 	if ( g_pModDisintegration.integer != 0 )
 	{//this is instagib
-		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_COMPRESSION_RIFLE );
-		client->ps.ammo[WP_COMPRESSION_RIFLE] = Max_Ammo[WP_COMPRESSION_RIFLE];
+		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_6 );
+		client->ps.ammo[WP_6] = Max_Ammo[WP_6];
 	}
 	else
 	{
@@ -3707,7 +3707,7 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 			trap_LinkEntity (ent);
 
 			// force the base weapon up
-			client->ps.weapon = WP_NULL_HAND; //TiM: WP_PHASER
+			client->ps.weapon = WP_1; //TiM: WP_5
 			client->ps.weaponstate = WEAPON_READY;
 
 		}
@@ -3755,7 +3755,7 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 		}*/
 
 		//TiM - Always default to the null hand
-		client->ps.weapon = WP_NULL_HAND;
+		client->ps.weapon = WP_1;
 		//}
 	}
 
@@ -3984,8 +3984,8 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 	body->s.weapon = ent->s.weapon;
 
 	// fix up some weapon holding / shooting issues
-	//if (body->s.weapon==WP_PHASER || body->s.weapon==WP_DERMAL_REGEN || body->s.weapon == WP_NONE )
-	//	body->s.weapon = WP_COMPRESSION_RIFLE;
+	//if (body->s.weapon==WP_5 || body->s.weapon==WP_13 || body->s.weapon == WP_0 )
+	//	body->s.weapon = WP_6;
 
 	body->s.event = 0;
 	body->r.svFlags = ent->r.svFlags;
@@ -4056,8 +4056,8 @@ gentity_t *SpawnBeamOutPlayer( gentity_t	*ent ) {
 		body->s.torsoAnim= ent->client->ps.stats[TORSOANIM];
 
 		//--------------------------- WEAPON ADJUST
-		if (body->s.weapon==WP_PHASER || body->s.weapon==WP_DERMAL_REGEN)
-			body->s.weapon = WP_COMPRESSION_RIFLE;
+		if (body->s.weapon==WP_5 || body->s.weapon==WP_13)
+			body->s.weapon = WP_6;
 
 		return body;
 }

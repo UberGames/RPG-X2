@@ -9,7 +9,7 @@
 Gives all the weapons specified here in the list.
 
 "items" - separated by ' | ', specify the items
-EG "WP_PHASER | WP_TOOLKIT" etc
+EG "WP_5 | WP_14" etc
 (Don't forget the spaces!)
 */
 void Use_Target_Give( gentity_t *ent, gentity_t *other, gentity_t *activator ) {

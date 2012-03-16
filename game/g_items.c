@@ -435,7 +435,7 @@ int Pickup_Weapon (gentity_t *ent, gentity_t *other) {
 
     // RPG-X: Marcin: print PADD message - 06/12/2008
 
-    if ( ent->item->giTag == WP_PADD ) {
+    if ( ent->item->giTag == WP_3 ) {
         msg = Padd_Get( ent, other );
         if (msg) {
             trap_SendServerCommand( other-g_entities, va("print \"" S_COLOR_CYAN "(padd)" S_COLOR_WHITE " %s\n\"", msg) );
@@ -649,7 +649,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
         return;
     }
 
-    if ( ent->item->giTag == WP_PADD ) {
+    if ( ent->item->giTag == WP_3 ) {
         Padd_Remove( ent );
     }
     
@@ -750,7 +750,7 @@ gentity_t *LaunchItem( gitem_t *item, gentity_t *who, vec3_t origin, vec3_t velo
 									// if the item has been droped, and if so, make it pick-up-able
 									// cdr
 
-    if ( item->giTag == WP_PADD ) {
+    if ( item->giTag == WP_3 ) {
         //Q_strncpyz(item->paddMsg, txt, sizeof(item->paddMsg));
         Padd_Add(dropped, who, txt);
     }
@@ -1111,24 +1111,24 @@ ClearRegisteredItems
 void ClearRegisteredItems( void ) {
 	memset( itemRegistered, 0, sizeof( itemRegistered ) );
 	// players always start with the base weapon
-	RegisterItem( BG_FindItemForWeapon( WP_PHASER ) );
-	RegisterItem( BG_FindItemForWeapon( WP_COMPRESSION_RIFLE ) );	//this is for the podium at the end, make sure we have the model
+	RegisterItem( BG_FindItemForWeapon( WP_5 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_6 ) );	//this is for the podium at the end, make sure we have the model
 
-	RegisterItem( BG_FindItemForWeapon( WP_NULL_HAND ) );
-//	RegisterItem( BG_FindItemForWeapon( WP_COFFEE ) );
-	RegisterItem( BG_FindItemForWeapon( WP_DISRUPTOR ) );
-//	RegisterItem( BG_FindItemForWeapon( WP_GRENADE_LAUNCHER ) );
-//	RegisterItem( BG_FindItemForWeapon( WP_TR116 ) );
-//	RegisterItem( BG_FindItemForWeapon( WP_QUANTUM_BURST ) );
-	RegisterItem( BG_FindItemForWeapon( WP_DERMAL_REGEN ) );
-	RegisterItem( BG_FindItemForWeapon( WP_VOYAGER_HYPO ) );
-	RegisterItem( BG_FindItemForWeapon( WP_TOOLKIT ) );
-	RegisterItem( BG_FindItemForWeapon( WP_MEDKIT ) );
-	RegisterItem( BG_FindItemForWeapon( WP_TRICORDER ) );
+	RegisterItem( BG_FindItemForWeapon( WP_1 ) );
+//	RegisterItem( BG_FindItemForWeapon( WP_4 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_10 ) );
+//	RegisterItem( BG_FindItemForWeapon( WP_8 ) );
+//	RegisterItem( BG_FindItemForWeapon( WP_7 ) );
+//	RegisterItem( BG_FindItemForWeapon( WP_9 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_13 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_12 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_14 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_11 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_2 ) );
 
-	RegisterItem( BG_FindItemForWeapon( WP_PADD ) );
-	RegisterItem( BG_FindItemForWeapon( WP_HYPERSPANNER ) );
-	RegisterItem( BG_FindItemForWeapon( WP_TR116 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_3 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_15 ) );
+	RegisterItem( BG_FindItemForWeapon( WP_7 ) );
 
 	// okay!  Now, based on what game mods we have one, we need to register even more stuff by default:
 	if ( g_pModSpecialties.integer )
@@ -1279,16 +1279,16 @@ gitem_t *G_CheckReplaceItem( gentity_t *ent, gitem_t *item )
 	{//replace tetryon and scav rifles with I-Mods 
 		switch ( item->giTag )
 		{
-		case WP_COFFEE:
-		case WP_TR116:
+		case WP_4:
+		case WP_7:
 			switch( item->giType )
 			{
 			case IT_WEAPON:
-				newitem = BG_FindItemForWeapon( WP_NULL_HAND );
+				newitem = BG_FindItemForWeapon( WP_1 );
 				ent->classname = "weapon_imod";
 				break;
 			case IT_AMMO:
-				newitem = BG_FindItemForAmmo( WP_NULL_HAND );
+				newitem = BG_FindItemForAmmo( WP_1 );
 				ent->classname = "ammo_imod";
 				break;
 			default:

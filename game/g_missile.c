@@ -489,7 +489,7 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
-	bolt->s.weapon = WP_COFFEE;
+	bolt->s.weapon = WP_4;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
 	bolt->damage = 20;
@@ -522,7 +522,7 @@ gentity_t *fire_comprifle(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
-	bolt->s.weapon = WP_COMPRESSION_RIFLE;
+	bolt->s.weapon = WP_6;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
 	bolt->damage = 20;
@@ -541,7 +541,7 @@ gentity_t *fire_comprifle(gentity_t *self, vec3_t start, vec3_t dir) {
 
 	VectorCopy (start, bolt->r.currentOrigin);
 
-	G_AddEvent(self, EV_SHOOTER_SOUND, WP_COMPRESSION_RIFLE);
+	G_AddEvent(self, EV_SHOOTER_SOUND, WP_6);
 
 	return bolt;
 }
@@ -566,7 +566,7 @@ gentity_t *fire_quantum (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
-	bolt->s.weapon = WP_QUANTUM_BURST;
+	bolt->s.weapon = WP_9;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
 	bolt->damage = 20;
@@ -585,7 +585,7 @@ gentity_t *fire_quantum (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	VectorCopy (start, bolt->r.currentOrigin);
 
-	G_AddEvent(self, EV_SHOOTER_SOUND, WP_QUANTUM_BURST);
+	G_AddEvent(self, EV_SHOOTER_SOUND, WP_9);
 
 	return bolt;
 }	
@@ -608,7 +608,7 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
-	bolt->s.weapon = WP_GRENADE_LAUNCHER;
+	bolt->s.weapon = WP_8;
 	bolt->s.eFlags = EF_BOUNCE_HALF;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
@@ -628,7 +628,7 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	VectorCopy (start, bolt->r.currentOrigin);
 
-	G_AddEvent(self, EV_SHOOTER_SOUND, WP_GRENADE_LAUNCHER);
+	G_AddEvent(self, EV_SHOOTER_SOUND, WP_8);
 
 	return bolt;
 }
@@ -653,7 +653,7 @@ gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
-	bolt->s.weapon = WP_DISRUPTOR;
+	bolt->s.weapon = WP_10;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
 	bolt->damage = 100;
@@ -671,7 +671,7 @@ gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	SnapVector( bolt->s.pos.trDelta );			// save net bandwidth
 	VectorCopy (start, bolt->r.currentOrigin);
 
-	G_AddEvent(self, EV_SHOOTER_SOUND, WP_DISRUPTOR);
+	G_AddEvent(self, EV_SHOOTER_SOUND, WP_10);
 
 	return bolt;
 }

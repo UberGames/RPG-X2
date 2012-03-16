@@ -195,7 +195,7 @@ void FX_GrenadeShrapnelExplode( vec3_t origin, vec3_t norm )
 
 qboolean GrenadeBeep(localEntity_t *le)
 {
-	weaponInfo_t	*weaponInfo = &cg_weapons[WP_GRENADE_LAUNCHER];
+	weaponInfo_t	*weaponInfo = &cg_weapons[WP_8];
 
 	trap_S_StartSound(le->refEntity.origin, ENTITYNUM_WORLD, CHAN_AUTO, weaponInfo->altHitSound);
 	return qtrue;
@@ -254,7 +254,7 @@ void FX_fxfunc_Explosion( vec3_t start, vec3_t origin, vec3_t normal )
 //	trace_t			trace;
 	float			scale, dscale;
 	int				i, j, numSparks;
-	//weaponInfo_t	*weaponInfo = &cg_weapons[WP_COMPRESSION_RIFLE];
+	//weaponInfo_t	*weaponInfo = &cg_weapons[WP_6];
 	//float	scale, dscale;
 //	int		s;
 //	vec3_t	new_org;

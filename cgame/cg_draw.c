@@ -1368,7 +1368,7 @@ static void CG_DrawStatusBar( void )
 	// Radar
 	// By Sam "-=Jazz=-"Dickinson
 	// http://www.telefragged.com/jazz
-	if ( ( cg.snap->ps.weapon == WP_TRICORDER || cg.snap->ps.weapon == WP_COMPRESSION_RIFLE ) && cg_drawradar.integer != 0 && !cg.zoomed )
+	if ( ( cg.snap->ps.weapon == WP_2 || cg.snap->ps.weapon == WP_6 ) && cg_drawradar.integer != 0 && !cg.zoomed )
 	{
 		vec4_t	radColor;
 
@@ -3042,7 +3042,7 @@ static void CG_DrawCrosshair(void) {
 	}
 
 	//TiM: With the new crosshair rendering system, this should be no problem
-	/*if ( cg.snap->ps.weapon == WP_NULL_HAND ) { //Teh hand has no crosshair
+	/*if ( cg.snap->ps.weapon == WP_1 ) { //Teh hand has no crosshair
 		return;
 	}*/
 
@@ -3133,25 +3133,25 @@ static void CG_DrawCrosshair(void) {
 	/*switch(cg.snap->ps.weapon)
 	{
 		default:
-		case WP_PHASER: hShader = cgs.media.crosshair[0]; break;							
-		case WP_COMPRESSION_RIFLE: hShader = cgs.media.crosshair[1]; break;
-		case WP_NULL_HAND: hShader = cgs.media.crosshair[4]; break;								
-		case WP_COFFEE: hShader = cgs.media.crosshair[2]; break;		
-		case WP_DISRUPTOR: hShader = cgs.media.crosshair[3]; break;							
-		case WP_GRENADE_LAUNCHER: hShader = cgs.media.crosshair[6]; break;
-		case WP_TR116: hShader = cgs.media.crosshair[5]; break;
-		case WP_QUANTUM_BURST: hShader = cgs.media.crosshair[7]; break;			
-		case WP_DERMAL_REGEN: hShader = cgs.media.crosshair[8]; break;				
-		case WP_VOYAGER_HYPO: hShader = cgs.media.crosshair[9]; break;			
-		case WP_TOOLKIT: hShader = cgs.media.crosshair[11]; break;		
-		case WP_MEDKIT: hShader = cgs.media.crosshair[10]; break;				
-		case WP_TRICORDER: hShader = cgs.media.crosshair[14]; break;					
-		case WP_PADD: hShader = cgs.media.crosshair[13]; break;								
+		case WP_5: hShader = cgs.media.crosshair[0]; break;							
+		case WP_6: hShader = cgs.media.crosshair[1]; break;
+		case WP_1: hShader = cgs.media.crosshair[4]; break;								
+		case WP_4: hShader = cgs.media.crosshair[2]; break;		
+		case WP_10: hShader = cgs.media.crosshair[3]; break;							
+		case WP_8: hShader = cgs.media.crosshair[6]; break;
+		case WP_7: hShader = cgs.media.crosshair[5]; break;
+		case WP_9: hShader = cgs.media.crosshair[7]; break;			
+		case WP_13: hShader = cgs.media.crosshair[8]; break;				
+		case WP_12: hShader = cgs.media.crosshair[9]; break;			
+		case WP_14: hShader = cgs.media.crosshair[11]; break;		
+		case WP_11: hShader = cgs.media.crosshair[10]; break;				
+		case WP_2: hShader = cgs.media.crosshair[14]; break;					
+		case WP_3: hShader = cgs.media.crosshair[13]; break;								
 		case WP_NEUTRINO_PROBE: hShader = cgs.media.crosshair[12]; break;
 	}*/
 
 	//If admins scan non-players
-	if ( cg.predictedPlayerState.weapon == WP_TRICORDER && cg.predictedPlayerState.eFlags & EF_FIRING ) {
+	if ( cg.predictedPlayerState.weapon == WP_2 && cg.predictedPlayerState.eFlags & EF_FIRING ) {
 		if (/*cg.predictedPlayerState.persistant[PERS_CLASS] == PC_ADMIN*/cg_showEntityNums.integer && cgs.clientinfo[cg.snap->ps.clientNum].isAdmin && cg.crosshairClientNum < ENTITYNUM_WORLD ) {
 			vec4_t ccolor;
 			/*color[0] = colorTable[CT_YELLOW][0];
@@ -3750,7 +3750,7 @@ static void CG_ScanForCrosshairEntity( void ) {
 
 	//VectorMA( start, 8192, cg.refdef.viewaxis[0], end );
 
-	if ( cg.snap->ps.weapon == WP_TR116 && cg.zoomed ) {
+	if ( cg.snap->ps.weapon == WP_7 && cg.zoomed ) {
 		CG_Trace( &trace, start, vec3_origin, vec3_origin, end, 
 			cg.snap->ps.clientNum, CONTENTS_BODY );
 		
@@ -3763,7 +3763,7 @@ static void CG_ScanForCrosshairEntity( void ) {
 		CG_Trace( &trace, start, vec3_origin, vec3_origin, end, 
 			cg.snap->ps.clientNum, MASK_SHOT ); //CONTENTS_SOLID|CONTENTS_BODY
 
-		if ( cg.predictedPlayerState.weapon == WP_TRICORDER && cg.predictedPlayerState.eFlags & EF_FIRING 
+		if ( cg.predictedPlayerState.weapon == WP_2 && cg.predictedPlayerState.eFlags & EF_FIRING 
 			&& (cg_entities[trace.entityNum].currentState.eType == ET_TRIC_STRING || cg_entities[trace.entityNum].currentState.eType == ET_MOVER_STR) ) 
 		{
 			//Never mind if it's a valid useable ent
@@ -3843,7 +3843,7 @@ static void CG_DrawCrosshairNames( void ) {
 
 	//If they're actively firing the tricorder
 	if( ( (cg.snap->ps.eFlags & EF_FIRING) && !(cg.snap->ps.eFlags & EF_ALT_FIRING) ) 
-		&& cg.snap->ps.weapon == WP_TRICORDER ) {
+		&& cg.snap->ps.weapon == WP_2 ) {
 		if(cg.crosshairClientNum != cg.predictedPlayerState.clientNum && cg.crosshairClientNum < MAX_CLIENTS ) { //ENTITYNUM_WORLD
 			
 			drawCrosshairName = qfalse;
@@ -3979,7 +3979,7 @@ static void CG_DrawCrosshairNames( void ) {
 					
 				Com_sprintf( namestr, sizeof( namestr), "%s: %s", "Name", name );		
 
-				if ( cent->currentState.weapon != WP_NULL_HAND /*&& cg_weapons[ cent->currentState.weapon ].item*/ )
+				if ( cent->currentState.weapon != WP_1 /*&& cg_weapons[ cent->currentState.weapon ].item*/ )
 				{
 					if ( cg_weapons[ cent->currentState.weapon ].item->pickup_name ) {
 						weap = cg_weapons[ cent->currentState.weapon ].item->pickup_name;
@@ -4463,7 +4463,7 @@ static void CG_DrawZoomMask( void )
 		return;
 	}*/
 	//TiM: New system. :)  Base zoom on current active weapon. :)
-	if ( !(cg.snap->ps.weapon == WP_COMPRESSION_RIFLE || cg.snap->ps.weapon == WP_TR116) ) 
+	if ( !(cg.snap->ps.weapon == WP_6 || cg.snap->ps.weapon == WP_7) ) 
 	{
 		cg.zoomed = qfalse;
 		cg.zoomLocked = qfalse;
@@ -4497,7 +4497,7 @@ static void CG_DrawZoomMask( void )
 		// Set fade color
 		trap_R_SetColor( color1 );
 		
-		if ( cg.snap->ps.weapon == WP_TR116 ) {
+		if ( cg.snap->ps.weapon == WP_7 ) {
 			static int TR116LoopTime = 0;
 
 			//Loop the whirring sight sound
@@ -4582,7 +4582,7 @@ static void CG_DrawZoomMask( void )
 		*/
 
 		//yellow
-		if ( cg.snap->ps.weapon == WP_TR116 ) {
+		if ( cg.snap->ps.weapon == WP_7 ) {
 			color1[0] = 0.886f;
 			color1[1] = 0.749f;
 			color1[2] = 0.0f;
@@ -4596,7 +4596,7 @@ static void CG_DrawZoomMask( void )
 		}
 
 		// Convert zoom and view axis into some numbers to throw onto the screen
-		if ( cg.snap->ps.weapon == WP_TR116 ) {
+		if ( cg.snap->ps.weapon == WP_7 ) {
 			x = 74;
 			y = 340;
 		}
@@ -4639,7 +4639,7 @@ static void CG_DrawZoomMask( void )
 			}
 
 			trap_R_SetColor( color1 );
-			if ( cg.snap->ps.weapon == WP_TR116 ) {
+			if ( cg.snap->ps.weapon == WP_7 ) {
 				CG_DrawPic( start_x, start_y, width, height, cgs.media.zoomMask116Shader );
 			} 
 			else {

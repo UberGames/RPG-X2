@@ -76,7 +76,7 @@ void breakable_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, 
 		te = G_TempEntity( org, EV_MISSILE_MISS );
 		VectorSet( dir, 0, 0, 1 );
 		te->s.eventParm = DirToByte( dir );
-		te->s.weapon = WP_GRENADE_LAUNCHER;
+		te->s.weapon = WP_8;
 
 		//G_Sound( self, G_SoundIndex("sound/weapons/explosions/cargoexplode.wav") );
 	}

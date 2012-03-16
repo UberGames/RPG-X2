@@ -750,24 +750,24 @@ void QDECL G_Error( const char *fmt, ... ) {
 
 stringID_table_t WeaponTable[] = {
 
-	{ ENUM2STRING(WP_TRICORDER) },
-	{ ENUM2STRING(WP_PADD) },
-	{ ENUM2STRING(WP_COFFEE) },				
+	{ ENUM2STRING(WP_2) },
+	{ ENUM2STRING(WP_3) },
+	{ ENUM2STRING(WP_4) },				
 
-	{ ENUM2STRING(WP_PHASER) },				
-	{ ENUM2STRING(WP_COMPRESSION_RIFLE) },	
-	{ ENUM2STRING(WP_TR116) },
+	{ ENUM2STRING(WP_5) },				
+	{ ENUM2STRING(WP_6) },	
+	{ ENUM2STRING(WP_7) },
 
-	{ ENUM2STRING(WP_GRENADE_LAUNCHER) },
-	{ ENUM2STRING(WP_QUANTUM_BURST) },		
-	{ ENUM2STRING(WP_DISRUPTOR) },			
+	{ ENUM2STRING(WP_8) },
+	{ ENUM2STRING(WP_9) },		
+	{ ENUM2STRING(WP_10) },			
 
-	{ ENUM2STRING(WP_MEDKIT) },				
-	{ ENUM2STRING(WP_VOYAGER_HYPO) },		
-	{ ENUM2STRING(WP_DERMAL_REGEN) },		
+	{ ENUM2STRING(WP_11) },				
+	{ ENUM2STRING(WP_12) },		
+	{ ENUM2STRING(WP_13) },		
 	
-	{ ENUM2STRING(WP_TOOLKIT) },				
-	{ ENUM2STRING(WP_HYPERSPANNER) },
+	{ ENUM2STRING(WP_14) },				
+	{ ENUM2STRING(WP_15) },
 	{ NULL, -1 }
 };
 
@@ -2653,11 +2653,11 @@ void G_InitModRules( void )
 
 	if ( g_pModDisintegration.integer != 0 )
 	{//don't use up ammo in disintegration mode
-		altAmmoUsage[WP_COMPRESSION_RIFLE] = 0;
+		altAmmoUsage[WP_6] = 0;
 	}
 	if ( g_pModSpecialties.integer != 0 )
 	{//tripwires use more ammo
-		altAmmoUsage[WP_GRENADE_LAUNCHER] = 3;
+		altAmmoUsage[WP_8] = 3;
 	}
 	if ( g_pModAssimilation.integer != 0 )
 	{

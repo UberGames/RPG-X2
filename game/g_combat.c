@@ -133,7 +133,7 @@ void TossClientItems( gentity_t *self, qboolean dis_con ) {
 		// weapon that isn't the mg or gauntlet.  Without this, a client
 		// can pick up a weapon, be killed, and not drop the weapon because
 		// their weapon change hasn't completed yet and they are still holding the MG.
-		if ( weapon == WP_MEDKIT || weapon == WP_TOOLKIT || weapon == WP_PHASER || weapon == WP_DERMAL_REGEN || weapon == WP_HYPERSPANNER || weapon == WP_PADD || weapon == WP_TRICORDER || weapon == WP_VOYAGER_HYPO )
+		if ( weapon == WP_11 || weapon == WP_14 || weapon == WP_5 || weapon == WP_13 || weapon == WP_15 || weapon == WP_3 || weapon == WP_2 || weapon == WP_12 )
 		{
 			if ( ps->weaponstate == WEAPON_DROPPING )
 			{
@@ -141,11 +141,11 @@ void TossClientItems( gentity_t *self, qboolean dis_con ) {
 			}
 			if ( !( ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) )
 			{
-				weapon = WP_NONE;
+				weapon = WP_0;
 			}
 		}
 
-		if ( weapon > WP_TOOLKIT && weapon > WP_MEDKIT && weapon > WP_PHASER && weapon != WP_DERMAL_REGEN && weapon != WP_HYPERSPANNER && weapon != WP_PADD && weapon != WP_TRICORDER && weapon != WP_VOYAGER_HYPO && ps->ammo[ weapon ] )
+		if ( weapon > WP_14 && weapon > WP_11 && weapon > WP_5 && weapon != WP_13 && weapon != WP_15 && weapon != WP_3 && weapon != WP_2 && weapon != WP_12 && ps->ammo[ weapon ] )
 		{
 			// find the item type for this weapon
 			item = BG_FindItemForWeapon( weapon );
@@ -499,9 +499,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	self->takedamage = qfalse;
 	
-	ps->weapon = WP_NONE;
+	ps->weapon = WP_0;
 	ps->weaponstate = WEAPON_READY;
-	//self->s.weapon = WP_NONE;
+	//self->s.weapon = WP_0;
 	//memset(ps->powerups, 0, sizeof(ps->powerups)); //TiM - BOOKMARK
 	//self->s.powerups = 0;
 	self->r.contents = CONTENTS_CORPSE;
@@ -930,7 +930,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	self->takedamage = qtrue;	// can still be gibbed
 
-	self->s.weapon = WP_NONE;
+	self->s.weapon = WP_0;
 	self->s.powerups = 0;
 	self->r.contents = CONTENTS_CORPSE;
 
@@ -1282,47 +1282,47 @@ qboolean G_CheckBorgAdaptation( gentity_t *targ, int mod )
 // Trek weapons
 	case MOD_PHASER:
 	case MOD_PHASER_ALT:
-		weapon = WP_PHASER;
+		weapon = WP_5;
 		break;
 	case MOD_CRIFLE:
 	case MOD_CRIFLE_SPLASH:
 	case MOD_CRIFLE_ALT:
 	case MOD_CRIFLE_ALT_SPLASH:
-		weapon = WP_COMPRESSION_RIFLE;
+		weapon = WP_6;
 		break;
 	case MOD_SCAVENGER:
 	case MOD_SCAVENGER_ALT:
 	case MOD_SCAVENGER_ALT_SPLASH:
 	case MOD_SEEKER:
-		weapon = WP_COFFEE;
+		weapon = WP_4;
 		break;
 	case MOD_STASIS:
 	case MOD_STASIS_ALT:
-		weapon = WP_DISRUPTOR;
+		weapon = WP_10;
 		break;
 	case MOD_GRENADE:
 	case MOD_GRENADE_ALT:
 	case MOD_GRENADE_SPLASH:
 	case MOD_GRENADE_ALT_SPLASH:
-		weapon = WP_GRENADE_LAUNCHER;
+		weapon = WP_8;
 		break;
 	case MOD_TETRION:
 	case MOD_TETRION_ALT:
-		weapon = WP_TR116;
+		weapon = WP_7;
 		break;
 	case MOD_DREADNOUGHT:
 	case MOD_DREADNOUGHT_ALT:
-		weapon = WP_DERMAL_REGEN;
+		weapon = WP_13;
 		break;
 	case MOD_QUANTUM:
 	case MOD_QUANTUM_SPLASH:
 	case MOD_QUANTUM_ALT:
 	case MOD_QUANTUM_ALT_SPLASH:
-		weapon = WP_QUANTUM_BURST;
+		weapon = WP_9;
 		break;
 	case MOD_IMOD:
 	case MOD_IMOD_ALT:
-		weapon = WP_PADD;
+		weapon = WP_3;
 		break;
 	case MOD_ASSIMILATE:
 	case MOD_BORG:
@@ -1337,28 +1337,28 @@ qboolean G_CheckBorgAdaptation( gentity_t *targ, int mod )
 		return qtrue;
 	}*/
 	switch(weapon) {
-		case WP_PHASER:
-			if(level.borgAdaptHits[WP_PHASER] > rpg_adaptPhaserHits.integer)
+		case WP_5:
+			if(level.borgAdaptHits[WP_5] > rpg_adaptPhaserHits.integer)
 				return qtrue;
 			break;
-		case WP_COMPRESSION_RIFLE:
-			if(level.borgAdaptHits[WP_COMPRESSION_RIFLE] > rpg_adaptCrifleHits.integer)
+		case WP_6:
+			if(level.borgAdaptHits[WP_6] > rpg_adaptCrifleHits.integer)
 				return qtrue;
 			break;
-		case WP_DISRUPTOR:
-			if(level.borgAdaptHits[WP_DISRUPTOR] > rpg_adaptDisruptorHits.integer)
+		case WP_10:
+			if(level.borgAdaptHits[WP_10] > rpg_adaptDisruptorHits.integer)
 				return qtrue;
 			break;
-		case WP_GRENADE_LAUNCHER:
-			if(level.borgAdaptHits[WP_GRENADE_LAUNCHER] > rpg_adaptGrenadeLauncherHits.integer)
+		case WP_8:
+			if(level.borgAdaptHits[WP_8] > rpg_adaptGrenadeLauncherHits.integer)
 				return qtrue;
 			break;
-		case WP_TR116:
-			if(level.borgAdaptHits[WP_TR116] > rpg_adaptTR116Hits.integer)
+		case WP_7:
+			if(level.borgAdaptHits[WP_7] > rpg_adaptTR116Hits.integer)
 				return qtrue;
 			break;
-		case WP_QUANTUM_BURST:
-			if(level.borgAdaptHits[WP_QUANTUM_BURST] > rpg_adaptPhotonHits.integer)
+		case WP_9:
+			if(level.borgAdaptHits[WP_9] > rpg_adaptPhotonHits.integer)
 				return qtrue;
 			break;
 		default:
@@ -1893,7 +1893,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 			if(targ->health == 1 ){ //TiM : Added Client to try and fix this stupid crashy bug
 				//ClientSpawn(targ, 1);
 				//if ( client ) {
-					client->ps.stats[STAT_WEAPONS] = ( 1 << WP_NONE ); //?!!!!!
+					client->ps.stats[STAT_WEAPONS] = ( 1 << WP_0 ); //?!!!!!
 					client->ps.stats[STAT_HOLDABLE_ITEM] = HI_NONE;
 					targ->health = 1;
 					player_die( targ, inflictor, attacker, take, mod );
