@@ -314,6 +314,7 @@ qboolean G_LuaStartVM(lvm_t * vm)
 	Luaopen_Entity(vm->L);
 	Luaopen_Cinematic(vm->L);
 	Luaopen_Sound(vm->L);
+	Luaopen_Trace(vm->L);
 
 	res = luaL_loadbuffer(vm->L, vm->code, vm->code_size, vm->filename);
 	if(res == LUA_ERRSYNTAX)
