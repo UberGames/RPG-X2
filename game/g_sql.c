@@ -340,6 +340,38 @@ G_Sql_UserDB_login
 ===============
 */
 qboolean G_Sql_UserDB_login(const char *uName, const char *pwd, int clientnum) {
+	sqlite3_stmt *stmt;
+	int res, id;
+	char *hashedpw;
+
+	res = sqlite3_prepare_v2(user_db, SQL_USER_LOGIN, -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
+		return qfalse;
+	}
+
+	res = sqlite3_bind_text(stmt, 1, uName, sizeof(uName), SQLITE_STATIC);
+	if(G_Sql_Check_BindReturn(res)) {
+		return qfalse;
+	}
+
+	hashedpw = G_Sql_Md5(pwd);
+	res = sqlite3_bind_text(stmt, 2, hashedpw, sizeof(hashedpw), SQLITE_STATIC);
+	if(G_Sql_Check_BindReturn(res)) {
+		return qfalse;
+	}
+
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		return qfalse;
+	}
+
+	if(res == SQLITE_ROW) {
+		id = sqlite3_column_int(stmt, 0);
+		level.clients[clientnum].uid = id;
+		return qtrue;
+	} else {
+		return qfalse;
+	}
 
 	return qfalse;
 }
@@ -350,6 +382,36 @@ G_Sql_UserDB_CheckRight
 ===============
 */
 qboolean G_Sql_UserDB_CheckRight(int uid, int right) {
+	sqlite3_stmt *stmt;
+	int res;
+	long rights;
+
+	res = sqlite3_prepare_v2(user_db, SQL_USER_GET_RIGHTS, -1, &stmt, 0);
+	if(G_Sql_Check_PrepareReturn(res)) {
+		return qfalse;
+	}
+
+	res = sqlite3_bind_int(stmt, 1, uid);
+	if(G_Sql_Check_BindReturn(res)) {
+		return qfalse;
+	}
+
+	res = sqlite3_step(stmt);
+	if(G_Sql_Check_StepReturn(res)) {
+		return qfalse;
+	}
+
+	if(res == SQLITE_ROW) {
+		rights = (long)sqlite3_column_int64;
+		if(right & right) {
+			return qtrue;
+		} else {
+			return qfalse;
+		}
+	} else {
+		return qfalse;
+	}
+
 	return qfalse;
 }
 

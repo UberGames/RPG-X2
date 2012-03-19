@@ -24,9 +24,11 @@
 #define SQL_USER_ADD_RIGHTS "INSERT INTO rpgx_userRights VALUES(NULL, 0, 0, :ID)"
 #define SQL_USER_MOD_RIGHTS "UPDATE rpgx_userRights SET rights = :RIGHTS WHERE id = :ID"
 #define SQL_USER_GET_RIGHTS "SELECT rights FROM rpgx_userRights WHERE id = :ID"
+#define SQL_USER_CHECK_ADMIN "SELECT admin FROM rpgx_userRights WHERE id = :ID"
 #define SQL_USER_GET_PASSWORD "SELECT password FROM rpgx_users WHERE id = :ID"
 #define SQL_USER_SET_PASSWORD "UPDATE rpgx_users SET password = :PASSWORD WHERE id = :ID"
 #define SQL_USER_GET_UID "SELECT id FROM rpgx_users WHERE username = :UNAME"
+#define SQL_USER_LOGIN "SELECT id FROM rpgx_users WHERE username = :UNAME AND password = :PASSWORD"
 
 typedef enum {
 	SQLF_GIVE			= 1,
