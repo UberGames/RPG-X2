@@ -452,6 +452,9 @@
     <ClInclude Include="g_cinematic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="g_weapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def">
