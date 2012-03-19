@@ -4,10 +4,7 @@
 // perform the server side effects of a weapon firing
 
 #include "g_local.h"
-
-static	float	s_quadFactor;
-static	vec3_t	forward, right, up;
-static	vec3_t	muzzle;
+#include "g_weapon.h"
 
 extern void G_MissileImpact( gentity_t *ent, trace_t *trace);
 
