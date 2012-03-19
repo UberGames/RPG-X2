@@ -52,34 +52,7 @@ void TryUse( gentity_t *ent )
 	target = &g_entities[trace.entityNum];
 
 	//Check for a use command
-	if ( target && target->client )
-	{//if a bot, make it follow me, if a teammate, give stuff
-		if ( target->client->sess.sessionTeam == sess->sessionTeam )
-		{//on my team
-//			gitem_t	*regen = BG_FindItemForPowerup( PW_LASER );
-//			gitem_t	*invis = BG_FindItemForPowerup( PW_INVIS );
-
-			//switch( sess->sessionClass )
-			//{
-			//case PC_MEDIC://medic gives regen
-			//	break;
-			//case PC_TECH://tech gives invisibility
-			//	break;
-			//}
-			//switch( target->client->sess.sessionClass )
-			//{
-			//case PC_TECH://using tech gives you full ammo
-			//	G_Sound(ent, G_SoundIndex("sound/player/suitenergy.wav") );
-			//	for ( i = 0 ; i < MAX_WEAPONS ; i++ )
-			//	{
-			//		ent->client->ps.ammo[i] = Max_Ammo[i];
-			//	}
-			//	return;
-			//	break;
-			//}
-		}
-	}
-	else if ( target && target->use && Q_stricmp("func_usable", target->classname) == 0 )
+	if ( target && target->use && Q_stricmp("func_usable", target->classname) == 0 )
 	{//usable brush
 		if ( target->team && atoi( target->team ) != 0 )
 		{//usable has a team
