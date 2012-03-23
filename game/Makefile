@@ -11,10 +11,8 @@ CC = gcc
 # cflags for the compiler
 ifeq ($(PLATFORM), mingw32)
 SOCFLAGS = $(CFLAGS) 
-LIBMYSQL = 
 else
 SOCFLAGS = $(CFLAGS) -fPIC
-LIBMYSQL = -mysqlclient
 endif
 
 # set extension
@@ -252,9 +250,9 @@ lzio.o: lzio.c; $(DO_LUACC)
 
 build_so: $(OBJ) $(SOOBJ) $(LUAOBJ)
 ifeq ($(PLATFORM), mingw32)
-	$(CC) -shared $(WL),--export-all-symbols,-soname,qqgame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) ../mysql/libs/mysqlclient.lib -lm
+	$(CC) -shared $(WL),--export-all-symbols,-soname,qqgame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) $(LIBEXPAT) -lm
 else
-	$(CC) -shared $(WL),--export-dynamic,-soname,qagame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) $(LIBMYSQL) -lm
+	$(CC) -shared $(WL),--export-dynamic,-soname,qagame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) $(LIBEXPAT) -lm
 endif
 	
 clean:
