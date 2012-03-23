@@ -21,8 +21,10 @@ endif
 ifeq ($(PLATFORM), mingw32)
 EXT=dll
 ARCH=x86
+LIBEXPAT=../libs/win32/expat/libexpat.a
 else
 EXT=so
+LIBEXPAT=../libs/linux/$(ARCH)/libexpat.a
 endif
 
 # warning level
