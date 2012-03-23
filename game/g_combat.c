@@ -5,10 +5,7 @@
 #include "g_local.h"
 #include "g_breakable.h" //RPG-X | GSIO01 | 09/05/2009: needed by G_Repair
 
-extern int	actionHeroClientNum;
-extern int	borgQueenClientNum;
 extern int	numKilled;
-extern void G_RandomActionHero( int ignoreClientNum );
 extern void SetClass( gentity_t *ent, char *s, char *teamName, qboolean SaveToCvar );
 
 
@@ -761,39 +758,13 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		{
 			if ( meansOfDeath != MOD_RESPAWN )
 			{//just changing class
-				if ( self->s.number == borgQueenClientNum )
-				{
-					numKilled++;
-					AddScore( attacker, -500 );
-				}
-				else
-				{
-					AddScore( attacker, -1 );
-				}
+				AddScore( attacker, -1 );
 			}
 		} 
 		else 
 		{
 			attacker->client->pers.teamState.frags++;
-			if ( self->s.number == borgQueenClientNum && attacker )
-			{
-				numKilled++;
-				if ( attacker->client )
-				{//killed by opponent
-					AddScore( attacker, 500 );//500 bonus
-				}
-			}
-			else if ( self->s.number == actionHeroClientNum && attacker )
-			{
-				if ( attacker->client )
-				{//killed by opponent
-					AddScore( attacker, 5 );//5 bonus
-				}
-			}
-			else
-			{
-				AddScore( attacker, 1 );
-			}
+			AddScore( attacker, 1 );
 
 			// check for two kills in a short amount of time
 			// if this is close enough to the last kill, give a reward sound
@@ -873,15 +844,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	{
 		if ( meansOfDeath != MOD_RESPAWN )
 		{//not just changing class
-			if ( self->s.number == borgQueenClientNum )
-			{
-				numKilled++;
-				AddScore( self, -500 );
-			}
-			else
-			{
-				AddScore( self, -1 );
-			}
+			AddScore( self, -1 );
 		}
 	}
 	////////////////////////////////////////////////////////////////////////
@@ -1113,83 +1076,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	deathNum = ( deathNum + 1 ) % 3;
 
 	trap_LinkEntity (self);
-
-	if ( g_pModAssimilation.integer != 0 )
-	{
-		if ( meansOfDeath == MOD_ASSIMILATE )
-		{//Go to Borg team if killed by assimilation
-			if ( attacker && attacker->client && attacker->client->sess.sessionTeam != self->client->sess.sessionTeam )
-			{
-				/*
-				if ( !numKilled )
-				{
-					trap_SendServerCommand( -1, "cp \"Assimilation Has Begun!\"" );
-				}
-				*/
-				numKilled++;
-				self->client->mod = meansOfDeath;
-				AddScore( attacker, 9 );//+ the 1 above = 10 points for an assimilation
-			}
-		}
-		 
-	}
-	if ( g_pModActionHero.integer != 0 )
-	{
-		if ( self->client && self->s.number == actionHeroClientNum )
-		{
-			//Make me no longer a hero... *sniff*...
-			ps->persistant[PERS_CLASS] = self->client->sess.sessionClass = 0;//PC_NOCLASS;
-			ClientUserinfoChanged( self->s.number );
-
-			if ( attacker && attacker->client && attacker != self )
-			{//killer of action hero becomes action hero
-				actionHeroClientNum = attacker->s.number;
-			}
-			else
-			{//other kind of hero death picks a random action hero
-				G_RandomActionHero( actionHeroClientNum );
-			}
-			//respawn the new hero
-			//FIXME: or just give them full health and all the goodies?
-			respawn( &g_entities[actionHeroClientNum] );
-		}
-	}
-	//if ( g_pModElimination.integer != 0 && meansOfDeath != MOD_RESPAWN )
-	//{//in elimination, you get scored by when you died, but knockout just respawns you, not kill you
-	//	/*
-	//	if ( !numKilled )
-	//	{
-	//		trap_SendServerCommand( -1, "cp \"Elimination Has Begun!\"" );
-	//	}
-	//	*/
-	//	numKilled++;
-	//	self->r.svFlags |= SVF_ELIMINATED;
-	//	switch ( self->client->sess.sessionTeam )
-	//	{
-	//	case TEAM_RED:
-	//		level.teamScores[TEAM_BLUE]++;
-	//		break;
-	//	case TEAM_BLUE:
-	//		level.teamScores[TEAM_RED]++;
-	//		break;
-	//	}
-	//	//Now increment score for everyone else
-	//	if ( g_gametype.integer < GT_TEAM )
-	//	{
-	//		for ( i = 0; i < MAX_CLIENTS; i++ )
-	//		{
-	//			if ( &g_entities[i] != NULL && &g_entities[i].client != NULL && g_entities[i].inuse )
-	//			{
-	//				if ( g_entities[i].client->sess.sessionTeam != TEAM_SPECTATOR && g_entities[i].health > 0 && !(g_entities[i].client->ps.eFlags&EF_ELIMINATED) )
-	//				{
-	//					SetScore( &g_entities[i], numKilled );
-	//				}
-	//			}
-	//		}
-	//	}
-	//	//RPG-X: Redtechie - No need for player frag rank
-	//	//CalculateRanks( qfalse );
-	//}
 }//RPG-X: RedTechie - End of my if statment for medics revive check
 }//RPG-X: RedTechie - End of void
 

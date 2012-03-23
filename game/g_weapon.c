@@ -8,67 +8,53 @@
 
 extern void G_MissileImpact( gentity_t *ent, trace_t *trace);
 
-extern int	borgQueenClientNum;
-
 #define MAX_BEAM_HITS	4
 
 #define DMG_VAR			(flrandom(0.8,1.2))
 
 
 // Weapon damages are located up here for easy access...
+extern vmCvar_t	rpg_rifleDamage;
+extern vmCvar_t	rpg_rifleAltDamage;
+extern vmCvar_t	rpg_phaserDamage;
+extern vmCvar_t	rpg_disruptorDamage;
+extern vmCvar_t	rpg_grenadeDamage;
+extern vmCvar_t	rpg_grenadeAltDamage;
+extern vmCvar_t	rpg_tr116Damage;
+extern vmCvar_t	rpg_photonDamage;
+extern vmCvar_t	rpg_photonAltDamage;
+
 // Phaser
-#define	PHASER_DAMAGE				55 //4 //RPG-X: TiM - Increased to a standard 0.5 second burst - Phenix GOING DOWN - TiM GOING UP we had complaints when this was put down :P //2
+#define	PHASER_DAMAGE				rpg_phaserDamage.integer //4 //RPG-X: TiM - Increased to a standard 0.5 second burst - Phenix GOING DOWN - TiM GOING UP we had complaints when this was put down :P //2
 #define PHASER_ALT_RADIUS			80 //12 //RPG-X: TiM - Increased to a near instant kill
 
 // Compression Rifle
-#define	CRIFLE_DAMAGE				75		//10 // 20 //RPG-X: TiM - Increased to 2 hits kill (needs debate like TR-116 :P ) //20
+#define	CRIFLE_DAMAGE				rpg_rifleDamage.integer		//10 // 20 //RPG-X: TiM - Increased to 2 hits kill (needs debate like TR-116 :P ) //20
 #define CRIFLE_MAIN_SPLASH_RADIUS	64
 #define CRIFLE_MAIN_SPLASH_DMG		0//16		// 20
-#define CRIFLE_ALTDAMAGE			16 //85		// 100
+#define CRIFLE_ALTDAMAGE			rpg_rifleAltDamage.integer //85		// 100
 #define CRIFLE_ALT_SPLASH_RADIUS	32
 #define CRIFLE_ALT_SPLASH_DMG		0//10
 
-// Imod
-#define	IMOD_DAMAGE					10		// 32
-#define	IMOD_ALT_DAMAGE				10
-
-// Scavenger Rifle
-#define SCAV_DAMAGE					8		// 16
-#define SCAV_ALT_DAMAGE				60		// 60
-#define SCAV_ALT_SPLASH_RAD			100
-#define SCAV_ALT_SPLASH_DAM			60		// 60	
-
 // Stasis Weapon
-#define STASIS_DAMAGE				80		// 15 //7 //RPG-X: TiM - Increased to 2 hits kill (needs debate like TR-116 :P ) //15
-#define STASIS_ALT_DAMAGE			7		// 40
-#define STASIS_ALT_DAMAGE2			7		// 20
+#define STASIS_DAMAGE				rpg_disruptorDamage.integer		// 15 //7 //RPG-X: TiM - Increased to 2 hits kill (needs debate like TR-116 :P ) //15
 
 // Grenade Launcher
-#define GRENADE_DAMAGE				75		// 100
+#define GRENADE_DAMAGE				rpg_grenadeDamage.integer		// 100
 #define GRENADE_SPLASH_RAD			190		//RPG-X: RedTechie - Before 160
 #define GRENADE_SPLASH_DAM			100		//RPG-X: RedTechie - Before 75
-#define GRENADE_ALT_DAMAGE			80		//RPG-X: RedTechie - Before 64
+#define GRENADE_ALT_DAMAGE			rpg_grenadeAltDamage.integer		//RPG-X: RedTechie - Before 64
 
 // Tetrion Disruptor
-#define TETRION_DAMAGE				150		//RPG-X: J2J - Increased for one shot one kill (needs debate)
-#define TETRION_ALT_DAMAGE			17		//RPG-X: J2J - Not used anymore for TR-116
+#define TETRION_DAMAGE				rpg_tr116Damage.integer		//RPG-X: J2J - Increased for one shot one kill (needs debate)
 
 // Quantum Burst
-#define QUANTUM_DAMAGE				140		// 85		// 100 
-#define QUANTUM_SPLASH_DAM			140		// 85		// 128
+#define QUANTUM_DAMAGE				rpg_photonDamage.integer		// 85		// 100 
+#define QUANTUM_SPLASH_DAM			rpg_photonDamage.integer		// 85		// 128
 #define QUANTUM_SPLASH_RAD			160
-#define QUANTUM_ALT_DAMAGE			140		// 75		// 100
-#define QUANTUM_ALT_SPLASH_DAM		140		// 75		// 128
+#define QUANTUM_ALT_DAMAGE			rpg_photonAltDamage.integer		// 75		// 100
+#define QUANTUM_ALT_SPLASH_DAM		rpg_photonAltDamage.integer		// 75		// 128
 #define QUANTUM_ALT_SPLASH_RAD		80
-
-// Dreadnought Weapon
-#define DREADNOUGHT_DAMAGE			8		// 6
-#define DREADNOUGHT_WIDTH			9		// 12
-#define DREADNOUGHT_ALTDAMAGE		35		// 40
-
-// Borg Weapon
-#define BORG_PROJ_DAMAGE			20
-#define BORG_TASER_DAMAGE			15
 
 /*
 ======================
@@ -209,7 +195,7 @@ void WP_FirePhaser( gentity_t *ent, qboolean alt_fire )
 		if ( traceEnt->takedamage && rpg_phaserdmg.integer != 0 ) 
 		{
 //			damage = (float)PHASER_DAMAGE*DMG_VAR*s_quadFactor;		// No variance on phaser
-			damage = (float)PHASER_DAMAGE*s_quadFactor;
+			damage = (float)PHASER_DAMAGE;
 
 			if (trEntFraction[i] <= PHASER_POINT_BLANK_FRAC)
 			{	// Point blank!  Do up to double damage.
@@ -279,7 +265,7 @@ void FirePrifleBullet( gentity_t *ent, vec3_t start, vec3_t dir )
 	}
 
 	if( rpg_rifledmg.integer != 0 ) 
-		bolt->damage = CRIFLE_DAMAGE*DMG_VAR*s_quadFactor;
+		bolt->damage = CRIFLE_DAMAGE*DMG_VAR;
 	else
 		bolt->damage = 0;
 
@@ -354,7 +340,7 @@ void WP_FireCompressionRifle ( gentity_t *ent, qboolean alt_fire )
 		if ( traceEnt->takedamage && rpg_phaserdmg.integer != 0 ) 
 		{
 //			damage = (float)PHASER_DAMAGE*DMG_VAR*s_quadFactor;		// No variance on phaser
-			damage = (float)PHASER_DAMAGE*s_quadFactor;
+			damage = (float)PHASER_DAMAGE;
 
 			if (tr.fraction <= PHASER_POINT_BLANK_FRAC)
 			{	// Point blank!  Do up to double damage.
@@ -423,7 +409,7 @@ void FireDisruptorMissile( gentity_t *ent, vec3_t origin, vec3_t dir, int size )
 	bolt->parent = ent;
 	if ( rpg_stasisdmg.integer != 0 )
 	{
-		bolt->damage = /*size */ STASIS_DAMAGE*DMG_VAR*s_quadFactor;
+		bolt->damage = /*size */ STASIS_DAMAGE*DMG_VAR;
 	}
 	else
 	{
@@ -622,7 +608,7 @@ void WP_FireDisruptor( gentity_t *ent, qboolean alt_fire )
 		if ( traceEnt->takedamage && rpg_phaserdmg.integer != 0 ) 
 		{
 //			damage = (float)PHASER_DAMAGE*DMG_VAR*s_quadFactor;		// No variance on phaser
-			damage = (float)PHASER_DAMAGE*s_quadFactor;
+			damage = (float)PHASER_DAMAGE;
 
 			if (tr.fraction <= PHASER_POINT_BLANK_FRAC)
 			{	// Point blank!  Do up to double damage.
@@ -857,7 +843,7 @@ void WP_FireGrenade( gentity_t *ent, qboolean alt_fire )
 				}
 				//now make the new one
 				grenade->classname = "tripwire";
-				grenade->splashDamage = GRENADE_SPLASH_DAM*2*s_quadFactor;
+				grenade->splashDamage = GRENADE_SPLASH_DAM*2;
 				grenade->splashRadius = GRENADE_SPLASH_RAD*2;
 				grenade->s.pos.trType = TR_LINEAR;
 				grenade->nextthink = level.time + 1000; // How long 'til she blows
@@ -868,7 +854,7 @@ void WP_FireGrenade( gentity_t *ent, qboolean alt_fire )
 			else
 			{
 				grenade->classname = "grenade_alt_projectile";
-				grenade->splashDamage = GRENADE_SPLASH_DAM*s_quadFactor;
+				grenade->splashDamage = GRENADE_SPLASH_DAM;
 				grenade->splashRadius = GRENADE_SPLASH_RAD;//*s_quadFactor;
 				grenade->s.pos.trType = TR_GRAVITY;
 				grenade->nextthink = level.time + GRENADE_ALT_TIME; // How long 'til she blows
@@ -877,7 +863,7 @@ void WP_FireGrenade( gentity_t *ent, qboolean alt_fire )
 			grenade->s.eFlags |= EF_MISSILE_STICK;
 			VectorScale( dir, 1000/*GRENADE_ALT_VELOCITY*/, grenade->s.pos.trDelta );
 
-			grenade->damage = GRENADE_ALT_DAMAGE*DMG_VAR*s_quadFactor;
+			grenade->damage = GRENADE_ALT_DAMAGE*DMG_VAR;
 			grenade->methodOfDeath = MOD_GRENADE_ALT;
 			grenade->splashMethodOfDeath = MOD_GRENADE_ALT_SPLASH;
 			grenade->s.eType = ET_ALT_MISSILE;
@@ -1036,8 +1022,8 @@ void WP_FireGrenade( gentity_t *ent, qboolean alt_fire )
 				VectorScale( dir, GRENADE_VELOCITY, grenade->s.pos.trDelta );
 				grenade->s.pos.trType = TR_GRAVITY;
 
-				grenade->damage = GRENADE_DAMAGE*DMG_VAR*s_quadFactor;
-				grenade->splashDamage = GRENADE_SPLASH_DAM*s_quadFactor;
+				grenade->damage = GRENADE_DAMAGE*DMG_VAR;
+				grenade->splashDamage = GRENADE_SPLASH_DAM;
 				grenade->splashRadius = GRENADE_SPLASH_RAD;//*s_quadFactor;
 				grenade->methodOfDeath = MOD_GRENADE;
 				grenade->splashMethodOfDeath = MOD_GRENADE_SPLASH;
@@ -1129,7 +1115,7 @@ void WP_FireTR116Bullet( gentity_t *ent, vec3_t start, vec3_t dir ) {
 		traceEnt = &g_entities[ tr.entityNum ];
 
 		if ( traceEnt->takedamage ) {
-			G_Damage( traceEnt, ent, ent, dir, tr.endpos, TETRION_DAMAGE * s_quadFactor, 0, MOD_TETRION_ALT );
+			G_Damage( traceEnt, ent, ent, dir, tr.endpos, TETRION_DAMAGE, 0, MOD_TETRION_ALT );
 		}
 	}
 
@@ -1187,8 +1173,8 @@ void FireQuantumBurst( gentity_t *ent, vec3_t start, vec3_t dir )
 	bolt->r.ownerNum = ent->s.number;
 	bolt->parent = ent;
 
-	bolt->damage = QUANTUM_DAMAGE*DMG_VAR*s_quadFactor;
-	bolt->splashDamage = QUANTUM_SPLASH_DAM*s_quadFactor;
+	bolt->damage = QUANTUM_DAMAGE*DMG_VAR;
+	bolt->splashDamage = QUANTUM_SPLASH_DAM;
 	bolt->splashRadius = QUANTUM_SPLASH_RAD;//*s_quadFactor;
 
 	bolt->methodOfDeath = MOD_QUANTUM;
@@ -1363,8 +1349,8 @@ void FireQuantumBurstAlt( gentity_t *ent, vec3_t start, vec3_t dir )
 	bolt->parent = ent;
 	bolt->s.eFlags |= EF_ALT_FIRING;
 
-	bolt->damage = QUANTUM_ALT_DAMAGE*DMG_VAR*s_quadFactor;
-	bolt->splashDamage = QUANTUM_ALT_SPLASH_DAM*s_quadFactor;
+	bolt->damage = QUANTUM_ALT_DAMAGE*DMG_VAR;
+	bolt->splashDamage = QUANTUM_ALT_SPLASH_DAM;
 	bolt->splashRadius = QUANTUM_ALT_SPLASH_RAD;//*s_quadFactor;
 
 	bolt->methodOfDeath = MOD_QUANTUM_ALT;
@@ -1831,8 +1817,6 @@ FireWeapon
 void FireWeapon( gentity_t *ent, qboolean alt_fire ) 
 {
 	float			projsize;
-
-	s_quadFactor = 1;
 
 	ent->client->pers.teamState.lastFireTime = level.time;
 

@@ -3,7 +3,6 @@
 
 #include "g_local.h"
 
-static	float	s_quadFactor;
 vec3_t	forward, right, up;
 vec3_t	muzzle;
 

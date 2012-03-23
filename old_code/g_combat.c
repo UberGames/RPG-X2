@@ -1,0 +1,1 @@
+extern void G_RandomActionHero( int ignoreClientNum );

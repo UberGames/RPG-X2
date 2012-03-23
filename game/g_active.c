@@ -5,7 +5,6 @@
 
 extern void SP_misc_ammo_station( gentity_t *ent );
 extern void ammo_station_finish_spawning ( gentity_t *self );
-extern int	borgQueenClientNum;
 //extern qboolean BG_BorgTransporting( playerState_t *ps );
 
 static int lastTimedMessage; //TiM - Moved here from g_local.h
@@ -2286,16 +2285,9 @@ void G_Rematerialize( gentity_t *ent )
 {
 	playerState_t *ps = &ent->client->ps;
 
-	if ( ent->s.number == borgQueenClientNum )
-	{
-		ent->client->teleportTime = level.time + ( 60 * 1000 );
-		ps->stats[STAT_USEABLE_PLACED] = 60;
-	}
-	else
-	{
-		ent->client->teleportTime = level.time + ( 15 * 1000 );
-		ps->stats[STAT_USEABLE_PLACED] = 15;
-	}
+	ent->client->teleportTime = level.time + ( 15 * 1000 );
+	ps->stats[STAT_USEABLE_PLACED] = 15;
+
 	ent->flags &= ~FL_NOTARGET;
 	ent->takedamage = qtrue;
 	ent->r.contents = MASK_PLAYERSOLID;

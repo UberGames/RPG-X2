@@ -13,7 +13,6 @@ and tournament restarts.
 =======================================================================
 */
 
-extern int	borgQueenClientNum;
 extern int	numKilled;
 
 /*
@@ -85,68 +84,43 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 
 	sess = &client->sess;
 
-	// initial team determination
-	/*if ( g_gametype.integer >= GT_TEAM ) 
-	{//Team holomatch or CTF
-		if ( g_teamAutoJoin.integer && !(g_team_group_red.string[0] || g_team_group_blue.string[0]) ) {
-			if ( g_pModElimination.integer && numKilled > 0 )
-			{//elim game already in progress
-				sess->sessionTeam = TEAM_SPECTATOR;	
-			}
-			else if ( g_pModAssimilation.integer && borgQueenClientNum != -1 && numKilled > 0 )
-			{//assim game already in progress
-				sess->sessionTeam = TEAM_SPECTATOR;	
-			}
-			else
-			{
-				sess->sessionTeam = PickTeam( -1 );
-				BroadcastTeamChange( client, -1 );
-			}
-		} else {
-			// always spawn as spectator in team games
-			sess->sessionTeam = TEAM_SPECTATOR;	
-		}
-	} 
-	else */
-	{//FFA, tournament or sp
-		value = Info_ValueForKey( userinfo, "team" );
-		if ( value[0] == 's' ) {
-			// a willing spectator, not a waiting-in-line
-			sess->sessionTeam = TEAM_SPECTATOR;
-		} else {
-			switch ( g_gametype.integer ) {
-			default:
-			case GT_FFA:
-				sess->sessionTeam = TEAM_FREE;
-				break;
-			case GT_SINGLE_PLAYER:
+	value = Info_ValueForKey( userinfo, "team" );
+	if ( value[0] == 's' ) {
+		// a willing spectator, not a waiting-in-line
+		sess->sessionTeam = TEAM_SPECTATOR;
+	} else {
+		switch ( g_gametype.integer ) {
+		default:
+		case GT_FFA:
+			sess->sessionTeam = TEAM_FREE;
+			break;
+		case GT_SINGLE_PLAYER:
 				
-				sess->sessionTeam = TEAM_FREE;
+			sess->sessionTeam = TEAM_FREE;
 
-				//RPG-X: RedTechie - Not sure we need this
-				/*if ( g_maxGameClients.integer > 0 && 
-					level.numNonSpectatorClients >= g_maxGameClients.integer ) {
+			//RPG-X: RedTechie - Not sure we need this
+			/*if ( g_maxGameClients.integer > 0 && 
+				level.numNonSpectatorClients >= g_maxGameClients.integer ) {
+				sess->sessionTeam = TEAM_SPECTATOR;
+			} else {
+				if ( g_pModElimination.integer && numKilled > 0 )
+				{//game already in progress
 					sess->sessionTeam = TEAM_SPECTATOR;
-				} else {
-					if ( g_pModElimination.integer && numKilled > 0 )
-					{//game already in progress
-						sess->sessionTeam = TEAM_SPECTATOR;
-					}
-					else
-					{
-						sess->sessionTeam = TEAM_FREE;
-					}
-				}*/
-				break;
-			case GT_TOURNAMENT:
-				// if the game is full, go into a waiting mode
-				if ( level.numNonSpectatorClients >= 2 ) {
-					sess->sessionTeam = TEAM_SPECTATOR;
-				} else {
+				}
+				else
+				{
 					sess->sessionTeam = TEAM_FREE;
 				}
-				break;
+			}*/
+			break;
+		case GT_TOURNAMENT:
+			// if the game is full, go into a waiting mode
+			if ( level.numNonSpectatorClients >= 2 ) {
+				sess->sessionTeam = TEAM_SPECTATOR;
+			} else {
+				sess->sessionTeam = TEAM_FREE;
 			}
+			break;
 		}
 	}
 

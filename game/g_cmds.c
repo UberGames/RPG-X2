@@ -16,7 +16,6 @@ extern qboolean	PlaceDecoy( gentity_t *ent );
 //static void PM_ForceTorsoAnim( int anim );
 //static void PM_StartTorsoAnim( int anim );
 
-extern int		borgQueenClientNum;
 extern int	numKilled;
 extern clInitStatus_t clientInitialStatus[];
 extern qboolean levelExiting;
@@ -853,11 +852,6 @@ qboolean SetTeam( gentity_t *ent, char *s ) {
 		return qfalse;
 	}
 
-	//replace them if they're the queen
-	if ( borgQueenClientNum != -1 )
-	{
-		G_CheckReplaceQueen( clientNum );
-	}
 	//
 	// execute the team change
 	//
@@ -1186,55 +1180,6 @@ static void Cmd_Team_f( gentity_t *ent ) {
 	}
 
 	trap_Argv( 1, s, sizeof( s ) );
-
-	if ( !s[0] || s[0] != 's' )
-	{//not trying to become a spectator
-		/*if ( g_pModElimination.integer )
-		{
-			if ( numKilled > 0 )
-			{
-				if ( ent->client->ps.eFlags & EF_ELIMINATED )
-				{
-					trap_SendServerCommand( ent-g_entities, "cp \"You have been eliminated until next round\"" );
-				}
-				else if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR )
-				{
-					trap_SendServerCommand( ent-g_entities, "cp \"Wait until next round to join\"" );
-				}
-				else if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR )
-				{
-					trap_SendServerCommand( ent-g_entities, "cp \"Wait until next round to change teams\"" );
-				}
-				return;
-			}
-		}*/
-
-/*		if ( g_pModAssimilation.integer )
-		{
-			if ( borgQueenClientNum != -1 && numKilled > 0 )
-			{
-				if ( ent->client->ps.eFlags & EF_ASSIMILATED )
-				{
-					trap_SendServerCommand( ent-g_entities, "cp \"You have been assimilated until next round\"" );
-					return;
-				}
-				else if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR )
-				{
-						if ( s[0] == 'r' && borgTeam != TEAM_RED || s[0] == 'b' && borgTeam != TEAM_BLUE )
-						{
-							trap_SendServerCommand( ent-g_entities, "cp \"Wait until next round or join the Borg\"" );
-							return;
-						}
-				}
-				else if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR )
-				{
-					trap_SendServerCommand( ent-g_entities, "cp \"Wait until next round to change teams\"" );
-					return;
-				}
-//				return;
-			}
-		}*/
-	}
 
 	// if they are playing a tournement game, count as a loss
 	if ( g_gametype.integer == GT_TOURNAMENT && sess->sessionTeam == TEAM_FREE )

@@ -796,7 +796,6 @@ Kills all entities that would touch the proposed new positioning
 of ent.  Ent should be unlinked before calling this!
 =================
 */
-extern int borgQueenClientNum;
 void G_KillBox (gentity_t *ent) {
 	int			i, num;
 	int			touch[MAX_GENTITIES];
@@ -813,13 +812,6 @@ void G_KillBox (gentity_t *ent) {
 			continue;
 		}
 	
-		if ( g_pModAssimilation.integer && touch[i] == borgQueenClientNum )
-		{//kill me instead
-			G_Damage ( ent, hit, hit, NULL, NULL,
-				100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
-			return;
-		}
-
 		// nail it
 		G_Damage ( hit, ent, ent, NULL, NULL,
 			100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);

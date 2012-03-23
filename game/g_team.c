@@ -5,7 +5,6 @@
 
 team_t	initialBorgTeam = TEAM_FREE;
 int		borgQueenStartPoint = ENTITYNUM_NONE;
-extern	int	borgQueenClientNum;
 
 typedef enum _flag_status {
 	FLAG_ATBASE = 0,
@@ -677,7 +676,7 @@ gentity_t *SelectRandomTeamSpawnPoint( gentity_t *ent, int teamstate, team_t tea
 	gentity_t	*spots[MAX_TEAM_SPAWN_POINTS];
 	char		*classname;
 
-	if (teamstate == TEAM_BEGIN||ent->s.number == borgQueenClientNum) {
+	if (teamstate == TEAM_BEGIN) {
 		if (team == TEAM_RED)
 			classname = "team_CTF_redplayer";
 		else if (team == TEAM_BLUE)
@@ -697,19 +696,7 @@ gentity_t *SelectRandomTeamSpawnPoint( gentity_t *ent, int teamstate, team_t tea
 	spot = NULL;
 
 	while ((spot = G_Find (spot, FOFS(classname), classname)) != NULL) {
-		if ( teamstate == TEAM_BEGIN || ent->s.number == borgQueenClientNum ) {//just starting
-			if ( spot->s.number == borgQueenStartPoint ) {
-				//Borg queen only
-				if ( ent->s.number != borgQueenClientNum ) {
-					continue;
-				}
-			}
-			else if ( borgQueenStartPoint != ENTITYNUM_NONE && ent->s.number == borgQueenClientNum ) {
-				//she must start on the right spot
-				continue;
-			}
-		}
-		else {
+		if ( teamstate != TEAM_BEGIN) {
 			if ( spot->spawnflags & 1 ) {
 				//not an active spawn point
 				continue;

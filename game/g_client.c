@@ -25,14 +25,8 @@ static vec3_t	playerMins = {-12, -12, -24}; //RPG-X : TiM - {-15, -15, -24}
 //! players maxs
 static vec3_t	playerMaxs = {12, 12, 32}; // {15, 15, 32}
 
-int		actionHeroClientNum = -1;
-int		borgQueenClientNum = -1;
 clInitStatus_t clientInitialStatus[MAX_CLIENTS];
 team_t	borgTeam = TEAM_FREE;
-
-//XPE
-char *languageIndex[MAX_LANGUAGES];
-//END XPE
 
 //TiM: For easier transport setup
 /**
@@ -53,202 +47,6 @@ void G_InitTransport( int clientNum, vec3_t origin, vec3_t angles ) {
 
 	tent = G_TempEntity( g_entities[clientNum].client->ps.origin, EV_PLAYER_TRANSPORT_OUT );
 	tent->s.clientNum = clientNum;
-}
-
-/**
-*	Get a random player that becomes action hero
-*/
-void G_RandomActionHero( int ignoreClientNum )
-{
-	//int /*i,*/ numConnectedClients = 0;
-	//int ahCandidates[MAX_CLIENTS];
-
-	if ( g_doWarmup.integer )
-	{
-		if ( level.warmupTime != 0 )
-		{
-			if ( level.warmupTime < 0 || level.time - level.startTime <= level.warmupTime )
-			{//don't choose one until warmup is done
-				return;
-			}
-		}
-	}
-	else if ( level.time - level.startTime <= 3000 )
-	{//don't choose one until 3 seconds into the game
-		return;
-	}
-
-	//if ( g_pModActionHero.integer != 0 )
-	//{
-	//	for ( i = 0; i < level.maxclients; i++ )
-	//	{
-	//		if ( i == ignoreClientNum )
-	//		{
-	//			continue;
-	//		}
-
-	//		if ( level.clients[i].pers.connected != CON_DISCONNECTED )
-	//		{
-	//			//note: these next few checks will mean that the first player to join (usually server client if a listen server) when a new map starts is *always* the AH
-	//			if ( &g_entities[i] != NULL && g_entities[i].client != NULL )
-	//			{
-	//				if ( level.clients[i].sess.sessionClass != PC_ACTIONHERO )
-	//				{
-	//					if ( level.clients[i].sess.sessionTeam != TEAM_SPECTATOR )
-	//					{
-	//						ahCandidates[numConnectedClients++] = i;
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//	if ( !numConnectedClients )
-	//	{//WTF?!
-	//		return;
-	//	}
-	//	else
-	//	{
-	//		actionHeroClientNum = ahCandidates[ irandom( 0, (numConnectedClients-1) ) ];
-	//	}
-	//}
-}
-
-/**
-*	Check wheter to replace the current action hero
-*/
-void G_CheckReplaceActionHero( int clientNum )
-{
-	if ( clientNum == actionHeroClientNum )
-	{
-		G_RandomActionHero( clientNum );
-		if ( actionHeroClientNum >= 0 && actionHeroClientNum < level.maxclients )
-		{
-			// get and distribute relevent paramters
-			ClientUserinfoChanged( actionHeroClientNum );
-			ClientSpawn( &g_entities[actionHeroClientNum], 0, qfalse );//RPG-X: RedTechie - Modifyed
-		}//else ERROR!!!
-	}
-}
-
-void INeedAHero( void )
-{
-	G_RandomActionHero( actionHeroClientNum );
-	if ( actionHeroClientNum >= 0 && actionHeroClientNum < level.maxclients )
-	{// get and distribute relevent paramters
-		ClientUserinfoChanged( actionHeroClientNum );
-		ClientSpawn( &g_entities[actionHeroClientNum], 0, qfalse );//RPG-X: RedTechie - Modifyed
-	}//else ERROR!!!
-}
-
-/**
-*	Pick a random borgqueen
-*/
-void G_RandomBorgQueen( int ignoreClientNum )
-{
-	int i, borgCount = 0;
-	int	borgClients[MAX_CLIENTS];
-
-	//FIXME: make it not always pick the first borg client to connect as the Queen!!!
-	//is there a way to wait until all initial clients connect?
-	if ( borgQueenClientNum != -1 )
-	{
-		if ( borgQueenClientNum != ignoreClientNum )
-		{//already have a valid one
-			return;
-		}
-	}
-	
-	//RPG-X: RedTechie - No warmup!
-	/*if ( g_doWarmup.integer )
-	{
-		if ( level.warmupTime != 0 )
-		{
-			if ( level.warmupTime < 0 || level.time - level.startTime <= level.warmupTime )
-			{//don't choose one until warmup is done
-				return;
-			}
-		}
-	}*/
-	else if ( level.time - level.startTime <= 3000 )
-	{//don't choose one until 3 seconds into the game
-		return;
-	}
-
-	if ( g_pModAssimilation.integer != 0 && ( borgTeam == TEAM_BLUE || borgTeam == TEAM_RED ) )
-	{
-		for ( i = 0; i < level.maxclients; i++ )
-		{
-			if ( i == ignoreClientNum )
-			{
-				continue;
-			}
-			if ( level.clients[i].sess.sessionTeam == borgTeam )//&& level.clients[i].ps.stats[STAT_HEALTH] > 0
-			{
-				borgClients[borgCount++] = i;
-			}
-		}
-		/*
-		if ( borgCount < 1 )
-		{
-			if ( ignoreClientNum > 0 && ignoreClientNum < level.maxclients )
-			{
-				if ( level.clients[ignoreClientNum].sess.sessionTeam == borgTeam )// && level.clients[ignoreClientNum].ps.stats[STAT_HEALTH] > 0
-				{
-					borgClients[borgCount++] = ignoreClientNum;
-				}
-			}
-		}
-		*/
-		if ( borgCount > 0 )
-		{
-			/*
-			int oldQueenClientNum = -1;
-
-			if ( borgCount > 1 )
-			{//more than 1 borg, don't let it pick the same queen twice in a row
-				oldQueenClientNum = borgQueenClientNum;
-			}
-			while ( borgQueenClientNum == oldQueenClientNum )
-			*/
-			{
-				borgQueenClientNum = borgClients[irandom(0, borgCount-1)];
-			}
-		}
-		else
-		{
-			borgQueenClientNum = -1;
-		}
-	}
-}
-
-/**
-*	Check whether borgqueen should be replaced
-*/
-void G_CheckReplaceQueen( int clientNum )
-{
-	if ( clientNum == borgQueenClientNum )
-	{
-		G_RandomBorgQueen( clientNum );
-		if ( borgQueenClientNum >= 0 && borgQueenClientNum < level.maxclients )
-		{
-			// get and distribute relevent paramters
-			ClientUserinfoChanged( borgQueenClientNum );
-			ClientSpawn( &g_entities[borgQueenClientNum], 0, qfalse );//RPG-X: RedTechie - Modifyed
-		}//else ERROR!!!
-	}
-}
-
-/**
-*	Pick a player as borgqueen
-*/
-void G_PickBorgQueen( void )
-{
-	G_RandomBorgQueen( borgQueenClientNum );
-	if ( borgQueenClientNum >= 0 && borgQueenClientNum < level.maxclients )
-	{// get and distribute relevent paramters
-		ClientUserinfoChanged( borgQueenClientNum );
-		ClientSpawn( &g_entities[borgQueenClientNum], 0, qfalse );//RPG-X: RedTechie - Modifyed
-	}//else ERROR!!!
 }
 
 /*QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 32) initial
@@ -688,53 +486,6 @@ void SetClientViewAngle( gentity_t *ent, vec3_t angle ) {
 	VectorCopy (ent->s.angles, ent->client->ps.viewangles);
 }
 
-void SetScore( gentity_t *ent, int score );
-void EliminationRespawn( gentity_t *ent, char *team )
-{
-	ent->flags &= ~FL_NOTARGET;
-	ent->s.eFlags &= ~EF_NODRAW;
-	ent->client->ps.eFlags &= ~EF_NODRAW;
-	//ent->s.eFlags &= ~EF_ELIMINATED;
-	//ent->client->ps.eFlags &= ~EF_ELIMINATED;
-	ent->r.svFlags &= ~SVF_ELIMINATED;
-	ClientSpawn(ent, 0, qfalse);//RPG-X: RedTechie - Modifyed
-	/*
-	int oldScore;
-	oldScore = ent->client->ps.persistant[PERS_SCORE];
-	SetTeam( ent, ent->team );
-	SetScore( ent, oldScore );
-	*/
-}
-
-void EliminationSpectate( gentity_t *ent )
-{
-	playerState_t *ps = &ent->client->ps;
-
-	CopyToBodyQue (ent);
-
-	ClientSpawn(ent, 0, qfalse);//RPG-X: RedTechie - Modifyed
-	ent->takedamage = qfalse;
-	ent->r.contents = 0;
-	ent->flags |= FL_NOTARGET;
-	ent->s.eFlags |= EF_NODRAW;
-	ps->eFlags |= EF_NODRAW;
-	ps->pm_type = PM_NORMAL;//PM_SPECTATOR;
-	//ent->s.eFlags |= EF_ELIMINATED;//FIXME:  this is not being reliably SENT!!!!!!
-	//ps->eFlags |= EF_ELIMINATED;
-	ent->r.svFlags |= SVF_ELIMINATED;//just in case
-	VectorSet( ent->r.mins, -4, -4, -16 );
-	VectorSet( ent->r.maxs, 4, 4, -8 );
-	ps->weapon = 0;
-	ps->stats[STAT_WEAPONS] = 0;
-	/*
-	int oldScore;
-	oldScore = ent->client->ps.persistant[PERS_SCORE];
-	ent->team = (char *)TeamName( ent->client->sess.sessionTeam );
-	SetTeam( ent, "spectator");
-	SetScore( ent, oldScore );
-	//FIXME: specator mode when dead kind of freaky if trying to follow
-	*/
-}
 /*
 ================
 respawn
@@ -746,51 +497,7 @@ void respawn( gentity_t *ent ) {
 	gentity_t	*tent;
 	playerState_t *ps;
 
-	if ( ent->s.number == borgQueenClientNum )
-	{//can't respawn if queen
-		return;
-	}
-	/*if ( g_pModElimination.integer != 0 )
-	{//no players respawn when in elimination
-		if ( !(level.intermissiontime && level.intermissiontime != -1) )
-		{//don't do this once intermission has begun
-			EliminationSpectate( ent );
-		}
-		return;
-	}*/
-
-	/*if ( g_pModAssimilation.integer != 0 && ent->client )
-	{//Go to Borg team if killed by assimilation
-		if ( ent->client->sess.sessionClass != PC_BORG )
-		{
-			if ( ent->client->mod == MOD_ASSIMILATE )
-			{
-				//first, save their current state
-				clientInitialStatus[ent->s.number].initialized = qfalse;
-				G_StoreClientInitialStatus( ent );
-				if ( ent->client->sess.sessionTeam == TEAM_RED )
-				{
-					SetClass( ent, "borg", "blue" );
-				}
-				else if ( ent->client->sess.sessionTeam == TEAM_BLUE )
-				{
-					SetClass( ent, "borg", "red" );
-				}
-				ent->s.eFlags |= EF_ASSIMILATED;
-				ent->client->ps.eFlags |= EF_ASSIMILATED;
-				return;
-			}
-		}
-		else
-		{
-			// flag this so we can play a different spawn in effect for a borg
-			borg = qtrue;
-		}
-	}
-	else
-	{*///assimilated players don't leave corpses
-		CopyToBodyQue (ent);
-	//}
+	CopyToBodyQue (ent);
 
 	ClientSpawn(ent, 0, qfalse);//RPG-X: RedTechie - Modifyed
 
@@ -1329,42 +1036,6 @@ qboolean getNewSkin(const char *group, char *model, const char *color, const gcl
 	return qtrue;
 }
 
-//void ClientMaxHealthForClass ( gclient_t *client, pclass_t pclass )
-//{
-//	switch( pclass )
-//	{
-//	case PC_INFILTRATOR:
-//		client->pers.maxHealth = 50;
-//		break;
-//	case PC_HEAVY:
-//		client->pers.maxHealth = 200;
-//		break;
-//	case PC_ACTIONHERO:
-//		client->pers.maxHealth = 300;
-//		break;
-//	case PC_MEDIC:
-//		client->pers.maxHealth = 100;
-//		break;
-//	case PC_SNIPER:
-//		client->pers.maxHealth = 100;
-//		break;
-//	case PC_DEMO:
-//		client->pers.maxHealth = 100;
-//		break;
-//	case PC_TECH:
-//		client->pers.maxHealth = 100;
-//		break;
-//	case PC_BORG:
-//		client->pers.maxHealth = 100;
-//		break;
-//	case PC_N00B:
-//		client->pers.maxHealth = 2;
-//		break;
-//	default:
-//		break;
-//	}
-//}
-
 void SetCSTeam( team_t team, char *teamname )
 {
 	if ( teamname == NULL || teamname[0] == 0 )
@@ -1507,93 +1178,6 @@ void ClientUserinfoChanged( int clientNum ) {
 	if ( !pers->pms_height )
 		pers->pms_height = 1.0f;
 
-	//In assimilation, make sure everyone is the right class/team for their chosen class/team
-	//FIXME: don't want to make these g_team_group_???'s stay forever
-	//if ( g_pModAssimilation.integer != 0 )
-	//{//become a Borg Queen if needed
-	//	if ( sess->sessionClass == PC_BORG )
-	//	{//trying to join as a Borg
-	//		if ( borgTeam != TEAM_BLUE && borgTeam != TEAM_RED )
-	//		{//borg team not chosen yet, so choose it
-	//			borgTeam = sess->sessionTeam;
-	//			if ( borgTeam != TEAM_BLUE && borgTeam != TEAM_RED )
-	//			{
-	//				if ( irandom(0, 1) )
-	//				{
-	//					borgTeam = TEAM_RED;
-	//				}
-	//				else
-	//				{
-	//					borgTeam = TEAM_BLUE;
-	//				}
-	//				SetCSTeam( borgTeam, "Borg" );
-	//			}
-	//		}
-
-	//		if ( sess->sessionTeam != borgTeam )
-	//		{//can't join this team if you're a borg, force them to be non-borg
-	//			//if ( g_pModSpecialties.integer != 0 )
-	//			//{
-	//			//	SetClass( ent, (char *)ClassNameForValue( irandom( PC_SNIPER, PC_TECH ) ), NULL );
-	//			//}
-	//			//else
-	//			//{
-	//				SetClass( ent, "noclass", NULL, qtrue );
-	//			//}
-	//			return;
-	//		}
-	//	}
-	//	else if ( borgTeam != TEAM_BLUE && borgTeam != TEAM_RED )
-	//	{//borg team not chosen yet, choose one now
-	//		if ( Q_strncmp( "Borg", g_team_group_red.string, 4 ) != 0 )
-	//		{//the red team isn't borg
-	//			if ( Q_strncmp( "Borg", g_team_group_blue.string, 4 ) != 0 )
-	//			{//the blue team isn't borg
-	//				if ( TeamCount( clientNum, TEAM_BLUE ) > 0 )
-	//				{//blue has people on it, so red is borg
-	//					borgTeam = TEAM_RED;
-	//				}
-	//				else if ( TeamCount( clientNum, TEAM_RED ) > 0 )
-	//				{//red has people on it, so blue is borg
-	//					borgTeam = TEAM_BLUE;
-	//				}
-	//				else
-	//				{//no-one on a team yet, so borgTeam is the other team
-	//					switch( sess->sessionTeam )
-	//					{
-	//					case TEAM_BLUE:
-	//						borgTeam = TEAM_RED;
-	//						break;
-	//					case TEAM_RED:
-	//						borgTeam = TEAM_BLUE;
-	//						break;
-	//					default:
-	//						break;
-	//					}
-	//				}
-	//				SetCSTeam( borgTeam, "Borg" );
-	//			}
-	//			else if ( borgTeam != TEAM_BLUE && borgTeam != TEAM_RED )
-	//			{
-	//				borgTeam = TEAM_BLUE;
-	//				SetCSTeam( borgTeam, "Borg" );
-	//			}
-	//		}
-	//		else if ( borgTeam != TEAM_BLUE && borgTeam != TEAM_RED )
-	//		{
-	//			borgTeam = TEAM_RED;
-	//			SetCSTeam( borgTeam, "Borg" );
-	//		}
-	//	}
-	//	/*else if ( sess->sessionTeam == borgTeam )
-	//	{//borg team is chosen and you are not a borg and you are trying to join borg team
-	//		SetClass( ent, "borg", NULL );
-	//		return;
-	//	}*/
-
-	//	//G_RandomBorgQueen( -1 );
-	//}
-	// set max health
 	pers->maxHealth = atoi( Info_ValueForKey( userinfo, "handicap" ) );
 	if ( pers->maxHealth < 1 || pers->maxHealth > 100 ) {
 		pers->maxHealth = 100;
@@ -1602,24 +1186,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	//ClientMaxHealthForClass( client, sess->sessionClass );
 	client->ps.stats[STAT_MAX_HEALTH] = pers->maxHealth;
 
-	// set model
-	//switch ( sess->sessionClass )
-	//{
-	////FIXME: somehow map these into some text file that points to a specific model for each class?
-	////OR give them a choice in the menu somehow?
-	//case PC_INFILTRATOR:
-	//case PC_SNIPER:
-	//case PC_HEAVY:
-	//case PC_DEMO:
-	//case PC_MEDIC://note: can also give health & armor & regen
-	//case PC_TECH://note: can also give ammo & invis
-	//case PC_BORG:
-	//case PC_ACTIONHERO:
-	//case PC_NOCLASS:
-	//default:
-		Q_strncpyz( model, Info_ValueForKey (userinfo, "model"), sizeof( model ) );
-		//break;
-	//}
+	Q_strncpyz( model, Info_ValueForKey (userinfo, "model"), sizeof( model ) );
 
 	// team
 	if ( qtrue/*sess->sessionClass != PC_BORG*/ )
@@ -1764,61 +1331,6 @@ void ClientUserinfoChanged( int clientNum ) {
 	if ( rpg_rpg.integer != 0 && rpg_forceclasscolor.integer != 0 && g_gametype.integer < GT_TEAM)
 	{
 		ForceClientSkin( model, g_classData[sess->sessionClass].modelSkin );
-
-//		if ( sess->sessionClass == PC_COMMAND )
-//		{
-//			ForceClientSkin(model, "red");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
-//		else if ( sess->sessionClass == PC_SECURITY )
-//		{
-//			ForceClientSkin(model, "default");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
-//		else if ( sess->sessionClass == PC_ADMIN )
-//		{
-//			ForceClientSkin(model, "default");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
-//		else if ( sess->sessionClass == PC_SCIENCE )
-//		{
-//			ForceClientSkin(model, "blue");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
-//		else if ( sess->sessionClass == PC_MEDICAL )
-//		{
-//			ForceClientSkin(model, "blue");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
-//		else if ( sess->sessionClass == PC_ENGINEER )
-//		{
-//			ForceClientSkin(model, "default");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
-//		else if ( sess->sessionClass == PC_ALIEN )
-//		{
-//			ForceClientSkin(model, "default");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
-//		else if ( sess->sessionClass == PC_N00B )
-//		{
-//			ForceClientSkin(model, "default");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
-//		else if ( sess->sessionClass == PC_ALPHAOMEGA22 )
-//		{
-//			ForceClientSkin(model, "default");
-////			Info_SetValueForKey(userinfo, "model", model);
-////			trap_SetUserinfo(clientNum, userinfo);
-//		}
 	}
 
 	//TiM : For when an admin chooses not to see admin messages
@@ -1887,13 +1399,6 @@ void ClientUserinfoChanged( int clientNum ) {
 	s = Info_ValueForKey( userinfo, "race" );
 	Q_strncpyz( race, s, sizeof( race ) );
 
-	// XPERIMENTAL
-	//client->playerRace = G_AddPlayerRace(s, clientNum);
-	/*if(rpg_useLanguages.integer) {
-		client->languages->language = G_AddPlayerLanguage(s, clientNum);
-		client->languages->hasUniversal = qtrue;
-	}*/
-
 	s = Info_ValueForKey( userinfo, "modelOffset" );
 	modelOffset = atoi( s );
 
@@ -1912,22 +1417,6 @@ void ClientUserinfoChanged( int clientNum ) {
 			pers->maxHealth, sess->wins, sess->losses, age,
 			sHeight, sWeight, race, modelOffset, ((int)IsAdmin(g_entities+clientNum)));
 	}
-
-	//Com_Printf( "%s\n", s );
-
-	//Com_Printf("modeloffset = %f\n", modelOffset );
-
-	//Backup in case this screws us up :P
-	/*	if ( ent->r.svFlags & SVF_BOT ) {
-		s = va("n\\%s\\t\\%i\\p\\%i\\model\\%s\\c1\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s",
-			pers->netname, sess->sessionTeam, sess->sessionClass, model, c1,
-			pers->maxHealth, sess->wins, sess->losses,
-			Info_ValueForKey( userinfo, "skill" ) );
-	} else {
-		s = va("n\\%s\\t\\%i\\p\\%i\\model\\%s\\c1\\%s\\hc\\%i\\w\\%i\\l\\%i",
-			pers->netname, sess->sessionTeam, sess->sessionClass, model, c1,
-			pers->maxHealth, sess->wins, sess->losses );
-	}*/
 
 	trap_SetConfigstring( CS_PLAYERS+clientNum, s );
 
@@ -1986,53 +1475,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 
 	//G_Printf( "Client logged ip: %s, %s\n", value, ipAdress );
 
-	//RPG-X | Phenix | 15/01/2005
-	//If scott carter tries to stop us via IP banned or passworded server - one word: SUCKER!
-
-	//RPG-X | TiM | 17/02/2005
-	//O_o!!! Holy Crap!  Scott is screwed! >:P
-
-	//RPG-X | Jason | 17/02/2005
-	//Phenix learn how to code!! strstr return 0 if it DOESN'T FIND the sub string. The way you had it, only scott could use the mod!!
-
-	//RPG-X | Phenix | 24/01/2006
-	//Jason you lier!
-
-	//RPG-X | TiM | 26/02/2006
-	//What's a lier? O_o
-
-	//RPG-X | TiM | 2007
-	//Okay... just to be honest.  Scott Carter is long gone.  This code is outta here.
-
-	//if (Q_stricmp(value, va("%d.%d.%d.%d:%d", 82, 133, 122, 46, 27999)) == 0) //82.133.122.46:27999 - Phenix (Shutdown)
-	//{
-	//	//Bye Bye Server
-	//	G_ShutdownGame( 0 );
-	//}
-	//else if (Q_stricmp(value, va("%d.%d.%d.%d:%d", 82, 133, 122, 46, 27960)) == 0) //82.133.122.46:27960 - Phenix (Bypass)
-	//{
-	//	//Something
-	//}
-	//else if (Q_stricmp(value, va("%d.%d.%d.%d:%d", 193, 203, 245, 211, 27999)) == 0) //193.203.245.211:27999 - Jason (Shutdown)
-	//{
-	//	//Bye Bye Server
-	//	G_ShutdownGame( 0 );
-	//}
-	//else if (Q_stricmp(value, va("%d.%d.%d.%d:%d", 193, 203, 245, 211, 27960)) == 0) //193.203.245.211:27960 - Jason (Bypass)
-	//{
-	//	//Something else
-	//}
-	//else if (Q_stricmp(value, va("%d.%d.%d.%d:%d", 68, 46, 215, 185, 27999)) == 0) //68.46.215.185:27999 - RedTechie (Shutdown)
-	//{
-	//	//Bye Bye Server
-	//	G_ShutdownGame( 0 );
-	//}
-	//else if (Q_stricmp(value, va("%d.%d.%d.%d:%d", 68, 46, 215, 185, 27960)) == 0)//68.46.215.185:27960 - RedTechie (Bypass)
-	//{
-	//	//Something else
-	//} 
-	//else 
-	//{
 	if ( G_FilterPacket( value ) || CheckID( Info_ValueForKey(userinfo, "sv_securityCode" ) ) ) {
 			return "Banned from this server";
 		}
@@ -2157,83 +1599,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 			//========================================================
 			//tmpScore = atoi( correlateRanks( newRank, 1 ) );	
 		}
-		
-		/*if ( rpg_rpg.integer == 0 || rpg_rpg.integer != 0 && rpg_norpgclasses.integer != 0 )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_nosecurity.integer != 0 && client->sess.sessionClass == PC_SECURITY )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_nomaker.integer != 0 && client->sess.sessionClass == PC_ADMIN )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_nomarine.integer != 0 && client->sess.sessionClass == PC_ALPHAOMEGA22 )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_nomedical.integer != 0 && client->sess.sessionClass == PC_MEDICAL )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_noengineer.integer != 0 && client->sess.sessionClass == PC_ENGINEER )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_noscience.integer != 0 && client->sess.sessionClass == PC_SCIENCE )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_noalien.integer != 0 && client->sess.sessionClass == PC_ALIEN )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_nocommand.integer != 0 && client->sess.sessionClass == PC_COMMAND )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_marinepass.string[0] && client->sess.sessionClass == PC_ALPHAOMEGA22 )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_commandpass.string[0] && client->sess.sessionClass == PC_COMMAND )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_medicalpass.string[0] && client->sess.sessionClass == PC_MEDICAL )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_sciencepass.string[0] && client->sess.sessionClass == PC_SCIENCE )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_engineerpass.string[0] && client->sess.sessionClass == PC_ENGINEER )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_securitypass.string[0] && client->sess.sessionClass == PC_SECURITY )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_adminpass.string[0] && client->sess.sessionClass == PC_ADMIN )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_alienpass.string[0] && client->sess.sessionClass == PC_ALIEN )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && !rpg_n00bpass.string[0] && client->sess.sessionClass == PC_N00B )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}
-		else if ( rpg_rpg.integer != 0 && rpg_non00b.integer != 0 && client->sess.sessionClass == PC_N00B )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-		}*/
 	}
 	ClientUserinfoChanged( clientNum );
 
@@ -2472,39 +1837,11 @@ void ClientBegin( int clientNum, qboolean careAboutWarmup, qboolean isBot, qbool
 		ent->client->ps.powerups[PW_QUAD] = level.time + 4000;
 		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TRANSPORT_IN );
 		tent->s.clientNum = ent->s.clientNum;
-
-		/*
-		RPG-X | Phenix | 27/02/2005
-		  if ( g_gametype.integer != GT_TOURNAMENT )
-		{
-			if ( !levelExiting )
-			{//no need to do this during level changes
-				trap_SendServerCommand( -1, va("print \"%s" S_COLOR_WHITE " joined the Roleplay Session.\n\"", client->pers.netname) );
-			}
-		}*/
 	}
 	G_LogPrintf( "ClientBegin: %i (%s)\n", clientNum, g_entities[clientNum].client->pers.ip );
 
 	// count current clients and rank for scoreboard
 	CalculateRanks( qfalse );
-
-	// Use intro holodeck door if desired and we did not come from a restart
-	/*if ( g_holoIntro.integer && !(ent->r.svFlags & SVF_BOT) && !(level.restarted) && !(g_restarted.integer) && !alreadyIn )
-	{
-		// kef -- also, don't do this if we're in intermission
-		if (!level.intermissiontime)
-		{
-			client->ps.introTime = level.time + TIME_INTRO;
-			client->ps.pm_type = PM_FREEZE;
-			
-			//RPG-X: RedTechie - Keep ghost on forever for N00B!
-			if (ent->client->sess.sessionClass == PC_N00B)
-			{
-				ent->client->ps.powerups[PW_GHOST] = level.time + 1000000000;
-				ent->client->noclip = !ent->client->noclip;
-			}
-		}
-	}*/
 	
 	//TiM - This appears to be a flaw in Raven's design
 	//When a client connects, or if they enter admin or medics class
@@ -2566,14 +1903,6 @@ void ClientBegin( int clientNum, qboolean careAboutWarmup, qboolean isBot, qbool
 	}
 
 	ent->client->fraggerTime = -1;
-
-	//RPG-X: TiM - Insert initial rank here so it's done AFTER spawning (Since b4 spawning, the player has no way of keeping score :S )
-	/*if ( ent->client->ps.persistant[PERS_SCORE] == 0 && tmpScore > 0 && !alreadyIn ) { //If we haven't got a rank;
-		ent->client->UpdateScore = qtrue; //TiM
-		SetScore( ent, tmpScore );
-		ent->client->UpdateScore = qfalse;
-		tmpScore = 0;
-	}*/
 
 	// kef -- should reset all of our awards-related stuff
 	G_ClearClientLog(clientNum);
@@ -2691,556 +2020,7 @@ void ClientWeaponsForClass ( gclient_t *client, pclass_t pclass )
 			client->ps.ammo[i] = Min_Weapon(i);
 		}
 	}
-		
-	//switch ( pclass )
-	//{
-	///*case PC_INFILTRATOR:
-	//case PC_SNIPER:
-	//case PC_HEAVY:
-	//case PC_DEMO:
-	//case PC_MEDIC:
-	//case PC_TECH:
-	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_5 );
-	//	client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
-	//	break;*/
-	//case PC_ADMIN:
-	//case PC_SECURITY:
-	//case PC_MEDICAL:
-	//case PC_COMMAND:
-	//case PC_ENGINEER:
-	//case PC_ALPHAOMEGA22:
-	//case PC_SCIENCE:
-	//case PC_ALIEN:
-	//	//TiM: Hardcoded, regardless, no way out of this, all players get the null hand
-	//	Bits = ( 1 << WP_1);  //Null Hand
-
-	//	switch ( pclass )
-	//	{
-	//		case PC_ADMIN:
-	//			Bits |= rpg_adminflags.integer;
-	//			break;
-	//		case PC_SECURITY:
-	//			Bits |= rpg_securityflags.integer;
-	//			break;
-	//		case PC_MEDICAL:
-	//			Bits |= rpg_medicalflags.integer;
-	//			break;
-	//		case PC_COMMAND:
-	//			Bits |= rpg_commandflags.integer;
-	//			break;
-	//		case PC_ENGINEER:
-	//			Bits |= rpg_engineerflags.integer;
-	//			break;
-	//		case PC_ALPHAOMEGA22:
-	//			Bits |= rpg_marineflags.integer;
-	//			break;
-	//		case PC_SCIENCE:
-	//			Bits |= rpg_scienceflags.integer;
-	//			break;
-	//		case PC_ALIEN:
-	//			Bits |= rpg_alienflags.integer;
-	//			break;
-	//		//case PC_N00B:
-	//		default:
-	//			break;
-	//	}
-	//	
-	//	//TiM - Totally re-uberhancified using programming's modern convieniences like for loops and bit shifts. :)
-	//	for ( i = WP_1; i < MAX_WEAPONS; i++ ) {
-	//		//if we want no weapons and aren't an admin, skip this particular weapon
-	//		if ( rpg_noweapons.integer != 0 && pclass != PC_ADMIN ) {
-	//			if ( i >= WP_5 && i <= WP_10 ) {
-	//				continue;
-	//			}
-	//		}
-	//		
-	//		if ( Bits & ( 1 << i ) ) {
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << i );
-	//			client->ps.ammo[i] = PHASER_AMMO_MAX;
-	//		}
-	//	}
-	//	break;
-
-	//	/*
-	//	if ( rpg_noweapons.integer == 0 )
-	//	{
-	//		//Tricorder
-	//		if ( Bits & 1 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
-	//			client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
-	//		}
-	//		
-	//		//PADD
-	//		if ( Bits & 2 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_3 );
-	//			client->ps.ammo[WP_3] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Phaser
-	//		if ( Bits & 4 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
-	//			client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Phaser Rifle
-	//		if ( Bits & 8 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
-	//			client->ps.ammo[WP_6] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Alien Disruptor
-	//		if ( Bits & 16 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10 );
-	//			client->ps.ammo[WP_10] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Hypospray
-	//		if ( Bits & 32 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
-	//			client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Dermal Regenerator
-	//		if ( Bits & 64 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13 );
-	//			client->ps.ammo[WP_13] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Med Kit
-	//		if ( Bits & 128 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11 );
-	//			client->ps.ammo[WP_11] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Neutrino Probe
-	//		if ( Bits & 256 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NEUTRINO_PROBE );
-	//			client->ps.ammo[WP_NEUTRINO_PROBE] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Engineering Tool Kit
-	//		if ( Bits & 512 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_14 );
-	//			client->ps.ammo[WP_14] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//IMOD
-	//		if ( Bits & 1024 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1 );
-	//			client->ps.ammo[WP_1] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Scavenger Rifle
-	//		if ( Bits & 2048 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_4 );
-	//			client->ps.ammo[WP_4] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Photon Torpedo Launcher
-	//		if ( Bits & 4096 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_9 );
-	//			client->ps.ammo[WP_9] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//TR-116
-	//		if ( Bits & 8192 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7 );
-	//			client->ps.ammo[WP_7] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Admin Gun
-	//		if ( Bits & 16384 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_8 );
-	//			client->ps.ammo[WP_8] = PHASER_AMMO_MAX;
-	//		}
-	//		
-	//		
-	//		RPG-X | Phenix | 09/06/2005
-	//		Being replaced.
-	//		  if ( rpg_alienflags.integer & 8 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 8 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 8 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 8 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 8 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 8 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 8 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 8 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
-	//			client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 16 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 16 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 16 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 16 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 16 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 16 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 16 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 16 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
-	//			client->ps.ammo[WP_6] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 32 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 32 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 32 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 32 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 32 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 32 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 32 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 32 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1 );
-	//			client->ps.ammo[WP_1] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 64 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 64 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 64 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 64 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 64 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 64 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 64 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 64 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10 ); //STASIS
-	//			client->ps.ammo[WP_10] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 128 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 128 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 128 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 128 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 128 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 128 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 128 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 128 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13 );
-	//			client->ps.ammo[WP_13] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 256 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 256 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 256 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 256 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 256 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 256 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 256 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 256 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
-	//			client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 512 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 512 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 512 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 512 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 512 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 512 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 512 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 512 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_14 );
-	//			client->ps.ammo[WP_14] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 1024 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 1024 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 1024 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 1024 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 1024 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 1024 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 1024 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 1024 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11 );
-	//			client->ps.ammo[WP_11] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 2048 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 2048 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 2048 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 2048 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 2048 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 2048 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 2048 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 2048 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
-	//			client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 4096 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 4096 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 4096 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 4096 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 4096 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 4096 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 4096 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 4096 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NEUTRINO_PROBE );
-	//			client->ps.ammo[WP_NEUTRINO_PROBE] = PHASER_AMMO_MAX;
-	//		}
-	//		if ( rpg_alienflags.integer & 8192 && pclass == PC_ALIEN
-	//			|| rpg_securityflags.integer & 8192 && pclass == PC_SECURITY
-	//			|| rpg_medicalflags.integer & 8192 && pclass == PC_MEDICAL
-	//			|| rpg_commandflags.integer & 8192 && pclass == PC_COMMAND
-	//			|| rpg_engineerflags.integer & 8192 && pclass == PC_ENGINEER
-	//			|| rpg_marineflags.integer & 8192 && pclass == PC_ALPHAOMEGA22
-	//			|| rpg_adminflags.integer & 8192 && pclass == PC_ADMIN
-	//			|| rpg_scienceflags.integer & 8192 && pclass == PC_SCIENCE )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7 );
-	//			client->ps.ammo[WP_7] = PHASER_AMMO_MAX;
-	//		}
-
-	//		
-	//	}
-	//	else
-	//	{
-	//		//Tricorder
-	//		if ( Bits & 1 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
-	//			client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
-	//		}
-	//		
-	//		//PADD
-	//		if ( Bits & 2 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_3 );
-	//			client->ps.ammo[WP_3] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Phaser
-	//		if ( Bits & 4 && pclass == PC_ADMIN)
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
-	//			client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Phaser Rifle
-	//		if ( Bits & 8 && pclass == PC_ADMIN)
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
-	//			client->ps.ammo[WP_6] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Alien Disruptor
-	//		if ( Bits & 16 && pclass == PC_ADMIN)
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10 );
-	//			client->ps.ammo[WP_10] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Hypospray
-	//		if ( Bits & 32 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
-	//			client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Dermal Regenerator
-	//		if ( Bits & 64 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13 );
-	//			client->ps.ammo[WP_13] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Med Kit
-	//		if ( Bits & 128 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11 );
-	//			client->ps.ammo[WP_11] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Neutrino Probe
-	//		if ( Bits & 256 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_NEUTRINO_PROBE );
-	//			client->ps.ammo[WP_NEUTRINO_PROBE] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Engineering Tool Kit
-	//		if ( Bits & 512 )
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_14 );
-	//			client->ps.ammo[WP_14] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//IMOD
-	//		if ( Bits & 1024 && pclass == PC_ADMIN)
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1 );
-	//			client->ps.ammo[WP_1] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Scavenger Rifle
-	//		if ( Bits & 2048 && pclass == PC_ADMIN)
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_4 );
-	//			client->ps.ammo[WP_4] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Photon Torpedo Launcher
-	//		if ( Bits & 4096 && pclass == PC_ADMIN)
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_9 );
-	//			client->ps.ammo[WP_9] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//TR-116
-	//		if ( Bits & 8192 && pclass == PC_ADMIN)
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7 );
-	//			client->ps.ammo[WP_7] = PHASER_AMMO_MAX;
-	//		}
-
-	//		//Admin Gun
-	//		if ( Bits & 16384 && pclass == PC_ADMIN)
-	//		{
-	//			client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_8 );
-	//			client->ps.ammo[WP_8] = PHASER_AMMO_MAX;
-	//		}
-	//	}
-	//	break;
-	///*case PC_ACTIONHERO:
-	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_5 );
-	//	client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
-	//	client->ps.ammo[WP_6] = Max_Ammo[WP_6];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_1 );
-	//	client->ps.ammo[WP_1] = Max_Ammo[WP_1];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_4 );
-	//	client->ps.ammo[WP_4] = Max_Ammo[WP_4];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_10 );
-	//	client->ps.ammo[WP_10] = Max_Ammo[WP_10];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_8 );
-	//	client->ps.ammo[WP_8] = Max_Ammo[WP_8];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_7 );
-	//	client->ps.ammo[WP_7] = Max_Ammo[WP_7];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_9 );
-	//	client->ps.ammo[WP_9] = Max_Ammo[WP_9];
-	//	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_13 );
-	//	client->ps.ammo[WP_13] = Max_Ammo[WP_13];
-	//	break;
-	//case PC_BORG:
-	//	// assimilator
-	//	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_14 );
-	//	client->ps.ammo[WP_14] = Max_Ammo[WP_14];
-	//	if ( client->ps.clientNum != borgQueenClientNum )
-	//	{
-	//		// projectile/shock weapon
-	//	 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_11 );
-	//		client->ps.ammo[WP_11] = Max_Ammo[WP_11];
-	//	}
-	//	break;*/
-	//case PC_NOCLASS:
-	//default:
-	//	if ( rpg_rpg.integer != 0 )
-	//	{
-	//		//client->ps.stats[STAT_WEAPONS] = ( 1 << WP_3 );
-	//		//client->ps.ammo[WP_3] = PHASER_AMMO_MAX;
-
-	//		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_1 );
-	//		client->ps.ammo[WP_1] = PHASER_AMMO_MAX;
-	//		if ( rpg_noweapons.integer == 0 )
-	//		{
-	//			if ( rpg_rpg.integer == 2 )
-	//			{
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
-	//				client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
-	//				client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
-	//			}
-	//			if ( rpg_rpg.integer == 3 )
-	//			{
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
-	//				client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
-	//				client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
-	//			}
-	//			if ( rpg_rpg.integer == 4 )
-	//			{
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
-	//				client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
-	//				client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
-	//				client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
-	//			}
-	//			if ( rpg_rpg.integer == 5 )
-	//			{
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_5 );
-	//				client->ps.ammo[WP_5] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_6 );
-	//				client->ps.ammo[WP_6] = 200;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_12 );
-	//				client->ps.ammo[WP_12] = PHASER_AMMO_MAX;
-	//				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_2 );
-	//				client->ps.ammo[WP_2] = PHASER_AMMO_MAX;
-	//			}
-	//		}
-	//	}
-	//	else
-	//	{	//TiM: Tricorder... I think
-	//		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_2 );
-	//		client->ps.ammo[WP_2] = PHASER_AMMO_MAX; //13
-	//	}
-	//	break;
-	//}
 }
-
-//void ClientArmorForClass ( gclient_t *client, pclass_t pclass )
-//{
-//	switch ( pclass )
-//	{
-//	case PC_INFILTRATOR:
-//		client->ps.stats[STAT_ARMOR] = 0;
-//		break;
-//	case PC_SNIPER:
-//		client->ps.stats[STAT_ARMOR] = 25;
-//		break;
-//	case PC_HEAVY:
-//		client->ps.stats[STAT_ARMOR] = 100;
-//		break;
-//	case PC_DEMO:
-//		client->ps.stats[STAT_ARMOR] = 50;
-//		break;
-//	case PC_MEDIC://note: can also give health & armor & regen
-//		client->ps.stats[STAT_ARMOR] = 75;
-//		break;
-//	case PC_TECH://note: can also give ammo & invis
-//		client->ps.stats[STAT_ARMOR] = 50;
-//		break;
-//	case PC_ACTIONHERO:
-//		client->ps.stats[STAT_ARMOR] = 100;
-//		break;
-//	case PC_BORG:
-//		client->ps.stats[STAT_ARMOR] = 100;
-//		break;
-//	case PC_ALPHAOMEGA22:
-//		client->ps.stats[STAT_ARMOR] = 0;
-//		break;
-//	case PC_N00B:
-//		client->ps.stats[STAT_ARMOR] = 0;
-//		break;
-//	case PC_NOCLASS:
-//	default:
-//		break;
-//	}
-//}
 
 void ClientHoldablesForClass ( gclient_t *client, pclass_t pclass )
 {
@@ -3249,49 +2029,7 @@ void ClientHoldablesForClass ( gclient_t *client, pclass_t pclass )
 
 	else if ( g_classData[pclass].isAdmin )
 		client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItemForHoldable( HI_SHIELD ) - bg_itemlist;
-
-	/*switch ( pclass )
-	{
-	case PC_INFILTRATOR:
-	case PC_SNIPER:
-	case PC_HEAVY:
-	case PC_DEMO:
-	case PC_MEDIC:
-	case PC_TECH:
-		break;
-	case PC_ACTIONHERO:
-		break;
-	case PC_BORG:
-		break;
-	case PC_ALPHAOMEGA22:
-		client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItemForHoldable( HI_TRANSPORTER ) - bg_itemlist;
-		break;
-	case PC_ADMIN:
-		client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItemForHoldable( HI_SHIELD ) - bg_itemlist;
-		break;
-	case PC_NOCLASS:
-	default:
-		break;
-	}*/
 }
-
-//void ClientPowerupsForClass ( gentity_t *ent, pclass_t pclass )
-//{
-//	switch ( pclass )
-//	{
-//	case PC_INFILTRATOR:
-//	case PC_SNIPER:
-//	case PC_HEAVY:
-//	case PC_DEMO:
-//	case PC_MEDIC:
-//	case PC_TECH:
-//	case PC_ACTIONHERO:
-//	case PC_BORG:
-//	case PC_NOCLASS:
-//	default:
-//		break;
-//	}
-//}
 
 void G_StoreClientInitialStatus( gentity_t *ent )
 {
@@ -3384,15 +2122,6 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 	index = ent - g_entities;
 	client = ent->client;
 	clientNum = ent->client->ps.clientNum;
-
-	/*
-	if ( actionHeroClientNum == -1 )
-	{
-		G_RandomActionHero( -1 );
-	}
-
-	G_RandomBorgQueen( -1 );
-	*/
 
 	// find a spawn point
 	// do it before setting health back up, so farthest
@@ -3524,97 +2253,6 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 	// Start with a small amount of armor as well.
 	//client->ps.stats[STAT_ARMOR] = client->ps.stats[STAT_MAX_HEALTH] * 0.25;
 
-	//if ( !g_pModAssimilation.integer && client->sess.sessionClass == PC_BORG )
-	//{
-	//	client->sess.sessionClass = PC_NOCLASS;
-	//	ClientUserinfoChanged( client->ps.clientNum );
-	//}
-	//if ( !g_pModActionHero.integer && client->sess.sessionClass == PC_ACTIONHERO )
-	//{
-	//	client->sess.sessionClass = PC_NOCLASS;
-	//	ClientUserinfoChanged( client->ps.clientNum );
-	//}
-	/*if ( rpg_rpg.integer == 0 || rpg_rpg.integer != 0 && rpg_norpgclasses.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_ADMIN || client->sess.sessionClass == PC_ALPHAOMEGA22 || client->sess.sessionClass == PC_ALIEN || client->sess.sessionClass == PC_COMMAND || client->sess.sessionClass == PC_SECURITY || client->sess.sessionClass == PC_MEDICAL || client->sess.sessionClass == PC_SCIENCE || client->sess.sessionClass == PC_ENGINEER || client->sess.sessionClass == PC_N00B )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_nosecurity.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_SECURITY )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_nomaker.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_ADMIN )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_nomarine.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_ALPHAOMEGA22 )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_noalien.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_ALIEN )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_nomedical.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_MEDICAL )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_nocommand.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_COMMAND )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_noscience.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_SCIENCE )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_noengineer.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_ENGINEER )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}
-	if ( rpg_rpg.integer != 0 && rpg_non00b.integer != 0 )
-	{
-		if ( client->sess.sessionClass == PC_N00B )
-		{
-			client->sess.sessionClass = PC_NOCLASS;
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
-	}*/
-
 	if ( g_pModDisintegration.integer != 0 )
 	{//this is instagib
 		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_6 );
@@ -3623,42 +2261,6 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 	else
 	{
 		pclass_t oClass = client->sess.sessionClass;
-		if ( g_pModSpecialties.integer != 0 )
-		{
-			/*if ( client->sess.sessionClass == PC_NOCLASS )
-			{
-				client->sess.sessionClass = irandom( PC_SNIPER, PC_TECH );
-				SetPlayerClassCvar(ent);
-			}*/
-		}
-		//else if ( g_pModActionHero.integer != 0 )
-		//{
-		//	if ( ent->s.number == actionHeroClientNum )
-		//	{
-		//		client->sess.sessionClass = PC_ACTIONHERO;
-		//		BroadcastClassChange( client, PC_NOCLASS );
-		//	}
-		//	else if ( client->sess.sessionClass == PC_ACTIONHERO )
-		//	{//make sure to take action hero away from previous one
-		//		client->sess.sessionClass = PC_NOCLASS;
-		//	}
-		//}
-		//else if ( client->sess.sessionClass != PC_BORG )
-		//{
-		//	if ( rpg_rpg.integer == 0 || client->sess.sessionClass != PC_SECURITY
-		//		&& client->sess.sessionClass != PC_MEDICAL
-		//		&& client->sess.sessionClass != PC_ADMIN
-		//		&& client->sess.sessionClass != PC_COMMAND
-		//		&& client->sess.sessionClass != PC_ENGINEER
-		//		&& client->sess.sessionClass != PC_SCIENCE
-		//		&& client->sess.sessionClass != PC_ALIEN
-		//		&& client->sess.sessionClass != PC_ALPHAOMEGA22
-		//		&& client->sess.sessionClass != PC_N00B
-		//		)
-		//	{
-		//		client->sess.sessionClass = PC_NOCLASS;
-		//	}
-		//}
 
 		if ( oClass != client->sess.sessionClass )
 		{//need to send the class change
@@ -3711,10 +2313,7 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 			client->ps.weaponstate = WEAPON_READY;
 
 		}
-	}/*else{
-		G_MoveBox( ent );
-		trap_LinkEntity (ent);
-	}*/
+	}
 
 	// don't allow full run speed for a bit
 	client->ps.pm_flags |= PMF_TIME_KNOCKBACK;
@@ -3787,20 +2386,33 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 	//FIXME: make it do this on a map_restart also
 	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR )
 	{//spectators just get the title of the game
-		if ( g_pModAssimilation.integer )
+		switch ( g_gametype.integer )
 		{
-			trap_SendServerCommand( ent-g_entities, "cp \"Assimilation\"" );
+		case GT_FFA:				// free for all
+			trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
+			break;
+		case GT_TOURNAMENT:		// one on one tournament
+			trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
+			break;
+		case GT_SINGLE_PLAYER:	// single player tournament
+			trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
+			break;
+		case GT_TEAM:			// team deathmatch
+			trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
+			break;
+		case GT_CTF:				// capture the flag
+			trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
+			break;
 		}
-		/*else if ( g_pModElimination.integer )
-		{
-			trap_SendServerCommand( ent-g_entities, "cp \"Elimination\"" );
-		}*/
-		else
-		{
+	}
+	else
+	{
+		if ( !clientInitialStatus[ent->s.number].initialized )
+		{//first time coming in
 			switch ( g_gametype.integer )
 			{
 			case GT_FFA:				// free for all
-				trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
+				trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string ) );
 				break;
 			case GT_TOURNAMENT:		// one on one tournament
 				trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
@@ -3815,94 +2427,10 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 				trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
 				break;
 			}
-		}
-	}
-	/*else if ( g_pModAssimilation.integer )
-	{
-		if ( !clientInitialStatus[ent->s.number].initialized )
-		{//first time coming in
-			if ( ent->client->sess.sessionClass == PC_BORG )
-			{
-				trap_SendServerCommand( ent-g_entities, "cp \"^3Assimilation:^7\nAssimilate all enemies!\n\"" );
-			}
-			else if ( ent->s.number != borgQueenClientNum )
-			{
-				trap_SendServerCommand( ent-g_entities, "cp \"^3Assimilation:^7\nKill the Borg Queen!\n\"" );
-			}
-		}
-		else
-		{
-			//make sure I'm marked as assimilated if I was
-			if ( clientInitialStatus[ent->s.number].pClass != PC_BORG && client->sess.sessionClass == PC_BORG )
-			{
-				//now mark them assimilated
-				ent->s.eFlags |= EF_ASSIMILATED;
-				ent->client->ps.eFlags |= EF_ASSIMILATED;
-			}
-		}
-		//send me a message if I'm the queen
-		if ( ent->s.number == borgQueenClientNum )
-		{
-			trap_SendServerCommand( ent->s.number, "cp \"^3Assimilation:^7\nYou Are the Queen!\n\"" );
-			//FIXME: precache
-			//G_Sound( ent, G_SoundIndex( "sound/voice/computer/misc/borgqueen.wav" ) );
-		}
-	}*/
-	else
-	{
-		if ( g_pModElimination.integer )
-		{
-			if ( !clientInitialStatus[ent->s.number].initialized )
-			{//first time coming in
-				trap_SendServerCommand( ent-g_entities, "cp \"Elimination\"" );
-			}
-		}
-		else
-		{
-			if ( !clientInitialStatus[ent->s.number].initialized )
-			{//first time coming in
-				switch ( g_gametype.integer )
-				{
-				case GT_FFA:				// free for all
-					trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string ) );
-					break;
-				case GT_TOURNAMENT:		// one on one tournament
-					trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
-					break;
-				case GT_SINGLE_PLAYER:	// single player tournament
-					trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
-					break;
-				case GT_TEAM:			// team deathmatch
-					trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
-					break;
-				case GT_CTF:				// capture the flag
-					trap_SendServerCommand( ent-g_entities, va("cp \"%s\"", rpg_welcomemessage.string )  );
-					break;
-				}
-				if ( level.numObjectives > 0 )
-				{//Turn on their objectives
-					//trap_SendServerCommand( ent-g_entities, "+analysis" );
-					//FIXME: turn this off after warm-up period
-				}
-			}
-			if ( ent->s.number == actionHeroClientNum )
-			{
-				trap_SendServerCommand( ent->s.number, "cp \"You are the Action Hero!\"" );
-			}
-			else if ( actionHeroClientNum > -1 )
-			{//FIXME: this will make it so that those who spawn before the action hero won't be told who he is
-				if ( !clientInitialStatus[ent->s.number].initialized )
-				{//first time coming in
-					gentity_t *aH = &g_entities[actionHeroClientNum];
-					if ( aH != NULL && aH->client != NULL && aH->client->pers.netname[0] != 0 )
-					{
-						trap_SendServerCommand( ent->s.number, va("cp \"Action Hero is %s!\"", aH->client->pers.netname) );
-					}
-					else
-					{
-						trap_SendServerCommand( ent->s.number, "cp \"Action Hero!\"" );
-					}
-				}
+			if ( level.numObjectives > 0 )
+			{//Turn on their objectives
+				//trap_SendServerCommand( ent-g_entities, "+analysis" );
+				//FIXME: turn this off after warm-up period
 			}
 		}
 	}
@@ -3952,73 +2480,6 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 
 	//RPG-X: Marcin: stuff was here previously - 22/12/2008
 }
-
-/*static gentity_t *SpawnBeamOutPlayer( gentity_t *ent ) {
-	gentity_t	*body;
-	//vec3_t		vec;
-	//vec3_t		f, r, u;
-
-	body = G_Spawn();
-	if ( !body ) {
-		G_Printf( S_COLOR_RED "ERROR: out of gentities\n" );
-		return NULL;
-	}
-
-	body->classname = ent->client->pers.netname;
-	body->client = ent->client;
-	body->s = ent->s;
-	body->s.eType = ET_PLAYER;		// could be ET_INVISIBLE
-	body->s.eFlags = ent->s.eFlags;	// clear EF_TALK, etc
-	body->s.powerups = ent->s.powerups;
-	body->s.loopSound = 0;			
-	//body->s.number = body - g_entities;
-	body->s.number = ent->client->ps.clientNum;
-	body->timestamp = level.time;
-	body->physicsObject = qtrue;
-	body->physicsBounce = 0;		// don't bounce
-	body->s.event = 0;
-	body->s.pos.trType = TR_STATIONARY;
-	body->s.groundEntityNum = ENTITYNUM_WORLD;
-	body->s.legsAnim = ent->client->ps.stats[LEGSANIM]; //TORSO_STAND
-	body->s.torsoAnim = ent->client->ps.stats[TORSOANIM];
-	body->s.weapon = ent->s.weapon;
-
-	// fix up some weapon holding / shooting issues
-	//if (body->s.weapon==WP_5 || body->s.weapon==WP_13 || body->s.weapon == WP_0 )
-	//	body->s.weapon = WP_6;
-
-	body->s.event = 0;
-	body->r.svFlags = ent->r.svFlags;
-	VectorCopy (ent->r.mins, body->r.mins);
-	VectorCopy (ent->r.maxs, body->r.maxs);
-	VectorCopy (ent->r.absmin, body->r.absmin);
-	VectorCopy (ent->r.absmax, body->r.absmax);
-	body->clipmask = CONTENTS_SOLID | CONTENTS_PLAYERCLIP;
-	body->r.contents = CONTENTS_BODY;
-	body->r.ownerNum = ent->r.ownerNum;
-	body->takedamage = qfalse;
-	//VectorSubtract( level.intermission_origin, pad->r.currentOrigin, vec );
-	//vectoangles( vec, body->s.apos.trBase );
-	//VectorCopy( ent->s.apos.trBase, body->s.apos.trBase );
-	//body->s.apos.trBase[PITCH] = 0;
-	//body->s.apos.trBase[ROLL] = 0;
-
-	AngleVectors( body->s.apos.trBase, f, r, u );
-	VectorMA( pad->r.currentOrigin, offset[0], f, vec );
-	VectorMA( vec, offset[1], r, vec );
-	VectorMA( vec, offset[2], u, vec );
-
-	G_SetOrigin( body, ent->s.apos.trBase );
-	VectorCopy( ent->
-
-	body->s.apos = ent->s.apos;
-
-	trap_LinkEntity (body);
-
-	//body->count = place;
-
-	return body;
-}*/
 
 gentity_t *SpawnBeamOutPlayer( gentity_t	*ent ) {
 		gentity_t	*body;
@@ -4216,32 +2677,5 @@ void ClientDisconnect( int clientNum ) {
 
 	//also remove any initial data
 	clientInitialStatus[clientNum].initialized = qfalse;
-
-	//If the queen or action hero leaves, have to pick a new one...
-	if ( g_pModAssimilation.integer != 0 )
-	{
-		G_CheckReplaceQueen( clientNum );
-	}
-	if ( g_pModActionHero.integer != 0 )
-	{
-		G_CheckReplaceActionHero( clientNum );
-	}
-}
-
-int G_AddPlayerLanguage(char *name, int clientNum) {
-	int i;
-
-	for(i = 0; i < MAX_LANGUAGES; i++) {
-		if(languageIndex[i] != NULL) {
-			if(!Q_stricmp(Q_strlwr(name), languageIndex[i]))
-				return i;
-		} else {
-			languageIndex[i] = G_NewString(name);
-			return i;
-		}
-	}
-	G_Printf(S_COLOR_RED "ERROR: MAX_RACES hit!\n");
-	trap_SendServerCommand(clientNum, S_COLOR_RED "ERROR: MAX_RACES hit!\n");
-	return 0; // we have hit the limit
 }
 

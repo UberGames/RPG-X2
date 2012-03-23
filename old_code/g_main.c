@@ -228,17 +228,6 @@ vmCvar_t	rpg_TR116Delay;		 //RPG-X | Marcin | 30/12/2008
 //! Fire delay for Tricorder alt fire
 vmCvar_t	rpg_altTricorderDelay;	 //RPG-X | GSIO01 | 14/05/2009
 
-// Weapon Damage
-vmCvar_t	rpg_rifleDamage;
-vmCvar_t	rpg_rifleAltDamage;
-vmCvar_t	rpg_phaserDamage;
-vmCvar_t	rpg_disruptorDamage;
-vmCvar_t	rpg_grenadeDamage;
-vmCvar_t	rpg_grenadeAltDamage;
-vmCvar_t	rpg_tr116Damage;
-vmCvar_t	rpg_photonDamage;
-vmCvar_t	rpg_photonAltDamage;
-
 // Motd
 //! Specifies the message of the day file
 vmCvar_t	rpg_motdFile;        //RPG-X | Marcin | 23/12/2008
@@ -639,18 +628,9 @@ static cvarTable_t		gameCvarTable[] = {
 	,
 	{ &g_debugLua, "g_debugLua", "0", 0, 0, qfalse },
 	{ &lua_allowedModules, "lua_allowedModules", "", 0, 0, qfalse },
-	{ &lua_modules, "lua_modules", "", 0, 0, qfalse },
+	{ &lua_modules, "lua_modules", "", 0, 0, qfalse }
 #endif
 
-	{ &rpg_rifleDamage, "rpg_rifleDamage", "75", CVAR_ARCHIVE, 0, qfalse },
-	{ &rpg_rifleAltDamage, "rpg_rifleAltDamage", "16", CVAR_ARCHIVE, 0, qfalse },
-	{ &rpg_phaserDamage, "rpg_phaserDamage", "55", CVAR_ARCHIVE, 0, qfalse },
-	{ &rpg_disruptorDamage, "rpg_disruptorDamage", "80", CVAR_ARCHIVE, 0, qfalse },
-	{ &rpg_grenadeDamage, "rpg_grenadeDamage", "75", CVAR_ARCHIVE, 0, qfalse },
-	{ &rpg_grenadeAltDamage, "rpg_grenadeAltDamage", "80", CVAR_ARCHIVE, 0, qfalse },
-	{ &rpg_tr116Damage, "rpg_tr116Damage", "150", CVAR_ARCHIVE, 0, qfalse },
-	{ &rpg_photonDamage, "rpg_photonDamage", "140", CVAR_ARCHIVE, 0, qfalse },
-	{ &rpg_photonAltDamage, "rpg_photonAltDamage", "140", CVAR_ARCHIVE, 0, qfalse }
 };
 
 static int	gameCvarTableSize = sizeof( gameCvarTable ) / sizeof( gameCvarTable[0] );
@@ -3203,6 +3183,47 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	
 }
 
+extern void G_RestoreClientInitialStatus( gentity_t *ent );
+extern int	borgQueenClientNum;
+void G_CheckResetAssimilationClients( void )
+{
+	if ( g_pModAssimilation.integer != 0 )
+	{
+		gentity_t *ent;
+		int			i;
+		//clear current queen
+		borgQueenClientNum = -1;
+		//put the assimilated players back on their original team and class
+		for ( i = 0; i < level.maxclients; i++ )
+		{
+			ent = &g_entities[i];
+			if ( ent->client && ent->inuse )
+			{
+				G_RestoreClientInitialStatus( ent );
+			}
+		}
+		//clear borg team
+		borgTeam = initialBorgTeam;
+	}
+}
+void EliminationRespawn( gentity_t *ent, char *team );
+void G_CheckResetEliminationClients( void )
+{
+	if ( g_pModElimination.integer != 0 )
+	{//no players respawn when in elimination
+		gentity_t	*client;
+		int			i;
+
+		for ( i = 0; i < level.numConnectedClients; i++ )
+		{
+			client = &g_entities[&level.clients[level.sortedClients[i]] - level.clients];
+			if ( client->team && client->client->sess.sessionTeam == TEAM_SPECTATOR )
+			{
+				EliminationRespawn( client, client->team );
+			}
+		}
+	}
+}
 
 /*
 =================
@@ -3210,6 +3231,9 @@ G_ShutdownGame
 =================
 */
 void G_ShutdownGame( int restart ) {
+	G_CheckResetAssimilationClients();
+	G_CheckResetEliminationClients();
+
 	G_Printf ("==== ShutdownGame ====\n");
 
 	#ifdef G_LUA
@@ -3696,6 +3720,8 @@ void BeginIntermission( void ) {
 		return;		// already active
 	}
 
+	G_CheckResetEliminationClients();
+
 	// if in tournament mode, change the wins / losses
 	if ( g_gametype.integer == GT_TOURNAMENT ) {
 		AdjustTournamentScores();
@@ -3785,6 +3811,9 @@ void ExitLevel (void) {
 	trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 	level.changemap = NULL;
 	level.intermissiontime = 0;
+
+	//don't reset the bots until after level.intermission is off so that it doesn't send 5 billion score updates
+	G_CheckResetAssimilationClients();
 
 	// we need to do this here before chaning to CON_CONNECTING
 	G_WriteSessionData();
@@ -3929,9 +3958,189 @@ and the time everyone is moved to the intermission spot, so you
 can see the last frag.
 =================
 */
+extern int	borgQueenClientNum;
 void CheckExitRules( void ) {
+	
 	//RPG-X: RedTechie - No exit in RPG Your TRAPED! MHAHAHA
 	return;
+
+	/*int			i;
+	gclient_t	*cl;
+
+	// if at the intermission, wait for all non-bots to
+	// signal ready, then go to next level
+	if ( level.intermissiontime ) {
+		CheckIntermissionExit ();
+		return;
+	}
+
+	if ( level.intermissionQueued ) {
+		if ( level.time - level.intermissionQueued >= INTERMISSION_DELAY_TIME ) {
+			level.intermissionQueued = 0;
+			BeginIntermission();
+		}
+		return;
+	}
+	
+	//RPG-X: RedTechie - hihohiho is off to commenting out warmup code i go
+	//if ( g_doWarmup.integer )
+	//{
+	//	if ( level.warmupTime != 0 )
+	//	{
+	//		if ( level.warmupTime < 0 || level.time - level.startTime <= level.warmupTime )
+	//		{//don't win until warmup is done
+	//			if ( g_pModAssimilation.integer != 0 || g_pModElimination.integer != 0 )
+	//			{
+	//				numKilled = 0;
+	//			}
+	//			return;
+	//		}
+	//	}
+	//}
+
+	// check for sudden death
+	if ( ScoreIsTied() && g_pModAssimilation.integer == 0 && g_pModElimination.integer == 0 )
+	{
+		// always wait for sudden death
+		return;
+	}
+
+	if ( g_timelimit.integer && !level.warmupTime && g_pModAssimilation.integer == 0 && g_pModElimination.integer == 0 )
+	{
+		if ( level.time - level.startTime >= g_timelimit.integer*60000 )
+		{
+			trap_SendServerCommand( -1, "print \"Timelimit hit.\n\"");
+			G_LogExit( "Timelimit hit." );
+			return;
+		}
+	}
+
+	if ( level.numPlayingClients < 2 )
+	{
+		//not enough players
+		if ( g_pModAssimilation.integer != 0 || g_pModElimination.integer != 0 )
+		{
+			numKilled = 0;
+		}
+		return;
+	}
+
+	if ( g_pModAssimilation.integer != 0 )
+	{//check assimilation rules
+		if ( level.numConnectedClients > 1 && numKilled > 0 )
+		{
+			gclient_t *survivor = NULL;
+
+			if ( borgQueenClientNum != -1 )
+			{//see if borg queen is dead first
+				if ( g_entities[borgQueenClientNum].health <= 0 )
+				{//the queen is dead!
+					//FIXME: What if the queen disconnects somehow...?  Shouldn't be possible
+					G_LogExit( "The Borg Queen has been killed!" );
+					return;
+				}
+			}
+
+			//See if only one player remains alive, if so, end it.
+			for ( i = 0; i < level.maxclients; i++ )
+			{
+				cl = &level.clients[i];
+				if ( cl->pers.connected == CON_CONNECTED && cl->sess.sessionTeam != TEAM_SPECTATOR && cl->sess.sessionClass != PC_BORG )
+				{
+					survivor = cl;
+					break;
+				}
+			}
+			if ( survivor == NULL )
+			{
+				G_LogExit( "Assimilation Complete." );
+				return;
+			}
+		}
+		//don't check anything else
+		return;
+	}
+
+	if ( g_pModElimination.integer != 0 )
+	{//check elimination rules
+		gclient_t *survivor = NULL;
+		//See if only one player remains alive, if so, end it.
+		if ( level.numConnectedClients > 1 && numKilled > 0 )
+		{
+			for ( i = 0; i < level.numConnectedClients; i++ )
+			{
+				cl = &level.clients[ level.sortedClients[i] ];
+				if ( cl->sess.sessionTeam != TEAM_SPECTATOR && !(cl->ps.eFlags&EF_ELIMINATED) )
+				{
+					if ( survivor != NULL )
+					{
+						if ( g_gametype.integer < GT_TEAM || cl->sess.sessionTeam != survivor->sess.sessionTeam )
+						{//not in a team game or survivor is on same team as previously found survivor, keep looking
+							survivor = NULL;
+							break;
+						}
+					}
+					else
+					{
+						survivor = cl;
+					}
+				}
+			}
+		}
+		if ( survivor != NULL )
+		{
+			G_LogExit( "Last Man Standing." );
+		}
+		//don't check anything else
+		return;
+	}
+
+	if ( g_gametype.integer != GT_CTF && g_fraglimit.integer ) 
+	{//check fraglimit
+		if ( level.teamScores[TEAM_RED] >= g_fraglimit.integer ) {
+			trap_SendServerCommand( -1, "print \"Red hit the point limit.\n\"" );
+			G_LogExit( "Fraglimit hit." );
+			return;
+		}
+
+		if ( level.teamScores[TEAM_BLUE] >= g_fraglimit.integer ) {
+			trap_SendServerCommand( -1, "print \"Blue hit the point limit.\n\"" );
+			G_LogExit( "Fraglimit hit." );
+			return;
+		}
+
+		for ( i=0 ; i< g_maxclients.integer ; i++ ) {
+			cl = level.clients + i;
+			if ( cl->pers.connected != CON_CONNECTED ) {
+				continue;
+			}
+			if ( cl->sess.sessionTeam != TEAM_FREE ) {
+				continue;
+			}
+
+			if ( cl->ps.persistant[PERS_SCORE] >= g_fraglimit.integer ) {
+				G_LogExit( "Fraglimit hit." );
+				trap_SendServerCommand( -1, va("print \"%s" S_COLOR_WHITE " hit the point limit.\n\"",
+					cl->pers.netname ) );
+				return;
+			}
+		}
+	}
+
+	if ( g_gametype.integer == GT_CTF && g_capturelimit.integer ) 
+	{//check CTF
+		if ( level.teamScores[TEAM_RED] >= g_capturelimit.integer ) {
+			trap_SendServerCommand( -1, "print \"Red hit the capturelimit.\n\"" );
+			G_LogExit( "Capturelimit hit." );
+			return;
+		}
+
+		if ( level.teamScores[TEAM_BLUE] >= g_capturelimit.integer ) {
+			trap_SendServerCommand( -1, "print \"Blue hit the capturelimit.\n\"" );
+			G_LogExit( "Capturelimit hit." );
+			return;
+		}
+	}*/
 }
 
 
@@ -4167,7 +4376,10 @@ Advances the non-player objects in the world
 extern void SetClass( gentity_t *ent, char *s, char *teamName, qboolean SaveToCvar );
 void DragCheck( void );								//RPG-X: J2J - Added to rid warning.
 void CheckHealthInfoMessage( void );
+extern void G_PickBorgQueen( void );
+extern void INeedAHero( void );
 extern qboolean levelExiting;
+extern int actionHeroClientNum;
 void G_RunFrame( int levelTime ) {
 	int			i;
 	gentity_t	*ent;
@@ -4294,6 +4506,20 @@ start = trap_Milliseconds();
 
 	// for tracking changes
 	CheckCvars();
+
+	if ( !levelExiting )
+	{
+		//keep looking for a borgQueen if we don't have one yet
+		if ( borgQueenClientNum == -1 )
+		{
+			G_PickBorgQueen();
+		}
+		//keep looking for an actionHero if we don't have one yet
+		if ( actionHeroClientNum == -1 )
+		{
+			INeedAHero();
+		}
+	}
 
 	//RPG-X: RedTechie - Count down our shake camera timer
 	//TiM: NOT NECESSARY

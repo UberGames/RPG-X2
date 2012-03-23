@@ -2,7 +2,6 @@
 
 #define LOGGING_WEAPONS	
 
-extern int	borgQueenClientNum;
 /*
 =================
 G_LogPrintf
@@ -1032,10 +1031,6 @@ qboolean CalculateUntouchable(gentity_t *ent)
 	int			playTime;
 	playTime = (level.time - ent->client->pers.enterTime)/60000;
 
-	if ( g_pModAssimilation.integer && ent->client->ps.clientNum == borgQueenClientNum )
-	{//Borg queen can only be killed once anyway
-		return qfalse;
-	}
 	//------------------------------------------------------ MUST HAVE ACHIEVED 2 KILLS PER MINUTE
 	if ( ((float)ent->client->pers.teamState.frags)/((float)(playTime)) < 2.0  || playTime==0)
 		return qfalse;
@@ -1120,10 +1115,6 @@ qboolean CalculateTactician(gentity_t *ent, int *kills)
 
 	if ( g_pModDisintegration.integer )
 	{//duh, only 1 weapon
-		return qfalse;
-	}
-	if ( g_pModAssimilation.integer && ent->client->ps.clientNum == borgQueenClientNum )
-	{//Borg queen has only 1 weapon
 		return qfalse;
 	}
 	//------------------------------------------------------ MUST HAVE ACHIEVED 2 KILLS PER MINUTE
