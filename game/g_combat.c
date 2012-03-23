@@ -182,32 +182,6 @@ void TossClientItems( gentity_t *self, qboolean dis_con ) {
 
 }
 
-
-/*
-==================
-LookAtKiller
-==================
-*/
-/*void LookAtKiller( gentity_t *self, gentity_t *inflictor, gentity_t *attacker ) {
-	vec3_t		dir;
-	vec3_t		angles;
-
-	if ( attacker && attacker != self ) {
-		VectorSubtract (attacker->s.pos.trBase, self->s.pos.trBase, dir);
-	} else if ( inflictor && inflictor != self ) {
-		VectorSubtract (inflictor->s.pos.trBase, self->s.pos.trBase, dir);
-	} else {
-		self->client->ps.stats[STAT_DEAD_YAW] = self->s.angles[YAW];
-		return;
-	}
-
-	self->client->ps.stats[STAT_DEAD_YAW] = vectoyaw ( dir );
-
-	angles[YAW] = vectoyaw ( dir );
-	angles[PITCH] = 0; 
-	angles[ROLL] = 0;
-}*/
-
 /*
 ==================
 GibEntity
@@ -734,76 +708,8 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			attacker->client->pers.teamState.frags++;
 			AddScore( attacker, 1 );
 
-			// check for two kills in a short amount of time
-			// if this is close enough to the last kill, give a reward sound
-			/*if ( level.time - attacker->client->lastKillTime < CARNAGE_REWARD_TIME ) {
-				attacker->client->ps.persistant[PERS_REWARD_COUNT]++;
-				attacker->client->ps.persistant[PERS_REWARD] = REWARD_EXCELLENT;
-				attacker->client->ps.persistant[PERS_EXCELLENT_COUNT]++;
-				// add the sprite over the player's head
-				attacker->client->ps.eFlags &= ~EF_AWARD_MASK;
-				attacker->client->ps.eFlags |= EF_AWARD_EXCELLENT;
-				attacker->client->rewardTime = level.time + REWARD_SPRITE_TIME;
-			}*/
-
 			// Check to see if the player is on a streak.
 			attacker->client->streakCount++;
-			// Only send awards on exact streak counts.
-			/*switch(attacker->client->streakCount) 
-			{
-			case STREAK_ACE:
-				attacker->client->ps.persistant[PERS_REWARD_COUNT]++;
-				attacker->client->ps.persistant[PERS_REWARD] = REWARD_STREAK;
-				// add the sprite over the player's head
-				attacker->client->ps.eFlags &= ~EF_AWARD_MASK;
-				attacker->client->ps.eFlags |= EF_AWARD_ACE;
-				attacker->client->rewardTime = level.time + REWARD_STREAK_SPRITE_TIME;
-				break;
-			case STREAK_EXPERT:
-				attacker->client->ps.persistant[PERS_REWARD_COUNT]++;
-				attacker->client->ps.persistant[PERS_REWARD] = REWARD_STREAK;
-				// add the sprite over the player's head
-				attacker->client->ps.eFlags &= ~EF_AWARD_MASK;
-				attacker->client->ps.eFlags |= EF_AWARD_EXPERT;
-				attacker->client->rewardTime = level.time + REWARD_STREAK_SPRITE_TIME;
-				break;
-			case STREAK_MASTER:
-				attacker->client->ps.persistant[PERS_REWARD_COUNT]++;
-				attacker->client->ps.persistant[PERS_REWARD] = REWARD_STREAK;
-				// add the sprite over the player's head
-				attacker->client->ps.eFlags &= ~EF_AWARD_MASK;
-				attacker->client->ps.eFlags |= EF_AWARD_MASTER;
-				attacker->client->rewardTime = level.time + REWARD_STREAK_SPRITE_TIME;
-				break;
-			case STREAK_CHAMPION:
-				attacker->client->ps.persistant[PERS_REWARD_COUNT]++;
-				attacker->client->ps.persistant[PERS_REWARD] = REWARD_STREAK;
-				// add the sprite over the player's head
-				attacker->client->ps.eFlags &= ~EF_AWARD_MASK;
-				attacker->client->ps.eFlags |= EF_AWARD_CHAMPION;
-				attacker->client->rewardTime = level.time + REWARD_STREAK_SPRITE_TIME;
-				break;
-			default:
-				// Do nothing if not exact values.
-				break;
-			}*/
-
-			// Check to see if the max streak should be raised.
-			/*if (attacker->client->streakCount > attacker->client->ps.persistant[PERS_STREAK_COUNT])
-			{
-				attacker->client->ps.persistant[PERS_STREAK_COUNT] = attacker->client->streakCount;
-			}*/
-
-			/*if (!level.firstStrike)
-			{	// There hasn't yet been a first strike.
-				level.firstStrike = qtrue;
-				attacker->client->ps.persistant[PERS_REWARD_COUNT]++;
-				attacker->client->ps.persistant[PERS_REWARD] = REWARD_FIRST_STRIKE;
-				// add the sprite over the player's head
-				attacker->client->ps.eFlags &= ~EF_AWARD_MASK;
-				attacker->client->ps.eFlags |= EF_AWARD_FIRSTSTRIKE;
-				attacker->client->rewardTime = level.time + REWARD_SPRITE_TIME;
-			}*/
 
 			attacker->client->lastKillTime = level.time;
 		}
@@ -828,17 +734,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		if ( meansOfDeath != MOD_RESPAWN ) {
 			TossClientItems( self, qfalse );
 		}
-	}
-	else 
-	{//suiciding and respawning returns the flag
-		/*if ( ps->powerups[PW_REDFLAG] ) 
-		{
-			Team_ReturnFlag(TEAM_RED);
-		}*/
-		/*else if ( ps->powerups[PW_BORG_ADAPT] ) 
-		{
-			Team_ReturnFlag(TEAM_BLUE);
-		}*/
 	}
 
 	Cmd_Score_f( self );		// show scores
@@ -1047,54 +942,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 }//RPG-X: RedTechie - End of my if statment for medics revive check
 }//RPG-X: RedTechie - End of void
 
-
-/*
-================
-CheckArmor
-================
-*/
-//RPG-X: - RedTechie No armor in RPG
-/*int CheckArmor (gentity_t *ent, int damage, int dflags)
-{
-	gclient_t	*client;
-	int			save;
-	int			count;
-	float		protectionFactor = ARMOR_PROTECTION;
-
-	if (!damage)
-		return 0;
-
-	client = ent->client;
-
-	if (!client)
-		return 0;
-
-	if (dflags & DAMAGE_NO_ARMOR)
-		return 0;
-
-	// armor
-	if (dflags & DAMAGE_ARMOR_PIERCING)
-	{
-		protectionFactor = PIERCED_ARMOR_PROTECTION;
-	}
-//	else if (dflags & DAMAGE_SUPER_ARMOR_PIERCING)
-//	{
-//		protectionFactor = SUPER_PIERCED_ARMOR_PROTECTION;
-//	}
-
-	count = client->ps.stats[STAT_ARMOR];
-	save = ceil( damage * protectionFactor );
-	if (save >= count)
-		save = count;
-
-	if (!save)
-		return 0;
-
-	client->ps.stats[STAT_ARMOR] -= save;
-
-	return save;
-}*/
-
 #define	BORG_ADAPT_NUM_HITS 10
 qboolean G_CheckBorgAdaptation( gentity_t *targ, int mod )
 {
@@ -1186,10 +1033,6 @@ qboolean G_CheckBorgAdaptation( gentity_t *targ, int mod )
 	}
 
 	level.borgAdaptHits[weapon]++;
-	/*if ( borgAdaptHits[weapon] > rpg_numAdaptHits.integer )//FIXME: different count per weapon?
-	{//we have adapted to this weapon
-		return qtrue;
-	}*/
 	switch(weapon) {
 		case WP_5:
 			if(level.borgAdaptHits[WP_5] > rpg_adaptPhaserHits.integer)
