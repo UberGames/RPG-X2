@@ -37,7 +37,7 @@ void AddScore( gentity_t *ent, int score ) {
 	}*/
 	ent->client->ps.persistant[PERS_SCORE] += score;
 	//don't add score to team score during elimination
-	if (g_gametype.integer == GT_TEAM && g_pModElimination.integer == 0 )
+	if (g_gametype.integer == GT_TEAM)
 	{//this isn't capture score
 		level.teamScores[ ent->client->ps.persistant[PERS_TEAM] ] += score;
 	}
@@ -119,38 +119,6 @@ void TossClientItems( gentity_t *self, qboolean dis_con ) {
 		ps->powerups[PW_BOLTON] = level.time;
 	}*/
 
-	// Marcin: Old stuff:
-/*
-	if ( rpg_rpg.integer == 0 && g_pModActionHero.integer == 0 && g_pModDisintegration.integer == 0 && g_pModSpecialties.integer == 0 /\*&& self->client->sess.sessionClass != PC_BORG*\/ )
-	{//not in playerclass game mode and not in disintegration mode (okay to drop weap)
-		// drop the weapon if not a phaser
-		weapon = self->s.weapon;
-
-		// make a special check to see if they are changing to a new
-		// weapon that isn't the mg or gauntlet.  Without this, a client
-		// can pick up a weapon, be killed, and not drop the weapon because
-		// their weapon change hasn't completed yet and they are still holding the MG.
-		if ( weapon == WP_11 || weapon == WP_14 || weapon == WP_5 || weapon == WP_13 || weapon == WP_15 || weapon == WP_3 || weapon == WP_2 || weapon == WP_12 )
-		{
-			if ( ps->weaponstate == WEAPON_DROPPING )
-			{
-				weapon = self->client->pers.cmd.weapon;
-			}
-			if ( !( ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) )
-			{
-				weapon = WP_0;
-			}
-		}
-
-		if ( weapon > WP_14 && weapon > WP_11 && weapon > WP_5 && weapon != WP_13 && weapon != WP_15 && weapon != WP_3 && weapon != WP_2 && weapon != WP_12 && ps->ammo[ weapon ] )
-		{
-			// find the item type for this weapon
-			item = BG_FindItemForWeapon( weapon );
-			// spawn the item
-			Drop_Item( self, item, 0 );
-		}
-	}
-*/
 	// drop all the powerups if not in teamplay
 	if ( g_gametype.integer != GT_TEAM ) {
 		angle = 45;

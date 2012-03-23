@@ -1562,16 +1562,7 @@ void CreateShield(gentity_t *ent)
 		ent->team = "2";
 	}
 	
-	//RPG-X: - RedTechie no shield count down
-	if ( g_pModSpecialties.integer != 0 )
-	{
-		//ent->health = ceil(SHIELD_HEALTH*4*g_dmgmult.value);
-	}
-	else
-	{
-		ent->health = ceil(SHIELD_HEALTH*g_dmgmult.value);
-	}
-	
+	ent->health = ceil(SHIELD_HEALTH*g_dmgmult.value);
 	
 	ent->s.time = ent->health;//???
 	ent->pain = ShieldPain;
@@ -2894,7 +2885,7 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.pointcontents = trap_PointContents;
 	pm.debugLevel = g_debugMove.integer;
 	pm.noFootsteps = ( g_dmflags.integer & DF_NO_FOOTSTEPS ) > 0;
-	pm.pModDisintegration = g_pModDisintegration.integer > 0;
+	pm.pModDisintegration = qfalse;
 
 	//pm.admin = IsAdmin(ent); // we use this way now the old way didn't work for adminlogin
 	// y call a function though???

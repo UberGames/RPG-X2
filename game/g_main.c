@@ -40,12 +40,6 @@ rankNames_t g_rankNames[MAX_RANKS];
 
 g_classData_t	g_classData[MAX_CLASSES];
 
-vmCvar_t	g_pModAssimilation;
-vmCvar_t	g_pModDisintegration;
-vmCvar_t	g_pModActionHero;
-vmCvar_t	g_pModSpecialties;
-vmCvar_t	g_pModElimination;
-
 vmCvar_t	g_gametype;
 vmCvar_t	g_dmflags;
 vmCvar_t	g_fraglimit;
@@ -380,11 +374,6 @@ static cvarTable_t		gameCvarTable[] = {
 
 	// latched vars
 	{ &g_gametype, "g_gametype", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_INIT | CVAR_ROM, 0, qfalse  },
-	{ &g_pModAssimilation, "g_pModAssimilation", "0", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },
-	{ &g_pModDisintegration, "g_pModDisintegration", "0", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },
-	{ &g_pModActionHero, "g_pModActionHero", "0", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },
-	{ &g_pModSpecialties, "g_pModSpecialties", "0", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },
-	{ &g_pModElimination, "g_pModElimination", "0", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },
 
 	{ &g_maxclients, "sv_maxclients", "8", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },
 	{ &g_maxGameClients, "g_maxGameClients", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },
@@ -2603,10 +2592,6 @@ void G_RegisterCvars( void ) {
 
 		if ( rpg_rpg.integer != 0 )
 		{
-			trap_Cvar_Set( "g_pModDisintegration", "0" );
-			trap_Cvar_Set( "g_pModActionHero", "0" );
-			trap_Cvar_Set( "g_pModSpecialties", "0" );
-			trap_Cvar_Set( "g_pModAssimilation", "0" );
 			trap_Cvar_Set( "g_gametype", "0" );//RPG-X: RedTechie - Make sure we keep gametype at 0
 		}
 
@@ -2670,19 +2655,6 @@ extern team_t	initialBorgTeam;
 void G_InitModRules( void )
 {
 	numKilled = 0;
-
-	if ( g_pModDisintegration.integer != 0 )
-	{//don't use up ammo in disintegration mode
-		altAmmoUsage[WP_6] = 0;
-	}
-	if ( g_pModSpecialties.integer != 0 )
-	{//tripwires use more ammo
-		altAmmoUsage[WP_8] = 3;
-	}
-	if ( g_pModAssimilation.integer != 0 )
-	{
-		borgTeam = initialBorgTeam;
-	}
 }
 
 extern qboolean G_CallSpawn(gentity_t *ent);

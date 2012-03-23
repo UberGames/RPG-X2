@@ -1129,18 +1129,6 @@ void ClearRegisteredItems( void ) {
 	RegisterItem( BG_FindItemForWeapon( WP_3 ) );
 	RegisterItem( BG_FindItemForWeapon( WP_15 ) );
 	RegisterItem( BG_FindItemForWeapon( WP_7 ) );
-
-	// okay!  Now, based on what game mods we have one, we need to register even more stuff by default:
-	if ( g_pModSpecialties.integer )
-	{
-		G_ModelIndex( "models/mapobjects/dn/powercell.md3" );
-		G_ModelIndex( "models/mapobjects/dn/powercell2.md3" );
-		G_SoundIndex( "sound/player/suitenergy.wav" );
-		G_SoundIndex( "sound/weapons/noammo.wav" );
-		G_SoundIndex( "sound/weapons/explosions/cargoexplode.wav" );
-		G_SoundIndex( "sound/items/respawn1.wav" );
-	}
-
 }
 
 /*
@@ -1191,53 +1179,7 @@ void SaveRegisteredItems( void ) {
 
 qboolean G_ItemSuppressed( int itemType, int itemTag )
 {
-	if ( g_pModDisintegration.integer != 0 )
-	{//FIXME: instagib
-		switch( itemType )
-		{
-		case IT_ARMOR://useless
-		case IT_WEAPON://only compression rifle
-		case IT_HEALTH://useless
-		case IT_AMMO://only compression rifle ammo
-			return qtrue;
-			break;
-		case IT_HOLDABLE:
-			switch ( itemTag )
-			{
-			case HI_MEDKIT:
-			case HI_DETPACK:
-				return qtrue;
-				break;
-			}
-			break;
-		case IT_POWERUP:
-			switch ( itemTag )
-			{
-			case PW_BOLTON: //BATTLESUIT
-			case PW_QUAD:
-			case PW_LASER:
-			//case PW_FLASHLIGHT:
-				return qtrue;
-				break;
-			}
-			break;
-		}
-	}
-	else if ( g_pModSpecialties.integer != 0 )
-	{
-		switch( itemType )
-		{
-		case IT_ARMOR://given to classes
-		case IT_WEAPON://spread out among classes
-		case IT_HOLDABLE://spread out among classes
-		case IT_HEALTH://given by medics
-		case IT_AMMO://given by technician
-		case IT_POWERUP:
-			return qtrue;
-			break;
-		}
-	}
-	else if ( rpg_rpg.integer != 0 )
+	if ( rpg_rpg.integer != 0 )
 	{
 		switch( itemType )
 		{
@@ -1272,36 +1214,6 @@ qboolean G_ItemClassnameSuppressed( char *itemname )
 	return G_ItemSuppressed( itemType, itemTag );
 }
 
-gitem_t *G_CheckReplaceItem( gentity_t *ent, gitem_t *item )
-{
-	gitem_t *newitem = item;
-	if ( g_pModAssimilation.integer != 0 )
-	{//replace tetryon and scav rifles with I-Mods 
-		switch ( item->giTag )
-		{
-		case WP_4:
-		case WP_7:
-			switch( item->giType )
-			{
-			case IT_WEAPON:
-				newitem = BG_FindItemForWeapon( WP_1 );
-				ent->classname = "weapon_imod";
-				break;
-			case IT_AMMO:
-				newitem = BG_FindItemForAmmo( WP_1 );
-				ent->classname = "ammo_imod";
-				break;
-			default:
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-
-	return newitem;
-}
 /*
 ============
 G_SpawnItem
@@ -1317,7 +1229,7 @@ void G_SpawnItem (gentity_t *ent, gitem_t *item) {
 	{
 		return;
 	}
-	item = G_CheckReplaceItem( ent, item );
+	//item = G_CheckReplaceItem( ent, item );
 
 	G_SpawnFloat( "random", "0", &ent->random );
 	G_SpawnFloat( "wait", "0", &ent->wait );

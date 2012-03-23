@@ -153,10 +153,6 @@ int BotGoForAir(bot_state_t *bs, int tfl, bot_goal_t *ltg, float range) {
 			{
 				botRoamsOnly = qtrue;
 			}*/
-			if ( g_pModDisintegration.integer != 0 )
-			{
-				botRoamsOnly = qtrue;
-			}
 			//get a nearby goal outside the water
 			while( trap_BotChooseNBGItem( bs->gs, bs->origin, bs->inventory, tfl, ltg, range, botRoamsOnly ) ) {
 				trap_BotGetTopGoal(bs->gs, &goal);
@@ -197,10 +193,6 @@ int BotNearbyGoal(bot_state_t *bs, int tfl, bot_goal_t *ltg, float range) {
 	{
 		botRoamsOnly = qtrue;
 	}*/
-	if ( g_pModDisintegration.integer != 0 )
-	{
-		botRoamsOnly = qtrue;
-	}
 	ret = trap_BotChooseNBGItem(bs->gs, bs->origin, bs->inventory, tfl, ltg, range, botRoamsOnly );
 	/*
 	if (ret)
@@ -278,10 +270,6 @@ int BotGetItemLongTermGoal(bot_state_t *bs, int tfl, bot_goal_t *goal) {
 		{
 			botRoamsOnly = qtrue;
 		}*/
-		if ( g_pModDisintegration.integer != 0 )
-		{
-			botRoamsOnly = qtrue;
-		}
 		if (trap_BotChooseLTGItem(bs->gs, bs->origin, bs->inventory, tfl, botRoamsOnly)) {
 			/*
 			char buf[128];

@@ -25,6 +25,13 @@ else
 EXT=so
 endif
 
+# warning level
+ifeq ($(DEBUG), 1)
+WL=-Wall
+else
+WL=-Wall
+endif
+
 #defines
 DEFINES=
 
@@ -135,9 +142,9 @@ SQLITE= \
 
 # do cc for shared library
 ifeq ($(DEBUG), 1)
-DO_SOCC = $(CC) $(SOCFLAGS) -Wall -g3 $(DEFINES) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) $(WL) -g3 $(DEFINES) -o $@ -c $<
 else
-DO_SOCC = $(CC) $(SOCFLAGS) -Wall $(DEFINES) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) $(WL) $(DEFINES) -o $@ -c $<
 endif
 # do cc for lua
 DO_LUACC = $(CC) -O2 -Wall $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
@@ -243,9 +250,9 @@ lzio.o: lzio.c; $(DO_LUACC)
 
 build_so: $(OBJ) $(SOOBJ) $(LUAOBJ)
 ifeq ($(PLATFORM), mingw32)
-	$(CC) -shared -W1,--export-all-symbols,-soname,qqgame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) ../mysql/libs/mysqlclient.lib -lm
+	$(CC) -shared $(WL),--export-all-symbols,-soname,qqgame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) ../mysql/libs/mysqlclient.lib -lm
 else
-	$(CC) -shared -Wl,--export-dynamic,-soname,qagame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) $(LIBMYSQL) -lm
+	$(CC) -shared $(WL),--export-dynamic,-soname,qagame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) $(LIBMYSQL) -lm
 endif
 	
 clean:

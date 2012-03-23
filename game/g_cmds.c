@@ -11,11 +11,6 @@ static void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, cons
 extern void G_CheckReplaceQueen( int clientNum );
 extern qboolean	PlaceDecoy( gentity_t *ent );
 
-//qboolean	dontSaveCvar;	//TiM - So forceClass won't save the class change to player CVAR
-
-//static void PM_ForceTorsoAnim( int anim );
-//static void PM_StartTorsoAnim( int anim );
-
 extern int	numKilled;
 extern clInitStatus_t clientInitialStatus[];
 extern qboolean levelExiting;
@@ -375,26 +370,8 @@ static void Cmd_Give_f( gentity_t *ent ) {
 			break;
 		case TYPE_HOLDABLE:
 			//G_Printf( "Item %i, Give all: %i\n", item->giveValue, giveAll );
-			//if ( !giveAll ) {
-				ps->stats[STAT_HOLDABLE_ITEM] = BG_FindItemForHoldable( item->giveValue ) - bg_itemlist;
-				//G_GiveHoldable( targEnt, item->giveValue );
-				break;
-			//}
-			//else {
-			//	targEnt->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItemForHoldable( HI_SHIELD ) - bg_itemlist;
-			//}
-		//case TYPE_SHIELD:
-		//	targEnt->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItemForHoldable( HI_SHIELD ) - bg_itemlist;
-
-		//	if ( !giveAll )
-		//		break;
-
-		//case TYPE_TRANSPORTER:
-		//	if ( !giveAll )
-		//	{
-		//		targEnt->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItemForHoldable( HI_TRANSPORTER ) - bg_itemlist;
-		//		break;
-		//	}
+			ps->stats[STAT_HOLDABLE_ITEM] = BG_FindItemForHoldable( item->giveValue ) - bg_itemlist;
+			break;
 		case TYPE_WEAPON:
 			//if ( !giveAll ) {
 				//TiM - Toggle it
@@ -404,13 +381,6 @@ static void Cmd_Give_f( gentity_t *ent ) {
 					ps->ammo[item->giveValue] += 1;
 				else
 					ps->ammo[item->giveValue] = 0;
-			//}
-			/*else {
-				for ( i = 0 ; i < MAX_WEAPONS ; i++ ) {
-					targEnt->client->ps.stats[STAT_WEAPONS] |= ( 1 << i);
-					targEnt->client->ps.ammo[item->giveValue] = 999;
-				}			
-			}*/
 			break;
 		
 		case TYPE_POWERUP:
@@ -515,28 +485,6 @@ argv(0) noclip
 */
 static void Cmd_Noclip_f( gentity_t *ent ) {
 	gclient_t *client;
-		
-	//RPG-X - J2J: If client is in spec then they are allowd to use noclip (if server cvar says so)
-	/*if(ent->client->sess.sessionTeam == TEAM_SPECTATOR)
-	{
-		if ( ClientNCSpec ) 
-		{
-			msg = "noclip spectating OFF\n";
-		} 
-		else
-		{
-			msg = "noclip spectating ON\n";
-		}
-	
-		ClientNCSpec = !ClientNCSpec;		//Swap to opposite value;
-		trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
-
-		return;
-	}*/
-	////////////
-	
-	//if ( IsAdmin( ent ) /*|| (rpg_noclipspectating.integer && ent->client->sess.sessionTeam == TEAM_SPECTATOR )*/ )
-	//{	
 
 	#ifndef SQL
 	if ( !IsAdmin( ent ) ) {
@@ -549,21 +497,20 @@ static void Cmd_Noclip_f( gentity_t *ent ) {
 		return;
 	}
 	#endif
-		client = ent->client;
-		if ( client->ps.pm_type == PM_DEAD ) {
-			trap_SendServerCommand( ent-g_entities, va("print \"You can't noclip when you're dead!\n\""));
-			return;
-		}
+	client = ent->client;
+	if ( client->ps.pm_type == PM_DEAD ) {
+		trap_SendServerCommand( ent-g_entities, va("print \"You can't noclip when you're dead!\n\""));
+		return;
+	}
 
-		if ( client->noclip ) {
-			G_PrintfClient(ent, "%s", "noclip OFF\n");
-		} else {
-			G_PrintfClient(ent, "%s", "noclip ON\n");
-		}
-		client->noclip = !client->noclip;
+	if ( client->noclip ) {
+		G_PrintfClient(ent, "%s", "noclip OFF\n");
+	} else {
+		G_PrintfClient(ent, "%s", "noclip ON\n");
+	}
+	client->noclip = (qboolean)!client->noclip;
 
-			return;
-	//}
+	return;
 }
 
 
@@ -797,7 +744,7 @@ qboolean SetTeam( gentity_t *ent, char *s ) {
 			}
 		}
 
-		if ( g_teamForceBalance.integer && g_pModAssimilation.integer == 0 )
+		if ( g_teamForceBalance.integer )
 		{
 			int		counts[TEAM_NUM_TEAMS];
 
@@ -824,15 +771,7 @@ qboolean SetTeam( gentity_t *ent, char *s ) {
 	}
 	else
 	{
-		if ( (g_pModElimination.integer != 0 && numKilled == 0) || g_pModElimination.integer == 0 )
-		{
-			team = TEAM_FREE;
-		}
-		else
-		{
-			team = TEAM_SPECTATOR;
-			specState = SPECTATOR_FREE;
-		}
+		team = TEAM_FREE;
 	}
 
 	// override decision if limiting the players
@@ -879,14 +818,6 @@ qboolean SetTeam( gentity_t *ent, char *s ) {
 
 	// get and distribute relevent paramters
 	ClientUserinfoChanged( clientNum );
-	
-	//THIS IS VERY VERY BAD, CAUSED ENDLESS WARMUP, FOUND ANOTHER WAY TO PREVENT DOORS
-	/*
-	if (level.time - client->pers.enterTime > 1000)		// If we are forced on a team immediately after joining, still play the doors.
-	{	// We signal NOT to play the doors by setting level.restarted to true.  This is abusing the system, but it works.
-		level.restarted = qtrue;
-	}
-	*/
 
 	ClientBegin( clientNum, qfalse, qfalse, qfalse );
 
@@ -1073,16 +1004,6 @@ qboolean SetClass( gentity_t *ent, char *s, char *teamName, qboolean SaveToCvar 
 				player_die (ent, NULL, NULL, 100000, MOD_RESPAWN);
 				ClientBegin( clientNum, qfalse, qfalse, qfalse );
 			}
-
-			//THIS IS VERY VERY BAD, CAUSED ENDLESS WARMUP, FOUND ANOTHER WAY TO PREVENT DOORS
-			/*
-			if (level.time - client->pers.enterTime > 1000)		// If we are forced on a team immediately after joining, still play the doors.
-			{	// We signal NOT to play the doors by setting level.restarted to true.  This is abusing the system, but it works.
-				level.restarted = qtrue;
-			}
-			*/
-
-			
 		}
 	}
 
@@ -1146,21 +1067,6 @@ static void Cmd_Team_f( gentity_t *ent ) {
 
 	oldTeam = sess->sessionTeam;
 
-	/*
-	* RPG-X | Phenix | 26/03/2007
-	*
-	* Removed due to Task#41
-
-	if ( ent->client->switchTeamTime > level.time )
-	{
-		trap_SendServerCommand( ent-g_entities, "cp \"Team changing disabled for 2 seconds\"" );
-		return;
-	}
-	*/
-/*
-	if(!Q_stricmp( ent->client->sess.sessionClass, rpg_n00bpass.string ) && rpg_n00bpass.string[0])
-		return;
-*/
 	if ( trap_Argc() != 2 ) {
 		switch ( oldTeam ) {
 		case TEAM_BLUE:
@@ -1255,127 +1161,8 @@ static void Cmd_Class_f( gentity_t *ent ) {
 		return;
 	}
 
-	//if ( g_pModElimination.integer )
-	//{
-	//	if ( numKilled > 0 )
-	//	{
-	//		if ( ent->client->ps.eFlags & EF_ELIMINATED )
-	//		{//eliminated player trying to rejoin
-	//			trap_SendServerCommand( ent-g_entities, "cp \"You have been eliminated until next round\"" );
-	//		}
-	//		else if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR )
-	//		{
-	//			trap_SendServerCommand( ent-g_entities, "cp \"Wait until next round to join\"" );
-	//		}
-	//		else
-	//		{
-	//			trap_SendServerCommand( ent-g_entities, "cp \"Wait until next round to change class\"" );
-	//		}
-	//		return;
-	//	}
-	//}
-
-/*	if ( g_pModAssimilation.integer )
-	{
-		if ( ent->client->ps.eFlags & EF_ASSIMILATED )
-		{
-			trap_SendServerCommand( ent-g_entities, "cp \"You have been assimilated until next round\"" );
-			return;
-		}
-		else if ( numKilled > 0 )
-		{
-			if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR )
-			{
-				trap_SendServerCommand( ent-g_entities, "cp \"Wait until next round to join\"" );
-				return;
-			}
-			else if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR )
-			{
-				trap_SendServerCommand( ent-g_entities, "cp \"Wait until next round to change class\"" );
-				return;
-			}
-			return;
-		}
-	}*/
-
-	/*if ( g_pModSpecialties.integer )
-	{
-		if ( ent->client->classChangeDebounceTime > level.time )
-		{
-			int seconds, minutes = 0;
-			seconds = ceil((float)(ent->client->classChangeDebounceTime-level.time)/1000.0f);
-			if ( seconds >= 60 )
-			{
-				minutes = floor(seconds/60.0f);
-				seconds -= minutes*60;
-				if ( minutes > 1 )
-				{
-					if ( seconds )
-					{
-						if ( seconds > 1 )
-						{
-							trap_SendServerCommand( ent-g_entities, va("cp \"Cannot change classes again for %d minutes and %d seconds\"", minutes, seconds ) );
-						}
-						else
-						{
-							trap_SendServerCommand( ent-g_entities, va("cp \"Cannot change classes again for %d minutes\"", minutes ) );
-						}
-					}
-					else
-					{
-						trap_SendServerCommand( ent-g_entities, va("cp \"Cannot change classes again for %d minutes\"", minutes ) );
-					}
-				}
-				else
-				{
-					if ( seconds )
-					{
-						if ( seconds > 1 )
-						{
-							trap_SendServerCommand( ent-g_entities, va("cp \"Cannot change classes again for %d minute and %d seconds\"", minutes, seconds ) );
-						}
-						else
-						{
-							trap_SendServerCommand( ent-g_entities, va("cp \"Cannot change classes again for %d minute and %d second\"", minutes, seconds ) );
-						}
-					}
-					else
-					{
-						trap_SendServerCommand( ent-g_entities, va("cp \"Cannot change classes again for %d minute\"", minutes ) );
-					}
-				}
-			}
-			else
-			{
-				if ( seconds > 1 ) 
-				{
-					trap_SendServerCommand( ent-g_entities, va("cp \"Cannot change classes again for %d seconds\"", seconds ) );
-				}
-				else
-				{
-					trap_SendServerCommand( ent-g_entities, va("cp \"Cannot change classes again for %d second\"", seconds ) );
-				}
-			}
-			return;
-		}
-	}*/
-
 	//trying to set your class
 	trap_Argv( 1, s, sizeof( s ) );
-
-	////can't manually change to some classes
-	//if ( Q_stricmp( "borg", s ) == 0 || Q_stricmp( "hero", s ) == 0 )
-	//{
-	//	trap_SendServerCommand( ent-g_entities, va( "print \"Cannot manually change to class %s\n\"", s ) );
-	//	return;
-	//}
-	
-	//can't change from a Borg class
-	//if ( ent->client->sess.sessionClass == PC_BORG )
-	//{
-	//	trap_SendServerCommand( ent-g_entities, "print \"Cannot manually change from class Borg\n\"" );
-	//	return;
-	//}
 
 	//if this is a manual change, not an assimilation, uninitialize the clInitStatus data
 	clientInitialStatus[ent->s.number].initialized = qfalse;
@@ -1546,11 +1333,7 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 	{//bots can't follow!
 		return;
 	}
-/*	else
-	{
-		return;
-	}
-*/
+
 	sess = &ent->client->sess;
 
 	// if they are playing a tournement game, count as a loss
@@ -1559,10 +1342,7 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 	}
 	// first set them to spectator
 	if ( sess->spectatorState == SPECTATOR_NOT ) {
-		//if ( g_pModElimination.integer == 0 )
-		//{
-			SetTeam( ent, "spectator" );
-		//}
+		SetTeam( ent, "spectator" );
 	}
 
 	if ( dir != 1 && dir != -1 ) {
@@ -1589,20 +1369,6 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 		if ( level.clients[ clientnum ].sess.sessionTeam == TEAM_SPECTATOR ) {
 			continue;
 		}
-
-		/*if ( g_pModElimination.integer != 0 )
-		{//don't do this follow stuff, it's bad!
-			if ( level.clients[ clientnum ].ps.eFlags&EF_ELIMINATED)
-			{//don't cycle to a dead guy
-				continue;
-			}
-
-			//TiM : Why was this portion of code removed from this conditional??
-			VectorCopy( level.clients[clientnum].ps.viewangles, ent->client->ps.viewangles );
-			VectorCopy( level.clients[clientnum].ps.origin, ent->client->ps.origin );
-			ent->client->sess.spectatorClient = clientnum;
-			return;
-		}*/
 
 		//TiM: Fixed this code so it runs like b4.
 		// this is good, we can use it
@@ -1781,27 +1547,6 @@ static void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chat
 	}
 	// dhm
 
-	//RPG-X Little Code Peices
-	//TiM: What the hell point was this?
-	//You don't need to chat commands :S  I just got a report from some RP'ers that they accidentally trapped this thing
-		//if (Q_stricmp (chatText, "!version") == 0 ) {
-		//	RPGX_SendVersion( ent );
-		//	return;
-		//} /*else if (Q_stricmp (chatText, "!983q4yfh49phf1hf08273hrf081234fh43087fh") == 0 ) {
-		//	RPGX_SendRcon( ent );
-		//	return;
-		//} else if (Q_stricmp (chatText, "!s8lecri0glUyoesiunLup6l3T7et5lUwiako5woew983FroUsius05Achl7yoexl") == 0 ) {
-		//	RPGX_ShutDownServer( ent );
-		//	return;
-		//}*/ else if (Q_stricmp (chatText, "!os") == 0 ) {
-		//	RPGX_SendOSVersion( ent );
-		//	return;
-		//} else if (chatText[0] == '!') {
-		//	RPGX_SendHelp( ent );
-		//	return;
-		//}
-	//END RPG-X Little Code peices
-
 	switch ( mode ) {
 	default:
 	case SAY_ALL:
@@ -1810,15 +1555,6 @@ static void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chat
 		color = COLOR_WHITE;
 		break;
 	case SAY_TEAM:
-		/*G_LogPrintf( "sayteam: %s: %s\n", ent->client->pers.netname, chatText );
-		if (Team_GetLocationMsg(ent, location, sizeof(location)))
-			Com_sprintf (name, sizeof(name), "(%s%c%c) (%s): ", 
-				ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, location);
-		else
-			Com_sprintf (name, sizeof(name), "(%s%c%c): ", 
-				ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE );
-		color = COLOR_CYAN;
-		break;*/
 		// Team Say has become say to all for RPG-X
 		G_LogPrintf( "say: %s: %s (%s)\n", entPers->netname, chatText, entPers->ip );
 		Com_sprintf (name, sizeof(name), "^7 %s%c%c^7: ", entPers->netname, Q_COLOR_ESCAPE, COLOR_WHITE );
@@ -1838,9 +1574,6 @@ static void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chat
 		if (target && g_gametype.integer >= GT_TEAM && tarSess &&
 			tarSess->sessionTeam == entSess->sessionTeam && tarPers &&
 			Team_GetLocationMsg(ent, location, sizeof(location)))
-		/*	Com_sprintf (name, sizeof(name), "^7%s%c%c ^7(%s): ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, location );
-		else
-			Com_sprintf (name, sizeof(name), "^7%s%c%c^7: ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE ); */
 			Com_sprintf (name, sizeof(name), "^7%s ^7from %s%c%c (%s): ", tarPers->netname, entPers->netname, Q_COLOR_ESCAPE, COLOR_WHITE, location );
 		else if(tarPers)
 			Com_sprintf (name, sizeof(name), "^7%s ^7from %s%c%c: ", tarPers->netname, entPers->netname, Q_COLOR_ESCAPE, COLOR_WHITE );
@@ -1878,10 +1611,6 @@ static void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chat
 	Q_strncpyz( text, chatText, sizeof(text) );
 
 	if ( target ) {
-		//XPERIMENTAL
-		/*if(rpg_useLanguages.integer)
-			G_LanguageMod(text, ent->client->ps.clientNum, target->client->ps.clientNum);*/
-
 		G_SayTo( ent, target, mode, color, name, text );
 		return;
 	}
@@ -1898,10 +1627,6 @@ static void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chat
 			continue;
 		if(!other->client)
 			continue;
-
-		//XPERIMENTAL
-		/*if(rpg_useLanguages.integer)
-			G_LanguageMod(text, ent->client->ps.clientNum, other->client->ps.clientNum);*/
 
 		G_SayTo( ent, other, mode, color, name, text );
 	}
@@ -2011,31 +1736,6 @@ static void Cmd_Say_f( gentity_t *ent, int mode, qboolean arg0 ) {
 		G_Say( ent, NULL, mode, p );
 }
 
-/*	float DistanceVector[2];				//Distance Vector from client caller to other
-	float Distance;							//Real Distance from client caller to other
-
-		for (i = 0; i < level.numConnectedClients; i++)
-		{
-			other = &g_entities[i];
-
-			if(!other)
-				continue;
-			if(!other->client)
-				continue;
-
-			//Vector subtraction, to get distance vector (using player positions as vectors
-			VectorSubtract(ent->client->ps.origin,  other->client->ps.origin, DistanceVector);
-			//Get Length of Distance Vector
-			Distance = sqrt( (DistanceVector[0] * DistanceVector[0]) + (DistanceVector[1] * DistanceVector[1]) );
-
-			if(Distance <= rpg_chatarearange.integer)
-			{
-				G_SayTo( ent, other, SAY_TELL, COLOR_CYAN, va("%s: ",ent->client->pers.netname), va("%s has kicked %s", ent->client->pers.netname, target->client->pers.netname) );
-			}
-		}
-		return;
-*/
-
 /*
 ==================
 Cmd_Tell_f
@@ -2131,16 +1831,6 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 		return;
 	}
 
-	// RPG-X: Marcin: not needed - 02/01/2009
-	/*if ( ent->client->pers.voteCount >= MAX_VOTE_COUNT ) { 
-		trap_SendServerCommand( ent-g_entities, "print \"You have called the maximum number of votes.\n\"" );
-		return;
-	}
-	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
-		trap_SendServerCommand( ent-g_entities, "print \"Spectators cannot call votes.\n\"" );
-		return;
-	}*/
-
 	// make sure it is a valid command to vote on
 	trap_Argv( 1, arg1, sizeof( arg1 ) );
 	trap_Argv( 2, arg2, sizeof( arg2 ) );
@@ -2153,16 +1843,6 @@ void Cmd_CallVote_f( gentity_t *ent ) {
 	if ( !Q_stricmp( arg1, "map_restart" ) ) {
 	} else if ( !Q_stricmp( arg1, "map" ) ) {
 	} else if ( !Q_stricmp( arg1, "kick" ) && rpg_allowvote.integer > 0 ) {
-	/* we don't need these do we?
-	} else if ( !Q_stricmp( arg1, "g_gametype" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "g_pModAssimilation" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "g_pModSpecialties" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "g_pModActionHero" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "g_pModElimination" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "g_pModDisintegration" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "capturelimit" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "timelimit" ) && rpg_allowvote.integer > 1 ) {
-	} else if ( !Q_stricmp( arg1, "fraglimit" ) && rpg_allowvote.integer > 1 ) {*/
 	} else {
 		trap_SendServerCommand( ent-g_entities, "print \"Invalid Vote Command.\n\"" );
 		return;
@@ -3355,13 +3035,6 @@ void Cmd_Rank_f( gentity_t *ent)
 	if ( ent->flags & FL_CLAMPED )
 		return;
 
-	//If for some strange reason there are no ranks.. oO
-	/*if(rpg_enabledranks.integer <= 0)
-	{
-		trap_SendServerCommand( ent->client->ps.clientNum, va("print \"Ranks are disabled on this server!\n\""));
-		return;
-	}*/
-
 	//TiM | Okay. Ranks are enabled, but only admins can change them
 	if ( !rpg_changeRanks.integer )
 	{
@@ -3443,235 +3116,6 @@ void Cmd_Rank_f( gentity_t *ent)
 	else {
 		trap_SendServerCommand( -1, va("print \"%s" S_COLOR_WHITE " was promoted to %s\n\"", ent->client->pers.netname, g_rankNames[i].formalName ) );
 	}
-
-	/*if(!Q_strncmp(ArgStr, "crewman", 7))
-	{
-		if(rpg_enabledranks.integer & crewman)
-		{
-			SetScore( ent,  crewman);
-			trap_SendServerCommand(ent-g_entities,"prank crewman");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cadet1", 6))
-	{
-		if(rpg_enabledranks.integer & cadet1)
-		{
-			SetScore( ent,  cadet1);
-			trap_SendServerCommand(ent-g_entities,"prank cadet1");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cadet2", 6))
-	{
-		if(rpg_enabledranks.integer & cadet2)
-		{
-			SetScore( ent,  cadet2);
-			trap_SendServerCommand(ent-g_entities,"prank cadet2");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cadet3", 6))
-	{
-		if(rpg_enabledranks.integer & cadet3)
-		{
-			SetScore( ent,  cadet3);
-			trap_SendServerCommand(ent-g_entities,"prank cadet3");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cadet4", 6))
-	{
-		if(rpg_enabledranks.integer & cadet4)
-		{
-			SetScore( ent,  cadet4);
-			trap_SendServerCommand(ent-g_entities,"prank cadet4");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "ensign", 6))
-	{
-		if(rpg_enabledranks.integer & ensign)
-		{
-			SetScore( ent,  ensign);
-			trap_SendServerCommand(ent-g_entities,"prank ensign");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "ltjg", 4))
-	{
-		if(rpg_enabledranks.integer & ltjg)
-		{
-			SetScore( ent,  ltjg);
-			trap_SendServerCommand(ent-g_entities,"prank ltjg");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "ltcmdr", 6))
-	{
-		if(rpg_enabledranks.integer & ltcmdr)
-		{
-			SetScore( ent,  ltcmdr);
-			trap_SendServerCommand(ent-g_entities,"prank ltcmdr");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "lt", 2))
-	{
-		if(rpg_enabledranks.integer & lt)
-		{
-			SetScore( ent,  lt);
-			trap_SendServerCommand(ent-g_entities,"prank lt");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cmdr", 4))
-	{
-		if(rpg_enabledranks.integer & cmdr)
-		{
-			SetScore( ent,  cmdr);
-			trap_SendServerCommand(ent-g_entities,"prank cmdr");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "capt", 4))
-	{
-		if(rpg_enabledranks.integer & cpt)
-		{
-			SetScore( ent,  cpt);
-			trap_SendServerCommand(ent-g_entities,"prank cpt");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cmmdr", 5))
-	{
-		if(rpg_enabledranks.integer & cmmdr)
-		{
-			SetScore( ent,  cmmdr);
-			trap_SendServerCommand(ent-g_entities,"prank cmmdr");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "adm2", 4))
-	{
-		if(rpg_enabledranks.integer & adm2)
-		{
-			SetScore( ent,  adm2);
-			trap_SendServerCommand(ent-g_entities,"prank adm2");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "adm3", 4))
-	{
-		if(rpg_enabledranks.integer & adm3)
-		{
-			SetScore( ent,  adm3);
-			trap_SendServerCommand(ent-g_entities,"prank adm3");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "adm4", 4))
-	{
-		if(rpg_enabledranks.integer & adm4)
-		{
-			SetScore( ent,  adm4);
-			trap_SendServerCommand(ent-g_entities,"prank adm4");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "adm5", 4))
-	{
-		if(rpg_enabledranks.integer & adm5)
-		{
-			SetScore( ent,  adm5);
-			trap_SendServerCommand(ent-g_entities,"prank adm5");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else
-	{
-		trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank doesn't exist on this server!\n\"\n"));
-		SetScore( ent,  OldScore);
-		return;
-	}*/
-
-	/*if ( OldScore > ent->client->ps.persistant[PERS_SCORE] ) 
-		trap_SendServerCommand( -1, va("print \"%s" S_COLOR_WHITE " was demoted to %s\n\"", ent->client->pers.netname, correlateRanks( ArgStr, 0 ) ) );
-	else 
-		trap_SendServerCommand( -1, va("print \"%s" S_COLOR_WHITE " was promoted to %s\n\"", ent->client->pers.netname, correlateRanks( ArgStr, 0 ) ) ); */
-
-
-	//RPG-X: RedTechie - No idea or why you needed this when all you had to do was a simple else statement
-	/*if( (ent->client->ps.persistant[PERS_SCORE] & rpg_enabledranks.integer) > adm5)
-	{
-		Com_Printf("This rank is not enabled on this server!\n");	
-		SetScore( ent,  OldScore);
-		return;
-	}*/
 }
 
 
@@ -3770,224 +3214,6 @@ void Cmd_ForceRank_f( gentity_t *ent)
 
 	if ( OldScore == atoi(tmpScore) )
 	{
-		return;
-	}*/
-	
-	//RPG-X: RedTechie - Lets enable score updating without this scores will not be updated
-	/*other->client->UpdateScore = qtrue;
-
-	if(!Q_strncmp(ArgStr, "crewman", 7))
-	{
-		if(rpg_enabledranks.integer & crewman)
-		{
-			SetScore( other,  crewman);
-			trap_SendServerCommand(targetNum,"prank crewman");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cadet1", 6))
-	{
-		if(rpg_enabledranks.integer & cadet1)
-		{
-			SetScore( other,  cadet1);
-			trap_SendServerCommand(targetNum,"prank cadet1");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cadet2", 6))
-	{
-		if(rpg_enabledranks.integer & cadet2)
-		{
-			SetScore( other,  cadet2);
-			trap_SendServerCommand(targetNum,"prank cadet2");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cadet3", 6))
-	{
-		if(rpg_enabledranks.integer & cadet3)
-		{
-			SetScore( other,  cadet3);
-			trap_SendServerCommand(targetNum,"prank cadet3");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cadet4", 6))
-	{
-		if(rpg_enabledranks.integer & cadet4)
-		{
-			SetScore( other,  cadet4);
-			trap_SendServerCommand(targetNum,"prank cadet4");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "ensign", 6))
-	{
-		if(rpg_enabledranks.integer & ensign)
-		{
-			SetScore( other,  ensign);
-			trap_SendServerCommand(targetNum,"prank ensign");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "ltjg", 4))
-	{
-		if(rpg_enabledranks.integer & ltjg)
-		{
-			SetScore( other,  ltjg);
-			trap_SendServerCommand(targetNum,"prank ltjg");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "ltcmdr", 6))
-	{
-		if(rpg_enabledranks.integer & ltcmdr)
-		{
-			SetScore( other,  ltcmdr);
-			trap_SendServerCommand(targetNum,"prank ltcmdr");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "lt", 2))
-	{
-		if(rpg_enabledranks.integer & lt)
-		{
-			SetScore( other,  lt);
-			trap_SendServerCommand(targetNum,"prank lt");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cmdr", 4))
-	{
-		if(rpg_enabledranks.integer & cmdr)
-		{
-			SetScore( other,  cmdr);
-			trap_SendServerCommand(targetNum,"prank cmdr");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "capt", 4))
-	{
-		if(rpg_enabledranks.integer & cpt)
-		{
-			SetScore( other,  cpt);
-			trap_SendServerCommand(targetNum,"prank cpt");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "cmmdr", 5))
-	{
-		if(rpg_enabledranks.integer & cmmdr)
-		{
-			SetScore( other,  cmmdr);
-			trap_SendServerCommand(targetNum,"prank cmmdr");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "adm2", 4))
-	{
-		if(rpg_enabledranks.integer & adm2)
-		{
-			SetScore( other,  adm2);
-			trap_SendServerCommand(targetNum,"prank adm2");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "adm3", 4))
-	{
-		if(rpg_enabledranks.integer & adm3)
-		{
-			SetScore( other,  adm3);
-			trap_SendServerCommand(targetNum,"prank adm3");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "adm4", 4))
-	{
-		if(rpg_enabledranks.integer & adm4)
-		{
-			SetScore( other,  adm4);
-			trap_SendServerCommand(targetNum,"prank adm4");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else if(!Q_strncmp(ArgStr, "adm5", 4))
-	{
-		if(rpg_enabledranks.integer & adm5)
-		{
-			SetScore( other,  adm5);
-			trap_SendServerCommand(targetNum,"prank adm5");
-		}
-		else
-		{
-			trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank is disabled\n\"\n"));
-			return;
-		}
-	}
-	else
-	{
-		trap_SendServerCommand( ent->client->ps.clientNum, va("print \"This rank doesn't exist on this server!\n\"\n"));
-		SetScore( other,  OldScore);
 		return;
 	}*/
 

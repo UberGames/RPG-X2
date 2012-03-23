@@ -1196,31 +1196,13 @@ void ClientUserinfoChanged( int clientNum ) {
 			// decide if we are going to have to reset a skin cos it's not applicable to a race selected
 			if (g_gametype.integer < GT_TEAM || !Q_stricmp("", g_team_group_red.string))
 			{
-				if ( g_pModAssimilation.integer != 0 && legalSkin(G_searchGroupList( model ), borgytype ) == qtrue )
-				{//if you're trying to be a Borg and not a borg playerclass, then pick a different model
-					getNewSkin("HazardTeam", model, "red", client, clientNum);
-					ForceClientSkin(model, "red");
-					// change the value in out local copy, then update it on the server
-					Info_SetValueForKey(userinfo, "model", model);
-					trap_SetUserinfo(clientNum, userinfo);
-				}
-				else
-				{
-					ForceClientSkin(model, "red");
-				}
+				ForceClientSkin(model, "red");
 				break;
 			}
 			// at this point, we are playing CTF and there IS a race specified for this game
 			else
 			{
-				if ( g_pModAssimilation.integer != 0 && Q_stricmp( borgytype, g_team_group_red.string ) == 0 )
-				{//team model is set to borg, but that is now allowed, pick a different "race"
-					reset = getNewSkin("HazardTeam", model, "red", client, clientNum);
-				}
-				else
-				{// go away and get what ever races this skin is attached to.
-					reset = getNewSkin(g_team_group_red.string, model, "red", client, clientNum);
-				}
+				reset = getNewSkin(g_team_group_red.string, model, "red", client, clientNum);
 
 				// did we get a model name back?
 				if (!model[0])
@@ -1256,32 +1238,14 @@ void ClientUserinfoChanged( int clientNum ) {
 			// decide if we are going to have to reset a skin cos it's not applicable to a race selected
 			if (g_gametype.integer < GT_TEAM || !Q_stricmp("", g_team_group_blue.string))
 			{
-				if ( g_pModAssimilation.integer != 0 && legalSkin(G_searchGroupList( model ), borgytype ) == qtrue )
-				{//if you're trying to be a Borg and not a borg playerclass, then pick a different model
-					getNewSkin("HazardTeam", model, "blue", client, clientNum);
-					ForceClientSkin(model, "blue");
-					// change the value in out local copy, then update it on the server
-					Info_SetValueForKey(userinfo, "model", model);
-					trap_SetUserinfo(clientNum, userinfo);
-				}
-				else
-				{
-					ForceClientSkin(model, "blue");
-				}
+				ForceClientSkin(model, "blue");
 				break;
 			}
 			// at this point, we are playing CTF and there IS a race specified for this game
 			else
 			{
-				if ( g_pModAssimilation.integer != 0 && Q_stricmp( borgytype, g_team_group_blue.string ) == 0 )
-				{//team model is set to borg, but that is now allowed, pick a different "race"
-					reset = getNewSkin("HazardTeam", model, "blue", client, clientNum);
-				}
-				else
-				{
-					// go away and get what ever races this skin is attached to.
-					reset = getNewSkin(g_team_group_blue.string, model, "blue", client, clientNum);
-				}
+				// go away and get what ever races this skin is attached to.
+				reset = getNewSkin(g_team_group_blue.string, model, "blue", client, clientNum);
 
 				// did we get a model name back?
 				if (!model[0])
@@ -1539,66 +1503,63 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 
 	// get and distribute relevent paramters
 	G_LogPrintf( "ClientConnect: %i (%s)\n", clientNum, g_entities[clientNum].client->pers.ip );
-	if ( g_pModSpecialties.integer == 0 /*&& client->sess.sessionClass != PC_BORG*/ )
+	if ( rpg_rpg.integer != 0 /*&& firstTime*/ )
 	{
-		if ( rpg_rpg.integer != 0 /*&& firstTime*/ )
-		{
-			//TiM: Code for automatic class + rank switching
-			//========================================================
-			if ( isBot ) {
-				client->sess.sessionClass = 0;
-				client->ps.persistant[PERS_SCORE] = 1;
+		//TiM: Code for automatic class + rank switching
+		//========================================================
+		if ( isBot ) {
+			client->sess.sessionClass = 0;
+			client->ps.persistant[PERS_SCORE] = 1;
+		}
+		else {
+			newClass = Info_ValueForKey (userinfo, "ui_playerClass" );
+			newRank	= Info_ValueForKey (userinfo, "ui_playerRank" );
+
+			//Com_Printf( S_COLOR_RED "Data: %s %s\n", newClass, newRank );
+
+			if ( newClass[0] ) {
+				client->sess.sessionClass = ValueNameForClass ( newClass ); //TiM: BOOYEAH! :)
+				//if class doesn't exist, default to 0
+				if ( client->sess.sessionClass < 0 )
+					client->sess.sessionClass = 0;
 			}
 			else {
-				newClass = Info_ValueForKey (userinfo, "ui_playerClass" );
-				newRank	= Info_ValueForKey (userinfo, "ui_playerRank" );
-
-				//Com_Printf( S_COLOR_RED "Data: %s %s\n", newClass, newRank );
-
-				if ( newClass[0] ) {
-					client->sess.sessionClass = ValueNameForClass ( newClass ); //TiM: BOOYEAH! :)
-					//if class doesn't exist, default to 0
-					if ( client->sess.sessionClass < 0 )
-						client->sess.sessionClass = 0;
-				}
-				else {
-					client->sess.sessionClass = 0;
-				}
-
-				{
-					qboolean	changeRank = qfalse;
-
-					for (i = 0; i < MAX_RANKS; i++ ) {
-						if ( !rpg_startingRank.string[0] && newRank[0] ) {
-							if ( !Q_stricmp( newRank, g_rankNames[i].consoleName ) ) {
-								tmpScore = i;//1 << i;
-
-								if ( rpg_changeRanks.integer )
-									changeRank = qtrue;
-								break;
-							}
-						}
-						else
-						{
-							if (rpg_startingRank.string[0] && !Q_stricmp( g_rankNames[i].consoleName, rpg_startingRank.string ) ) {
-								tmpScore =i;// 1 << i;
-								changeRank = qtrue;
-								break;
-							}
-						}
-					}
-					
-					//client->ps.persistant[PERS_SCORE] = tmpScore;
-					if ( changeRank ) {
-						ent->client->UpdateScore = qtrue;
-						SetScore( ent, tmpScore );
-					}
-				}
+				client->sess.sessionClass = 0;
 			}
 
-			//========================================================
-			//tmpScore = atoi( correlateRanks( newRank, 1 ) );	
+			{
+				qboolean	changeRank = qfalse;
+
+				for (i = 0; i < MAX_RANKS; i++ ) {
+					if ( !rpg_startingRank.string[0] && newRank[0] ) {
+						if ( !Q_stricmp( newRank, g_rankNames[i].consoleName ) ) {
+							tmpScore = i;//1 << i;
+
+							if ( rpg_changeRanks.integer )
+								changeRank = qtrue;
+							break;
+						}
+					}
+					else
+					{
+						if (rpg_startingRank.string[0] && !Q_stricmp( g_rankNames[i].consoleName, rpg_startingRank.string ) ) {
+							tmpScore =i;// 1 << i;
+							changeRank = qtrue;
+							break;
+						}
+					}
+				}
+					
+				//client->ps.persistant[PERS_SCORE] = tmpScore;
+				if ( changeRank ) {
+					ent->client->UpdateScore = qtrue;
+					SetScore( ent, tmpScore );
+				}
+			}
 		}
+
+		//========================================================
+		//tmpScore = atoi( correlateRanks( newRank, 1 ) );	
 	}
 	ClientUserinfoChanged( clientNum );
 
@@ -2253,38 +2214,30 @@ void ClientSpawn(gentity_t *ent, int rpgx_spawn, qboolean fromDeath ) {
 	// Start with a small amount of armor as well.
 	//client->ps.stats[STAT_ARMOR] = client->ps.stats[STAT_MAX_HEALTH] * 0.25;
 
-	if ( g_pModDisintegration.integer != 0 )
-	{//this is instagib
-		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_6 );
-		client->ps.ammo[WP_6] = Max_Ammo[WP_6];
+	pclass_t oClass = client->sess.sessionClass;
+
+	if ( oClass != client->sess.sessionClass )
+	{//need to send the class change
+		ClientUserinfoChanged( client->ps.clientNum );
 	}
-	else
-	{
-		pclass_t oClass = client->sess.sessionClass;
 
-		if ( oClass != client->sess.sessionClass )
-		{//need to send the class change
-			ClientUserinfoChanged( client->ps.clientNum );
-		}
+	client->ps.persistant[PERS_CLASS] = client->sess.sessionClass;
+	pClass = client->sess.sessionClass;
 
-		client->ps.persistant[PERS_CLASS] = client->sess.sessionClass;
-		pClass = client->sess.sessionClass;
-
-		//ClientMaxHealthForClass( client, pClass );
-		if ( pClass != 0/*PC_NOCLASS*/ )
-		{//no health boost on spawn for playerclasses
-			ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
-		}
+	//ClientMaxHealthForClass( client, pClass );
+	if ( pClass != 0/*PC_NOCLASS*/ )
+	{//no health boost on spawn for playerclasses
+		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
+	}
 		
-		if ( !fromDeath || !rpg_dropOnDeath.integer || !rpg_allowWeaponDrop.integer ) {
-			ClientWeaponsForClass( client, pClass );
-		} else { // Marcin: just a hand
-			ClientWeaponsForClass( client, 0 );
-		}
-		//ClientArmorForClass( client, pClass );
-		ClientHoldablesForClass( client, pClass );
-		//ClientPowerupsForClass( ent, pClass );
+	if ( !fromDeath || !rpg_dropOnDeath.integer || !rpg_allowWeaponDrop.integer ) {
+		ClientWeaponsForClass( client, pClass );
+	} else { // Marcin: just a hand
+		ClientWeaponsForClass( client, 0 );
 	}
+	//ClientArmorForClass( client, pClass );
+	ClientHoldablesForClass( client, pClass );
+	//ClientPowerupsForClass( ent, pClass );
 	
 	if(rpgx_spawn != 1){
 		G_SetOrigin( ent, spawn_origin );

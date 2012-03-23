@@ -97,22 +97,14 @@ void UpdateTournamentInfo( void ) {
 		else
 			loseCaptures = level.teamScores[TEAM_RED];
 
-		if ( g_pModElimination.integer != 0 )
-		{//in elimination, don't add each member's points to the total
-			winningPoints = winningCaptures;
-			losePoints = loseCaptures;
-		}
-		else
+		for (i = 0; i < level.maxclients; i++ )
 		{
-			for (i = 0; i < level.maxclients; i++ )
-			{
-				if ( !&g_entities[i] ) continue;
-				if ( !(&g_entities[i])->client ) continue;
-				if ( g_entities[i].client->ps.persistant[PERS_TEAM] == winningTeam )
-					winningPoints += g_entities[i].client->ps.persistant[PERS_SCORE];
-				else
-					losePoints += g_entities[i].client->ps.persistant[PERS_SCORE];
-			}
+			if ( !&g_entities[i] ) continue;
+			if ( !(&g_entities[i])->client ) continue;
+			if ( g_entities[i].client->ps.persistant[PERS_TEAM] == winningTeam )
+				winningPoints += g_entities[i].client->ps.persistant[PERS_SCORE];
+			else
+				losePoints += g_entities[i].client->ps.persistant[PERS_SCORE];
 		}
 	}
 

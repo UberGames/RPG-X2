@@ -398,11 +398,6 @@ void G_CheckMinimumPlayers( void ) {
 		}
 	}
 
-	if ( (g_pModAssimilation.integer != 0 && numKilled != 0) || (g_pModElimination.integer != 0 && numKilled != 0) )
-	{
-		return;
-	}
-
 	if (g_gametype.integer >= GT_TEAM) {
 		if (minplayers >= g_maxclients.integer / 2) {
 			minplayers = (g_maxclients.integer / 2) -1;
@@ -651,11 +646,6 @@ static void G_AddBot( const char *name, float skill, const char *team, const cha
 	Info_SetValueForKey( userinfo, "characterfile", Info_ValueForKey( botinfo, "aifile" ) );
 	Info_SetValueForKey( userinfo, "skill", va( "%5.2f", skill ) );
 	Info_SetValueForKey( userinfo, "team", team );
-	if( pclass && *pclass ) {
-		if( g_pModSpecialties.integer ) {
-			Info_SetValueForKey( userinfo, "class", pclass );
-		}
-	}
 
 	bot = &g_entities[ clientNum ];
 	bot->r.svFlags |= SVF_BOT;

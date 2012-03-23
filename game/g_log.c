@@ -1113,10 +1113,6 @@ qboolean CalculateTactician(gentity_t *ent, int *kills)
 	int			killsWithWeapon[WP_NUM_WEAPONS];
 	int			playTime = (level.time - ent->client->pers.enterTime)/60000;
 
-	if ( g_pModDisintegration.integer )
-	{//duh, only 1 weapon
-		return qfalse;
-	}
 	//------------------------------------------------------ MUST HAVE ACHIEVED 2 KILLS PER MINUTE
 	if (playTime<0.3)
 		return qfalse;

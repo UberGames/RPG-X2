@@ -2742,10 +2742,6 @@ void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
 			Com_sprintf(buf, sizeof(buf), "team %s", bs->settings.team);
 			trap_EA_Command(bs->client, buf);
 		}
-		if ( g_pModSpecialties.integer ) {
-			Com_sprintf(buf, sizeof(buf), "class %s", bs->settings.pclass);
-			trap_EA_Command(bs->client, buf);
-		}
 		//set the chat gender
 		if (gender[0] == 'm') trap_BotSetChatGender(bs->cs, CHAT_GENDERMALE);
 		else if (gender[0] == 'f')  trap_BotSetChatGender(bs->cs, CHAT_GENDERFEMALE);
