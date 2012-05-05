@@ -1826,9 +1826,8 @@ void CG_Init( int serverMessageNum, int serverCommandSequence ) {
 	//TiM2 - Separated this out so class data has to be locally accessed now
 	//CG_ParseClassData();
 
-	#ifdef XTRA
+	/* shader remapping */
 	CG_ShaderStateChanged();
-	#endif
 
 	if(grp_berp.integer)
 		CG_Printf(S_COLOR_YELLOW "GSIO01 and Ubergames greet Brave Explorers.\n");

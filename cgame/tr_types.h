@@ -6,11 +6,7 @@
 
 #define	MAX_DLIGHTS		32			// can't be increased, because bit flags are used on surfaces
 
-#ifndef XTRA
-#define	ENTITYNUM_BITS		10		// can't be increased without changing drawsurf bit packing
-#else
 #define	ENTITYNUM_BITS		11		// can't be increased without changing drawsurf bit packing
-#endif
 #define	MAX_ENTITIES		((1<<ENTITYNUM_BITS) - 1)
 
 // renderfx flags

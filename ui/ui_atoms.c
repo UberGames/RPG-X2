@@ -1314,12 +1314,11 @@ qboolean UI_ConsoleCommand( void ) {
 		return qtrue;
 	}
 
-	#ifdef XTRA
+	/* TODO remove me? */
 	if ( Q_stricmp( cmd, "sqlkey" ) == 0) {
 		//UI_LoginSetSqlkey((int)UI_Argv(1));
 		return qtrue;
 	}
-	#endif
 
 
 	return qfalse;

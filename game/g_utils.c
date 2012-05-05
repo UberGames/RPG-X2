@@ -4,7 +4,6 @@
 
 #include "g_local.h"
 
-#ifdef XTRA
 typedef struct {
   char oldShader[MAX_QPATH];
   char newShader[MAX_QPATH];
@@ -47,7 +46,6 @@ const char *BuildShaderStateConfig(void) {
 	}
 	return buff;
 }
-#endif
 
 /*
 =========================================================================
@@ -336,13 +334,11 @@ void G_UseTargets2( gentity_t *ent, gentity_t *activator, char *target ) {
 		return;
 	}
 
-	#ifdef XTRA
 	if (ent->targetShaderName && ent->targetShaderNewName) {
 		float f = level.time * 0.001;
 		AddRemap(ent->targetShaderName, ent->targetShaderNewName, f);
 		trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());
 	}
-	#endif
 
 	if ( !target ) {
 		return;

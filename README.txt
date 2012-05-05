@@ -28,6 +28,12 @@ On Windows:
 - make clean removes all compiled files (including the 
   shared libraries)
 
+Cross Compiling for Windows:
+Not yet but hopefully soon.
+
+Mac OSX:
+Not yet but hopefully soon.
+
 Bug Reports and Patch/Feature Suggestions:
 --------------
 We have a bug report system set up at http://bugs.rpg-x.net
@@ -35,6 +41,10 @@ If you see an error in the game, or if the game crashes,
 please let us know! Also if you fixed a bug in the code of 
 have coded a new feature feels free suggest us adding it
 there (please upload a *.diff file).
+
+Note:
+As the UberGames bug tracker is down right now use
+http://bugs.hennecke-online.net instead.
 
 
 Contact:
@@ -44,8 +54,11 @@ Come join our forum at http://forums.ubergames.net/
 
 Legal Notice:
 -------------
-All assets used in this file are copyrighted to the RPG-X Mod and/or their
-original creators. Any external use of these assets without explicit permission
-from their original creators is not allowed.
-The RPG-X Mod and its creators cannot be held accountable for any damage that
-may have been caused by playing the game.
+All assets used in this file and/or git repository are copyrighted
+to the UberGames and/or their original creators. Any external 
+use of these assets without explicit permission from their original 
+creators is not allowed. Feel free to use the source code included 
+in this file and/or git repository for your own mod as long as you
+give full credit to UberGames. The Ubergames and other conributers 
+to the RPG-X Mod cannot be held accountable for any damage that may 
+have been caused by playing the game.

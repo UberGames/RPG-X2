@@ -361,10 +361,8 @@ struct gentity_s {
 				//*core, // -->falsetarget
 				//*coreSwap; // -->bluename
 
-	#ifdef XTRA
 	char		*targetShaderName;		//!< shader to remap for shader remapping
 	char		*targetShaderNewName;	//!< shader to remap to for shader remapping
-	#endif
 
 	qboolean	tmpEntity;				//!< is this a temporal entity?
 #ifdef G_LUA
@@ -602,12 +600,10 @@ struct gclient_s {
 	qboolean	*universalTrans;*/
 	languageData_t *languages;
 
-	#ifdef XTRA
 	// for sql
 	char		*userName;						//!< username (not player name) in the sql database
 	int			uid;							//!< uiser id of the player in the sql database 
 	byte		sqlkey;							//!< random key used to make transmission of the username and password from the ui at least a bit safer
-	#endif
 
 	// CCAM
 	vec3_t		origViewAngles;
@@ -839,9 +835,8 @@ int G_GetEntityByTargetname(const char *targetname, gentity_t *entities[MAX_GENT
 int G_GetEntityByTarget(const char *target, gentity_t *entities[MAX_GENTITIES]);
 int G_GetEntityByBmodel(char *bmodel, gentity_t *entities[MAX_GENTITIES]);
 
-#ifdef XTRA
+/* shader remapping */
 void AddRemap(const char *oldShader, const char *newShader, float timeOffset);
-#endif
 
 //
 // g_combat.c
@@ -1546,7 +1541,7 @@ extern vmCvar_t rpg_server6;
 // SP level change
 extern vmCvar_t rpg_allowSPLevelChange;
 
-#ifdef XTRA
+/* TODO some can be removed */
 extern vmCvar_t sql_dbName;
 extern vmCvar_t sql_use;
 extern vmCvar_t sql_server;
@@ -1554,7 +1549,6 @@ extern vmCvar_t sql_user;
 extern vmCvar_t sql_password;
 extern vmCvar_t sql_port;
 extern vmCvar_t sql_hash;
-#endif
 
 // developer tools
 extern vmCvar_t	dev_showTriggers;
@@ -2036,12 +2030,10 @@ struct srvChangeData_s {
 	 char bspname[16][MAX_QPATH];
  };
 
-#ifdef XTRA
 /**
 *	Builds the config string for shader remapping.
 */
 const char *BuildShaderStateConfig(void);
-#endif
 
 typedef struct luaAlertState_s luaAlertState_t;
 struct luaAlertState_s {

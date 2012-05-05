@@ -340,12 +340,9 @@ static void CG_ConfigStringModified( void ) {
 		cgs.redflag = str[0] - '0';
 		cgs.blueflag = str[1] - '0';
 	}
-	#ifdef XTRA
 	else if(num == CS_SHADERSTATE) {
 		CG_ShaderStateChanged();
-	}
-	#endif
-		
+	}	
 }
 
 
@@ -618,7 +615,6 @@ char	*ConcatArgs2( int start ) {
 	return line;
 }
 
-#ifdef XTRA
 /*
 =====================
 CG_ShaderStateChanged
@@ -661,7 +657,6 @@ void CG_ShaderStateChanged(void) {
 		}
 	}
 }
-#endif
 
 
 /*
@@ -866,7 +861,7 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
-	#ifdef XTRA
+	/* shader remap */
 	if ( Q_stricmp (cmd, "remapShader") == 0 )
 	{
 		if (trap_Argc() == 4)
@@ -884,7 +879,6 @@ static void CG_ServerCommand( void ) {
 		
 		return;
 	}
-	#endif
 
 	if(!strcmp(cmd, "ui_transporter")) {
 		trap_SendConsoleCommand(va("ui_transporter %s", CG_Argv(1)));
@@ -906,12 +900,11 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
-	#ifdef XTRA
+	/* TODO remove me? */
 	if(!strcmp(cmd, "sqlkey")) {
 		trap_SendClientCommand(va("sqlkey %i", CG_Argv(1)));
 		return;
 	}
-	#endif
 
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }

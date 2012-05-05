@@ -2,8 +2,6 @@
 //
 // bg_public.h -- definitions shared by both the server game and client game modules
 
-// are we compiling for rpgxEF?
-#define XTRA 1
 // meh somehow preprocessor G_LUA won't work for me
 #define G_LUA 1
 #define CG_LUA 1
@@ -169,9 +167,8 @@ typedef enum
 #define CS_RED_GROUP		16		//!< used to send down what the group the red team is
 #define CS_BLUE_GROUP		17		//!< used to send down what the group the blue team is
 
-#ifdef XTRA
+/** shader remapping info */
 #define CS_SHADERSTATE		18
-#endif
 
 #define	CS_ITEMS			27		//!< string of 0's and 1's that tell which items are present
 //TiM: Ooooh! a gap between 27 + 32! Exploitationism!

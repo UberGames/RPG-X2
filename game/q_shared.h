@@ -53,16 +53,13 @@
 
  **********************************************************************/
 
-// use this to specify whether the code is compile for rpgxEF or not
-#define XTRA 1
 // meh somehow preprocessor G_LUA won't work for me
 #define G_LUA 1
 #define CG_LUA 1
 
 #ifdef Q3_VM
-
-#include "bg_lib.h"
-
+//#include "bg_lib.h"
+#error "Q3_VM detected: QVMs are no longer supported by RPG-X2
 #else
 
 #include <assert.h>
@@ -85,7 +82,8 @@
 
 // Needed for mods compiled in 64 bit shared objects.
 #ifdef Q3_VM
-	typedef int intptr_t;
+//	typedef int intptr_t;
+#error "Q3_VM detected: QVMs are no longer supported by RPG-X2
 #else
 	#ifdef _MSC_VER
 		#include <stddef.h>
@@ -906,13 +904,7 @@ typedef enum {
 //
 #define	MAX_CLIENTS			128		// absolute limit
 #define MAX_LOCATIONS		64
-
-#ifndef XTRA
-#define	GENTITYNUM_BITS		10		// don't need to send any more
-#else
-#define GENTITYNUM_BITS		11		// XTRA
-#endif
-
+#define GENTITYNUM_BITS		11		
 #define	MAX_GENTITIES		(1<<GENTITYNUM_BITS)
 
 // entitynums are communicated with GENTITY_BITS, so any reserved
@@ -922,12 +914,7 @@ typedef enum {
 #define	ENTITYNUM_WORLD		(MAX_GENTITIES-2)
 #define	ENTITYNUM_MAX_NORMAL	(MAX_GENTITIES-2)
 
-#ifndef XTRA
-#define MAX_MODELS_BITS		8
-#else
-#define MAX_MODELS_BITS		9	// XTRA
-#endif
-
+#define MAX_MODELS_BITS		9
 #define	MAX_MODELS			(1<<MAX_MODELS_BITS)		// these are sent over the net as 8 bits <--- who cares xD
 #define	MAX_SOUNDS			256		// so they cannot be blindly increased
 
@@ -935,11 +922,7 @@ typedef enum {
 #define MAX_TRIC_STRINGS	64
 #define	MAX_DECOYS			64 //128
 
-#ifndef XTRA
-#define		MAX_CONFIGSTRINGS	1024
-#else
 #define		MAX_CONFIGSTRINGS	4096
-#endif
 
 // these are the only configstrings that the system reserves, all the
 // other ones are strictly for servergame to clientgame communication
@@ -948,12 +931,7 @@ typedef enum {
 
 #define	RESERVED_CONFIGSTRINGS	2	// game can't modify below this, only the system can
 
-#ifndef XTRA
-#define		MAX_GAMESTATE_CHARS	16000
-#else
 #define		MAX_GAMESTATE_CHARS 64000
-#endif
-
 
 typedef struct {
 	int			stringOffsets[MAX_CONFIGSTRINGS];

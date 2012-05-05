@@ -2493,8 +2493,7 @@ void CG_InitLensFlare( vec3_t worldCoord,
 //TiM - Allow parts of the lerp code to update the 3rd view if need be
 void CG_ResetThirdPersonViewDamp ( void );
 
-#ifdef XTRA
+/* shader remapping */
 void trap_R_RemapShader( const char *oldShader, const char *newShader, const char *timeOffset );
 void CG_ShaderStateChanged(void);
 
-#endif
