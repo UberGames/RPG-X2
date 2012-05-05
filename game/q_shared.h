@@ -59,7 +59,7 @@
 
 #ifdef Q3_VM
 //#include "bg_lib.h"
-#error "Q3_VM detected: QVMs are no longer supported by RPG-X2
+#error "Q3_VM detected: QVMs are no longer supported by RPG-X2"
 #else
 
 #include <assert.h>
@@ -83,7 +83,7 @@
 // Needed for mods compiled in 64 bit shared objects.
 #ifdef Q3_VM
 //	typedef int intptr_t;
-#error "Q3_VM detected: QVMs are no longer supported by RPG-X2
+#error "Q3_VM detected: QVMs are no longer supported by RPG-X2"
 #else
 	#ifdef _MSC_VER
 		#include <stddef.h>

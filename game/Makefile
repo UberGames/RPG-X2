@@ -19,17 +19,15 @@ endif
 ifeq ($(PLATFORM), mingw32)
 EXT=dll
 ARCH=x86
-LIBEXPAT=../libs/win32/expat/libexpat.a
 else
 EXT=so
-LIBEXPAT=../libs/linux/$(ARCH)/libexpat.a
 endif
 
 # warning level
 ifeq ($(DEBUG), 1)
 WL=-Wall
 else
-WL=-Wall
+WL=-Wall -Wno-unused-but-set-variable
 endif
 
 #defines
@@ -147,7 +145,11 @@ else
 DO_SOCC = $(CC) $(SOCFLAGS) $(WL) $(DEFINES) -o $@ -c $<
 endif
 # do cc for lua
+ifeq ($(DEBUG), 1)
+DO_LUACC = $(CC) -O2 -Wall -g3 $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
+else
 DO_LUACC = $(CC) -O2 -Wall $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
+endif
 
 build_so: DO_CC=$(DO_SOCC)
 
@@ -250,9 +252,9 @@ lzio.o: lzio.c; $(DO_LUACC)
 
 build_so: $(OBJ) $(SOOBJ) $(LUAOBJ)
 ifeq ($(PLATFORM), mingw32)
-	$(CC) -shared $(WL),--export-all-symbols,-soname,qqgame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) $(LIBEXPAT) -lm
+	$(CC) -shared -Wl,--export-all-symbols,-soname,qqgame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) -lm
 else
-	$(CC) -shared $(WL),--export-dynamic,-soname,qagame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) $(LIBEXPAT) -lm
+	$(CC) -shared -Wl,--export-dynamic,-soname,qagame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) -lm
 endif
 	
 clean:

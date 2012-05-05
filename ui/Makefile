@@ -78,11 +78,13 @@ OBJDEP = \
 SOOBJ = \
   ui_syscalls.o 
 
+
+
 # do cc for shared libraries
 ifeq ($(DEBUG), 1)
 DO_SOCC = $(CC) $(SOCFLAGS) -Wall -g3 $(DEFINES) -o $@ -c $<
 else
-DO_SOCC = $(CC) $(SOCFLAGS) -Wall $(DEFINES) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) -Wall -Wno-unused-but-set-variable $(DEFINES) -o $@ -c $<
 endif
 
 build_so: DO_CC=$(DO_SOCC)

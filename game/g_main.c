@@ -346,7 +346,6 @@ vmCvar_t	sql_user;		//!< SQL user for sql_server (only mysql)
 vmCvar_t	sql_password;	//!< SQL password for sql_server (only mysql)
 vmCvar_t	sql_port;		//!< SQL port to use to connect to sql_server (only mysql)
 vmCvar_t	sql_hash;		//!< Specifies whether passwords should be hashed and what hash to use (only mysql)
-#endif
 
 // developer tools
 vmCvar_t	dev_showTriggers;
@@ -622,7 +621,6 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &sql_server, "sql_server", "", CVAR_ARCHIVE, 0, qfalse },
 	{ &sql_user, "sql_user", "rpgx", CVAR_ARCHIVE, 0, qfalse },
 	{ &sql_hash, "sql_hash", "0", CVAR_ARCHIVE, 0, qfalse }
-#endif
 
 #ifdef G_LUA
 	,
