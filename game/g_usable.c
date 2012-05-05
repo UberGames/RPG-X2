@@ -49,12 +49,14 @@ void func_usable_think( gentity_t *self )
 
 void func_usable_use (gentity_t *self, gentity_t *other, gentity_t *activator)
 {//Toggle on and off
+	#ifdef XTRA
 	//Remap shader
 	if(self->targetShaderName && self->targetShaderNewName) {
 		float f = level.time * 0.001;
 		AddRemap(self->targetShaderName, self->targetShaderNewName, f);
 		trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());
 	}
+	#endif
 
 
 	//RPG-X | GSIO01 | 09/05/2009:
@@ -308,6 +310,139 @@ G_LoadMapConfigurations
 *	\return sucessfully loaded?
 *	\author Ubergames - TiM
 */
+#ifdef Q3_VM
+qboolean G_SetupUsablesStrings( void )
+{
+	char			serverInfo[MAX_TOKEN_CHARS];
+	char			fileRoute[MAX_QPATH];
+	char			buffer[20000];
+	int				file_len;
+	char			*textPtr, *token;
+	fileHandle_t	f;
+	int				i, j;
+
+	level.hasScannableFile = qfalse;
+	level.hasEntScannableFile = qfalse;
+
+	//get the map name out of the server data
+	trap_GetServerinfo( serverInfo, sizeof( serverInfo ) );
+
+	//setup the file route
+	Com_sprintf( fileRoute, sizeof( fileRoute ), "maps/%s.usables", Info_ValueForKey( serverInfo, "mapname" ) );
+
+	file_len = trap_FS_FOpenFile( fileRoute, &f, FS_READ );
+
+	//It's assumed most maps won't have this feature, so just exit 'gracefully'
+	if ( file_len<=1 )
+	{
+		trap_FS_FCloseFile( f );
+		//G_Printf( S_COLOR_YELLOW "WARNING: No file named %s was found.\n", fileRoute );
+		return qfalse;
+	}
+
+	//fill the buffer with the file data
+	memset( &buffer, 0, sizeof( buffer ) );
+	trap_FS_Read( buffer, file_len, f );
+	buffer[file_len] = '0';
+
+	trap_FS_FCloseFile( f );
+	
+	if ( !buffer[0] )
+	{
+		G_Printf( S_COLOR_RED "ERROR: Attempted to load %s, but no data was inside!\n", fileRoute );
+		return qfalse;
+	}
+
+	G_Printf( "Usables file %s located. Proceeding to load scan data.\n", fileRoute );
+
+	COM_BeginParseSession();
+	textPtr = buffer;
+
+	i = 0;	//used for the main arrays indices
+
+	while( 1 )
+	{
+		token = COM_Parse( &textPtr );
+		if ( !token[0] )
+			break;
+
+		if ( !Q_strncmp( token, "UsableDescriptions", 18 ) )
+		{
+			token = COM_Parse( &textPtr );
+			if ( Q_strncmp( token, "{", 1 ) != 0 )
+			{
+				G_Printf( S_COLOR_RED "ERROR: UsableDescriptions had no opening brace ( { )!\n", fileRoute );
+				continue;
+			}
+
+			level.hasScannableFile = qtrue;
+
+			token = COM_Parse( &textPtr );
+
+			//expected format is 'id' <space> 'string'
+			while ( Q_strncmp( token, "}", 1 ) )
+			{
+				if ( !token[0] )
+					break;
+
+				if ( !Q_strncmp( token, "UsableEntities", 14 ) )
+				{
+					token = COM_Parse( &textPtr );
+					if ( Q_strncmp( token, "{", 1 ) )
+					{
+						G_Printf( S_COLOR_RED "ERROR: UsableEntities had no opening brace ( { )!\n", fileRoute );
+						continue;
+					}
+
+					level.hasEntScannableFile = qtrue;
+
+					token = COM_Parse( &textPtr );
+
+					j = 0;
+					while( Q_strncmp( token, "}", 1 ) )
+					{
+						if ( !token[0] )
+							break;
+
+						if ( token[0] != 'e' )
+						{
+							SkipRestOfLine( &textPtr );
+							continue;
+						}
+
+						token++; //skip the 'e'
+
+						level.g_entScannables[j][0] = atoi( token );
+						token = COM_ParseExt( &textPtr, qfalse );
+						level.g_entScannables[j][1] = atoi( token );
+
+						//there's no way clients are scannable in here, so just validate the entry b4 proceeding
+						if ( level.g_entScannables[j][0] > MAX_CLIENTS-1 && level.g_entScannables[j][1] > 0 )
+							j++;
+
+						token = COM_Parse( &textPtr );
+					}
+				}
+				else
+				{
+					level.g_scannables[i] = atoi( token );
+
+					//ensure a valid number was passed, else ignore it
+					if ( level.g_scannables[i] > 0 )
+						i++;
+
+					//we don't need the text on the server side
+					SkipRestOfLine( &textPtr );
+
+					token = COM_Parse( &textPtr );
+				}
+			}
+		}
+	}
+
+	return qtrue;
+}
+#else
 qboolean G_SetupUsablesStrings( void )
 {
 	char			*serverInfo;
@@ -453,5 +588,5 @@ qboolean G_SetupUsablesStrings( void )
 	free(buffer);
 	return qtrue;
 }
-
+#endif
 

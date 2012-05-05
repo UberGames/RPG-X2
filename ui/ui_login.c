@@ -5,7 +5,8 @@
 **********************************************************************/
 #include "ui_local.h"
 
-/* TODO remove me? */
+#ifdef XTRA
+
 static byte sqlkey;
 
 typedef struct {
@@ -137,3 +138,4 @@ void UI_LoginMenu(void) {
 	Menu_AdjustCursor(&s_login.menu, 1);
 }
 
+#endif //XTRA

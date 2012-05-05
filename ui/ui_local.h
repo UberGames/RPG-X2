@@ -1859,7 +1859,9 @@ extern void TransDataReceived(const char *data);
 //
 // ui_login.c
 //
+#ifdef XTRA
 extern void UI_LoginSetSqlkey(int key);
+#endif
 
 //
 // ui_demo2.c

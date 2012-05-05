@@ -773,6 +773,110 @@ given a race name, go find all the skins that use it, and randomly select one
 /**
 *	given a race name, go find all the skins that use it, and randomly select one
 */
+#ifdef Q3_VM
+void randomSkin(const char* race, char* model, int current_team, int clientNum)
+{
+	char	skinsForRace[MAX_SKINS_FOR_RACE][128];
+	int		howManySkins = 0;
+	int		i,x;
+	int		temp;
+	int		skin_count_check;
+	char	skinNamesAlreadyUsed[16][128];
+	int		current_skin_count = 0;
+	gentity_t	*ent = NULL;
+	char	userinfo[MAX_INFO_STRING];
+	char	temp_model[MAX_QPATH];
+
+	memset(skinsForRace, 0, sizeof(skinsForRace));
+	memset(skinNamesAlreadyUsed, 0, sizeof(skinNamesAlreadyUsed));
+
+	// first up, check to see if we want to select a skin from someone that's already playing on this guys team
+	skin_count_check = g_random_skin_limit.integer;
+	if (skin_count_check)
+	{
+		// sanity check the skins to compare against count
+		if (skin_count_check > 16)
+		{
+			skin_count_check = 16;
+		}
+
+		// now construct an array of the names already used
+		for (i=0; i<g_maxclients.integer; i++)
+		{
+			// did we find enough skins to grab a random one from yet?
+			if (current_skin_count == skin_count_check)
+			{
+				break;
+			}
+
+			ent = g_entities + i;
+			if (!ent->inuse || i == clientNum)
+				continue;
+
+			// no, so look at the next one, and see if it's in the list we are constructing
+			// same team?
+			if 	(ent->client && ent->client->sess.sessionTeam == current_team)
+			{
+				// so what's this clients model then?
+				trap_GetUserinfo( i, userinfo, sizeof( userinfo ) );
+				Q_strncpyz( temp_model, Info_ValueForKey (userinfo, "model"), sizeof( temp_model ) );
+
+				// check the name
+				for (x = 0; x< current_skin_count; x++)
+				{
+					// are we the same?
+					if (!Q_stricmp(skinNamesAlreadyUsed[x], temp_model))
+					{
+						// yeah - ok we already got this one
+						break;
+					}
+				}
+
+				// ok, did we match anything?
+				if (x == current_skin_count)
+				{
+					// no - better add this name in
+					Q_strncpyz(skinNamesAlreadyUsed[current_skin_count], temp_model, sizeof(skinNamesAlreadyUsed[current_skin_count]));
+					current_skin_count++;
+				}
+			}
+		}
+
+		// ok, array constructed. Did we get enough?
+		if (current_skin_count >= skin_count_check)
+		{
+			// yeah, we did - so select a skin from one of these then
+			temp = rand() % current_skin_count;
+			Q_strncpyz( model, skinNamesAlreadyUsed[temp], MAX_QPATH );
+			ForceClientSkin(model, "");
+			return;
+		}
+	}
+
+	// search through each and every skin we can find
+	for (i=0; i<group_count && howManySkins < MAX_SKINS_FOR_RACE; i++)
+	{
+
+		// if this models race list contains the race we want, then add it to the list
+		if (legalSkin(group_list[i].text, race))
+		{
+			Q_strncpyz( skinsForRace[howManySkins++], group_list[i].name , 128 );
+		}
+	}
+
+	// set model to a random one
+	if (howManySkins)
+	{
+		temp = rand() % howManySkins;
+		Q_strncpyz( model, skinsForRace[temp], MAX_QPATH );
+	}
+	else
+	{
+		model[0] = 0;
+	}
+
+}
+#else
 void randomSkin(const char* race, char* model, int current_team, int clientNum)
 {
 	char	**skinsForRace;
@@ -898,6 +1002,7 @@ void randomSkin(const char* race, char* model, int current_team, int clientNum)
 	free(skinNamesAlreadyUsed);
 
 }
+#endif
 
 /*
 ===========
@@ -1845,12 +1950,13 @@ void ClientBegin( int clientNum, qboolean careAboutWarmup, qboolean isBot, qbool
       
     }
 
-	/* TODO remove me? */
+	#ifdef XTRA
 	if(sql_use.integer) {
 		int key = (byte)irandom(4096, 65535);
 		ent->client->sqlkey = (byte)key;
 		trap_SendServerCommand(ent-g_entities, va("sqlkey \"%i\"", key));
 	}
+	#endif
 }
 
 // WEAPONS - PHENIX1

@@ -183,8 +183,9 @@ void SP_target_warp(gentity_t *ent); //RPG-X | GSIO01 | 19/05/2009
 void SP_target_deactivate(gentity_t *ent);
 void SP_target_serverchange(gentity_t *ent);
 void SP_target_levelchange(gentity_t *ent);
-/* shader remap */
+#ifdef XTRA
 void SP_target_shaderremap(gentity_t *ent);
+#endif
 
 void SP_light (gentity_t *self);
 void SP_info_null (gentity_t *self);
@@ -387,8 +388,9 @@ spawn_t	spawns[] = {
 	{"target_deactivate",			SP_target_deactivate},
 	{"target_serverchange",			SP_target_serverchange},
 	{"target_levelchange",			SP_target_levelchange},
-	/* shader remap */
+	#ifdef XTRA
 	{"target_shaderremap",			SP_target_shaderremap},
+	#endif
 
 	{"light",						SP_light},
 	{"path_corner",					SP_path_corner},

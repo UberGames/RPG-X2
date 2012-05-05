@@ -338,7 +338,7 @@ vmCvar_t	rpg_server6;
 //! Allow target_levelchange to change the current level?
 vmCvar_t	rpg_allowSPLevelChange;
 
-/* TODO some can be removed */
+#ifdef XTRA
 vmCvar_t	sql_dbName;		//!< Name of the SQL Database
 vmCvar_t	sql_use;		//!< Use SQL? 1 = mysql, 2 = sqlite
 vmCvar_t	sql_server;		//!< SQL server to connect to (only mysql)
@@ -346,6 +346,7 @@ vmCvar_t	sql_user;		//!< SQL user for sql_server (only mysql)
 vmCvar_t	sql_password;	//!< SQL password for sql_server (only mysql)
 vmCvar_t	sql_port;		//!< SQL port to use to connect to sql_server (only mysql)
 vmCvar_t	sql_hash;		//!< Specifies whether passwords should be hashed and what hash to use (only mysql)
+#endif
 
 // developer tools
 vmCvar_t	dev_showTriggers;
@@ -612,7 +613,7 @@ static cvarTable_t		gameCvarTable[] = {
 	
 	{ &dev_showTriggers, "dev_showTriggers", "0", CVAR_ARCHIVE, 0, qfalse }
 
-/* TODO some can be removed */
+#ifdef XTRA
 	,
 	{ &sql_dbName, "sql_dbName", "rpgx", CVAR_ARCHIVE, 0, qfalse },
 	{ &sql_use, "sql_use", "0", CVAR_ARCHIVE, 0, qfalse },
@@ -621,6 +622,7 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &sql_server, "sql_server", "", CVAR_ARCHIVE, 0, qfalse },
 	{ &sql_user, "sql_user", "rpgx", CVAR_ARCHIVE, 0, qfalse },
 	{ &sql_hash, "sql_hash", "0", CVAR_ARCHIVE, 0, qfalse }
+#endif
 
 #ifdef G_LUA
 	,
@@ -786,6 +788,270 @@ and parses the class data
 for utilization on the server
 and transfer to clients
 **************************/
+#ifdef Q3_VM
+static qboolean G_LoadClassData( char* fileName )
+{
+	char			buffer[32000];
+	char			*textPtr, *token;
+	int				fileLen;
+	fileHandle_t	f;
+	qboolean		classValid=qfalse;
+	int				classIndex=0;
+	int				weapon;
+	int				i;
+
+	//Init the storage place
+	memset( &g_classData, 0, sizeof ( g_classData ) );
+	
+	fileLen = trap_FS_FOpenFile( fileName, &f, FS_READ );
+
+	if ( !f ) {
+		G_Printf( S_COLOR_RED "ERROR: File %s not found.\n", fileName );
+		return qfalse;
+	}
+
+	if ( fileLen >= sizeof( buffer ) ) {
+		G_Printf( S_COLOR_RED "ERROR: File %s was way too big.\n", fileName );
+		trap_FS_FCloseFile( f );
+		return qfalse;
+	}
+
+	trap_FS_Read( buffer, fileLen, f );
+	buffer[fileLen] = 0;
+	trap_FS_FCloseFile( f );
+
+	COM_BeginParseSession();
+
+	textPtr = buffer;
+
+	token = COM_Parse( &textPtr );
+
+	if ( !token[0] ) {
+		G_Printf( S_COLOR_RED "ERROR: No data was found when going to parse the file!\n" );
+		return qfalse;
+	}
+
+	if ( Q_stricmpn( token, "{", 1 ) ) {
+		G_Printf( S_COLOR_RED "ERROR: File did not start with a '{' symbol!\n" );
+		return qfalse;
+	}
+
+	while ( 1 ) 
+	{
+		if ( classIndex >= MAX_CLASSES )
+			break;
+
+		if ( !Q_stricmpn( token, "{", 1 ) ) 
+		{
+			while ( 1 ) 
+			{
+				token = COM_Parse( &textPtr );
+				if (!token[0]) {
+					break;
+				}				
+
+				if ( !Q_stricmpn( token, "consoleName", 11 ) )
+				{
+					if ( COM_ParseString( &textPtr, &token ) ) 
+					{
+						G_Printf( S_COLOR_RED "ERROR: Invalid class console name in class index: %i.\n", classIndex );
+						SkipBracedSection( &textPtr );
+						continue;
+					}
+
+					Q_strncpyz( g_classData[classIndex].consoleName, token, sizeof( g_classData[classIndex].consoleName ) );
+					classValid = qtrue;
+					
+					//G_Printf( S_COLOR_RED "%s\n", g_classData[classIndex].consoleName );
+
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "formalName", 11 ) )
+				{
+					if ( COM_ParseString( &textPtr, &token ) ) 
+					{
+						G_Printf( S_COLOR_RED "ERROR: Invalid class formal name in class index: %i.\n", classIndex );
+						SkipBracedSection( &textPtr );
+						continue;
+					}
+
+					Q_strncpyz( g_classData[classIndex].formalName, token, sizeof( g_classData[classIndex].formalName ) );
+					classValid = qtrue;
+					
+					//G_Printf( S_COLOR_RED "%s\n", g_classData[classIndex].consoleName );
+
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "message", 7 ) ) 
+				{
+					if ( COM_ParseString( &textPtr, &token ) ) 
+					{
+						G_Printf( S_COLOR_RED "ERROR: Invalid class message in class index: %i.\n", classIndex );
+						continue;
+					}
+
+					Q_strncpyz( g_classData[classIndex].message, token, sizeof( g_classData[classIndex].message ) );
+					continue;					
+				}
+
+				if ( !Q_stricmpn( token, "modelSkin", 9 ) ) 
+				{
+					if ( COM_ParseString( &textPtr, &token ) ) 
+					{
+						G_Printf( S_COLOR_RED "ERROR: Invalid class skin color in class index: %i.\n", classIndex );
+						continue;
+					}
+
+					Q_strncpyz( g_classData[classIndex].modelSkin, token, sizeof( g_classData[classIndex].modelSkin ) );
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "weapons", 7) ) 
+				{
+					token = COM_Parse( &textPtr );
+
+					if ( Q_stricmpn( token, "{", 1 ) ) 
+					{
+						G_Printf( S_COLOR_RED "No opening bracket found for weapons field in class: %i.\n", classIndex );
+						SkipRestOfLine( &textPtr );
+						continue;
+					}
+
+					//sub loop
+					while ( 1 ) 
+					{
+						token = COM_Parse( &textPtr );
+
+						if ( !token[0] )
+							break;
+						
+						if ( !Q_stricmpn( token, "|", 1 ) )
+							continue;
+
+						if ( !Q_stricmpn( token, "}", 1 ) )
+							break;
+
+						if( !Q_stricmpn( token, "WP_", 3 ) ) 
+						{
+							weapon = GetIDForString( WeaponTable, token );
+
+							if ( weapon >= 0 ) 
+							{
+								g_classData[classIndex].weaponsFlags |= ( 1 << weapon );
+								continue;
+							}
+						}
+					}
+
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "admin", 5 ) ) 
+				{
+					if ( COM_ParseInt( &textPtr, &g_classData[classIndex].isAdmin ) ) 
+					{
+						G_Printf( S_COLOR_RED "ERROR: Class admin check for class %i was invalid.\n", classIndex );
+						continue;
+					}
+
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "marine", 6 ) ) 
+				{
+					if ( COM_ParseInt( &textPtr, &g_classData[classIndex].isMarine ) ) 
+					{
+						G_Printf( S_COLOR_RED "ERROR: Class marine check for class %i was invalid.\n", classIndex );
+						continue;
+					}
+
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "medical", 7 ) ) 
+				{
+					if ( COM_ParseInt( &textPtr, &g_classData[classIndex].isMedical ) ) 
+					{
+						G_Printf( S_COLOR_RED "ERROR: Class medic check for class %i was invalid.\n", classIndex );
+						continue;
+					}
+
+					continue;
+				}
+
+				if( !Q_stricmpn( token, "isBorg", 6 ) )
+				{
+					if( COM_ParseInt( &textPtr, &g_classData[classIndex].isBorg ) )
+					{
+						G_Printf( S_COLOR_RED "ERROR: Class borg check for class %i was invalid.\n", classIndex );
+						continue;
+					}
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "n00b", 4 ) ) 
+				{
+					if ( COM_ParseInt( &textPtr, &g_classData[classIndex].isn00b ) ) 
+					{
+						G_Printf( S_COLOR_RED "ERROR: Class n00b check for class %i was invalid.\n", classIndex );
+						continue;
+					}
+
+					continue;
+				}
+
+				//skip the client-side specific entries since they interfere with the parsing
+				if ( !Q_stricmpn( token, "radarColor", 10 ) 
+					|| !Q_stricmpn( token, "iconColor", 9 ) 
+					|| !Q_stricmpn( token, "hasRanks", 8 ) 
+					|| !Q_stricmpn( token, "noShow", 6 )
+					)
+				{
+					SkipRestOfLine( &textPtr );
+					continue;
+				}
+
+				if ( !Q_stricmpn( token, "}", 1 ) ) 
+				{
+					break;
+				}
+			}
+
+			
+			if ( classValid ) 
+			{
+				classIndex++;
+				classValid = qfalse;
+			}
+		}
+		
+		token = COM_Parse( &textPtr );	
+		if (!token[0]) 
+		{
+			break;
+		}
+	}
+
+	//build ourselves custom CVARs for each class
+	for ( i=0; g_classData[i].consoleName[0] && i < MAX_CLASSES; i++ ) 
+	{
+		trap_Cvar_Register( NULL, va("rpg_%sPass", g_classData[i].consoleName ), g_classData[i].consoleName, CVAR_ARCHIVE );
+		trap_Cvar_Register( NULL, va("rpg_%sFlags", g_classData[i].consoleName ), va("%i", g_classData[i].weaponsFlags), CVAR_ARCHIVE );
+	}
+
+	if ( classIndex > 0 ) 
+	{
+		return qtrue;
+	}
+	else 
+	{
+		G_Printf( S_COLOR_RED "ERROR: No valid classes were found.\n");
+		return qfalse;
+	}
+}
+#else
 static qboolean G_LoadClassData( char* fileName )
 {
 	char			*buffer;
@@ -1060,12 +1326,137 @@ static qboolean G_LoadClassData( char* fileName )
 		return qfalse;
 	}
 }
+#endif
 
 void BG_LanguageFilename(char *baseName,char *baseExtension,char *finalName);
 void SP_target_location (gentity_t *ent);
 
 holoData_t holoData;
 
+#ifdef Q3_VM
+void G_LoadHolodeckFile(void) {
+	char			fileRoute[MAX_QPATH];
+	char			mapRoute[MAX_QPATH];
+	char			info[MAX_INFO_STRING];
+	fileHandle_t	f;
+	char			buffer[20000];
+	int				file_len;
+	char			*txtPtr, *token;
+	int				numProgs = 0;
+	int				i;
+
+	//get the map name out of the server data
+	trap_GetServerinfo( info, sizeof( info ) );
+
+	//setup the file route
+	Com_sprintf( mapRoute, sizeof( mapRoute ), "maps/%s", Info_ValueForKey( info, "mapname" ) );
+
+	BG_LanguageFilename( mapRoute, "holodeck", fileRoute );
+
+	file_len = trap_FS_FOpenFile( fileRoute, &f, FS_READ );
+
+	if ( !file_len )
+		return;
+
+	memset( buffer, 0, sizeof(buffer) );
+
+	trap_FS_Read( buffer, file_len, f );
+	if ( !buffer[0] )
+	{
+		G_Printf( S_COLOR_RED "ERROR: Couldn't read in file: %s!\n", fileRoute );
+		trap_FS_FCloseFile( f );
+		return;
+	}
+
+	buffer[file_len] = '\0';
+	trap_FS_FCloseFile( f );
+
+	COM_BeginParseSession();
+	txtPtr = buffer;
+
+	while(1) {
+		token = COM_Parse(&txtPtr);
+		if(!token[0]) break;
+
+		if(!Q_stricmpn(token, "HolodeckData", 12)) {
+			token = COM_Parse(&txtPtr);
+			if(Q_stricmpn(token, "{", 1)) {
+				G_Printf( S_COLOR_RED "ERROR: HolodeckData had no opening brace ( { )!\n");
+				continue;
+			}
+			while(Q_stricmpn(token, "}", 1)) {
+				token = COM_Parse(&txtPtr);
+				if(!token[0]) break;
+
+				if(!Q_stricmpn(token, "Program", 7)) {
+					token = COM_Parse(&txtPtr);
+					if(Q_stricmpn(token, "[", 1)) {
+						G_Printf( S_COLOR_RED "ERROR: Program had no opening brace ( [ )!\n");
+						continue;
+					}
+
+					// expected format:
+					// <string> - target notnull
+					// <string> - name
+					// <string> - desc1
+					// <string> - desc2
+					// <string> - image
+					// <string> - iTrigger
+					// <string> - dTrigger
+					while(Q_stricmpn(token, "]", 1)) {
+						if(!token[0]) break;
+
+						if(numProgs >= 5) return;
+
+						// targetname of info_notnull
+						token = COM_Parse(&txtPtr);
+						Q_strncpyz(holoData.target[numProgs], token, sizeof(holoData.target[numProgs]));
+
+						// parse name
+						token = COM_Parse(&txtPtr);
+						Q_strncpyz(holoData.name[numProgs], token, sizeof(holoData.name[numProgs]));
+
+						// parse desc1
+						token = COM_Parse(&txtPtr);
+						Q_strncpyz(holoData.desc1[numProgs], token, sizeof(holoData.desc1[numProgs]));
+
+						// parse desc2
+						token = COM_Parse(&txtPtr);
+						Q_strncpyz(holoData.desc2[numProgs], token, sizeof(holoData.desc2[numProgs]));
+
+						// parse image
+						token = COM_Parse(&txtPtr);
+						Q_strncpyz(holoData.image[numProgs], token, sizeof(holoData.image[numProgs]));
+
+						// parse iTrigger
+						token = COM_Parse(&txtPtr);
+						Q_strncpyz(holoData.iTrigger[numProgs+1], token, sizeof(holoData.iTrigger[numProgs+1]));
+
+						// parse dTrigger
+						token = COM_Parse(&txtPtr);
+						Q_strncpyz(holoData.dTrigger[numProgs+1], token, sizeof(holoData.dTrigger[numProgs+1]));
+
+						holoData.active = -1;
+
+						numProgs++;
+
+						token = COM_Parse(&txtPtr);
+					}
+				}
+			}
+		}
+	}
+
+	for(i = 0; i < MAX_GENTITIES; i++)
+		if(!strcmp("target_holodeck", &g_entities[i]->classname)) {
+			strcpy(holoData.iTrigger[0], &g_entities[i]->target);
+			strcpy(holoData.dTrigger[0], &g_entities[i]->redsound);
+			break;
+		}
+
+	holoData.numProgs = numProgs;
+}
+#else
 void G_LoadHolodeckFile(void) {
 	char			fileRoute[MAX_QPATH];
 	char			mapRoute[MAX_QPATH];
@@ -1191,9 +1582,107 @@ void G_LoadHolodeckFile(void) {
 
 	free(buffer);
 }
+#endif
 
 srvChangeData_t srvChangeData;
 
+#ifdef Q3_VM
+static void G_LoadServerChangeFile(void) {
+	char			fileRoute[MAX_QPATH];
+	//char			mapRoute[MAX_QPATH];
+	char			infoString[MAX_INFO_STRING];
+	fileHandle_t	f;
+	char			buffer[20000];
+	int				file_len;
+	char			*txtPtr, *token;
+	char			*temp;
+	int				cnt = 0;
+	int				i = 0;
+
+	BG_LanguageFilename("serverchange", "cfg", fileRoute);
+
+	file_len = trap_FS_FOpenFile(fileRoute, &f, FS_READ);
+
+	if(!file_len) 
+		return;
+
+	memset(buffer, 0, sizeof(buffer));
+	memset(infoString, 0, sizeof(infoString));
+
+	trap_FS_Read(buffer, file_len, f);
+	if ( !buffer[0] )
+	{
+		G_Printf( S_COLOR_RED "ERROR: Couldn't read in file: %s!\n", fileRoute );
+		trap_FS_FCloseFile( f );
+		return;
+	}
+
+	buffer[file_len] = '\0';
+	trap_FS_FCloseFile(f);
+
+	COM_BeginParseSession();
+	txtPtr = buffer;
+
+	while(1) {
+		token = COM_Parse(&txtPtr);
+		if(!token[0]) break;
+
+		if(!Q_stricmp(token, "ServerChangeConfig")) {
+			token = COM_Parse( &txtPtr );
+			if ( Q_strncmp( token, "{", 1 ) != 0 )
+			{
+				G_Printf( S_COLOR_RED "ERROR: ServerChangeConfig had no opening brace ( { )!\n" );
+				continue;
+			}
+			
+			while(Q_strncmp(token, "}", 1)) {
+				token = COM_Parse(&txtPtr);
+				if(!token[0]) break;
+
+				if(!Q_stricmp(token, "Server")) {
+					token = COM_Parse(&txtPtr);
+					if ( Q_strncmp( token, "[", 1 ) != 0 )
+					{
+						G_Printf( S_COLOR_RED "ERROR: Server had no opening brace ( [ )!\n" );
+						continue;
+					}
+
+					token = COM_Parse(&txtPtr);
+					while(Q_strncmp(token, "]", 1)) {
+						if(!token[0]) break;
+
+						if(cnt > 12) break;
+
+						temp = G_NewString(token);
+
+						/*if(!infoString[0])
+							Com_sprintf(infoString, sizeof(infoString), "i%i\\%s\\", cnt, temp);
+						else {
+							if(cnt % 2 == 0)
+								Com_sprintf(infoString, sizeof(infoString), "%si%i\\%s\\", infoString, i, temp);
+							else
+								Com_sprintf(infoString, sizeof(infoString), "%sd%i\\%s\\", infoString, i, temp);
+						}*/
+
+						if(cnt % 2 == 0)
+							Q_strncpyz(srvChangeData.ip[i], token, sizeof(srvChangeData.ip[i]));
+						else
+							Q_strncpyz(srvChangeData.name[i], token, sizeof(srvChangeData.name[i]));
+
+						cnt++;
+						if(cnt % 2 == 0)
+							i++;
+
+						token = COM_Parse(&txtPtr);
+					}
+				}
+			}
+		}
+	}
+
+	//trap_SetConfigstring(CS_SERVERCHANGE, infoString);
+}
+#else
 static void G_LoadServerChangeFile(void) {
 	char			fileRoute[MAX_QPATH];
 	//char			mapRoute[MAX_QPATH];
@@ -1296,9 +1785,107 @@ static void G_LoadServerChangeFile(void) {
 	free(buffer);
 	//trap_SetConfigstring(CS_SERVERCHANGE, infoString);
 }
+#endif
 
 mapChangeData_t mapChangeData;
 
+#ifdef Q3_VM
+static void G_LoadMapChangeFile(void) {
+	char			fileRoute[MAX_QPATH];
+	//char			mapRoute[MAX_QPATH];
+	char			infoString[MAX_INFO_STRING];
+	fileHandle_t	f;
+	char			buffer[20000];
+	int				file_len;
+	char			*txtPtr, *token;
+	char			*temp;
+	int				cnt = 0;
+	int				i = 0;
+
+	BG_LanguageFilename("mapchange", "cfg", fileRoute);
+
+	file_len = trap_FS_FOpenFile(fileRoute, &f, FS_READ);
+
+	if(!file_len) 
+		return;
+
+	memset(buffer, 0, sizeof(buffer));
+	memset(infoString, 0, sizeof(infoString));
+
+	trap_FS_Read(buffer, file_len, f);
+	if ( !buffer[0] )
+	{
+		G_Printf( S_COLOR_RED "ERROR: Couldn't read in file: %s!\n", fileRoute );
+		trap_FS_FCloseFile( f );
+		return;
+	}
+
+	buffer[file_len] = '\0';
+	trap_FS_FCloseFile(f);
+
+	COM_BeginParseSession();
+	txtPtr = buffer;
+
+	while(1) {
+		token = COM_Parse(&txtPtr);
+		if(!token[0]) break;
+
+		if(!Q_stricmp(token, "MapChangeConfig")) {
+			token = COM_Parse( &txtPtr );
+			if ( Q_strncmp( token, "{", 1 ) != 0 )
+			{
+				G_Printf( S_COLOR_RED "ERROR: MapChangeConfig had no opening brace ( { )!\n" );
+				continue;
+			}
+			
+			while(Q_strncmp(token, "}", 1)) {
+				token = COM_Parse(&txtPtr);
+				if(!token[0]) break;
+
+				if(!Q_stricmp(token, "Map")) {
+					token = COM_Parse(&txtPtr);
+					if ( Q_strncmp( token, "[", 1 ) != 0 )
+					{
+						G_Printf( S_COLOR_RED "ERROR: Server had no opening brace ( [ )!\n" );
+						continue;
+					}
+
+					token = COM_Parse(&txtPtr);
+					while(Q_strncmp(token, "]", 1)) {
+						if(!token[0]) break;
+
+						if(cnt > 12) break;
+
+						temp = G_NewString(token);
+
+						/*if(!infoString[0])
+							Com_sprintf(infoString, sizeof(infoString), "i%i\\%s\\", cnt, temp);
+						else {
+							if(cnt % 2 == 0)
+								Com_sprintf(infoString, sizeof(infoString), "%si%i\\%s\\", infoString, i, temp);
+							else
+								Com_sprintf(infoString, sizeof(infoString), "%sd%i\\%s\\", infoString, i, temp);
+						}*/
+
+						if(cnt % 2 == 0)
+							Q_strncpyz(mapChangeData.name[i], token, sizeof(mapChangeData.name[i]));
+						else
+							Q_strncpyz(mapChangeData.bspname[i], token, sizeof(mapChangeData.bspname[i]));
+
+						cnt++;
+						if(cnt % 2 == 0)
+							i++;
+
+						token = COM_Parse(&txtPtr);
+					}
+				}
+			}
+		}
+	}
+
+	//trap_SetConfigstring(CS_SERVERCHANGE, infoString);
+}
+#else
 static void G_LoadMapChangeFile(void) {
 	char			fileRoute[MAX_QPATH];
 	//char			mapRoute[MAX_QPATH];
@@ -1401,7 +1988,213 @@ static void G_LoadMapChangeFile(void) {
 	free(buffer);
 	//trap_SetConfigstring(CS_SERVERCHANGE, infoString);
 }
+#endif
 
+#ifdef Q3_VM
+static void G_LoadLocationsFile( void )
+{
+	char			fileRoute[MAX_QPATH];
+	char			mapRoute[MAX_QPATH];
+	char			serverInfo[MAX_TOKEN_CHARS];
+	fileHandle_t	f;
+	char			buffer[20000];
+	int				file_len;
+	char			*textPtr, *token;
+	vec3_t			origin, angles;
+	gentity_t		*ent;
+	char			*desc;
+	int				rest;
+
+	//get the map name out of the server data
+	trap_GetServerinfo( serverInfo, sizeof( serverInfo ) );
+
+	//setup the file route
+	Com_sprintf( mapRoute, sizeof( mapRoute ), "maps/%s", Info_ValueForKey( serverInfo, "mapname" ) );
+
+	BG_LanguageFilename( mapRoute, "locations", fileRoute );
+
+	file_len = trap_FS_FOpenFile( fileRoute, &f, FS_READ );
+
+	if ( !file_len )
+		return;
+
+	memset( buffer, 0, sizeof(buffer) );
+
+	trap_FS_Read( buffer, file_len, f );
+	if ( !buffer[0] )
+	{
+		G_Printf( S_COLOR_RED "ERROR: Couldn't read in file: %s!\n", fileRoute );
+		trap_FS_FCloseFile( f );
+		return;
+	}
+
+	buffer[file_len] = '\0';
+	trap_FS_FCloseFile( f );
+	
+	G_Printf( "Locations file %s located. Proceeding to load scan data.\n", fileRoute ); //GSIO01: why did this say "Usables file ..."? lol
+
+	COM_BeginParseSession();
+	textPtr = buffer;
+
+	while( 1 )
+	{
+		token = COM_Parse( &textPtr );
+		if ( !token[0] )
+			break;
+
+		if(!Q_strncmp( token, "LocationsList2", 19 )) { // new style locations list with restricted locations
+			token = COM_Parse( &textPtr );
+			if ( Q_strncmp( token, "{", 1 ) != 0 )
+			{
+				G_Printf( S_COLOR_RED "ERROR: LocationsList2 had no opening brace ( { )!\n", fileRoute );
+				continue;
+			}
+
+			//expected format is "<origin> <angle> <int> <string>"
+			while ( Q_strncmp( token, "}", 1 ) )
+			{
+				if ( !token[0] )
+					break;
+
+				//Parse origin
+				if ( COM_ParseVec3( &textPtr, origin ) )
+				{
+					G_Printf( S_COLOR_RED "Invalid origin entry in %s!\n", fileRoute );
+					return;
+				}
+
+				//Parse angles
+				if ( COM_ParseVec3( &textPtr, angles ) )
+				{
+					G_Printf( S_COLOR_RED "Invalid origin entry in %s!\n", fileRoute );
+					return;
+				}
+
+				//Pars restriction value
+				if( COM_ParseInt( &textPtr, &rest ) )
+				{
+					G_Printf( S_COLOR_RED "Invalid restriction entry in %s!\n", fileRoute );
+					return;
+				}
+
+				//Parse Location string
+				token = COM_ParseExt( &textPtr, qfalse );
+				if ( !token[0] )
+				{
+					G_Printf( S_COLOR_RED "Invalid string desc entry in %s!\n", fileRoute );
+					return;
+				}
+
+				desc = token;
+
+				//create a new entity
+				ent = G_Spawn();
+				if ( !ent )
+				{
+					G_Printf( S_COLOR_RED "Couldn't create entity in %s!\n", fileRoute );
+					return;
+				}
+
+				ent->classname = "target_location";
+
+				//copy position data
+				VectorCopy( origin, ent->s.origin );
+				VectorCopy( angles, ent->s.angles );
+
+				//copy string
+				ent->message = G_NewString( desc );
+
+				//copy desc into target as well
+				ent->target = ent->targetname = G_NewString( desc );
+
+				// copy restriction value
+				ent->sound1to2 = rest;
+
+				//G_Printf( S_COLOR_RED "Added string %s to entity %i.\n", ent->message, (int)(ent-g_entities) );
+
+				//initiate it as a location ent
+				SP_target_location( ent );
+
+				//reset the ent
+				ent = NULL;
+
+				//--
+				token = COM_Parse( &textPtr );
+			}
+		} else if ( !Q_strncmp( token, "LocationsList", 18 ) ) // old stly locations file
+		{
+			token = COM_Parse( &textPtr );
+			if ( Q_strncmp( token, "{", 1 ) != 0 )
+			{
+				G_Printf( S_COLOR_RED "ERROR: LocationsList had no opening brace ( { )!\n", fileRoute );
+				continue;
+			}
+
+			//expected format is "<origin> <angle> <string>"
+			while ( Q_strncmp( token, "}", 1 ) )
+			{
+				if ( !token[0] )
+					break;
+
+				//Parse origin
+				if ( COM_ParseVec3( &textPtr, origin ) )
+				{
+					G_Printf( S_COLOR_RED "Invalid origin entry in %s!\n", fileRoute );
+					return;
+				}
+
+				//Parse angles
+				if ( COM_ParseVec3( &textPtr, angles ) )
+				{
+					G_Printf( S_COLOR_RED "Invalid origin entry in %s!\n", fileRoute );
+					return;
+				}
+
+				//Parse Location string
+				token = COM_ParseExt( &textPtr, qfalse );
+				if ( !token[0] )
+				{
+					G_Printf( S_COLOR_RED "Invalid string desc entry in %s!\n", fileRoute );
+					return;
+				}
+
+				desc = token;
+
+				//create a new entity
+				ent = G_Spawn();
+				if ( !ent )
+				{
+					G_Printf( S_COLOR_RED "Couldn't create entity in %s!\n", fileRoute );
+					return;
+				}
+
+				ent->classname = "target_location";
+
+				//copy position data
+				VectorCopy( origin, ent->s.origin );
+				VectorCopy( angles, ent->s.angles );
+
+				//copy string
+				ent->message = G_NewString( desc );
+
+				//copy desc into target as well
+				ent->target = ent->targetname = G_NewString( desc );
+
+				//G_Printf( S_COLOR_RED "Added string %s to entity %i.\n", ent->message, (int)(ent-g_entities) );
+
+				//initiate it as a location ent
+				SP_target_location( ent );
+
+				//reset the ent
+				ent = NULL;
+
+				//--
+				token = COM_Parse( &textPtr );
+			}
+		}
+	} 
+}
+#else
 static void G_LoadLocationsFile( void )
 {
 	char			fileRoute[MAX_QPATH];
@@ -1630,6 +2423,7 @@ static void G_LoadLocationsFile( void )
 
 	free(buffer);
 }
+#endif
 
 /*void G_initGroupsList(void)
 {

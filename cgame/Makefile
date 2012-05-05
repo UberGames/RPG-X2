@@ -116,14 +116,10 @@ LUAOBJ = \
 ifeq ($(DEBUG), 1)
 DO_SOCC = $(CC) $(SOCFLAGS) -Wall -g3 $(DEFINES) -o $@ -c $<
 else
-DO_SOCC = $(CC) $(SOCFLAGS) -Wall -Wno-unused-but-set-variable $(DEFINES) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) -Wall $(DEFINES) -o $@ -c $<
 endif
 # do cc for lua
-ifeq ($(DEBUF), 1)
-DO_LUACC = $(CC) -O2 -Wall -g3 $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
-else
 DO_LUACC = $(CC) -O2 -Wall $(SOCFLAGS) -DLUA_COMPAT_ALL -o $@ -c $<
-endif
 
 build_so: DO_CC=$(DO_SOCC)
 

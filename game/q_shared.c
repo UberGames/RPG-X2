@@ -905,6 +905,26 @@ char *Q_CleanStr( char *string ) {
 	return string;
 }
 
+#ifdef Q3_VM
+void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
+	int		len;
+	va_list		argptr;
+	char	bigbuffer[32000];	/* big, but small enough to fit in PPC stack */
+
+	va_start (argptr,fmt);
+	len = vsprintf (bigbuffer,fmt,argptr);
+	va_end (argptr);
+	if ( len >= sizeof( bigbuffer ) ) {
+		Com_Error( ERR_FATAL, "Com_sprintf: overflowed bigbuffer" );
+	}
+	if (len >= size) {
+		Com_Printf ("Com_sprintf: overflow of %i in %i\n", len, size);
+		Com_Printf("Fmt: %s\n", fmt);
+		Com_Printf("BigBuffer: %s\n", bigbuffer);
+	}
+	Q_strncpyz (dest, bigbuffer, size );
+}
+#else
 void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	int			len;
 	va_list		argptr;
@@ -933,6 +953,7 @@ void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	}
 	Q_strncpyz (dest, bigbuffer, size );
 }
+#endif
 
 /*
 ============

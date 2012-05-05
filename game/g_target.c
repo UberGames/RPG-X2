@@ -960,7 +960,10 @@ static void target_turbolift_endMove ( gentity_t *ent )
 	gentity_t* lights=NULL;
 	gentity_t* otherLift=NULL;
 	//gentity_t* tent=NULL;
+
+	#ifdef XTRA
 	float f = 0;
+	#endif
 
 	otherLift = &g_entities[ent->count];
 	if ( !otherLift )
@@ -1060,7 +1063,8 @@ static void target_turbolift_endMove ( gentity_t *ent )
 		}
 	}
 
-	/* check for shader remaps */
+	#ifdef XTRA
+	// check for shader remaps
 	if(rpg_calcLiftTravelDuration.integer) {
 		if((ent->truename && otherLift->truename) || (ent->falsename && otherLift->falsename)) {
 			f = level.time * 0.001;
@@ -1069,6 +1073,7 @@ static void target_turbolift_endMove ( gentity_t *ent )
 		}
 		trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());
 	}
+	#endif
 
 	//next phase, teleport player
 	ent->nextthink = level.time + ent->sound1to2;
@@ -1119,6 +1124,65 @@ static void TeleportPlayers ( gentity_t* ent, gentity_t* targetLift, int numEnts
 	}
 }
 
+#ifdef Q3_VM
+static void target_turbolift_TeleportPlayers ( gentity_t *ent )
+{
+	gentity_t	*targetLift;
+	vec3_t		mins, maxs;
+	float		time;
+
+	//store both sets of data so they can be swapped at the same time
+	int			liftTouch[MAX_GENTITIES];
+	int			targetLiftTouch[MAX_GENTITIES];
+	int			liftNumEnts;
+	int			targetLiftNumEnts;
+
+	//teleport the players
+	targetLift = &g_entities[ent->count];
+
+	if ( !targetLift ) {
+		target_turbolift_unlock( ent );
+		return;
+	}
+
+	//scan the turbo region for players
+	//in the current lift
+	{
+		VectorCopy( ent->r.maxs, maxs );
+		VectorCopy( ent->r.mins, mins );
+
+		liftNumEnts = trap_EntitiesInBox( mins, maxs, liftTouch, MAX_GENTITIES );
+	}
+
+	//the target lift
+	{
+		VectorCopy( targetLift->r.maxs, maxs );
+		VectorCopy( targetLift->r.mins, mins );
+
+		targetLiftNumEnts = trap_EntitiesInBox( mins, maxs, targetLiftTouch, MAX_GENTITIES );
+	}
+
+	//TiM - Teleport the players from the other target to this one
+	TeleportPlayers( targetLift, ent, targetLiftNumEnts, targetLiftTouch );
+
+	//TiM - Teleport the main players
+	TeleportPlayers( ent, targetLift, liftNumEnts, liftTouch );
+
+	if(rpg_calcLiftTravelDuration.integer) {
+		time = targetLift->health - ent->health;
+		if(time < 0)
+			time *= -1;
+		time *= rpg_liftDurationModifier.value;
+		time *= 1000;
+		ent->think = target_turbolift_endMove;
+		ent->nextthink = level.time + (time * 0.5f);
+	} else {
+		//first thing's first
+		ent->think = target_turbolift_endMove;
+		ent->nextthink = level.time + (ent->wait*0.5f);
+	}
+}
+#else
 static void target_turbolift_TeleportPlayers ( gentity_t *ent )
 {
 	gentity_t	*targetLift;
@@ -1202,6 +1266,8 @@ static void target_turbolift_TeleportPlayers ( gentity_t *ent )
 	free(liftTouch);
 	free(targetLiftTouch);
 }
+#endif
+
 
 static void target_turbolift_startSoundEnd(gentity_t *ent) {
 	ent->nextthink = -1;
@@ -1215,7 +1281,10 @@ static void target_turbolift_startMove ( gentity_t *ent )
 	gentity_t*	otherLift=NULL;
 	gentity_t*  tent=NULL;
 	float		time = 0, time2 = 0;
+
+	#ifdef XTRA
 	float f = 0;
+	#endif
 
 	otherLift = &g_entities[ent->count];
 	if ( !otherLift )
@@ -1330,6 +1399,7 @@ static void target_turbolift_startMove ( gentity_t *ent )
 		}
 	}
 
+	#ifdef XTRA
 	// check for shader remaps
 	if(rpg_calcLiftTravelDuration.integer) {
 		if(time2 < 0 && ent->truename && otherLift->truename) {
@@ -1343,6 +1413,7 @@ static void target_turbolift_startMove ( gentity_t *ent )
 		}
 		trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());	
 	}
+	#endif
 
 	if(rpg_calcLiftTravelDuration.integer) {
 		/*time = ent->health - otherLift->health;
@@ -1695,6 +1766,295 @@ void SP_target_doorLock(gentity_t *ent) {
 }
 
 //RPG-X | GSIO01 | 11/05/2009 | MOD START
+#ifndef XTRA
+/*QUAKED target_alert (1 0 0) (-8 -8 -8) (8 8 8) SOUND_TOGGLE SOUND_OFF
+This entity acts like 3-Alert-Conditions scripts.
+
+Any of the func_usables that are used as buttons must have the NO_ACTIVATOR spawnflag.
+
+SOUND_TOGGLE		if set the alert sound can be toggled on/off by using the alerts trigger again.
+SOUND_OFF			if SOUND_TOGGLE is set, the alert will be silent at beginning
+
+"greenname"			the trigger for green alert should target this				
+"yellowname"		the trigger for yellow alert should target this				
+"redname"			the trigger for red alert should target this				
+"bluename"			the trigger for blue alert should target this				
+"greentarget"		anything that should be toggled when activating green alert	
+"yellowtarget"		anything that should be toggled when activating yellow alert
+"redtarget"			anything that should be toggled when activating red alert	
+"bluetarget"		anything that should be toggled when activating blue alert	
+"greensnd"			targetname of target_speaker with sound for green alert		
+"yellowsnd"			targetname of target_speaker with sound for yellow alert		
+"redsnd"			targetname of target_speaker with sound for red alert			
+"bluesnd"			targetname of target_speaker with sound for blue alert
+*/
+void target_alert_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+	if(!Q_stricmp(activator->target, ent->swapname)) {
+		if(ent->damage == 0) {
+			if(ent->spawnflags & 1) {
+				ent->health = !ent->health;
+				ent->target = ent->greensound;
+				G_UseTargets(ent, ent);
+			}
+		} else {
+			switch(ent->damage) {
+				case 1: // yellow
+					if(ent->health) {
+						ent->target = ent->yellowsound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					}
+					/*if(!ent->spawnflags) {
+						ent->target = ent->yellowsound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->falsetarget;
+					G_UseTargets(ent, ent);
+					break;
+				case 2: // red
+					if(ent->health) {
+						ent->target = ent->redsound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					}
+					/*if(!ent->spawnflags) {
+						ent->target = ent->redsound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->paintarget;
+					G_UseTargets(ent, ent);
+					break;
+				case 3: // blue
+					if(ent->health) {
+						ent->target = ent->bluesound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					} 
+					/*if(!ent->spawnflags) {
+						ent->target = ent->bluesound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->targetname2;
+					G_UseTargets(ent, ent);
+					break;
+			}
+			if(!ent->spawnflags) {
+				ent->target = ent->greensound;
+				G_UseTargets(ent, ent);
+			} else if(ent->spawnflags & 2) {
+				ent->health = 0;
+			} else {
+				if(ent->spawnflags) {
+					ent->target = ent->greensound;
+					G_UseTargets(ent, ent);
+					ent->health = 1;
+				}
+			}
+			ent->target = ent->truetarget;
+			G_UseTargets(ent, ent);
+			ent->damage = 0;
+		}
+	} else if(!Q_stricmp(activator->target, ent->truename)) {
+		if(ent->damage == 1) {
+			if(ent->spawnflags & 1) {
+				ent->health = !ent->health;
+				ent->target = ent->yellowsound;
+				G_UseTargets(ent, ent);
+			}
+		} else {
+			switch(ent->damage) {
+				case 0: // green
+					if(ent->health) {
+						ent->target = ent->greensound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					}
+					/*if(!ent->spawnflags) {
+						ent->target = ent->greensound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->truetarget;
+					G_UseTargets(ent, ent);
+					break;
+				case 2: // red
+					if(ent->health) {
+						ent->target = ent->redsound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					}
+					/*if(!ent->spawnflags) {
+						ent->target = ent->redsound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->paintarget;
+					G_UseTargets(ent, ent);
+					break;
+				case 3: // blue
+					if(ent->health) {
+						ent->target = ent->bluesound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					}
+					/*if(!ent->spawnflags) {
+						ent->target = ent->bluesound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->targetname2;
+					G_UseTargets(ent, ent);
+					break;
+			}
+			if(!ent->spawnflags) {
+				ent->target = ent->yellowsound;
+				G_UseTargets(ent, ent);
+			} else if(ent->spawnflags & 2) {
+				ent->health = 0;
+			} else {
+				if(ent->spawnflags) {
+					ent->target = ent->yellowsound;
+					G_UseTargets(ent, ent);
+					ent->health = 1;
+				}
+			}
+			ent->target = ent->falsetarget;
+			G_UseTargets(ent, ent);
+			ent->damage = 1;
+		}
+	} else if(!Q_stricmp(activator->target, ent->falsename)) {
+		if(ent->damage == 2) {
+			if(ent->spawnflags & 1) {
+				ent->health = !ent->health;
+				ent->target = ent->redsound;
+				G_UseTargets(ent, ent);
+			}
+		} else {
+			switch(ent->damage) {
+				case 0: // green
+					if(ent->health) {
+						ent->target = ent->greensound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					}
+					/*if(!ent->spawnflags) {
+						ent->target = ent->greensound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->truetarget;
+					G_UseTargets(ent, ent);
+					break;
+				case 1: // ryellow
+					if(ent->health) {
+						ent->target = ent->yellowsound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					}
+					/*if(!ent->spawnflags) {
+						ent->target = ent->yellowsound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->falsetarget;
+					G_UseTargets(ent, ent);
+					break;
+				case 3: // blue
+					if(ent->health) {
+						ent->target = ent->bluesound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					}
+					/*if(!ent->spawnflags) {
+						ent->target = ent->bluesound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->targetname2;
+					G_UseTargets(ent, ent);
+					break;
+			}
+			if(!ent->spawnflags) {
+				ent->target = ent->redsound;
+				G_UseTargets(ent, ent);
+			} else if(ent->spawnflags & 2) {
+				ent->health = 0;
+			} else {
+				if(ent->spawnflags) {
+					ent->target = ent->redsound;
+					G_UseTargets(ent, ent);
+					ent->health = 1;
+				}
+			}
+			ent->target = ent->paintarget;
+			G_UseTargets(ent, ent);
+			ent->damage = 2;
+		}
+	} if(!Q_stricmp(activator->target, ent->bluename)) {
+		if(ent->damage == 3) {
+			if(ent->spawnflags & 1) {
+				ent->health = !ent->health;
+				ent->target = ent->bluesound;
+				G_UseTargets(ent, ent);
+			}
+		} else {
+			switch(ent->damage) {
+				case 0: // green
+					if(ent->health) {
+						ent->target = ent->greensound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					} 
+					/*if(!ent->spawnflags) {
+						ent->target = ent->greensound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->truetarget;
+					G_UseTargets(ent, ent);
+					break;
+				case 1: // yellow
+					if(ent->health) {
+						ent->target = ent->yellowsound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					} 
+					/*if(!ent->spawnflags) {
+						ent->target = ent->yellowsound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->falsetarget;
+					G_UseTargets(ent, ent);
+					break;
+				case 2: // red
+					if(ent->health) {
+						ent->target = ent->redsound;
+						G_UseTargets(ent, ent);
+						ent->health = !ent->health;
+					} 
+					/*if(!ent->spawnflags) {
+						ent->target = ent->redsound;
+						G_UseTargets(ent, ent);
+					}*/
+					ent->target = ent->paintarget;
+					G_UseTargets(ent, ent);
+					break;
+			}
+			if(!ent->spawnflags) {
+				ent->target = ent->bluesound;
+				G_UseTargets(ent, ent);
+			} else if(ent->spawnflags & 2) {
+				ent->health = 0;
+			} else {
+				if(ent->spawnflags) {
+					ent->target = ent->bluesound;
+					G_UseTargets(ent, ent);
+					ent->health = 1;
+				}
+			}
+			ent->target = ent->targetname2;
+			G_UseTargets(ent, ent);
+			ent->damage = 3;
+		}
+	}
+	// Free activator if no classname <-- alert command
+	if(!activator->classname)
+		G_FreeEntity(activator);
+}
+#else
 /*QUAKED target_alert (1 0 0) (-8 -8 -8) (8 8 8) SOUND_TOGGLE SOUND_OFF
 This entity acts like 3-Alert-Conditions scripts.
 
@@ -2051,7 +2411,9 @@ void target_alert_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	if(!activator->classname)
 		G_FreeEntity(activator);
 }
+#endif
 
+#ifdef XTRA
 void target_alert_parseShaders(gentity_t *ent) {
 	char	buffer[BIG_INFO_STRING];
 	char	*txtPtr;
@@ -2133,6 +2495,7 @@ void target_alert_parseShaders(gentity_t *ent) {
 		}
 	}
 }
+#endif
 
 void SP_target_alert(gentity_t *ent) {
 	//int			errorNum = 0;
@@ -2154,6 +2517,7 @@ void SP_target_alert(gentity_t *ent) {
 	G_SpawnString("bluetarget", "", &temp);
 	ent->targetname2 = G_NewString(temp);
 
+	#ifdef XTRA
 	if(G_SpawnString("greenshader", "", &temp))
 		ent->message = G_NewString(temp);
 	if(G_SpawnString("yellowshader", "", &temp))
@@ -2164,6 +2528,7 @@ void SP_target_alert(gentity_t *ent) {
 		ent->model2 = G_NewString(temp);
 
 	target_alert_parseShaders(ent);
+	#endif
 
 	if(!ent->swapname || !ent->truename || !ent->falsename || !ent->bluename ||
 		!ent->truetarget || !ent->falsetarget || !ent->paintarget || !ent->targetname2) {
@@ -2513,6 +2878,7 @@ void SP_target_holodeck(gentity_t *ent) {
 }
 
 //RPG-X | Harry Young | 15/10/2011 | MOD START
+#ifdef XTRA
 /*QUAKED target_shaderremap (1 0 0) (-8 -8 -8) (8 8 8)
 This will remap the shader "falsename" with shader "truename" and vice versa.
 It will save you some vfx-usables.
@@ -2556,4 +2922,5 @@ void SP_target_shaderremap(gentity_t *ent) {
 
 	ent->use = target_shaderremap_use;
 }
+#endif
 //RPG-X | Harry Young | 15/10/2011 | MOD END

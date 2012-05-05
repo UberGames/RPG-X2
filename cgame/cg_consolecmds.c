@@ -954,24 +954,19 @@ void CG_InitConsoleCommands( void ) {
 	/* temp */
 	trap_AddCommand("ui_holodeck");
 
-	/* 
-	 * note: 
-	 *     - some of these might get removed 
-	 *     - some of these don't require rpgxEF anymore
-	 *       and will be merged into the non rpgxEF version
-	 */
+	#ifdef XTRA
 	trap_AddCommand("userlogin");
 	trap_AddCommand("userAdd");
 	trap_AddCommand("sql_setup");
 	trap_AddCommand("userMod");
 	trap_AddCommand("userDel");
+	#endif
 
-	/* lua */
 	#ifdef CG_LUA
 	trap_AddCommand("lua_status");
 	#endif
 
-	/* Cinematic Cam testing */
+	/* CCAM */
 	trap_AddCommand("camtest");
 	trap_AddCommand("camtestend");
 }

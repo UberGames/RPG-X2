@@ -286,8 +286,8 @@ int trap_MemoryRemaining( void ) {
 	return syscall( CG_MEMORY_REMAINING );
 }
 
-/* shader remap */
+#ifdef XTRA
 void	trap_R_RemapShader( const char *oldShader, const char *newShader, const char *timeOffset ) {
 	syscall( CG_R_REMAP_SHADER, oldShader, newShader, timeOffset );
 }
-
+#endif
