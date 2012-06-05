@@ -8,7 +8,7 @@
 
 
 // rpgxEF?
-#define XTRA 1
+#define XTRA 0
 
 #define	CMD_BACKUP			64	
 #define	CMD_MASK			(CMD_BACKUP - 1)

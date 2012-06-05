@@ -3,7 +3,7 @@
 // bg_public.h -- definitions shared by both the server game and client game modules
 
 // are we compiling for rpgxEF?
-#define XTRA 1
+#define XTRA 0
 // meh somehow preprocessor G_LUA won't work for me
 #define G_LUA 1
 #define CG_LUA 1

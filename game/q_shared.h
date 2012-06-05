@@ -54,7 +54,7 @@
  **********************************************************************/
 
 // use this to specify whether the code is compile for rpgxEF or not
-#define XTRA 1
+#define XTRA 0
 // meh somehow preprocessor G_LUA won't work for me
 #define G_LUA 1
 #define CG_LUA 1
