@@ -254,7 +254,7 @@ build_so: $(OBJ) $(SOOBJ) $(LUAOBJ)
 ifeq ($(PLATFORM), mingw32)
 	$(CC) -shared -Wl,--export-all-symbols,-soname,qqgame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) -lm
 else
-	$(CC) -shared -Wl,--export-dynamic,-soname,qagame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) -lm
+	$(CC) -shared -Wl,--export-dynamic,-soname,qagame$(ARCH).$(EXT) -o qagame$(ARCH).$(EXT) $(OBJ) $(SOOBJ) $(LUAOBJ) -lm -lpthread
 endif
 	
 clean:

@@ -23,6 +23,13 @@ else
 EXT=so
 endif
 
+# warning level
+ifeq ($(DEBUG), 1)
+WL=-Wall
+else
+WL=-Wall -Wno-unused-but-set-variable 
+endif
+
 # cgame objects
 OBJ = \
   fx_transporter.o \
@@ -114,9 +121,9 @@ LUAOBJ = \
 
 # do cc for shared library
 ifeq ($(DEBUG), 1)
-DO_SOCC = $(CC) $(SOCFLAGS) -Wall -g3 $(DEFINES) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) $(WL) -g3 $(DEFINES) -o $@ -c $<
 else
-DO_SOCC = $(CC) $(SOCFLAGS) -Wall -Wno-unused-but-set-variable $(DEFINES) -o $@ -c $<
+DO_SOCC = $(CC) $(SOCFLAGS) $(WL) $(DEFINES) -o $@ -c $<
 endif
 # do cc for lua
 ifeq ($(DEBUG), 1)
@@ -215,9 +222,9 @@ lzio.o: ../game/lzio.c; $(DO_LUACC)
 
 build_so: $(OBJDEP) $(OBJ) $(SOOBJ) $(LUAOBJ)
 ifeq ($(PLATFORM), mingw32)
-	$(CC) -shared -Wl,--export-all-symbols,-soname,cgame$(ARCH).$(EXT) -o cgame$(ARCH).$(EXT) $(OBJ) $(OBJDEP) $(SOOBJ) $(LUAOBJ)
+	$(CC) -shared -Wl,--export-all-symbols,-soname,cgame$(ARCH).$(EXT) -o cgame$(ARCH).$(EXT) $(OBJ) $(OBJDEP) $(SOOBJ) $(LUAOBJ) -lm
 else
-	$(CC) -shared -Wl,--export-dynamic,-soname,cgame$(ARCH).$(EXT) -o cgame$(ARCH).$(EXT) $(OBJ) $(OBJDEP) $(SOOBJ) $(LUAOBJ)
+	$(CC) -shared -Wl,--export-dynamic,-soname,cgame$(ARCH).$(EXT) -o cgame$(ARCH).$(EXT) $(OBJ) $(OBJDEP) $(SOOBJ) $(LUAOBJ) -lm -lpthread
 endif
 	
 clean:
